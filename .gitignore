@@ -1,0 +1,7 @@
+model
+embedding
+*.pb
+*.fbs
+*.csv
+*.txt
+*.html
