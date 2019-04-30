@@ -3,6 +3,5 @@ embedding
 *.pb
 *.fbs
 *.csv
-*.txt
 *.html
 *.png
