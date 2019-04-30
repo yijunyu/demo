@@ -1,19 +1,11 @@
 FROM yijun/fast:latest
-RUN apt-get install -y golang
-ENV GOPATH /usr/bin
-ENV CGO_ENABLED=1
-ENV GOOS=linux
-RUN addgroup --gid 33333 gitpod && \
-    adduser --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --gid 33333 --uid 33333 --shell /bin/bash --disabled-login --disabled-password gitpod
-RUN chmod g+rw /home && \
-    chown -R gitpod:gitpod /home/gitpod && \
-    mkdir -p /workspace && \
-    chown -R gitpod:gitpod /workspace;
-RUN mkdir -p /root && touch /root/dontBreakMyBuild
+### Gitpod user ###
+# '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
+RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
+    # passwordless sudo for users in the 'sudo' group
+    && sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
 ENV HOME=/home/gitpod
-ENV GITPOD_HOME /home/gitpod
-ENV GITPOD_UID_GID 33333
-ENV SHELL /bin/bash
-ENV USE_LOCAL_GIT true
 WORKDIR $HOME
-USER gitpod
+# custom Bash prompt
+RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \\\$ '" ; } >> .bashrc
+
