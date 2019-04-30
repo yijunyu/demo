@@ -1,5 +1,6 @@
 #FROM yijun/fast:latest
 FROM buildpack-deps:cosmic
+RUN apt-get update
 RUN apt-get install -yq sudo
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
