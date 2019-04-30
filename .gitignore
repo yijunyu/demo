@@ -1,5 +1,3 @@
-model
-embedding
 *.pb
 *.fbs
 *.csv

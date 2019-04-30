@@ -1,0 +1,10 @@
+0 insertion-sort
+1 merge-sort
+2 topological-sort
+3 heap-sort
+4 bubble-sort
+5 radix-sort
+6 shell-sort
+7 quick-sort
+8 selection-sort
+9 bucket-sort
