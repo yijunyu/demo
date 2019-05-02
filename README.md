@@ -30,7 +30,7 @@ Two example Java code are provided to test the algorithm classification deep lea
 ## Open the generated HTML file
 
 Click at the HTML files and use the Preview button to see the visualization results in a split pane.
-It shows which parts of the code gains the attention by the classification algorithm.
+It shows which parts of the code have got the attention by the classification algorithm.
 
 On the histogram of probabilistic distribution, the correctly classified label will be in blue, and the wrongly classified label will be in red.
 
