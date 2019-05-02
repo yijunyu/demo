@@ -1,8 +1,10 @@
-# demo-vscode-fast
-This repository provides a demonstration of the deep learning package for classifying the code parsed by the FAST
-utility. All the binary and python dependencies have been provided in this package, including also the trained models and
-the pre-trained embeddings. To reproduce the results, all you need is to enable the GitPod app to access your GitHub account
-so that the commands can be run on a remote server. 
+# Demo of Flattened Abstract Syntax Trees in Deep Learning using GitPod (see also the Visual Studio Code Extension)
+
+This repository provides a demonstration of the deep learning package for classifying code parsed by the [fast
+utility](https://cloud.docker.com/u/yijun/repository/docker/yijun/fast). You can run fast in your own machine as a 
+docker container of course, but here you don't even need that because all the binary and python dependencies have been provided, including also the trained models and the pre-trained embeddings. 
+
+To reproduce the results, all you need is to [enable the GitPod app to access your GitHub account](https://gitpod.io/#https://github.com/yijunyu/demo-vscode-fast) so that the commands can be run on a remote server belonging to yourself. 
 
 ## initialisation
 
