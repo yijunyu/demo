@@ -21,10 +21,11 @@ pip3 install -r requirements.txt
 This will get all the dependent python packages installed.
 
 ## usage
-Two example Java code are provided to test the algorithm classification deep learning tool, simply type:
+Two examples of insertion sort algorithms in Java are provided to
+test the algorithm classification deep learning tool, simply type:
 ```bash
-./run.sh 1.java
-./run.sh 103.java
+./run.sh 1/1.java
+./run.sh 1/103.java
 ```
 
 ## Open the generated HTML file
