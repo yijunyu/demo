@@ -27,13 +27,18 @@ test the algorithm classification deep learning tool, simply type:
 ./run.sh 1/1.java
 ./run.sh 1/103.java
 ```
+In this convention, the folder number indicate the correct class
+they we already know, and the test will return the class the algorithm
+thinks it is.
 
 ## Open the generated HTML file
+
+On the histogram of probabilistic distribution, the correctly classified label will be in blue,
+and the wrongly classified label will be in red.
 
 Click at the HTML files and use the Preview button to see the visualization results in a split pane.
 It shows which parts of the code have got the attention by the classification algorithm.
 
-On the histogram of probabilistic distribution, the correctly classified label will be in blue, and the wrongly classified label will be in red.
 
 ## References
 
