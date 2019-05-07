@@ -7,32 +7,30 @@ You can run fast in your own machine as the docker container of course, but here
 
 To reproduce the results, all you need is to [enable the GitPod app to access your GitHub account](https://gitpod.io/#https://github.com/yijunyu/demo-vscode-fast) so that the commands can run on a remote server belonging to yourself.
 
-## initialisation
-
-On first run of your gitpod container, after it has been spawned, type in the terminal:
-```bash
-. .bashrc
-```
-This will set the paths to all the folders of the binary and libraries.
-
-```bash
-pip3 install -r requirements.txt
-```
-This will get all the dependent python packages installed.
-
 ## usage
-Two example Java code are provided to test the algorithm classification deep learning tool, simply type:
+Two examples of insertion sort algorithms in Java are provided to
+test the algorithm classification deep learning tool. Once the
+gitpod machine is running, it will launch the following command:
 ```bash
-./run.sh 1.java
-./run.sh 103.java
+./run.sh 1/1.java
 ```
+In this convention, the folder number indicate the correct class label
+that we already know, and the test will return the algorithm of the code.
 
-## Open the generated HTML file
+Click the file "1/1.png" in the EXPLORER, you will see the predicted
+probabilistic distribution of the class labels. The correctly classified label
+will be shown in blue, and the wrongly classified label will be shown in red.
 
-Click at the HTML files and use the Preview button to see the visualization results in a split pane.
-It shows which parts of the code have got the attention by the classification algorithm.
+To understand why, click at the HTML files and use the Preview button on the
+up-right corner of the tab to see visualization results in a split pane.  The
+colours on the tokens indicate which parts of the code that have got the most
+attention by the classification algorithm.
 
-On the histogram of probabilistic distribution, the correctly classified label will be in blue, and the wrongly classified label will be in red.
+
+To run the other example, simply type:
+```bash
+./run.sh 1/103.java
+```
 
 ## References
 

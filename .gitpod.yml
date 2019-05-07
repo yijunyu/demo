@@ -1,0 +1,4 @@
+tasks:
+   - before: pip3 install -r requirements.txt
+     init: . .bashrc
+     command: ./run.sh 1/1.java
