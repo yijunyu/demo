@@ -12,7 +12,7 @@ Two examples of insertion sort algorithms in Java are provided to
 test the algorithm classification deep learning tool. Once the
 gitpod machine is running, it will launch the following command:
 ```bash
-./run.sh 1/1.java
+live_test live_test --model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 --pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz github_java_10/1/1.java
 ```
 In this convention, the folder number indicate the correct class label
 that we already know, and the test will return the algorithm of the code.
@@ -29,8 +29,12 @@ attention by the classification algorithm.
 
 To run the other example, simply type:
 ```bash
-./run.sh 1/103.java
+live_test live_test --model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 --pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz github_java_10/1/103.java
 ```
+
+## Datasets
+
+* [pku_cpp_104/](https://sites.google.com/site/treebasedcnn/)
 
 ## References
 
