@@ -167,6 +167,6 @@ eval "$(pyenv virtualenv-init -)"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
-export PATH=$PATH:/workspace/demo-vscode-fast/usr/bin:/workspace/demo-vscode-fast/usr/local/bin:.:/workspace/.pip-modules/bin
-export LD_LIBRARY_PATH=/workspace/demo-vscode-fast/usr/lib:/workspace/demo-vscode-fast/usr/local/lib:/workspace/demo-vscode-fast/usr/lib/x86_64-linux-gnu:/usr/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu
+export PATH=$PATH:/workspace/demo-fast/usr/bin:/workspace/demo-fast/usr/local/bin:.:/workspace/.pip-modules/bin
+export LD_LIBRARY_PATH=/workspace/demo-fast/usr/lib:/workspace/demo-fast/usr/local/lib:/workspace/demo-fast/usr/lib/x86_64-linux-gnu:/usr/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu
 
