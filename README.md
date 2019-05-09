@@ -12,24 +12,30 @@ Two examples of insertion sort algorithms in Java are provided to
 test the algorithm classification deep learning tool. Once the
 gitpod machine is running, it will launch the following command:
 ```bash
-live_test live_test --model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 --pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz github_java_10/1/1.java
+live_test \
+--model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 \
+--pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz \
+github_java_10/1/1.java
 ```
 In this convention, the folder number indicate the correct class label
 that we already know, and the test will return the algorithm of the code.
 
-Click the file "1/1.png" in the EXPLORER, you will see the predicted
+Click the file "github_java_10/1/1.png" in the EXPLORER, you will see the predicted
 probabilistic distribution of the class labels. The correctly classified label
 will be shown in blue, and the wrongly classified label will be shown in red.
 
-To understand why, click at the HTML files and use the Preview button on the
-up-right corner of the tab to see visualization results in a split pane.  The
-colours on the tokens indicate which parts of the code that have got the most
-attention by the classification algorithm.
+To understand why, click at the HTML file "github_java_10/1/1.html" and use the
+Preview button on the up-right corner of the tab to see visualization results
+in a split pane.  The colours on the tokens indicate which parts of the code
+that have got the most attention by the classification algorithm.
 
 
-To run the other example, simply type:
+To run the other example, type:
 ```bash
-live_test live_test --model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 --pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz github_java_10/1/103.java
+live_test \
+--model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 \
+--pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz \
+github_java_10/1/103.java 
 ```
 
 ## Datasets
