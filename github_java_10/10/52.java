@@ -1,16 +1,4 @@
-package nl.hva.dmci.ict.se.datastructures.sortstudents.util;
-
-import nl.hva.dmci.ict.se.datastructures.sortstudents.KlasGenerator;
-import nl.hva.dmci.ict.se.datastructures.sortstudents.models.SortedLinkedList;
-import nl.hva.dmci.ict.se.datastructures.sortstudents.models.Student;
-
-import java.util.Comparator;
-import java.util.List;
-
-
-public class Bucketsort {
-
-    public static <T> SortedLinkedList<SortedLinkedList<Student>> sort(List<T> lijst, Comparator<SortedLinkedList<T>> bucketsComparator, Comparator<T> bucketComparator){
+ public static <T> SortedLinkedList<SortedLinkedList<Student>> sort(List<T> lijst, Comparator<SortedLinkedList<T>> bucketsComparator, Comparator<T> bucketComparator){
         
         String[] klasNamen = KlasGenerator.maakKlassen(lijst.size());
         int klassenIndex = 0;
@@ -47,5 +35,3 @@ public class Bucketsort {
 
         return buckets;
     }
-    
-}

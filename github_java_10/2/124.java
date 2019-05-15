@@ -1,30 +1,4 @@
 
-
-public class Sort_MergeSort {
-
-    static int[] arr;
-
-    public static void main(String[] args){
-
-        arr = new int[6];
-        for(int i=0; i<6; i++){
-            arr[i] = (int)(Math.random()*100);
-        }
-
-        for(int x: arr){
-            System.out.print(x+" ");
-        }
-        System.out.println();
-
-        MergeSort(0, arr.length-1);
-
-        for(int y: arr){
-            System.out.print(y+" ");
-        }
-        System.out.println();
-
-    }
-
     public static void MergeSort(int left, int right){
 
         if(left==right){
@@ -68,5 +42,3 @@ public class Sort_MergeSort {
         }
 
     }
-
-}

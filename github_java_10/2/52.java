@@ -1,6 +1,4 @@
-
-public class Sort_MergeSort {
-    public int[] mergeSort(int[] num){
+  public int[] mergeSort(int[] num){
         if(num.length == 0 || num.length == 1) return num;
         int left = 0;
         int right = num.length-1;
@@ -59,13 +57,3 @@ public class Sort_MergeSort {
             num[left+e] = tmp[e];
         }
     }
-
-
-    public static void main(String[] args){
-        
-        int[] arr = new int[]{2,3,1,3,8,4};
-        Sort_MergeSort t = new Sort_MergeSort();
-        
-        t.mergeSort(arr);
-    }
-}

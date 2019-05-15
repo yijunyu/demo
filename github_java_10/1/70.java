@@ -1,22 +1,3 @@
-
-
-public class MyInsertionSort {
-
-    
-
-    public static void main(String[] args) {
-        
-        int arr1 []= {3,6,3,8,7,0,12,32,-1,100};
-
-
-        int[] arr2=insertsort(arr1);
-
-        for (int i:arr2){
-            System.out.print(i);
-            System.out.print(", ");
-        }
-
-   }
  public static int[] insertsort(int [] input){
 
 
@@ -33,6 +14,3 @@ public class MyInsertionSort {
      }
      return input;
          }
- }
-
-

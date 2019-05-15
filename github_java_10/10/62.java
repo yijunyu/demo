@@ -1,13 +1,4 @@
-package com.reggie.algs4.ch2_sorting.other;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
-
-public class Bucket {
-    public static void sort(int[] a, int M) {
+ public static void sort(int[] a, int M) {
         int N = a.length;
         int min = a[0], max = a[0];
         for (int value : a) {
@@ -38,15 +29,3 @@ public class Bucket {
                 a[k++] = (int) value;
             }
         }
-    }
-
-    private static class IntegerComparator implements Comparator<Integer> {
-
-        @Override
-        public int compare(Integer o1, Integer o2) {
-            if (o1 < o2) return -1;
-            else if (o1 > o2) return 1;
-            else return 0;
-        }
-    }
-}

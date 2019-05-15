@@ -1,46 +1,4 @@
-package sorting;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
-public class MinHeapSort {
-    
-    public static void main(String[] args) {
-        
-        int size = 100000;
-        int[] arr = new int[size];
-        
-        Random rand = new Random();
-        for(int i = 0; i < size; i++) 
-            arr[i] = rand.nextInt(10*size);
-        
-        
-        int[] copyOf = Arrays.copyOf(arr, arr.length);
-        Arrays.sort(copyOf);
-        
-        
-        MinHeapSort minHeap = new MinHeapSort();
-        for(int i = 0; i < size; i++) 
-            minHeap.add(arr[i]);
-        for(int i = 0; i < size; i++) 
-            arr[i] = minHeap.removeMin();
-        
-        
-        for(int i = 0; i < size; i++) 
-            if(arr[i] != copyOf[i]) {
-                System.out.println("arr:" + Arrays.toString(arr));
-                throw new IllegalStateException("Not equal for i:" + i + " arr val:" + arr[i] + " copyOfVal:" + copyOf[i]);
-            }
-        
-        System.out.println("good result.");
-    }
-    
-    List<Integer> heap = new ArrayList<Integer>();
-    
-    
-    public int removeMin() {
+public int removeMin() {
         if(this.heap == null || this.heap.size() == 0) throw new IllegalStateException();
         
         int toReturn = this.heap.get(0);
@@ -101,5 +59,3 @@ public class MinHeapSort {
         this.heap.set(i, this.heap.get(j));
         this.heap.set(j, temp);
     }
-
-}

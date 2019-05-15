@@ -1,13 +1,3 @@
-import java.util.Arrays;
-
-
-public class Sort_HeapSort {
-	public static void main(String[] args) throws Exception {
-		//MinHeap for sorting Sort
-		HeapSort hs = new HeapSort();
-		hs.sort(new int[]{3,4,0,1,2});
-	}
-}
 
 class HeapSort {
 	

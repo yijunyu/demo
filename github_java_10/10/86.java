@@ -1,13 +1,4 @@
-package ch.hsr.prog2.exercises;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-
-public class Bucketsort {
-
-    
+  
     private static void bucketsort(List S, int N) {
         List[] B = new LinkedList[N];
         for (int i = 0; i < N; i++) {
@@ -29,17 +20,3 @@ public class Bucketsort {
         }
 
     }
-
-    
-    public static void main(String[] args) {
-        LinkedList<Integer> list = new LinkedList<>();
-        int[] iarr = { 7, 1, 3, 7, 3, 7 };
-        for (int i : iarr) {
-            list.add(i);
-        }
-
-        bucketsort(list, 8);
-
-    }
-
-}

@@ -1,17 +1,4 @@
-package singular.cluster.bubblesort;
-
-
-public final class Bubblesort
-{
-    
-    private Bubblesort() {}
-
-    public static void sort(int[] array)
-    {
-        sort(array, 0, array.length);
-    }
-
-    public static void sort(int[] array, int startIndex, int endIndex)
+  public static void sort(int[] array, int startIndex, int endIndex)
     {
         boolean swapOccurred = true;
         int swapValue = Integer.MIN_VALUE;
@@ -32,4 +19,3 @@ public final class Bubblesort
             }
         }
     }
-}

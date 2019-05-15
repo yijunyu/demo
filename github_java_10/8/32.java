@@ -1,10 +1,3 @@
-package com.simplicityitself.training.bench;
-
-
-public class JavaQuickSort {
-    public static void quickSort(int[] numbers) {
-        quickSort(numbers, 0, numbers.length - 1);
-    }
 
     public static void quickSort(int[] a, int p, int r) {
         if (p < r) {
@@ -40,5 +33,3 @@ public class JavaQuickSort {
         a[i] = a[j];
         a[j] = temp;
     }
-
-}

@@ -1,23 +1,6 @@
-package pers.vin.base.dataStructure;
-
-import java.util.Arrays;
-
-
-public class Sort_BubbleSort {
-
-    static void bubbleSort(int[] arr) {
+   static void bubbleSort(int[] arr) {
 
         
-        
-
-        
-        
-        
-        
-        
-        
-
-
         
         int temp;
         
@@ -33,24 +16,4 @@ public class Sort_BubbleSort {
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
     }
-
-    public static void main(String[] args) {
-        int[] arr = new int[]{2, 1, 3, 1,4,5,8,6,10,9};
-
-        bubbleSort(arr);
-        System.out.println(Arrays.toString(arr));
-
-    }
-}

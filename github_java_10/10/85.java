@@ -1,12 +1,4 @@
-package sort;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-
-public class Bucket {
-    public static void bucketSort(int[] nums){
+ public static void bucketSort(int[] nums){
         int max = Integer.MIN_VALUE;
         int min = Integer.MAX_VALUE;
         for (int i=0;i<nums.length;i++){
@@ -30,9 +22,3 @@ public class Bucket {
         }
         System.out.println(bucket.toString());
     }
-
-    public static void main(String[] args) {
-        int[] nums=new int[]{5,2,9,4,7,6,1,3,8,30};
-        bucketSort(nums);
-    }
-}

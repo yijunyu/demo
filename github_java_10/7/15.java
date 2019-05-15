@@ -1,17 +1,4 @@
-import java.util.*;
-
-public class Example {
-
-   public static void main(String[] args) {
-
-      int[] arr = {99, 77, 55, 33, 11, 88, 66, 44, 22};
-      System.out.println("Unsorted: " + Arrays.toString(arr));
-
-      shellSort(arr);
-      System.out.println("Sorted  : " + Arrays.toString(arr));
-   }
-
-   public static void shellSort(int[] arr) {
+ public static void shellSort(int[] arr) {
       int inner, outer;
       int temp;
 
@@ -33,6 +20,3 @@ public class Example {
          h = (h - 1) / 3;
       }
    }  
-}
-
-

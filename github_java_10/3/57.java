@@ -35,17 +35,5 @@ public class TopologicalSort {
 		stack.push(vertex);
 	}
 
-	public static void main(String[] args) {
-		Graph g = new Graph(6);
-		TopologicalSort topologicalSort = new TopologicalSort();
-		
-		topologicalSort.addEdge(g, 3, 1);
-		topologicalSort.addEdge(g, 2, 1);
-		topologicalSort.addEdge(g, 4, 2);
-		topologicalSort.addEdge(g, 5, 3);
-		
 
-		System.out.println("Following is a Topological " + "sort of the given graph");
-		topologicalSort.topologicalSort(g);
-	}
 }

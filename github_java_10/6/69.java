@@ -44,24 +44,5 @@ public class RadixSort {
         return ((value/digitPlace ) % 10);
     }
 
-    public static void main(String[] args){
-        final int SIZE = 1000000;
-
-        Random r = new Random();
-        int[] test = new int[SIZE];
-
-        for (int i = 0; i < SIZE; i++){
-            test[i] = r.nextInt(Integer.MAX_VALUE);
-        }
-
-        long start = System.currentTimeMillis();
-        test = sort(test);
-        long end = System.currentTimeMillis();
-
-        for (Integer i : test){
-            System.out.println(i);
-        }
-
-        System.out.println(end-start);
-    }
+   
 }

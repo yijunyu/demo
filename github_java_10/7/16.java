@@ -1,14 +1,4 @@
-package interviews.sorts;
-
-import interviews.arrays.Swap;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
-
-public class Shellsort {
-  public static <E> void f(List<E> list, Comparator<E> comparator) {
+ public static <E> void f(List<E> list, Comparator<E> comparator) {
     int h = 1;
     while(h < list.size()/3) {  
       h = 3*h + 1;  
@@ -23,10 +13,3 @@ public class Shellsort {
       h /= 3;
     }
   }
-
-  public static void main(String[] args) {
-    f(Arrays.asList("iris", "wine", "pear", "dusk", "bark", "ruby", "sage", "aqua", "rust", "rose",
-        "fawn", "onyx", "lava", "buff", "sand", "teal", "lime", "herb", "palm", "mint", "silk",
-        "leaf", "pink", "gray"), String.CASE_INSENSITIVE_ORDER);
-  }
-}

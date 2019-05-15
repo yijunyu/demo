@@ -1,23 +1,4 @@
-package Sorting;
-
-public class InsertionSort_JAVA {
-
-    public static void main(String[] args) {
-        int test[] = {8, 5, 6, 2, 4};
-        System.out.println("삽입정렬 전");
-        for (int data : test) {
-            System.out.print(data + ", ");
-        }
-        
-        insertionSort(test, test.length);
-        
-        System.out.println("\n삽입정렬 후");
-        for (int data : test) {
-            System.out.print(data + ", ");
-        }
-    }
-    
-    public static void insertionSort(int[] list, int n) {
+   public static void insertionSort(int[] list, int n) {
         int i, j, key;
         
         
@@ -34,4 +15,3 @@ public class InsertionSort_JAVA {
             list[j+1] = key;
         }
     }
-}

@@ -1,12 +1,4 @@
-public class SelectionSort{
-  private void printArray(int[] array){
-    for(int i = 0 ; i < array.length; i++){
-      System.out.print(array[i]+"  ");
-    }
-    System.out.println();
-  }
-
-  private void swapArrayElements(int[] array, int indexa, int indexb){
+private void swapArrayElements(int[] array, int indexa, int indexb){
     int tmp = array[indexa];
     array[indexa] = array[indexb];
     array[indexb] = tmp;
@@ -29,4 +21,3 @@ public class SelectionSort{
       printArray(arrayToSort);
     }
   }
-}

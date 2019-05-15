@@ -1,11 +1,3 @@
-package alg4th.sort;
-
-public class ShellSort {
-    Sortable sortable;
-
-    public ShellSort(Sortable sortable) {
-        this.sortable = sortable;
-    }
 
     private void sort(Comparable[] t) {
         int n = t.length;
@@ -25,15 +17,3 @@ public class ShellSort {
             h /= 3;
         }
     }
-
-
-    public static void main(String[] args) {
-
-        ShellSort shellSort = new ShellSort(new Sortable());
-        String[] array = {"bed", "bug", "dad", "yes", "zoo", "all", "bad", "yet"};
-
-        shellSort.sort(array);
-        shellSort.sortable.show(array);
-        shellSort.sortable.assertIsSorted(array);
-    }
-}

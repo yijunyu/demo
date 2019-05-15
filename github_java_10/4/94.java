@@ -67,28 +67,5 @@ class Ideone
 			
 		}
 	}
-	public static void main (String[] args) throws java.lang.Exception
-	{
-	  Scanner sc=new Scanner(System.in);
-	  int n=sc.nextInt();
-	  int[]arr=new int[n];
-	  
-	  for(int i=0;i<n;i++)
-	     arr[i]=sc.nextInt();
-	   
-	   System.out.println("before sorting");
-	   for(int elem:arr)
-	      System.out.print(elem+" ");
-	      
-	      System.out.println();
-	      Ideone ob=new Ideone();
-	      
-	  ob.heap_sort(arr,n);   
-	  
-	   System.out.println("after sorting");
-	   for(int elem:arr)
-	      System.out.print(elem+" ");
-	      
-	      System.out.println();
-	}
+	
 }

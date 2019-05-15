@@ -1,13 +1,4 @@
-
-package radixsort;
-
-
-import java.lang.*;
-import java.io.*;
-
-public class Radixsort {
-
-    public static void radixSort(int[] arr) {
+public static void radixSort(int[] arr) {
         if (arr.length == 0) {
             return;
         }
@@ -46,20 +37,4 @@ public class Radixsort {
         }
     }
 
-    public static void main(String[] args) {
-        int i;
-        int[] arr = new int[15];
-        System.out.print("original: ");
-        for (i = 0; i < arr.length; i++) {
-            arr[i] = (int) (Math.random() * 1024);
-            System.out.print(arr[i] + " ");
-        }
-        radixSort(arr);
-        System.out.print("\nsorted: ");
-        for (i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-        System.out.println("\nDone ;-)");
-    }
-}
-
+    

@@ -1,11 +1,4 @@
-package com.sorting;
-
-
-public class Insertionsort {
-    private int[] numbers;
-
-
-    public void sort(int[] values) {
+ public void sort(int[] values) {
         
         if (values ==null || values.length==0){
             return;
@@ -26,11 +19,3 @@ public class Insertionsort {
             System.out.print(numbers[n] + ", ");
         }
     }
-
-    public static void main(String ... args)  {
-        Insertionsort is = new Insertionsort();
-        int a[] = {3,7,8,5,2,1,9,5,4};
-        is.sort(a);
-   }
-
-}

@@ -1,4 +1,3 @@
-class TestClass {
     static void merge(int[] A, int p, int q, int r) {
         int n1 = q - p + 1;
         int n2 = r - q;
@@ -39,12 +38,3 @@ class TestClass {
             merge(A, p, q, r);
         }
     }
-
-    public static void main(String[] args) {
-        int[] arr = {8, 3, 2, 9, 7, 1, 5, 4};
-        mergeSort(arr, 0, arr.length - 1);
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-    }
-}

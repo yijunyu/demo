@@ -46,10 +46,4 @@ public class Radix {
 
     }
 
-    public static void main(String[] args) {
-        int[] a = StdIn.readAllInts();
-        sort(a);
-        StdOut.println(Arrays.toString(a));
-    }
-
 }

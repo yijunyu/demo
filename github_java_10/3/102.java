@@ -55,19 +55,4 @@ public class TopologicalSort {
 
         stack.push(start);
     }
-
-
-
-
-
-    public static  void main(String[] args){
-        TopologicalSort topologicalSort=new TopologicalSort(6);
-        topologicalSort.addEdge(5, 2);
-        topologicalSort.addEdge(5, 0);
-        topologicalSort.addEdge(4, 0);
-        topologicalSort.addEdge(4, 1);
-        topologicalSort.addEdge(2, 3);
-        topologicalSort.addEdge(3, 1);
-        topologicalSort.tsort();
-    }
 }

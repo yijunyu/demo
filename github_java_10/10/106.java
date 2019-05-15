@@ -1,13 +1,4 @@
-
-package LSDA_Assignment1;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-public class bucketsort {
-
-
-    public static int[] bucketSort ( int[] numbers, int bucketCount){
+ public static int[] bucketSort ( int[] numbers, int bucketCount){
 
             if (numbers.length <= 1) return numbers;
             int maxVal = numbers[0];
@@ -41,27 +32,3 @@ public class bucketsort {
 
             return numbers;
         }
-
-
-
-    static void printArray(int arr[])
-    {
-        for (int i=0; i<arr.length; i++)
-            System.out.print(arr[i] + " ");
-        System.out.println();
-    }
-
-    public static void main(String args[]) {
-
-            int []numbers = {76,92,12,3,54,86,27,30,10,91,67,3,91,1,65,53,23,230,800,169} ; 
-
-            int bucketCount = 10;
-            System.out.println("Array before sort : " );
-            printArray(numbers);
-            int []arr = bucketSort(numbers,bucketCount);
-            System.out.println("Array after Bucket sort");
-            printArray(arr);
-
-        }
-}
-

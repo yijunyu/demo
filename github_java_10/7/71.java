@@ -1,10 +1,4 @@
-package pl.piotrkrzyminski;
-
-
-
-public class Shellsort {
-
-    public static void sort(long[] valuesArray, int[] gapsArray) throws SortException {
+public static void sort(long[] valuesArray, int[] gapsArray) throws SortException {
 
         if(gapsArray.length == 0) throw new EmptyArrayException("Gaps array can not by empty");
 
@@ -30,4 +24,3 @@ public class Shellsort {
             }
         }
     }
-}

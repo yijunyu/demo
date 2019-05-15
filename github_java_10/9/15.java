@@ -1,6 +1,4 @@
-public class Solution {
-    
-    public void sortIntegers(int[] A) {
+ public void sortIntegers(int[] A) {
         
         if (A == null) {
           return;
@@ -17,9 +15,3 @@ public class Solution {
           }
         }
     }
-    private void swap(int[] array, int i, int j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-      }
-}

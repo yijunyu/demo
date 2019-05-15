@@ -4,19 +4,7 @@ import java.util.Arrays;
 
 public class HeapSortMaxHeap {
 	
-	
-	
-	
-	private static int getLeftChildIndex(int parentIndex){return 2*parentIndex+1;}
-	private static int getRightChildIndex(int parentIndex){return 2*parentIndex+2;}
 
-    
-   
-   
-
-    
-    private static boolean hasLeft(int index,int size){ return getLeftChildIndex(index) < size;}
-    private static boolean hasRight(int index,int size){ return getRightChildIndex(index) < size;}
     
     
 	
@@ -66,14 +54,6 @@ public class HeapSortMaxHeap {
 	   }
 		    
 	}
-	public static void main(String[] args) {
-		Integer arr[] = new Integer[]{ 8,7,9,10,3,4,1,12,6,5};
-		System.out.println("\nInput array");
-		System.out.println(Arrays.toString(arr));
-		heapsort(arr);
-		System.out.println("\n After sorting \n");
-		System.out.println(Arrays.toString(arr));
-
-	}
+	
 
 }

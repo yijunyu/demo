@@ -1,11 +1,4 @@
-package sort.uncomparison;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-
-public class BucketSort {
-    public static void sort(int[] arr) {
+ public static void sort(int[] arr) {
         int max = Integer.MAX_VALUE;
         int min = Integer.MIN_VALUE;
 
@@ -34,4 +27,3 @@ public class BucketSort {
 
         System.out.println(bucketArr.toString());
     }
-}

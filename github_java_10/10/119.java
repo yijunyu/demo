@@ -1,8 +1,4 @@
-import java.util.Random;
- 
-public class bucketsort
-{
-    static int[] sort(int[] sequence, int maxValue) 
+  static int[] sort(int[] sequence, int maxValue) 
     {
         
         int[] Bucket = new int[maxValue + 1];
@@ -19,12 +15,7 @@ public class bucketsort
         return sorted_sequence;
     }
  
-    static void printSequence(int[] sorted_sequence) 
-    {
-        for (int i = 0; i < sorted_sequence.length; i++)
-            System.out.print(sorted_sequence[i] + " ");
-    }
- 
+  
     static int maxValue(int[] sequence) 
     {
         int maxValue = 0;
@@ -33,22 +24,3 @@ public class bucketsort
                 maxValue = sequence[i];
         return maxValue;
     }
- 
-    public static void main(String args[]) 
-    {
-        Random random = new Random(); 
-        int N = 20;
-        int[] sequence = new int[N];
- 
-        for (int i = 0; i < N; i++)
-            sequence[i] = Math.abs(random.nextInt(100));
- 
-        int maxValue = maxValue(sequence);
- 
-        System.out.println("\nSequenza originale: ");
-        printSequence(sequence);
- 
-        System.out.println("\nSequenza ordinata: ");
-        printSequence(sort(sequence, maxValue));
-    }
-}

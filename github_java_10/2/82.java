@@ -1,12 +1,3 @@
-import java.util.Arrays;
-
-public class Mergesort {
-  public static void main(String []args){
-    int a[]={49,38,65,97,76,13,27,49,78,34,12,64,5,4,62,99,98,54,56,17,18,23,34,15,35,25,53,51};
-    int numbers [] = sorting(a,0,a.length-1);
-    System.out.println(Arrays.toString(numbers));
-  }
-
 public static int[] sorting(int[] data, int left, int right) {
     
     if(left<right){
@@ -51,6 +42,4 @@ public static int[] merge(int[] data, int left, int center, int right) {
     }
     return data;
     
-}
-
 }

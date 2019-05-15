@@ -1,5 +1,4 @@
-public class Solution {
-  private static void selectionSort(int[] ar) {
+ private static void selectionSort(int[] ar) {
     for (int i = 0; i < ar.length; i++) {
       int min = ar[i];
       int index = i;
@@ -15,8 +14,3 @@ public class Solution {
       System.out.print(ar[i] + " ");
     }
   }
-
-  public static void main(String[] args) {
-    selectionSort( new int[]{ 100, 1, 5, 3, 6, 18, 4, 90, 18, 32, 24 } );
-  }
-}

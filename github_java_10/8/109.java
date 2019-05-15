@@ -1,15 +1,4 @@
-package com.java.se7.data.structures.algos.sorting;
-
-import com.java.se7.data.structures.queue.LinkedQueue;
-import com.java.se7.data.structures.queue.Queue;
-
-import java.util.Comparator;
-
-class QuickSort {
-
-  
-  
-  public static <K> void quickSort(Queue<K> S, Comparator<K> comp) {
+public static <K> void quickSort(Queue<K> S, Comparator<K> comp) {
     int n = S.size();
     if (n < 2) return;                       
     
@@ -70,4 +59,3 @@ class QuickSort {
     quickSortInPlace(S, comp, a, left - 1);
     quickSortInPlace(S, comp, left + 1, b);
   }
-}

@@ -52,40 +52,4 @@ public class TopologicalSort {
         }
     }
 
-    public static void main(String[] args) {
-        TopologicalSort g = new TopologicalSort();
-        g.instantiateGraph();
-    }
-
-    void instantiateGraph() {
-        Node seven = new Node("7");
-        Node five = new Node("5");
-        Node three = new Node("3");
-        Node eleven = new Node("11");
-        Node eight = new Node("8");
-        Node two = new Node("2");
-        Node nine = new Node("9");
-        Node ten = new Node("10");
-
-        addNeighbor(seven, eleven);
-        addNeighbor(seven, eight);
-        addNeighbor(five, eleven);
-        addNeighbor(three, eight);
-        addNeighbor(three, ten);
-        addNeighbor(eleven, two);
-        addNeighbor(eleven, nine);
-        addNeighbor(eleven, ten);
-        addNeighbor(eight, nine);
-
-        try {
-            topologicalSort();
-        } catch (Exception e) {
-            
-            e.printStackTrace();
-        }
-
-        for (Node node: topoSorted) {
-            System.out.print(node.value + " ");
-        }
-    }
 }

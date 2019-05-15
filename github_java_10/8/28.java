@@ -1,28 +1,4 @@
 
-public class Sort_QuickSort {
-
-    static int[] arr;
-
-    public static void main(String[] args){
-
-        arr = new int[50];
-        for(int i=0; i<50; i++){
-            arr[i] = (int)(Math.random()*100);
-        }
-
-        for(int x: arr){
-            System.out.print(x+" ");
-        }
-        System.out.println();
-
-        quicksort(0, 49);
-
-        for(int x: arr){
-            System.out.print(x+" ");
-        }
-        System.out.println();
-    }
-
     public static void quicksort(int left, int right){
 
         if(right-left<=0){
@@ -59,6 +35,3 @@ public class Sort_QuickSort {
         arr[a] = arr[b];
         arr[b] = temp;
     }
-
-}
-

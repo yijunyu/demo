@@ -1,32 +1,28 @@
-package com.practice.after2017.algorithm.sorting;
-
-public class HeapSort {
-
-    public void sortII(int[] arr) {
-    	for(int i = arr.length / 2 - 1; i>=0; i--) {
-    		heapifyII(arr, arr.length, i);
-    	}
-    	for(int i = arr.length -1; i>=0; i--) {
-    		swap(arr, 0, i);
-    		heapifyII(arr, i, 0);
-    	}
+public void sortII(int[] arr) {
+        for(int i = arr.length / 2 - 1; i>=0; i--) {
+            heapifyII(arr, arr.length, i);
+        }
+        for(int i = arr.length -1; i>=0; i--) {
+            swap(arr, 0, i);
+            heapifyII(arr, i, 0);
+        }
     }
     
     private void heapifyII(int[] arr, int size, int i) {
-    	int l = 2*i + 1;
-    	int r = 2*i + 2;
-    	int largest = i;
-    	
-    	if(l < size && arr[l] > arr[largest]) {
-    		largest = l;
-    	} 
-    	if(r < size && arr[r] > arr[largest]) {
-    		largest = r;
-    	}
-    	if(largest != i) {
-    		swap(arr, largest, i);
-    		heapifyII(arr, size, largest);
-    	}
+        int l = 2*i + 1;
+        int r = 2*i + 2;
+        int largest = i;
+        
+        if(l < size && arr[l] > arr[largest]) {
+            largest = l;
+        } 
+        if(r < size && arr[r] > arr[largest]) {
+            largest = r;
+        }
+        if(largest != i) {
+            swap(arr, largest, i);
+            heapifyII(arr, size, largest);
+        }
     }
 
     private void swap(int[] arr, int i, int j) {
@@ -44,4 +40,3 @@ public class HeapSort {
             System.out.print(each+" - ");
         }
     }
-}

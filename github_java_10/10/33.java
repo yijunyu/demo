@@ -1,25 +1,4 @@
-import java.util.*;
-
-public class Bucketsort
-{
-
-  public static void main(String[] args)
-  {
-    int[] testArray = {7, 11, 36, 36, 2, 15, 52, 48, 43};
-    Bucketsort bs = new Bucketsort();
-    ArrayList<Integer> sorted = bs.sort(testArray);
-    printArray(sorted);
-  }
-
-  static void printArray(ArrayList<Integer> array)
-   {
-      for(Integer val: array)
-      {
-        System.out.println(val);
-      }
-   }
-
-  public ArrayList<Integer> sort(int[] array)
+public ArrayList<Integer> sort(int[] array)
   {
     int maxElement = getMaxElement(array);
     int[] buckets = new int[maxElement];
@@ -57,4 +36,3 @@ public class Bucketsort
     }
     return maxElem;
   }
-}

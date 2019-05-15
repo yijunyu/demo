@@ -1,11 +1,4 @@
-package com.github.tomdican.program.sort;
-
-import com.github.tomdican.program.Util;
-
-
-public class HeapSort2 {
-
-    
+ 
     public static void buildMaxHeap(int[] heap,int len) {
         for (int parent = len/2; parent >= 1; parent--) {
            maxHeap(heap,parent,len);
@@ -40,11 +33,3 @@ public class HeapSort2 {
             HeapSort2.buildMaxHeap(heap,n);
         }
     }
-
-    public static void main(String[] args) {
-        int[] heap = {4,1,2,7,5,3,8,10,6,9};
-        HeapSort2.sort(heap);
-        Util.printArray(heap);
-    }
-
-}

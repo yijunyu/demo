@@ -1,10 +1,4 @@
-
-package algoritmos_java;
-
-
-public class SelectionSort {
-    
-    public static int[] doSelectionSort(int[] arr){
+ public static int[] doSelectionSort(int[] arr){
          
         for (int i = 0; i < arr.length - 1; i++)
         {
@@ -20,14 +14,3 @@ public class SelectionSort {
         return arr;
     }
      
-
-
-
-
-
-
-
-
-
-    
-}

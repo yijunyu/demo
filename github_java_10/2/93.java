@@ -1,12 +1,4 @@
-
-package algorithms.Sorting;
-
-
-public class Mergesort {
-    public static <T extends Comparable<T>> void mergesort(T[] ar){
-        mergesort (ar,0,ar.length-1);
-    }
-    public static <T extends Comparable<T>> void mergesort (T[] ar, int i, int f){
+public static <T extends Comparable<T>> void mergesort (T[] ar, int i, int f){
         if(i<f){
             int m = (i+f)/2;
             mergesort(ar,i,m);
@@ -41,4 +33,3 @@ public class Mergesort {
         for(a=i,k=0;a<=f;a++,k++) ar[a]=aux[k];
     }
     
-}

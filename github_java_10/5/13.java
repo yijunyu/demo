@@ -1,18 +1,4 @@
-package sort;
-
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdOut;
-
-
-
-
-public class Bubble {
-
-   
-    private Bubble() { }
-
-    
-    public static <Key extends Comparable<Key>> void sort(Key[] a) {
+ public static <Key extends Comparable<Key>> void sort(Key[] a) {
         int n = a.length;
         for (int i = 0; i < n; i++) {
             int exchanges = 0;
@@ -25,31 +11,3 @@ public class Bubble {
             if (exchanges == 0) break;
         }
     }
-
-    
-    private static <Key extends Comparable<Key>> boolean less(Key v, Key w) {
-        return v.compareTo(w) < 0;
-    }
-
-    
-    private static <Key extends Comparable<Key>> void exch(Key[] a, int i, int j) {
-        Key swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
-
-   
-    private static <Key extends Comparable<Key>> void show(Key[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
-        }
-    }
-
-    
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        Bubble.sort(a);
-        show(a);
-    }
-}
-

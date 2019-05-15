@@ -1,15 +1,4 @@
-package com.bufferworks.algorithms.sorting;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-public class BucketSort {
-
-    private static final int DEFAULT_BUCKET_SIZE = 5;
-
-    public void sort(final int array[]) {
+ public void sort(final int array[]) {
         if (array.length == 0) {
             return;
         }
@@ -45,4 +34,3 @@ public class BucketSort {
             }
         }
     }
-}

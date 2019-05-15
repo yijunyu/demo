@@ -1,14 +1,4 @@
-package sorting;
-
-
-public class Mergesort {
-
-    private Mergesort() {
-
-    }
-
-    
-    public static void mergesort(int[] array) {
+public static void mergesort(int[] array) {
         mergesort(array, new int[array.length], 0, array.length - 1);
     }
 
@@ -61,4 +51,3 @@ public class Mergesort {
         array[i] = array[j];
         array[j] = temp;
     }
-}

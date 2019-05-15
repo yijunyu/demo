@@ -1,19 +1,4 @@
-package sorting;
-
-import java.util.Arrays;
-import java.util.Collections;
-
-
-public class RadixSort implements Sorting {
-
-    public static void main(String[] args) {
-        Integer[] arr = {403, 647, 803, 354, 808, 730, 787, 105};
-        Sorting algo = new RadixSort();
-
-        algo.sort(Arrays.copyOf(arr, arr.length), 1);
-    }
-
-    @Override
+@Override
     public void sort(Integer[] arr, Integer sortOrder) {
         long startTime = System.nanoTime();
         System.out.println("Before Sorting");

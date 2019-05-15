@@ -1,14 +1,4 @@
-package sort;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-
-public class Bucket {
-
-    
-    private static double[] bucketSort(double[] array) {
+  private static double[] bucketSort(double[] array) {
         double max = array[0];
         double min = array[0];
         for (int i = 1; i < array.length; i++) {
@@ -39,11 +29,3 @@ public class Bucket {
 
         return sortedArray;
     }
-
-    public static void main(String[] args) {
-        double[] array = new double[]{4.12, 6.421, 0.0023, 3.0, 8.122, 4.12, 10.09};
-        double[] sortedArray = bucketSort(array);
-        System.out.println(Arrays.toString(sortedArray));
-    }
-
-}

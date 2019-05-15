@@ -37,8 +37,5 @@ public class InsertionSortList {
         return head;
     }
 	
-	public static void main(String[] args) {
-
-	}
-
+	
 }

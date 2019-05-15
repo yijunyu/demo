@@ -1,11 +1,4 @@
-package Sorting;
-
-
-public class Quicksort  {
-    private int[] numbers;
-    private int number;
-
-    public void sort(int[] values) {
+ public void sort(int[] values) {
         
         if (values ==null || values.length==0){
             return;
@@ -56,4 +49,3 @@ public class Quicksort  {
         numbers[i] = numbers[j];
         numbers[j] = temp;
     }
-}

@@ -1,18 +1,3 @@
-
-
-
-public class ShellSort {
-
-    public static void main(String[] args) {
-        int[] a = {26,81,12,54,92,76,20,37,19,48};
-        ShellSort shellSort = new ShellSort();
-        System.out.println("---排序前---");
-        shellSort.print(a);
-        shellSort.sort(a);
-        System.out.println("---排序后---");
-        shellSort.print(a);
-    }
-
     private void sort(int[] a) {
         int dk = a.length/2;
         while( dk >= 1  ){
@@ -37,11 +22,3 @@ public class ShellSort {
         }
 
     }
-
-
-    private void print(int[] a) {
-        for (int i = 0; i < a.length-1; i++) {
-            System.out.print(a[i] + " ");
-        }
-    }
-}

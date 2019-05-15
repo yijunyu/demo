@@ -1,15 +1,4 @@
-import java.util.Arrays;
-public class Heapsort {
-
-    public static void Main(String[] args) {
-        Heapsort object = new Heapsort();
-        double[] array = {2, 4, -1, 2, 5, 20, 3, 9, -8, 12, -14, 23};
-        System.out.println("Unsorted " + Arrays.toString(array));
-        array = sort(array);
-        System.out.println("Sorted " + Arrays.toString(array));
-    }
-
-    public static double[] sort(double[] input) {
+public static double[] sort(double[] input) {
         int length = input.length;
         reorder(input, length);
         int end = length - 1;
@@ -52,4 +41,3 @@ public class Heapsort {
             }
         }
     }
-}

@@ -1,12 +1,4 @@
 
-package java_celia.t5ArrayColecciones.Ordenacion;
-
-public class JavaQuickSort {
-
-
-    static int[] vector = {90, 50, 100, 70, 80, 60, 20, 10, 30, 40};
-
-
     void ordenaArray(int iz, int de) {
 
         int i, j, x, w;
@@ -50,15 +42,3 @@ public class JavaQuickSort {
             ordenaArray(i, de);
         }
     }
-
-    public static void main(String[] args) {
-
-        JavaQuickSort j = new JavaQuickSort();
-        j.ordenaArray(0, 9);
-
-        for (int i = 0; i < vector.length; i++) {
-            System.out.println(vector[i]);
-        }
-
-    }
-}

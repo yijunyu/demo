@@ -1,11 +1,3 @@
-package Sort;
-
-import org.omg.Messaging.SyncScopeHelper;
-
-
-public class Sort_heapSort {
-
-    public static <AnyType extends Comparable<? super AnyType>>
     void heapSort(AnyType[] a){
 
         
@@ -59,12 +51,3 @@ public class Sort_heapSort {
         a[i] = a[j];
         a[j] = tmp ;
     }
-
-    public static void main(String[] args) {
-        Integer[] a = {34,4,213,6,23,55,77,223};
-        heapSort(a);
-        for(int i = 0; i<a.length; i++){
-            System.out.print(a[i]+" ");
-        }
-    }
-}

@@ -1,8 +1,4 @@
-public class Quicksort {
-
-    
-	
-    public static void sort(int[] a, int ulimit, int llimit)
+public static void sort(int[] a, int ulimit, int llimit)
     {
         quicksort(a, 0, a.length, ulimit, llimit);
     }
@@ -13,7 +9,7 @@ public class Quicksort {
     
     
     
-	
+    
     
     private static void quicksort(int[] a, int start, int stop, int ulimit, int llimit)
     {
@@ -69,4 +65,3 @@ public class Quicksort {
         a[i] = a[j];
         a[j] = temp;
     }
-}

@@ -58,14 +58,3 @@ void sort(int arr[],int size)
 	 
 }
 }
-class Heapsort{
-
-public static void main(String args[])
-{
-int[] arr = {12, 11, 13, 5, 6, 7};
-SortingHeap obj=new SortingHeap();
-obj.sort(arr,6);
-
-for(int i=0;i<6;i++)
-	System.out.print(arr[i]+" ")	;
-}}

@@ -1,19 +1,3 @@
-import java.util.Arrays;
-
-
-class QuickSort {
-    private static int[] array;
-    private static int size;
-
-
-    public static void main(String[] args) {
-        QuickSort sort = new QuickSort(10);
-        System.out.println(Arrays.toString(sort.array));
-
-        sort.sort(0, 9);
-        System.out.println(Arrays.toString(sort.array));
-    }
-
     public void sort(int left, int right) {
         if(right - left <= 0)
             return;  
@@ -65,16 +49,3 @@ class QuickSort {
         this.array[pos2] = temp;
     }
 
-
-    public void generate() {
-        for(int i=0; i<this.size; ++i)
-            this.array[i] = (int)(Math.random()*50)+10;
-    }
-
-
-    QuickSort(int size) {
-        this.size = size;
-        this.array = new int[size];
-        this.generate();
-    }
-}

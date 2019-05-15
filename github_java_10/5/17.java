@@ -1,16 +1,4 @@
-
-
-import javafx.application.Application;
-import javafx.stage.Stage;
-
-public class testApp extends Application {
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
+  public void start(Stage primaryStage) {
         System.out.println("Hello world");
         int[] myList = {2, 5, 9, 3, 12, 6};
 
@@ -29,4 +17,3 @@ public class testApp extends Application {
         }
 
     }
-}

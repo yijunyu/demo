@@ -1,10 +1,4 @@
-package org.algorithmprac.sort;
-
-
-public class ShellSorter extends AbstractCostAwareSorter {
-
-    @Override
-    protected void sortInternal(Comparable[] a) {
+ protected void sortInternal(Comparable[] a) {
         int h = 1;
         while (h < a.length / 3) {
             h = 3 * h + 1;
@@ -19,10 +13,3 @@ public class ShellSorter extends AbstractCostAwareSorter {
             }
             h /= 3;
         }
-    }
-
-    @Override
-    public String getName() {
-        return "shell-sort";
-    }
-}

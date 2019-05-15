@@ -1,9 +1,4 @@
-package com.meiliinc.mls.algorithm.sort;
-
-
-public class SortAlgoBucketSort {
-    
-    public static int[] bucketSort(int[] arr){
+public static int[] bucketSort(int[] arr){
         
         int bucketNum = 10;
         Integer[][] buckets = new Integer[bucketNum][arr.length];
@@ -48,14 +43,4 @@ public class SortAlgoBucketSort {
         return arr;
     }
 
-    private static void printArray(int[] arr){
-        for (int num : arr){
-            System.out.printf("%d,", num);
-        }
-    }
-    public static void main(String[] args) {
-        int[] arr = new int[]{3,1,41,62,73,22};
-        arr = bucketSort(arr);
-        printArray(arr);
-    }
-}
+    

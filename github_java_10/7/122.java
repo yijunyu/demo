@@ -1,14 +1,3 @@
-public class ShellSort {
-
-  public static void sort(int[] sortMe) {
-
-    for(int i=sortMe.length/(3); i>=0; i--) {
-      sort(sortMe, 3*i+1);
-    }
-
-    System.out.println(prettyPrint(sortMe));
-  }
-
   private static int[] sort(int[] sortMe, int shellSize) {
     if(shellSize <= 0) return new int[0];
 
@@ -32,14 +21,3 @@ public class ShellSort {
     return sortMe;
   }
   
-  private static String prettyPrint(int[] printMe) {
-    String retMe = "";
-
-    for(int i=0; i<printMe.length; i++) {
-      retMe += printMe[i] + " ";
-    }
-
-    return retMe;
-  }
-
-}

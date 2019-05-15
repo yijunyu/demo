@@ -171,42 +171,9 @@ public class Heapsort {
 	System.out.println();
     }
 
-    public static void shuffle( int[] d ) {
-	int tmp;
-	int swapPos;
-	for( int i = 0; i < d.length; i++ ) {
-	    tmp = d[i];
-	    swapPos = i + (int)( (d.length - i) * Math.random() );
-	    swap( i, swapPos, d );
-	}
-    }
+  
 
-    public static int[] buildArray( int size, int hi ) {
-	int[] retArr = new int[size];
-	for( int i = 0; i < retArr.length; i++ )
-	    retArr[i] = (int)( hi * Math.random() );
-	return retArr;
-    }
-    
-
-
-
-
-    
-    public static void main( String[] args ) {
-
-	int[] a = buildArray( 10, 10 );
-
-	printArr(a);
-
-	Heapsort h = new Heapsort();
-
-	a = h.sort(a);
-
-	printArr(a);
-
-    }
-
+  
 }
 
 

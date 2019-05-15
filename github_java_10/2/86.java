@@ -1,8 +1,4 @@
-
-
-public class Merge {
-
-    public static void sort(Comparable[] a) {
+ public static void sort(Comparable[] a) {
         sort(a, 0, a.length);
     } 
 
@@ -33,29 +29,3 @@ public class Merge {
             a[lo + k] = aux[k]; 
         }
     } 
-
-
-
-   
-    private static boolean isSorted(Comparable[] a) {
-        for (int i = 1; i < a.length; i++)
-            if (a[i].compareTo(a[i-1]) < 0) return false;
-        return true;
-    }
-
-   
-    public static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++)
-            System.out.println(a[i]);
-    }
-
-
-    public static void main(String[] args) {
-        String[] a = StdIn.readAll().split("\\s+");
-        Merge.sort(a);
-        for (int i = 0; i < a.length; i++) {
-            StdOut.print(a[i] + " ");
-        }
-        StdOut.println();
-    }
-}

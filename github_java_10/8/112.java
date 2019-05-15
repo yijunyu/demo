@@ -1,28 +1,4 @@
 
-public class Sort_quickSort {
-    
-
-
-
-    
-    
-    
-    
-    
-    
-
-    public int[] quickSort(int[] num) {
-        if (num.length == 0 || num.length == 1) return num;
-
-        int left = 0;
-        int right = num.length - 1;
-
-        quickSortHelper(num, left, right);
-
-        return num;
-    }
-
-
     public void quickSortHelper(int[] num, int left, int right) {
         
         if(left >= right) return;
@@ -57,18 +33,3 @@ public class Sort_quickSort {
         num[i] = num[j];
         num[j] = tmp;
     }
-
-
-    public static void main(String[] args) {
-        
-        int[] arr = new int[]{2,4,3,6,5,4};
-        Sort_quickSort q = new Sort_quickSort();
-        q.quickSort(arr);
-        System.out.print("[");
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + ",");
-        }
-        System.out.print("]");
-    }
-
-}

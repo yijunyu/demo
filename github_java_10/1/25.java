@@ -1,37 +1,3 @@
-package algo.cormen.javacode.src;
-
-
-/**
- * Algorithm to demonstrate INSERTION-SORT on a set of data
- * @author Rishu
- *
- */
-
-/**
- * pseudocode: INSERTION-SORT(A)  
- * 
- * Input: A[1..n] - an array of integers
- * Output: Sorted Array such that A[1]<=A[2]<=A[3]....A[n]
- * Begin:
- * 		for j<- 2 to n do
- * 			key<- A[j]
- * 
- *  // insert A[j] into the sorted sequence A[1..j-1]
- *  
- *  	i<- (j-1)
- *  
- *  	while( i>0 and A[i]>key ) do
- *  
- *  		A[i+1] <- A[i]
- * 			i--
- * 
- *		A[i+1]<- key
- *
- * End
- * 
- * The Running Time of this algo is O(n^2) since every element in the array is calculated twice.
- *
- */
 public class InsertionSortAlgo {
 
 	public static void main(String[] args) {
@@ -66,18 +32,5 @@ public class InsertionSortAlgo {
 		
 		
 	}
-	
-	/*
-	 * Method to display the Array in final order
-	 */
-	public static void PrintArray(Integer[] arr){
-		
-		for(int i=0; i<arr.length; i++){
-			
-			System.out.print(arr[i]+" ");
-			
-		}
-		System.out.println("\n");
-		
-	}
+
 }

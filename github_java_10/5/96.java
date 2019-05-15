@@ -1,25 +1,4 @@
-import java.util.Arrays;
-import java.util.Scanner;
-
-public class Sort_BubbleSort {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        
-        
-        
-        
-        
-
-        int n = Integer.parseInt(scanner.nextLine());
-        int[] array = new int[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = scanner.nextInt();
-        }
-        BubbleSort(array);
-        System.out.println(Arrays.toString(array));
-    }
-    public static void BubbleSort(int[] array) {
+  public static void BubbleSort(int[] array) {
         for (int j = 0; j < array.length; j++) {
             boolean isSwapped = false;
             for (int i = 0; i < array.length - 1 - j; i++) {
@@ -37,4 +16,3 @@ public class Sort_BubbleSort {
         array[index1] = array[index2];
         array[index2] = temp;
     }
-}

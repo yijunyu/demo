@@ -1,21 +1,4 @@
-package sort.complexsort;
-
-import Util.RandomUtil;
-import Util.SortUtil;
-
-
-public class HeapSort<E extends Comparable> {
-
-    protected E[] data;    
-
-    protected int count;   
-
-    protected int capacity;  
-
-    private static int DEFALUT_CAPACITY = 11; 
-
-    
-    public HeapSort(){
+public HeapSort(){
         initHeap(DEFALUT_CAPACITY);
     }
 
@@ -130,43 +113,3 @@ public class HeapSort<E extends Comparable> {
         for( int i = n-1 ; i >= 0 ; i -- )
             array[i] = heapSort.extractMax();
     }
-
-
-    public static void main(String[] args) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        Integer[] array = RandomUtil.generateNearlyOrderdData(1000000,10);
-        Integer[] copyArray1 = RandomUtil.copyGenerateRandomData(array);
-        Integer[] copyArray2 = RandomUtil.copyGenerateRandomData(array);
-        Integer[] copyArray3 = RandomUtil.copyGenerateRandomData(array);
-        SortUtil.testSortTime("sort.complexsort.MergeSort",null,array);
-        SortUtil.testSortTime("sort.complexsort.DoubleStandardQuickSort",null,copyArray1);
-        SortUtil.testSortTime("sort.complexsort.ThreeWayQuickSort",null,copyArray2);
-        SortUtil.testSortTime("sort.complexsort.HeapSort",null,copyArray3);
-
-    }
-
-}

@@ -1,17 +1,3 @@
-package com.nichao.sorts;
-
-import java.util.Arrays;
-
-
-public class InsertSort_ShellSort {
-    public static void main(String[] args) {
-        int[] arr={4,2,9,23,22,5,1};
-        int[] delta={4,2,1};
-
-        shellSort(arr,delta);
-        System.out.println(Arrays.toString(arr));
-
-    }
 
     public static void shellSort(int[] arr,int[] deltas){
         for(int delta:deltas){
@@ -27,4 +13,3 @@ public class InsertSort_ShellSort {
             }
         }
     }
-}

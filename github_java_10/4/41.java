@@ -1,38 +1,4 @@
-
-package heapsort;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-
-public class Heapsort {
-
-    public static void main(String args[]) throws IOException
-    {
-       File file = new File("C:\\Users\\Rangita\\Documents\\NetBeansProjects\\heapsort\\src\\heapsort\\heapsort.txt");
-        byte[] bytes = new byte[(int) file.length()];
-        FileInputStream fis = new FileInputStream(file);
-        fis.read(bytes);
-        fis.close();
-        String[] valueStr = new String(bytes).trim().split("\\s+");
-        int[] ec = new int[valueStr.length];
-        for (int i = 0; i < valueStr.length; i++) 
-        ec[i] = Integer.parseInt(valueStr[i]);
-        Heapsort ob = new Heapsort();
-        print(ec);
-        ob.sort(ec);
-        print(ec);
-    }
-    static void print(int sorted[])
-    {
-        int n = sorted.length;
-        for (int i=0; i<n; ++i)
-            System.out.print(sorted[i]+" ");
-        System.out.println();
-    }
- 
-    public void sort(int eCost[])
+ public void sort(int eCost[])
     {
         int n = eCost.length;
  
@@ -70,6 +36,3 @@ public class Heapsort {
             heapify_eC(sorting, n, root);
         }
     }
- 
-    
-}

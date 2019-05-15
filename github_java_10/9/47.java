@@ -1,22 +1,4 @@
-
-package sort.methods;
-
-import mystrategy.IStrategy;
-import sort.strategy.Stopwatch;
-
-
-public class Selectionsort implements IStrategy {
- private Stopwatch _stopWatch;
-    private double _elapsedTime;
-    @Override
-    public double[] SortData(double[] data) {
-        _stopWatch = new Stopwatch();
-         this.sort(data);
-            _elapsedTime = _stopWatch.elapsedTime();
-        return data;
-    }
-    
-    void sort(double arr[])
+ void sort(double arr[])
     {
         int n = arr.length;
          for (int i = 0; i < n-1; i++)
@@ -32,9 +14,3 @@ public class Selectionsort implements IStrategy {
             arr[i] = temp;
         }
     }
-
-    @Override
-    public double ElapsedTime() {
-        return _elapsedTime;
-    }
-}

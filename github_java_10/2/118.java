@@ -1,43 +1,4 @@
-package sort.divide;
-
-import sort.insertion.InsertionSort;
-
-
-
-public abstract class DivideAndConquer {
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
+ 
     public static void merge(int[] arr,int p,int q,int r){
 
 
@@ -71,14 +32,6 @@ public abstract class DivideAndConquer {
             }
         }
     }
-
-    
-    
-    
-    
-    
-    
-    
     
     public static void mergeSort(int[] arr,int p,int r){
 
@@ -90,13 +43,3 @@ public abstract class DivideAndConquer {
             print(arr);
         }
     }
-
-
-    static void print(int[] arr){
-
-        for (int i=0;i<arr.length;i++){
-            System.out.print(arr[i]+"  ");
-        }
-        System.out.println();
-    }
-}

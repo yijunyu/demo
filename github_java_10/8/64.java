@@ -1,14 +1,4 @@
-package cn.van.kuang.java.core.algorithms;
-
-import cn.van.kuang.java.core.algorithms.utils.ArrayHelper;
-import cn.van.kuang.java.core.algorithms.utils.Checker;
-import cn.van.kuang.java.core.algorithms.utils.Printer;
-
-public final class Quick implements Algorithm {
-
-    private static final String NAME = "Quick";
-
-    public static void sort(int[] integers) {
+  public static void sort(int[] integers) {
         Checker.isNotNull(integers);
 
         sort(integers, 0, integers.length - 1);
@@ -53,12 +43,3 @@ public final class Quick implements Algorithm {
 
         return right;
     }
-
-    @Override
-    public String name() {
-        return NAME;
-    }
-
-    private Quick() {
-    }
-}

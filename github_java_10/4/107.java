@@ -1,14 +1,4 @@
-package edu.learn.java.ds.sort;
-
-import java.util.Arrays;
-
-public class Heapsort {
-
-    private int total;
-    int[] arr = { 23, 17, 14, 6, 27, 13, 10, 1, 5, 7, 12 };
-
-    private void swap(int i, int j) {
-        int temp=arr[i];
+      int temp=arr[i];
         arr[i]=arr[j];
         arr[j]=temp;
     }
@@ -89,52 +79,3 @@ public class Heapsort {
             i = getParentIndex(i);
         }
     }
-
-    public void printArray() {
-        System.out.println(java.util.Arrays.toString(arr));
-    }
-
-    public static void main(final String[] args)
-    {
-        
-        
-        
-        
-        
-        
-        
-        
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

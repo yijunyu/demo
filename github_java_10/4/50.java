@@ -1,40 +1,4 @@
-package algs.sort;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Scanner;
-
-import static algs.sort.Sort.*;
-
-public class Heap {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private Heap() { }
-
-    
-    public static void sort(Comparable[] pq) {
+ public static void sort(Comparable[] pq) {
         int n = pq.length;
         for (int k = n/2; k >= 1; k--)
             sink(pq, k, n);
@@ -66,19 +30,3 @@ public class Heap {
         pq[i-1] = pq[j-1];
         pq[j-1] = swap;
     }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("C:\\Users\\qianji\\IdeaProjects\\Algorithms\\src\\words.txt");
-        InputStream inputStream = new FileInputStream(file);
-        Scanner scanner = new Scanner(inputStream);
-        String s = scanner.nextLine();
-        String[] a = s.split(" ");
-
-
-
-
-
-        Heap.sort(a);
-        show(a);
-    }
-}

@@ -1,10 +1,4 @@
-import java.util.Arrays;
-import java.util.Random;
-public class insertionsort
-{
-    
-    
-    public static void InsertionSort(int[] A)
+public static void InsertionSort(int[] A)
     {
         int temp,j;
         for (int i = 0; i < A.length; i++)
@@ -22,21 +16,4 @@ public class insertionsort
     }
 
       
-    public static int[] crearArreglo(int n) {
-        int max = 10000;
-        int[] array = new int[n];
-        Random generator = new Random();
-        for (int i =0; i<n; i++)
-            array[i] = generator.nextInt(max);
-        return array;
-    } 
-
-     
-    public static long tomarTimepo(int n){
-        int [] arreglo = crearArreglo(n);
-        long startTime = System.currentTimeMillis();
-        InsertionSort(arreglo);
-        long estimatedTime = System.currentTimeMillis() - startTime;
-        return estimatedTime;
-    }
-}
+    

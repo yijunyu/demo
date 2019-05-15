@@ -1,19 +1,4 @@
-
-
- 
-public class InsertionSort {
-
-
-  
-  public static void main (String[] args) {
-    int[] array = {10,23,49,2,49,29,85,14,9,48,60,30};
-    System.out.println("Original Array = " + toString(array));
-    insertionSort(array);
-    System.out.println("Sorted Array   = " + toString(array));
-  }
-
-  
-  static void insertionSort(int[] arr) {
+static void insertionSort(int[] arr) {
     if (arr == null || arr.length <= 0) {
       return;
     }
@@ -47,20 +32,3 @@ public class InsertionSort {
     }
     arr[index+1] = arr[index];
   }
-
-  
-  static String toString(int[] arr) {
-    StringBuilder b = new StringBuilder("[");
-    if (arr != null && arr.length > 0) {
-      for (int i=0; i < arr.length; i++) {
-        if (i != 0) {
-          b.append(',');
-        }
-        b.append(arr[i]);
-      }
-    }
-    b.append("]");
-    return b.toString();
-  }
-
-}

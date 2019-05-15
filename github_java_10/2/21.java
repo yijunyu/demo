@@ -1,16 +1,3 @@
-import java.util.*;
-
-public class Example {
-
-   public static void main(String[] args) {
-
-      int[] list = {97,75,53,31,19,86,64,42,20};
-      System.out.println("Unsorted: " + Arrays.toString(list));
-
-      mergeSort(list);
-      System.out.println("Sorted  :  " + Arrays.toString(list));
-   }
-
    public static void mergeSort(int[] arr) {
       if (arr.length > 1) {
          int[] left = leftHalf(arr);
@@ -56,6 +43,3 @@ public class Example {
          }
       }
    }
-}
-
-

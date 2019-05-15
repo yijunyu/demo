@@ -1,18 +1,3 @@
-
-package heapsortjava;
-import java.util.*;
-
-class sorting<T extends Comparable<T>>{
-  
-    
-
- public void HeapSort(T[] arr){
- buildHeap(arr);
- for (int i = arr.length - 1; i > 0; i--) {
- swap(arr,0, i);
- ReHeap(arr, 0, i - 1);
-}
-}
 public void buildHeap(T[] arr){
  int c;
    int p;
@@ -65,26 +50,3 @@ public void swap(T arr[],int f, int l){
          
          
      }
-
-void Display(T [] arr){
-    for (int i = 0; i < arr.length; i++) {
-        System.out.print( arr[i] + " ");
-    }
-} 
-}
-
-public class HeapSortJava {
-
-   
-    public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    sorting<Integer> s = new sorting<>();
-    Integer [] arr =new Integer[5];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = in.nextInt();
-        }
-    
- s.HeapSort(arr);
- s.Display(arr);
-}
-}

@@ -1,26 +1,4 @@
-package com.example.sabin.sabinwork_active.task;
-
-import android.app.Activity;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.TextView;
-
-import com.example.sabin.sabinwork_active.R;
-
-
-public class Bubblesort extends AsyncTask<Integer[],Integer,int[]> {
-
-private Activity activity;
-    private long start;
-    private long stop;
-    private TextView tvBubblesort;
-
-    public Bubblesort(Activity activity) {
-        this.activity = activity;
-    }
-
-    @Override
-    protected int[] doInBackground(Integer[]... arrays1) {
+protected int[] sort(Integer[]... arrays1) {
         Log.i("sabin","bubb");
 
         Integer[]array = arrays1[0];
@@ -50,20 +28,3 @@ private Activity activity;
 
         return null;
     }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        tvBubblesort=(TextView)activity.findViewById(R.id.tvbubble);
-
-    }
-
-    @Override
-    protected void onPostExecute(int[] ints) {
-        super.onPostExecute(ints);
-        stop = System.currentTimeMillis();
-        tvBubblesort.setText(stop - start + "ms");
-    }
-
-
-}

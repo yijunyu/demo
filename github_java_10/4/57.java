@@ -79,32 +79,6 @@ public class Heap {
         if (! isSorted (a)) throw new Error ();
         
     }
-    public static void main(String[] args) {
-        int N = 2000;
-        countops (N);
-        
-        double prevOps = ops;
-        double prevTime = time;
-        for (int i=0; i<40; i++) {
-            N *= 2;
-            countops (N);
-            StdOut.printf("%8d %10d %5.1f [%5.3f %5.3f]\n", N, ops, ops/prevOps, time, time/prevTime);
-            prevOps = ops;
-            prevTime = time;
-        }
-    }
 
-    
-    public static void bookMain(String[] args) {
-        
-        
 
-        
-        
-        
-
-        final String[] a = StdIn.readAllStrings();
-        sort(a);
-        show(a);
-    }
 }

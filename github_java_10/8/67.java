@@ -1,17 +1,3 @@
-
-
-package org.mingle.orange.arithmetic.sort;
-
-import org.mingle.orange.util.SortUtils;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-
-public class Quick {
-    private static final int M = 10;
-
     public static <T extends Comparable<T>> void sort(List<T> a) {
         Collections.shuffle(a);
         sort(a, 0, a.size() - 1);
@@ -76,20 +62,3 @@ public class Quick {
 
         return j;
     }
-
-    public static void main(String[] args) {
-        Integer[] arr = {4, 5, 2, 11, 12, 13, 1, 3, 9, 8, 7, 6, 10};
-        List<Integer> array = Arrays.asList(arr);
-        sort(array);
-
-        assert SortUtils.isSorted(array);
-
-        SortUtils.show(array);
-
-        mediansort(array);
-
-        assert SortUtils.isSorted(array);
-
-        SortUtils.show(array);
-    }
-}

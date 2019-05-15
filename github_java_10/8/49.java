@@ -1,12 +1,3 @@
-package arrays;
-
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdRandom;
-
-
-public class Quicksort {
-
-
     private static void swap(int[] a, int l, int m){
         int temp = a[l];
         a[l] = a[m];
@@ -60,21 +51,6 @@ public class Quicksort {
         sort(a, p + 1, hi);
     }
 
-    public static void main(String[] args) {
-        int j = StdIn.readInt();
-        int N = StdRandom.uniform(j);
-        int[] a = new int[N];
-        for (int i = 0; i < a.length; i++) {
-            a[i] = StdRandom.uniform(5*j);
-        }
-        System.out.println("Is sorted " + Util.isSorted(a));
-        System.out.println(Util.print(a));
-
-        sort(a);
-        System.out.println("Is sorted " + Util.isSorted(a));
-        System.out.println(Util.print(a));
-    }
-
 
     public int partitionGlobal(int[] a, int lo, int hi){
         if (a == null ) return -1;
@@ -94,6 +70,3 @@ public class Quicksort {
 
         return i;
     }
-
-
-}

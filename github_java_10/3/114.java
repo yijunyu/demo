@@ -59,17 +59,5 @@ class TopologicalSort {
         System.out.print("\n");
     }
 
-    public static void main(String[] args) {
-
-        TopologicalSort TopologicalSort = new TopologicalSort(6);
-
-        TopologicalSort.addEdge(5, 2);
-        TopologicalSort.addEdge(5, 0);
-        TopologicalSort.addEdge(4, 0);
-        TopologicalSort.addEdge(4, 1);
-        TopologicalSort.addEdge(2, 3);
-        TopologicalSort.addEdge(3, 1);
-
-        TopologicalSort.TopologicalSorting();
-    }
+ 
 }

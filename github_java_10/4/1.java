@@ -49,11 +49,4 @@ public class Heapsort {
     private static boolean less(Comparable[] a, int i, int j) {
         return a[i].compareTo(a[j]) < 0;
     }
-    
-    public static void printArray(Comparable a[]) {
-        for(int i=0; i<a.length; i++) {
-            System.out.print(a[i] + " ");
-        }
-        System.out.println();
-    }
 }

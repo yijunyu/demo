@@ -1,8 +1,3 @@
-public class Mergesort {
-    private int[] numbers;
-    private int[] helper;
-
-    private int number;
 
     public void sort(int[] values) {
         this.numbers = values;
@@ -51,5 +46,3 @@ public class Mergesort {
 
         }
     }
-
-}

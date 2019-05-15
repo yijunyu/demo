@@ -1,7 +1,4 @@
-package johnny.dsa.sorting;
-
-public class BucketSort {
-    public void bucketSort(int[] nums) {
+  public void bucketSort(int[] nums) {
         if (nums == null || nums.length == 0) {
             return;
         }
@@ -36,6 +33,3 @@ public class BucketSort {
         }
     }
     
-    
-    
-}

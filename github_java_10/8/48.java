@@ -1,10 +1,4 @@
-package chapter2_Sort;
-
-import java.util.concurrent.Exchanger;
-
-public class Sort_QuickSort extends Sort_Base {
-
-    public static void Sort(Comparable[] a) {
+  public static void Sort(Comparable[] a) {
         SortDivide(a, 0, a.length - 1);
     }
 
@@ -30,5 +24,3 @@ public class Sort_QuickSort extends Sort_Base {
         Exchange(a, j, lo);
         return j;
     }
-
-}

@@ -6,19 +6,6 @@ import java.util.Scanner;
 
 public class RadixSort {
 
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        System.out.print("Enter number of elements : ");
-        int n = s.nextInt();
-        int arr[] = new int[n];
-        System.out.println("Enter Arra to be sorted : ");
-        for (int i = 0; i < n; i++)
-            arr[i] = s.nextInt();
-        radixSort(arr, arr.length - 1);
-        for (int i : arr)
-            System.out.print(i + " ");
-    }
-
     private static void radixSort(int[] arr, int length) {
         int max = getMax(arr, length);
 

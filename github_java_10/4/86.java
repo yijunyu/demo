@@ -94,11 +94,6 @@ public class HeapSort implements SortAlgorithm {
         return sorted;
     }
 
-    
-    public static void main(String[] args) {
-        Integer[] heap = {4, 23, 6, 78, 1, 54, 231, 9, 12};
-        HeapSort heapSort = new HeapSort();
-        print(heapSort.sort(heap));
-    }
+
 
 }

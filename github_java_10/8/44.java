@@ -1,49 +1,4 @@
-package coursera.algorithms.course1.week3;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-
-public class QuickSortJava {
-
-    static int counter;
-
-    public static void main(String... args) throws IOException {
-
-
-
-
-        File f = new File("src/main/resources/algorithms/quicksort.txt");
-
-        System.out.println(f.getAbsolutePath() + " : " + f.exists());
-
-        int[] a = loadInputArray(f);
-        System.out.println(a.length);
-        quickSort(a);
-        System.out.println(Arrays.toString(a));
-        System.out.println(counter);
-    }
-
-    private static int[] loadInputArray(File file) throws IOException {
-        List<Integer> list = Files.lines(file.toPath())
-                .map(String::trim)
-                .filter(s -> !"".equals(s))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
-
-        int[] res = new int[list.size()];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = list.get(i);
-        }
-        return res;
-    }
-
-
-    public static void quickSort(int[] a) {
+ public static void quickSort(int[] a) {
         counter = 0;
         quickSort(a, 0, a.length - 1);
     }
@@ -80,6 +35,3 @@ public class QuickSortJava {
         a[i] = a[j];
         a[j] = buf;
     }
-
-
-}

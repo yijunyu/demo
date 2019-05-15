@@ -22,8 +22,6 @@ public class HeapSort
         }
     }
  
-    
-    
     void heapify(int arr[], int n, int i)
     {
         int largest = i;  
@@ -59,24 +57,6 @@ public class HeapSort
         System.out.println();
     }
  
-    
-    public static void main(String args[])
-    {
-        for(int i= 0;  i<5; i++){
-            int arr[4];
-            Scanner i  = new Scanner(System.in);
-            System.out.println("insert element of array :");
-            i.nextInt;
-            
-            int n = arr.length;
- 
-            HeapSort ob = new HeapSort();
-            ob.sort(arr);
- 
-            System.out.println("Sorted array is");
-            printArray(arr);
-        }
-    }
 }
 
 

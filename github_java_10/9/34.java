@@ -1,11 +1,3 @@
-
-package sort.methods;
-
-
-public class Selectionsort {
-private static int tablica[];
-private static int ile_liczb;
- 
 private static void selectionsort(double tablica[], int ile_liczb) {
     int min,i,j;
     double temp;
@@ -18,5 +10,4 @@ private static void selectionsort(double tablica[], int ile_liczb) {
     tablica[min]=tablica[i];
     tablica[i]=temp;
     }
-}
 }

@@ -42,42 +42,7 @@ public class HeapSort {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-		HeapSort heapSort = new HeapSort();
-		int [] array = {100,60,70,50,32,65};
-		heapSort.heapSort(array);
-		for(int temp:array){
-			System.out.print(temp+"\t");
-		}
-
-		
-		
+	
 		
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	}
 }

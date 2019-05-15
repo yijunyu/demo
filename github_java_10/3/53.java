@@ -16,41 +16,7 @@ class Node13{
 	}
 }
 public class Test13 {
-	static List<Node13> list=new ArrayList<Node13>();
-	static boolean[] visited=new boolean[8];
-	static Set<Node13> stack=new LinkedHashSet<>();
-	static Deque<Node13> set=new LinkedList<>();
-	public static void main(String[] args) {
-		
-		list.add(new Node13(1));
-		list.add(new Node13(2));
-		list.add(new Node13(3));
-		list.add(new Node13(4));
-		list.add(new Node13(5));
-		list.add(new Node13(6));
-		list.add(new Node13(7));
-		list.add(new Node13(8));
-		addEdge(1, 3);
-		addEdge(2, 3);
-		addEdge(2, 4);
-		addEdge(3, 5);
-		addEdge(4, 6);
-		addEdge(5, 7);
-		addEdge(5, 6);
-		addEdge(6, 8);
-		for(Node13 n:list){
-			while(n!=null){
-				System.out.print(n.c+"-->");
-				n=n.next;
-			}
-			System.out.println();
-		}
-		topolSort();
-		System.out.println("After Topological sort : "+stack.size());
-		for(Node13 p:stack){
-			System.out.print(p.c+" ");
-		}
-	}
+
 	static void addEdge(int a,int b){
 		Node13 p=list.get(a-1);
 		while(p.next!=null)

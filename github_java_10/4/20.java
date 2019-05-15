@@ -1,9 +1,4 @@
-
-
-public class Sort_HeapSort<Key extends  Comparable<Key>>  {
-
-
-    private boolean less(Comparable a[], int i, int j){
+private boolean less(Comparable a[], int i, int j){
         return a[i].compareTo(a[j]) < 0;
     }
 
@@ -41,4 +36,3 @@ public class Sort_HeapSort<Key extends  Comparable<Key>>  {
         }
 
     }
-}

@@ -89,20 +89,6 @@ public class TopologicalSort {
         }
 
     }
-    public static void testTopologicalOrder() {
-        int sz = 7;
-        Graph graph = new Graph(sz);
-        for(int i=0; i<sz; i++ ) {
-            graph.addNode(i, i+10);
-        }
-        graph.addEdge(0,1);
-        graph.addEdge(0,5);
-        graph.addEdge(1,3);
-        graph.addEdge(5,1);
-        graph.printTopologicalOrder();
-    }
-    public static void main(String[] args) {
-        testTopologicalOrder();
-    }
+   
 
 }

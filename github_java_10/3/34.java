@@ -28,28 +28,4 @@ public class TopologicalSort {
 		return res;
 	}
 
-	public static void main(String[] args) {
-		Scanner in = new Scanner(System.in);
-		int n = in.nextInt();
-
-		for (int i = 0; i < n; i++) {
-			int nV = in.nextInt();
-			int nE = in.nextInt();
-			List<Integer>[] g = new List[nV];
-
-			for (int j = 0; j < g.length; j++) {
-				g[j] = new ArrayList<>();
-			}
-
-			for (int j = 0; j < nE; j++) {
-				int start = in.nextInt();
-				int end = in.nextInt();
-				g[start].add(end);
-				
-			}
-
-			List<Integer> order = topSort(g);
-			
-		}
-	}
 }

@@ -1,9 +1,4 @@
-import java.util.*; 
-
-class quicksort{
-
-
-  public void sort(int[] arr, int beg, int end)
+ public void sort(int[] arr, int beg, int end)
   {
     if(end <= beg){return;} 
     
@@ -41,21 +36,3 @@ class quicksort{
     
     return (pivotIndex = left - 1);
   }
-
-  public void swap(int[] arr, int a, int b)
-  {
-    int temp = arr[a];
-    arr[a] = arr[b]; 
-    arr[b] = temp; 
-  }
-
-  public static void main(String[] args)
-  {
-    quicksort caller = new quicksort(); 
-    
-    int[] unorg = new int[]{2, 3, 5, 1, 0, 4, 3};
-    caller.sort(unorg, 0, unorg.length-1);
-    for(int num : unorg)
-      System.out.println(num);
-  }
-}

@@ -5,47 +5,6 @@ package sort.heapify;
 public abstract class HeapSort {
 
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     static int heapSize = 0;
     
@@ -71,11 +30,6 @@ public abstract class HeapSort {
         }
     }
     
-    
-    
-    
-    
-    
     static void buildMaxHeap(int[] arr){
         heapSize = arr.length;
         
@@ -88,21 +42,6 @@ public abstract class HeapSort {
     }
 
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
     static void maxHeapify(int[] arr,int i){
 
         int largest = 0;
@@ -128,13 +67,4 @@ public abstract class HeapSort {
         }
 
     }
-
-    static void print(int[] arr){
-
-        for (int i=0;i<arr.length;i++){
-            System.out.print(arr[i]+"  ");
-        }
-        System.out.println();
-    }
-
 }

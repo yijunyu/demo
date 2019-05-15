@@ -1,4 +1,3 @@
-class SelectionSort{
 public static int findMin(int[] array, int index)
 {
     int min = index - 1;
@@ -30,6 +29,3 @@ public static void swap(int[] array, int index1, int index2)
     array[index2] = temp;
 }
 
-
-
-}

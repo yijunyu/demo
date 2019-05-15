@@ -1,19 +1,4 @@
-package com.rzit.alogorithms;
-
-
-public class Mergesort {
-    public static void main(String[] args) {
-        int[] input = {24, 2, 45, 20, 56, 75, 2, 56, 99, 53, 12};
-        sort(input, 0, input.length - 1);
-        System.out.println("After Sort");
-        for (int i : input) {
-            System.out.println(i);
-        }
-    }
-
-    
-    
-    
+ 
     static void merge(int arr[], int l, int m, int r) {
         
         int n1 = m - l + 1;
@@ -78,4 +63,3 @@ public class Mergesort {
             merge(arr, l, m, r);
         }
     }
-}

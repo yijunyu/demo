@@ -50,16 +50,4 @@ public class TopologicalSort {
         stack.push(new Integer(v));
     }
 
-    public static void main(String args[]){
-        TopologicalSort graph = new TopologicalSort(6);
-
-        graph.addEdges(5,2);
-        graph.addEdges(5,0);
-        graph.addEdges(4,0);
-        graph.addEdges(4,1);
-        graph.addEdges(2,3);
-        graph.addEdges(3,1);
-
-        graph.topologicalSort();
-    }
 }

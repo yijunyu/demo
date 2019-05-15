@@ -36,8 +36,5 @@ public class Radix {
             countSort(arr, exp);
     }
 
-    public static void main(String[] args) {
-        int[] arr = {2, 24, 45, 66, 75, 90, 170, 802};
-        radixSort(arr);
-    }
+
 }

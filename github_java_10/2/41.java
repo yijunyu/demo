@@ -1,17 +1,4 @@
-import java.util.Arrays;
-
-
-public class MergeSort {
-    public int[] a;
-    public static int[] arr;
-
-    public MergeSort(int size) {
-        a = new int[size];
-        for (int i=0; i <size; i++) {
-            a[i] = (int) (Math.random()*100);
-        }
-    }
-    public int[] mergeSort(int[] a){
+  public int[] mergeSort(int[] a){
         if (a.length <= 1) return a;
         int middle = a.length/2;
         return merge(mergeSort(Arrays.copyOfRange(a, 0, middle)), mergeSort(Arrays.copyOfRange(a,middle,a.length)));
@@ -44,6 +31,3 @@ public class MergeSort {
             System.out.print(arr[i] + " ");
         }
     }
-
-
-}

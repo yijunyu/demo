@@ -1,7 +1,3 @@
-package algorithm.sort;
-
-public class ShellSort {
-    
 
     private void shellsort(int[] a) {
         int d = a.length / 2;
@@ -23,13 +19,3 @@ public class ShellSort {
         }
     }
 
-
-    public static void main(String[] args) {
-        int[] a = {11, 21, 42, 62, 1, 4, 2, 52, 73, 36, 98};
-        ShellSort shellSort = new ShellSort();
-        
-        for (int arr : a) {
-            System.out.println(arr);
-        }
-    }
-}

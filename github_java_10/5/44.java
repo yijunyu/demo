@@ -1,12 +1,4 @@
-package com.sysmech.simpulse.experiment;
-
-import net.jcip.annotations.NotThreadSafe;
-
-
-@NotThreadSafe
-public class JavaBubbleSort {
-
-    public int[] recursiveBubble(final int[] args,
+ public int[] recursiveBubble(final int[] args,
                                  final int startIndex,
                                  final int endIndex) {
 
@@ -35,5 +27,3 @@ public class JavaBubbleSort {
         return args;
 
     }
-
-}

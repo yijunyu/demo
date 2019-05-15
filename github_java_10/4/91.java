@@ -66,20 +66,5 @@ public class Heap {
 
 	
 	private static boolean COUNT_OPS = false;
-	public static void main(String[] args) {
-		
-		
 
-		
-		
-		
-
-		String[] a = StdIn.readAllStrings();
-		sort(a);
-		show(a);
-
-		DoublingTest.run (2000, 5, N -> ArrayGenerator.integerRandomUnique (N),          (Integer[] x) -> sort (x));
-		DoublingTest.run (2000, 5, N -> ArrayGenerator.integerRandom (N, 2),             (Integer[] x) -> sort (x));
-		DoublingTest.run (2000, 5, N -> ArrayGenerator.integerPartiallySortedUnique (N), (Integer[] x) -> sort (x));
-	}
 }
