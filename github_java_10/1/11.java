@@ -1,100 +1,84 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.graph.algorithms;
+package chapter2.section1;
+
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.Stopwatch;
 
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import org.graph.directed.DirectedGraph;
-import org.graph.directed.RootedTree;
-import org.graph.undirected.UnDirected;
-import org.graph.undirected.Tree;
+@SuppressWarnings("unchecked")
+public class Exercise25_InsertionSortWithoutExchanges {
 
-/**
- *
- * @author rinke
- */
-public final class BreadthFirstSearch {
-
-    private BreadthFirstSearch() {
-    }
-    
-    
-    /**
-     * Methode zum Erzeugen eines Breitensuchbaums.
-     *
-     * @param root      Wurzel des Suchbaums
-     * @return          {@link RootedTree} fuer den Knoten <code>root</code>
-     */
-    public static <V> RootedTree<V> computeBreadthSearchTree(
-                                            DirectedGraph<V> graph, V root) {
-        //Suchbaum, der am Ende zurueckgegeben wird.
-        RootedTree<V> tree = new RootedTree<V>(root);
-
-        Queue<V> candidates = new ConcurrentLinkedQueue<V>();
-        candidates.offer(root);
-
-        while (!candidates.isEmpty()) {
-            V k = candidates.poll();
-            for (V n : graph.getSuccessors(k)) {
-                if (!tree.containsVertex(n)) {
-                    candidates.offer(n);
-                    tree.addChild(n, k);
-                }
-            }
-        }
-        return tree;
+    private enum InsertionSortType {
+        DEFAULT, WITHOUT_EXCHANGES;
     }
 
-    public static <V> RootedTree<V> computeBreadthSearchTree(
-                                            DirectedGraph<V> graph, V root, int K) {
-        //Suchbaum, der am Ende zurueckgegeben wird.
-        RootedTree<V> tree = new RootedTree<V>(root);
-
-        Queue<V> candidates = new ConcurrentLinkedQueue<V>();
-        candidates.offer(root);
-
-        while (!candidates.isEmpty()) {
-            V k = candidates.poll();
-            for (V n : graph.getSuccessors(k)) {
-                if (!tree.containsVertex(n)) {
-                    candidates.offer(n);
-                    tree.addChild(n, k);
-                    if(tree.numberOfVertices()==K)
-                        return tree;
-                }
-            }
-        }
-        return tree;
+    public static void main(String[] args) {
+        sortCompare();
     }
 
+    private static void insertionSort(Comparable[] array) {
 
-    /**
-     * Methode zum Erzeugen eines Breitensuchbaums.
-     *
-     * @param root      Wurzel des Suchbaums
-     * @return          {@link RootedTree} fuer den Knoten <code>root</code>
-     */
-    public static <V> Tree<V> computeBreadthSearchTree(
-                                            UnDirected<V> graph, V root) {
-        //Suchbaum, der am Ende zurueckgegeben wird.
-        Tree<V> tree = new Tree<V>(root);
-
-        Queue<V> candidates = new ConcurrentLinkedQueue<V>();
-        candidates.offer(root);
-
-        while (!candidates.isEmpty()) {
-            V k = candidates.poll();
-            for (V n : graph.getNeighbours(k)) {
-                if (!tree.containsVertex(n)) {
-                    candidates.offer(n);
-                    tree.addConnection(n, k);
-                }
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i; j > 0 && array[j].compareTo(array[j - 1]) < 0; j--) {
+                Comparable temp = array[j];
+                array[j] = array[j - 1];
+                array[j - 1] = temp;
             }
         }
-        return tree;
+    }
+
+    private static void insertionSortWithoutExchanges(Comparable[] array) {
+
+        for(int i = 0; i < array.length; i++) {
+            Comparable aux = array[i];
+
+            int j;
+
+            for(j = i; j > 0 && aux.compareTo(array[j - 1]) < 0; j--) {
+                array[j] = array[j - 1];
+            }
+
+            array[j] = aux;
+        }
+
+    }
+
+    private static void sortCompare() {
+        int arrayLength = 100000;
+        int numberOfExperiments = 10;
+
+        double timeInsertionSortDefault = timeRandomInput(InsertionSortType.DEFAULT, arrayLength, numberOfExperiments);
+        double timeInsertionSortWithoutExchanges = timeRandomInput(InsertionSortType.WITHOUT_EXCHANGES, arrayLength, numberOfExperiments);
+
+        StdOut.printf("For %d random doubles\n Insertion Sort default is", arrayLength);
+        StdOut.printf(" %.1f times faster than Insertion Sort without exchanges", timeInsertionSortWithoutExchanges / timeInsertionSortDefault);
+    }
+
+    private static double timeRandomInput(InsertionSortType insertionSortType, int length, int numberOfExperiments) {
+        double total = 0;
+        Comparable[] array = new Comparable[length];
+
+        for(int experiment = 0; experiment < numberOfExperiments; experiment++) {
+            for(int i = 0; i < length; i++) {
+                array[i] = StdRandom.uniform();
+            }
+
+            total += time(insertionSortType, array);
+        }
+
+        return total;
+    }
+
+    public static double time(InsertionSortType insertionSortType, Comparable[] array) {
+        Stopwatch timer = new Stopwatch();
+
+        if (insertionSortType == InsertionSortType.DEFAULT) {
+            insertionSort(array);
+        } else if (insertionSortType == InsertionSortType.WITHOUT_EXCHANGES) {
+            insertionSortWithoutExchanges(array);
+        }
+
+        return timer.elapsedTime();
     }
 
 }

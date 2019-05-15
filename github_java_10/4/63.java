@@ -1,40 +1,80 @@
-package org.colin.sort;
+package com.meiliinc.mls.algorithm.sort;
 
-/**
- * 插入排序
- * 
- * @author Colin{wjd.colin@gmail.com}
- * @date Dec 5, 2014
- */
-public class InsertionSort {
-	/**
-	 * 对输入的整型数组进行插入排序
-	 * 
-	 * @param arr
-	 *            待排序的整型数组
-	 */
-	public static void insertSort(int[] arr) {
-		// 认为第一个元素已经有序，从第二个元素开始取值插入已经有序的部分
-		for (int i = 1; i < arr.length; i++) {
-			// 待插入的元素
-			int key = arr[i];
-			// 待插入的位置下标
-			int index = i;
-			// 从后向前遍历数组已经有序的部分，寻找合适的插入位置
-			for (int j = i - 1; j >= 0; j--) {
-				// 如果待插入的元素较小，则将较大的元素依次向后移动，空出合适的插入位置
-				if (arr[j] > key) {
-					// 因为arr[j+1]=arr[i]=key，该元素已经临时存储在了key中，所以不会出现数据丢失
-					arr[j + 1] = arr[j];
-					// 记录下该位置的下标
-					index = j;
-				} else {
-					// 找到了合适的插入位置，则退出这个循环，开始取下一个元素，直到取完所有元素
-					break;
-				}
-			}
-			// 将该元素插入到合适的位置
-			arr[index] = key;
-		}
-	}
+
+public class SortAlgoHeapSort {
+
+    
+    private static void shiftUp(int[] arr, int i){
+        int temp = arr[i];
+        int j = (i - 1) / 2; 
+        while (j >= 0 && i != 0){
+            if (arr[j] <= temp){ 
+                break;
+            }
+            arr[i] = arr[j]; 
+            i = j;
+            j = (i - 1) / 2;
+        }
+        arr[i] = temp;
+    }
+
+    
+    private static void heapInsert(int[] arr, int n, int num){
+        arr[n] = num;
+        shiftUp(arr, n);
+    }
+
+    
+    private static void shiftDown(int[] arr, int i, int n){
+        int temp = arr[i];
+        int j = 2 * i + 1;
+        while (j < n) {
+            
+            if (j + 1 < n && arr[j + 1] < arr[j]) {
+                j++;
+            }
+            if (arr[j] >= temp){
+                break;
+            }
+            arr[i] = arr[j];     
+            i = j;
+            j = 2 * i + 1;
+        }
+        arr[i] = temp;
+    }
+
+    
+    private static void heapDelete(int[] arr, int n){
+        
+        int temp = arr[n - 1];
+        arr[n - 1] = arr[0];
+        arr[0] = temp;
+        
+        shiftDown(arr, 0, n - 1);
+    }
+
+    
+    private static void createHeap(int[] arr, int n) {
+        for (int i = n / 2 - 1; i >= 0; i--){
+            shiftDown(arr, i, n);
+        }
+    }
+
+    public static int[] heapSort(int[] arr, int n){
+        for (int i = n - 1; i >= 1; i--) {
+            int temp = arr[0];
+            arr[0] = arr[n - 1];
+            arr[n - 1] = temp;
+            shiftDown(arr, 0, i);
+        }
+        return arr;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[]{3,1,41,62,73,22};
+        int n = arr.length;
+        createHeap(arr, n);
+        heapSort(arr, n);
+        System.out.println(arr);
+    }
 }

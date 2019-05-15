@@ -1,101 +1,87 @@
-package avl.tree;
+package main.java;
 
-import bsearch.tree.BTreeSearch;
-import bsearch.tree.LDR;
-import bsearch.tree.TreeNode;
+public class Mergesort {
+	
+	public void merge(int arr[], int l, int m, int r) {
+		int len1 = m - l + 1;
+		int len2 = r - m;
+		int left[] = new int[len1];
+		int right[] = new int[len2];
+		System.out.println("Split original array into left and right array" +
+		" with size " + len1 + " and " + len2 + " respectively.");
+		for (int i = 0; i < len1; ++i) {
+			left[i] = arr[l + i];
+		}
+		System.out.print("Left array: ");
+		printArr(left);
+		for (int j = 0; j < len2; ++j) {
+			right[j] = arr[m + 1 + j];
+		}
+		System.out.print("Right array: ");
+		printArr(right);
+		int i = 0, j = 0;
+		int k = l;
+		while (i < len1 && j < len2) {
+			if (left[i] <= right[j]) {
+				arr[k] = left[i];
+				i++;
+			} else {
+				arr[k] = right[j];
+				j++;
+			}
+			k++;
+		}
+		while (i < len1) {
+			arr[k] = left[i];
+			i++;
+			k++;
+		}
+		while (j < len2) {
+			arr[k] = right[j];
+			j++;
+			k++;
+		}
+		System.out.print("Merge back the left and right array: ");
+		printArr(arr);
+		System.out.println("");
+	}
 
-public class AVLRightRotate {
+	
+	public void sort(int arr[], int l, int r) {
+		if (l < r) {
+			int m = (l + r) / 2;
+			sort(arr, l, m);
+			sort(arr, m + 1, r);
+			merge(arr, l, m, r);
+		}
+	}
 
+	
+	public static void printArr(final int[] data) { 
+		System.out.print("[");
+		for (int i = 0; i < data.length; i++) {
+			if (i != data.length - 1) {
+				System.out.print(data[i] + ", ");
+			} else {
+				System.out.print(data[i]);
+			}
+		}
+		System.out.print("]");
+		System.out.println("");
+	}
+
+	
 	public static void main(String[] args) {
-		AVLTreeRootNode rootNode = new AVLTreeRootNode();
-		LDR.LDRShow(rootNode.root);
-		TreeNode rotateNode = BTreeSearch.searchNodeByKey(rootNode.root, 4);
-		rightRotate(rotateNode);
-		LDR.LDRShow(rootNode.root);
-	}
+		long start = System.currentTimeMillis();
+		int arr[] = { 10, 7, 8, 9, 1, 5, 6, 4, 6, 8, 10, 5, 7, 3, 2, 6, 3};
+		System.out.println("Given Array");
+		printArr(arr);
+		Mergesort ob = new Mergesort();
+		ob.sort(arr, 0, arr.length - 1);
+		System.out.println("\nSorted array");
+		printArr(arr);
+		long end = System.currentTimeMillis();
+		System.out.println("Total runtime of program: " + (end - start) + "ms");
 
-	// AVL-Tree                                          
-	//                    7                      
-	//              4            11                 
-	//           3     6     9        18            
-	//        2                   14      19      
-	//						   12    17       22
-	//                                      20    
-	
-	@Deprecated
-	//    18
-	//  14
-	// 12
-	// ���������̫�У�39�б���ָ��
-	public static void rightRotate(TreeNode rotationNode){
-//		if(rotationNode.leftChild != null && rotationNode.parent != null){
-//			rotationNode.leftChild.parent = rotationNode.parent;// �������������ڵ�ָ��
-//			rotationNode.parent.leftChild = rotationNode.leftChild;// ���ĸ��ڵ�������ָ��
-//			rotationNode.parent = rotationNode.leftChild;// �����Լ�����Ϊ������
-//			rotationNode.leftChild = rotationNode.parent.rightChild;// ��ת����ڵ�Ϊԭ���������ҽڵ�
-//			rotationNode.parent.rightChild = null;// ԭ���������ҽڵ����
-//			rotationNode.parent.rightChild = rotationNode;// ԭ���������Һ����������Լ�
-//		}
-		rotationNode.leftChild.parent = rotationNode.parent;// �������������ڵ�ָ��
-		if(rotationNode.parent == null){
-			AVLTreeRootNode.root = rotationNode.leftChild;
-		}
-		else{
-			if(rotationNode == rotationNode.parent.leftChild){
-				rotationNode.parent.leftChild = rotationNode.leftChild;// �����Լ�����Ϊ������
-			}
-			else if(rotationNode == rotationNode.parent.rightChild){
-				rotationNode.parent.rightChild = rotationNode.leftChild;// �����Լ�����Ϊ������
-			}
-		}
-		rotationNode.parent = rotationNode.leftChild;// ����ԭ�ڵ�ĸ��ڵ�Ϊԭ�ڵ��Һ���
-		// ��ת����ڵ�Ϊԭ���������ҽڵ�
-		// �����ϵ���ȣ�������ٿ�ָ����ж϶�ֱ�Ӹ�ֵ
-		rotationNode.leftChild = rotationNode.parent.rightChild;
-		rotationNode.parent.rightChild = rotationNode;// ԭ���������Һ����������Լ�
-		// AVL-Tree                                          
-		//                    7                      
-		//              3            11                 
-		//           2     4     9        18            
-		//                   6        14      19      
-		//						   12    17       22
-		// 
 	}
-	
-	// 1. ��ת�ڵ��������Ϊ��ת�ڵ�������������
-		// 2. ��ת�ڵ�������ָ����ת�ڵ㸸�ڵ�
-		// 3. ������ת�ڵ�λ�ã�Ϊ����������������������ת�ڵ�ĸ��ڵ�ָ����ת�ڵ�������
-		// 4. ��ת�ڵ���������� ������ Ϊ�Լ�
-		// 5. ��ת�ڵ�ĸ��ڵ�ָ���Լ����Һ���
-		public static TreeNode rightRotate2(TreeNode rotationNode){
-			TreeNode leftChild = rotationNode.leftChild;
-			rotationNode.leftChild = leftChild.rightChild;// �ƶ�ԭ�ڵ������������ӵ�ԭ�ڵ���Һ���λ��
-			if(leftChild.rightChild != null){
-				leftChild.rightChild.parent = rotationNode;
-			}
-			// �����ת���Ǹ��ڵ�
-			leftChild.parent = rotationNode.parent;
-			if(rotationNode.parent == null){
-				//AVLTreeRootNode.root = leftChild;
-				AVLTreeRootNode.avlRoot = leftChild;
-			}
-			// ����������֧���Ҵ��֧������������Ҫ�ж���ת�ڵ������ӻ����Һ���
-			else if(rotationNode == rotationNode.parent.leftChild){
-				rotationNode.parent.leftChild = leftChild;
-			}
-			else{
-				rotationNode.parent.rightChild = leftChild;
-			}
-			leftChild.rightChild = rotationNode;
-			rotationNode.parent = leftChild;
-			
-			// ���¶�������߶ȣ���������!!!!!
-			((AVLTreeNode)rotationNode).height 
-				= AVLInsert.max(AVLInsert.getHeight(rotationNode.leftChild),
-						AVLInsert.getHeight(rotationNode.rightChild)) + 1;
-			((AVLTreeNode)leftChild).height 
-				= AVLInsert.max(AVLInsert.getHeight(rotationNode.leftChild),
-						AVLInsert.getHeight(rotationNode.rightChild)) + 1;
-			return leftChild;
-		}
 }

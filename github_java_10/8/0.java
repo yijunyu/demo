@@ -1,55 +1,80 @@
-package etc.stringdistance;
+import java.util.Arrays;
 
-public class Main {
 
-	/**
-	 * @param d
-	 *            2d-matrix
-	 * @return pritns d in human-readable form
-	 */
-	public static String printMatrix(final int[][] d) {
-		String s = "";
-		for (final int[] element : d) {
-			for (final int element2 : element) {
-				s += element2 + " ";
-			}
-			s += "\r\n";
-		}
-		return s;
-	}
+class QuickSort {
+    private static int[] array;
+    private static int size;
 
-	/**
-	 * Debug-method to pretty-print the two distances of the input words
-	 *
-	 * @param input
-	 *            words to compare
-	 */
-	private static void printDistances(final String... input) {
-		// actual pairing
-		for (int i = 0; i < input.length; i++) {
-			for (int j = i + 1; j < input.length; j++) {
-				final StringDistance ld = new LevenshteinDistance(input[i], input[j]);
-				final StringDistance dld = new DamerauLevenshteinDistance(input[i], input[j]);
 
-				System.out.println(String.format("'%s' vs. '%s':", input[i],
-						input[j]));
-				System.out.println("Levenshtein-Distance: " + ld.getDistance()
-						+ " Transformation-process:");
-				System.out.println(ld.getProcessString());
-				System.out.println();
+    public static void main(String[] args) {
+        QuickSort sort = new QuickSort(10);
+        System.out.println(Arrays.toString(sort.array));
 
-				System.out.println("Damerau-Levenshtein-Distance: " + dld.getDistance()
-						+ " Transformation-process:");
-				System.out.println(dld.getProcessString());
+        sort.sort(0, 9);
+        System.out.println(Arrays.toString(sort.array));
+    }
 
-				// System.out.println(ld.toLaTeXString());
-			}
-		}
-	}
+    public void sort(int left, int right) {
+        if(right - left <= 0)
+            return;  
+        
+        else {
+            
+            
+            int pivot = this.array[right];
 
-	public static void main(final String[] args) {
-		printDistances("Fussball", "Football", "Futsal");
-		printDistances("Rentner", "Renntier");
-		printDistances("people", "pepole");
-	}
+            System.out.println("Value in right "+this.array[right]+" is made the pivot");
+            System.out.println("left="+left+" right="+right+" pivot="+pivot+"\n\n");
+
+            int pivotLocation = this.partition(left, right, pivot);
+            System.out.println("Value in left "+this.array[left]+" is made the pivot\n\n");
+
+            this.sort(left, pivotLocation - 1); 
+            this.sort(pivotLocation + 1, right); 
+        }
+    }
+
+
+    public int partition(int leftpointer, int right, int pivot) {
+        int left = leftpointer - 1;
+
+        while(true){
+            while(this.array[++left] < pivot);
+            System.out.println("Bigger value found against pivot "+pivot+" is "+this.array[left]);
+            
+            while(right > 0 && this.array[--right] > pivot);
+            System.out.println("Smaller value found against pivot "+pivot+" is "+this.array[right]);
+
+            if(left >= right) break;
+
+            else {
+                this.swap(left, right);
+                System.out.println(this.array[left]+" was swapped for "+this.array[right]);
+            }
+
+        }
+
+        this.swap(leftpointer, right);
+        return leftpointer;
+    }
+
+
+    public void swap(int pos1, int pos2) {
+        int temp = this.array[pos1];
+        this.array[pos1] = this.array[pos2];
+        this.array[pos2] = temp;
+    }
+
+
+    public void generate() {
+        for(int i=0; i<this.size; ++i)
+            this.array[i] = (int)(Math.random()*50)+10;
+    }
+
+
+    QuickSort(int size) {
+        this.size = size;
+        this.array = new int[size];
+        this.generate();
+    }
 }

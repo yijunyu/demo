@@ -1,56 +1,73 @@
-package com.walmart.productgenome.pairComparison.utils.comparers.stringComparers;
+package Quicksort;
 
-import com.walmart.productgenome.pairComparison.utils.comparers.IComparer;
+import sun.plugin.javascript.navig.Array;
 
-public class LevenshteinDistanceBasedComparer implements IComparer {
 
-	public double compare(String str1, String str2) {
-		if (str1 == null) throw new IllegalArgumentException("str1 cannot be null");
-		if (str2 == null) throw new IllegalArgumentException("str2 cannot be null");
-		
-		//the two strings must at least be 5 characters long for this comparer to work
-		if (str1.length() < 5) return 0.0;
-		if (str2.length() < 5) return 0.0;
-		
-		//the two strings are at least 5 characters long, so the comparer can work.
-		
-		//Compute the levenshtein-distance between the two strings
-		double distance = (double)computeLevenshteinDistance(str1, str2);
-		
-		//get the length of the longer string
-		double maxLength = Math.max((double)str1.length(), (double)str2.length());
-		
-		double simScore = 1.0 - (distance/maxLength);
-		
-		return simScore;
-	}
-	
-	
+public class Quicksort {
 
-	private static int computeLevenshteinDistance(CharSequence str1, CharSequence str2) {
-		int[][] distance = new int[str1.length() + 1][str2.length() + 1];
+    private int array[];
 
-		for (int i = 0; i <= str1.length(); i++)
-			distance[i][0] = i;
-		for (int j = 1; j <= str2.length(); j++)
-			distance[0][j] = j;
+    private void sort(int[] inputArr) {
 
-		for (int i = 1; i <= str1.length(); i++)
-			for (int j = 1; j <= str2.length(); j++)
-				distance[i][j] = minimum(
-						distance[i - 1][j] + 1,
-						distance[i][j - 1] + 1,
-						distance[i - 1][j - 1]
-								+ ((str1.charAt(i - 1) == str2.charAt(j - 1)) ? 0
-										: 1));
+        if (inputArr == null || inputArr.length == 0) {
+            return;
+        }
+        this.array = inputArr;
+        int length = inputArr.length;
+        quickSort(0, length - 1);
+    }
 
-		return distance[str1.length()][str2.length()];
-	}
-	
-	private static int minimum(int a, int b, int c) {
-		return Math.min(Math.min(a, b), c);
-	}
+    private void quickSort(int lowerIndex, int higherIndex) {
 
-	
-	
+        int i = lowerIndex;
+        int j = higherIndex;
+        
+        int pivot = array[lowerIndex + (higherIndex - lowerIndex) / 2];
+        
+        while (i <= j) {
+
+
+
+
+
+
+            while (array[i] < pivot) {
+                i++;
+            }
+            while (array[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                exchangeNumbers(i, j);
+                
+                i++;
+                j--;
+            }
+        }
+        
+        if (lowerIndex < j)
+            quickSort(lowerIndex, j);
+        if (i < higherIndex)
+            quickSort(i, higherIndex);
+    }
+
+    private void exchangeNumbers(int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static void main(String arg[]) {
+
+        Quicksort sorter = new Quicksort();
+        int[] input = { 24, 2, 45, -20, 56, 75, 7, -56, 99, 53, 12 };
+        sorter.sort(input);
+
+        for(int i : input) {
+            System.out.print(i);
+            System.out.print(" ");
+        }
+
+    }
+
 }

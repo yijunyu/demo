@@ -1,56 +1,106 @@
-package test;
+import java.util.Arrays;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+class ShellSort {
 
-public class Test {
-  public static List<String> order(String[] projects, String[][] deps) {
-    HashMap<String, List<String>> d = new HashMap<String, List<String>>();
-    for (int i = 0; i < deps.length; i++) {
-      String key = deps[i][0];
-      String value = deps[i][1];
-      if (!d.containsKey(key)) {
-        d.put(key, new ArrayList<String>());
-      }
-      d.get(key).add(value);
+    private int size;
+    private int[] array;
+
+    ShellSort(int arraySize) {
+        this.size = arraySize;
+        this.array = new int[this.size];
+        this.generate();
     }
 
-    HashMap<String, Integer> counts = new HashMap<String, Integer>();
-    for (String p : projects) {
-      if (d.containsKey(p)) {
-        for (String v : d.get(p)) {
-          if (!counts.containsKey(v)) {
-            counts.put(v, 0);
-          }
-          counts.put(v, counts.get(v) + 1);
+    private void generate() {
+        for(int i=0; i<this.size; ++i)
+            this.array[i] = (int)(Math.random()*50)+10;
+    }
+
+    public void sort() {
+        int inner, outer, temp;
+        int interval = 1;
+        
+        while (interval <= size / 3) {
+            
+            interval = interval * 3 + 1;
+            
+            
+            
+            
+            while (interval > 0) {
+                
+
+                for (outer = interval; outer < size; outer++) {
+
+                    
+                    
+                    
+
+                    temp = array[outer];
+
+                    System.out.println("Copy " + array[outer] + " into temp");
+
+                    
+                    
+                    
+
+                    inner = outer;
+
+                    System.out.println("Checking if " + array[inner - interval] + " in index " + (inner - interval) + " is bigger than " + temp);
+
+                    
+                    
+
+                    while (inner > interval - 1 && array[inner - interval] >= temp) {
+
+                    System.out.println("In While Checking if " + array[inner - interval] + " in index " + (inner - interval) + " is bigger than " + temp);
+
+                    
+                    
+                    
+
+                    array[inner] = array[inner - interval];
+
+                    System.out.println(array[inner - interval] + " moved to index " + inner);
+
+                    inner -= interval;
+
+                    System.out.println("inner= " + inner);
+
+                    System.out.println("outer= " + outer);
+                    System.out.println("temp= " + temp);
+                    System.out.println("interval= " + interval);
+
+                }
+
+                
+                
+                
+
+                array[inner] = temp;
+
+                System.out.println(temp + " moved to index " + inner);
+
+                System.out.println(Arrays.toString(this.array));
+
+            }
+
+            
+            
+
+            interval = (interval - 1) / 3;
         }
-      }
-      if (!counts.containsKey(p)) {
-        counts.put(p, 0);
-      }
-    }
 
-    List<String> res = new ArrayList<String>();
-    LinkedList<String> queue = new LinkedList<String>();
-    for (String key : counts.keySet()) {
-      if (counts.get(key) == 0) {
-        queue.add(key); // enqueue element
-      }
     }
-    while (!queue.isEmpty()) {
-      String elem = queue.pop(); // dequeue element
-      res.add(elem);
-      if (d.containsKey(elem)) {
-        for (String par : d.get(elem)) {
-          counts.put(par, counts.get(par) - 1);
-          if (counts.get(par) == 0) queue.add(par);
-        }
-      }
-    }
+}
 
-    if (res.size() != counts.size()) return null;
-    return res;
-  }
+
+
+    public static void main(String[] args) {
+        ShellSort sort = new ShellSort(10);
+        System.out.println(Arrays.toString(sort.array));
+
+        sort.sort();
+        System.out.println(Arrays.toString(sort.array));
+    }
 }

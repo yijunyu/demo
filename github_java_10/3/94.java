@@ -1,25 +1,45 @@
-import java.io.*;
-class TowersOfHanoi
-{
-	static int k=0;
-	public static void main(String args[])
-    {
-        int n = 4; // Number of disks
-        towerOfHanoi(n, '1', '2', '3');  // A, B and C are names of rods
-		System.out.println("total no. of steps : "+(k-1));
+
+
+public class Topological {
+    private Iterable<Integer> order;    
+
+    
+    public Topological(Digraph G) {
+        DirectedCycle finder = new DirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
     }
-        
-		static void towerOfHanoi(int n, char from_rod, char to_rod, char aux_rod)
-		{
-			if (n == 1)
-			{
-				k++;
-				System.out.println("Move disk 1 from rod " +  from_rod + " to rod " + to_rod);
-				return;
-			}
-			towerOfHanoi(n-1, from_rod, aux_rod, to_rod);
-			System.out.println("Move disk " + n + " from rod " +  from_rod + " to rod " + to_rod);
-			towerOfHanoi(n-1, aux_rod, to_rod, from_rod);
-		}
-     
+
+    
+    public Topological(EdgeWeightedDigraph G) {
+        EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
+    }
+
+    
+    public Iterable<Integer> order() {
+        return order;
+    }
+
+    
+    public boolean hasOrder() {
+        return order != null;
+    }
+
+
+    public static void main(String[] args) {
+        String filename  = args[0];
+        String delimiter = args[1];
+        SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
+        Topological topological = new Topological(sg.G());
+        for (int v : topological.order()) {
+            StdOut.println(sg.name(v));
+        }
+    }
+
 }

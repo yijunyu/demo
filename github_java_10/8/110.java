@@ -1,42 +1,82 @@
-/*
-@Copyright:LintCode
-@Author:   hanqiao
-@Problem:  http://www.lintcode.com/problem/edit-distance
-@Language: Java
-@Datetime: 16-06-08 09:28
-*/
+package nearestNeigh;
 
-public class Solution {
-    /**
-     * @param word1 & word2: Two string.
-     * @return: The minimum number of steps.
-     */
-    public int minDistance(String word1, String word2) {
-        // write your code here
-        if (word1 == null || word2 == null) {
-            return 0;
-        }
-        int m = word1.length();
-        int n = word2.length();
-        int[][] f = new int[m + 1][n + 1];
-        //initialize
-        for (int i = 0; i < m + 1; i++) {
-            f[i][0] = i;
-        }
-        for (int j = 0; j < n + 1; j++) {
-            f[0][j] = j;
-        }
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    f[i][j] = Math.min(Math.min(f[i - 1][j - 1], 
-                        f[i - 1][j] + 1), f[i][j - 1] + 1); 
-                } else {
-                    f[i][j] = Math.min(Math.min(f[i - 1][j - 1] + 1, 
-                        f[i - 1][j] + 1), f[i][j - 1] + 1);
-                }
-            }
-        }
-        return f[m][n];
-    }
+import java.util.Collections;
+import java.util.List;
+
+public class Quicksort {
+	
+	public static List<Point> byLat(List<Point> l, int low, int high) {
+
+		int lowWall = low;	
+		int highWall = high;	
+		
+		Point pivot = l.get((low + high)/2);	
+		while (lowWall < highWall) {	
+			while (l.get(lowWall).lat < pivot.lat)	
+				lowWall++;	
+
+			while (l.get(highWall).lat > pivot.lat) 
+				highWall--; 
+
+			if (lowWall <= highWall)	
+				Collections.swap(l, lowWall, highWall);
+		}
+		if (low + 1 < lowWall)	
+			byLat(l, low, lowWall);
+		if (high > highWall + 1)	
+			byLat(l, highWall, high);
+		return l;
+	}
+	
+	public static List<Point> byLon(List<Point> l, int low, int high) {
+
+		if (high - low == 1)
+			return l;
+		
+		int lowWall = low;
+		int highWall = high;
+		
+		Point pivot = l.get((low + high)/2);
+		while (lowWall < highWall) {
+			while (l.get(lowWall).lon < pivot.lon)
+				lowWall++;
+
+			while (l.get(highWall).lon > pivot.lon)
+				highWall--;
+
+			if (lowWall <= highWall)
+				Collections.swap(l, lowWall, highWall);
+		}
+		if (low < lowWall)
+			byLon(l, low, lowWall);
+		if (high > highWall)
+			byLon(l, highWall, high);
+		return l;
+	}
+	
+	public static List<Point> byDist(List<Point> l, Point value, int low, int high) {
+
+		if (high - low == 1)
+			return l;
+		
+		int lowWall = low;
+		int highWall = high;
+		
+		Point pivot = l.get((low + high)/2);
+		while (lowWall < highWall) {
+			while (l.get(lowWall).distTo(value) < pivot.distTo(value))
+				lowWall++;
+
+			while (l.get(highWall).distTo(value) > pivot.distTo(value))
+				highWall--;
+
+			if (lowWall <= highWall)
+				Collections.swap(l, lowWall, highWall);
+		}
+		if (low < lowWall)
+			byDist(l, value, low, lowWall);
+		if (high > highWall)
+			byDist(l, value, highWall, high);
+		return l;
+	}
 }

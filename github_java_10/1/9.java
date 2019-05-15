@@ -1,44 +1,51 @@
-package search.algorithms;
 
-import search.Explorable;
-import search.Status;
 
-import java.util.*;
 
-/**
- * Created by alde on 5/28/18.
- */
-public class BFS<T> implements ISearch {
 
-    @Override public Status search(Explorable initial) {
-        long iniTime = System.currentTimeMillis();
-        Queue<Explorable> nodes = new LinkedList<Explorable>();
-        nodes.add(initial);
-        Explorable currentSol = initial;
-        Map<String, String> statuses = new HashMap<String, String>();
-        statuses.put(initial.getKey(), initial.getKey());
-        while (!nodes.isEmpty()) {
-            Explorable currentNode = nodes.poll();
+import java.lang.*;
+import java.io.*;
+import java.lang.Object;
+import java.io.Reader;
+import java.io.BufferedReader;
 
-            if (currentNode.isFinal()) {
-                currentSol = currentNode;
-                break;
-            }
-            if(currentNode.isBetter(currentSol)){
-                currentSol = currentNode;
-            }
+public class insertionsort{
+	public static void main(String[] args){
+        int i;
+		int j;
+		 if(args.length!=1){
+			System.err.println("inputfile ");
+		 }
+		 long startTime = System.currentTimeMillis();
+		 String[] t1 = new String[50000];
+		 String tempStr;
+		try{
+			BufferedReader orig = new BufferedReader(new FileReader(args[0]));
+		
 
-            List<Explorable<T>> childs = currentNode.expand();
-            for (Explorable<T> newNode : childs) {
-                if (statuses.get(newNode.getKey()) != null) {
-                    continue;
-                }
-                statuses.put(newNode.getKey(), newNode.getKey());
-                nodes.add(newNode);
-            }
+		
+			String s1 = new String(orig.readLine());
+			t1 = s1.split(" ");
+			orig.close();
+		} catch(Exception error){
+			System.err.println("Error: message");
+		}
 
-        }
-        System.err.println("Time : "+(System.currentTimeMillis() - iniTime));
-        return currentSol;
-    }
+		
+		for (j = 1; j < t1.length; j++) { 
+			tempStr = t1[j];
+			i = j - 1;
+			while (i >= 0) {
+				if (tempStr.compareTo(t1[i]) > 0) {
+				break;
+				}
+				t1[i + 1] = t1[i];
+				i--;
+			}
+		t1[i + 1] = tempStr;
+		}
+
+		long endTime = System.currentTimeMillis();
+
+		System.out.println(endTime - startTime);
+   }
 }

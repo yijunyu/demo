@@ -1,170 +1,67 @@
+package linear;
 
-/*************************************************************************
- *  Compilation:  javac Merge.java
- *  Execution:    java Merge < input.txt
- *  Dependencies: StdOut.java StdIn.java
- *  Data files:   http://algs4.cs.princeton.edu/22mergesort/tiny.txt
- *                http://algs4.cs.princeton.edu/22mergesort/words3.txt
- *   
- *  Sorts a sequence of strings from standard input using mergesort.
- *   
- *  % more tiny.txt
- *  S O R T E X A M P L E
- *
- *  % java Merge < tiny.txt
- *  A E E L M O P R S T X                 [ one string per line ]
- *    
- *  % more words3.txt
- *  bed bug dad yes zoo ... all bad yet
- *  
- *  % java Merge < words3.txt
- *  all bad bed bug dad ... yes yet zoo    [ one string per line ]
- *  
- *************************************************************************/
-
-public class Merge {
-
-    // stably merge a[lo .. mid] with a[mid+1 .. hi] using aux[lo .. hi]
-    public static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
-
-        // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
-        assert isSorted(a, lo, mid);
-        assert isSorted(a, mid+1, hi);
-
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = a[k]; 
-        }
-
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)              a[k] = aux[j++];
-            else if (j > hi)               a[k] = aux[i++];
-            else if (less(aux[j], aux[i])) a[k] = aux[j++];
-            else                           a[k] = aux[i++];
-        }
-
-        // postcondition: a[lo .. hi] is sorted
-        assert isSorted(a, lo, hi);
-        
-    	/*int i = lo, j = mid+1;
-    	for (int k = lo; k <= hi; k++)
-    	{
-    	if (i > mid) aux[k] = a[j++];
-    	else if (j > hi) aux[k] = a[i++];
-    	else if (less(a[j], a[i])) aux[k] = a[j++];
-    	else aux[k] = a[i++];
-    	}*/
-    }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, aux, lo, mid);
-        sort(a, aux, mid + 1, hi);
-        merge(a, aux, lo, mid, hi);
-    	/*if (hi <= lo) return;
-    	int mid = lo + (hi - lo) / 2;
-    	sort (aux, a, lo, mid);
-    	sort (aux, a, mid+1, hi);
-    	merge(aux, a, lo, mid, hi);*/
-    }
-
-    public static void sort(Comparable[] a) {
-        Comparable[] aux = new Comparable[a.length];
-        sort(a, aux, 0, a.length-1);
-        assert isSorted(a);
-    }
+import java.util.Random;
 
 
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
+public class RadixSort {
     
-    // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
-    }
+    public static int[] sort(int[] input){
         
-    // exchange a[i] and a[j]
-    private static void exch(Object[] a, int i, int j) {
-        Object swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
-
-
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        return isSorted(a, 0, a.length - 1);
-    }
-
-    private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo + 1; i <= hi; i++)
-            if (less(a[i], a[i-1])) return false;
-        return true;
-    }
-
-
-   /***********************************************************************
-    *  Index mergesort
-    ***********************************************************************/
-    // stably merge a[lo .. mid] with a[mid+1 .. hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
-
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = index[k]; 
+        for(int place=1; place <= 1000000000; place *= 10){
+            
+            input = countingSort(input, place);
         }
 
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)                    index[k] = aux[j++];
-            else if (j > hi)                     index[k] = aux[i++];
-            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
-            else                                 index[k] = aux[i++];
+        return input;
+    }
+
+    private static int[] countingSort(int[] input, int place){
+        int[] out = new int[input.length];
+
+        int[] count = new int[10];
+
+        for(int i=0; i < input.length; i++){
+            int digit = getDigit(input[i], place);
+            count[digit] += 1;
         }
-    }
 
-    // return a permutation that gives the elements in a[] in ascending order
-    // do not change the original array a[]
-    public static int[] indexSort(Comparable[] a) {
-        int N = a.length;
-        int[] index = new int[N];
-        for (int i = 0; i < N; i++)
-            index[i] = i;
-
-        int[] aux = new int[N];
-        sort(a, index, aux, 0, N-1);
-        return index;
-    }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, index, aux, lo, mid);
-        sort(a, index, aux, mid + 1, hi);
-        merge(a, index, aux, lo, mid, hi);
-    }
-
-    // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
+        for(int i=1; i < count.length; i++){
+            count[i] += count[i-1];
         }
+
+        for(int i = input.length-1; i >= 0; i--){
+            int digit = getDigit(input[i], place);
+
+            out[count[digit]-1] = input[i];
+            count[digit]--;
+        }
+
+        return out;
+
     }
 
-    // Read strings from standard input, sort them, and print.
-    public static void main(String[] args) {
-        String[] a = StdIn.readStrings();
-        Merge.sort(a);
-        show(a);
+    private static int getDigit(int value, int digitPlace){
+        return ((value/digitPlace ) % 10);
+    }
+
+    public static void main(String[] args){
+        final int SIZE = 1000000;
+
+        Random r = new Random();
+        int[] test = new int[SIZE];
+
+        for (int i = 0; i < SIZE; i++){
+            test[i] = r.nextInt(Integer.MAX_VALUE);
+        }
+
+        long start = System.currentTimeMillis();
+        test = sort(test);
+        long end = System.currentTimeMillis();
+
+        for (Integer i : test){
+            System.out.println(i);
+        }
+
+        System.out.println(end-start);
     }
 }
-

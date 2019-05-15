@@ -1,258 +1,246 @@
-package sorting;
+import java.util.Arrays;
 
-public class Heap {
+public class Driver implements DriverInterface {
 
-	Integer[] A;
-	Integer heapSize;
+	static BubbleSort bubble;
+	static InsertionSort insertion;
+	static SelectionSort selection;
 
-	void maxHeapify(Integer A[], Integer i) {
-		int l = left(i);
-		int r = right(i);
-		int largest;
 
-		if (l <= heapSize && A[l - 1] > A[i - 1]) {
-			largest = l;
-		} else {
-			largest = i;
-		}
-
-		if (r <= heapSize && A[r - 1] > A[largest - 1]) {
-			largest = r;
-		}
-
-		if (largest != i) {
-			int temp = A[i - 1];
-			A[i - 1] = A[largest - 1];
-			A[largest - 1] = temp;
-			maxHeapify(A, largest);
-		}
-	}
-
-	void maxHeapifyIterative(Integer A[], Integer i) {
-
-		while (true) {
-			int l = left(i);
-			int r = right(i);
-			int largest;
-
-			if (l <= heapSize && A[l - 1] > A[i - 1]) {
-				largest = l;
-			} else {
-				largest = i;
-			}
-
-			if (r <= heapSize && A[r - 1] > A[largest - 1]) {
-				largest = r;
-			}
-
-			if (largest != i) {
-				int temp = A[i - 1];
-				A[i - 1] = A[largest - 1];
-				A[largest - 1] = temp;
-
-				i = largest;
-
-			} else {
-				return;
-			}
-		}
-
-	}
-
-	void minHeapify(Integer A[], Integer i) {
-		int l = left(i);
-		int r = right(i);
-		int smallest;
-
-		if (l <= heapSize && A[l - 1] < A[i - 1]) {
-			smallest = l;
-		} else {
-			smallest = i;
-		}
-
-		if (r <= heapSize && A[r - 1] < A[smallest - 1]) {
-			smallest = r;
-		}
-
-		System.out.println("smallest is " + A[smallest - 1]);
-
-		if (smallest != i) {
-			int temp = A[i - 1];
-			A[i - 1] = A[smallest - 1];
-			A[smallest - 1] = temp;
-			minHeapify(A, smallest);
-		}
-	}
-
-	void buildMaxHeap(Integer[] A) {
-		this.heapSize = A.length;
-
-		for (int i = (int) Math.floor(A.length / 2); i >= 1; i--) {
-			maxHeapify(A, i);
-		}
-	}
-
-	void heapSort(Integer[] A) {
-
-		buildMaxHeap(A);
-
-		for (int i = A.length; i >= 2; i--) {
-			int temp = A[0];
-			A[0] = A[i - 1];
-			A[i - 1] = temp;
-			this.heapSize--;
-			maxHeapify(A, 1);
-		}
-	}
-
-	public static void main(String[] args) throws Exception {
+	
+	@Override
+	public Integer[] createArray(ArrayType arrayType, int arraySize) {
 		
-		Integer[] data = { 16, 4, 10, 14, 7, 9, 3, 2, 8, 1 };
-
-		Heap heapSort = new Heap();
-
-		heapSort.A = data;
-		heapSort.heapSize = 10;
-		heapSort.maxHeapifyIterative(heapSort.A, 2);
-
-		for (int i = 0; i < heapSort.heapSize; i++) {
-			System.out.print(heapSort.A[i] + " ");
+		switch (arrayType) {
+			case Equal:
+				Integer[] equalArray = new Integer[arraySize];
+				for (int value = 0; value < equalArray.length; value++) {
+					equalArray[value] = 1;
+				}
+				return equalArray;
+			case Random:
+				Integer[] randArray = new Integer[arraySize];
+				for (int value = 0; value < randArray.length; value++) {
+					randArray[value] = (int)(Math.random() * 100000);
+				}
+				return randArray;
+			case Increasing:
+				Integer[] incArray = new Integer[arraySize];
+				for (int i = 0; i < incArray.length; i++) {
+					incArray[i] = i + 1;
+				}
+				return incArray;
+			case Decreasing:
+				Integer[] decArray = new Integer[arraySize];
+				int counter = arraySize;
+				for (int i = 0; i < decArray.length ; i++) {
+					
+					decArray[i] = counter--;
+				}
+				return decArray;
+			case IncreasingAndRandom:
+				
+				
+				
+				Integer[] incAndRandArray = new Integer[arraySize];
+				incAndRandArray[0] = 1;
+				
+				int arrayAt90Percent = (int) (incAndRandArray.length * .90);
+				for (int i = 1; i < arrayAt90Percent; i++) {
+					incAndRandArray[i] = i + 1;
+				}
+				for (int i = arrayAt90Percent; i < incAndRandArray.length ; i++) {
+					incAndRandArray[i] = (int)(Math.random() * 100000);
+				}
+				return incAndRandArray;
 		}
-
-		data = new Integer[10];
-		data[0] = 12;
-		data[1] = 2;
-		data[2] = 3;
-		data[3] = 4;
-		data[4] = 5;
-		data[5] = 6;
-		data[6] = 7;
-		data[7] = 8;
-		data[8] = 9;
-		data[9] = 10;
-
-		heapSort.A = data;
-		heapSort.minHeapify(heapSort.A, 1);
-		System.out.println();
-		for (int i = 0; i < heapSort.heapSize; i++) {
-			System.out.print(heapSort.A[i] + " ");
-		}
-
-		data = new Integer[10];
-		data[0] = 4;
-		data[1] = 1;
-		data[2] = 3;
-		data[3] = 2;
-		data[4] = 16;
-		data[5] = 9;
-		data[6] = 10;
-		data[7] = 14;
-		data[8] = 8;
-		data[9] = 7;
-
-		heapSort.A = data;
-		heapSort.buildMaxHeap(heapSort.A);
-		System.out.println();
-		for (int i = 0; i < heapSort.heapSize; i++) {
-			System.out.print(heapSort.A[i] + " ");
-		}
-
-		data = new Integer[11];
-		data[0] = 4;
-		data[1] = 1;
-		data[2] = 3;
-		data[3] = 2;
-		data[4] = 16;
-		data[5] = 9;
-		data[6] = 10;
-		data[7] = 14;
-		data[8] = 8;
-		data[9] = 7;
-		data[10] = 7;
-		heapSort.heapSize = 11;
-		heapSort.A = data;
-		heapSort.heapSort(heapSort.A);
-		System.out.println();
-		for (int i = 0; i < heapSort.A.length; i++) {
-			System.out.print(heapSort.A[i] + " ");
-		}
-
-		// -----------priority queue
-
-		data = new Integer[10];
-		data[0] = 16;
-		data[1] = 14;
-		data[2] = 10;
-		data[3] = 8;
-		data[4] = 7;
-		data[5] = 9;
-		data[6] = 3;
-		data[7] = 2;
-		data[8] = 4;
-		data[9] = 1;
-
-		heapSort.A = data;
-		heapSort.heapSize = 10;
-
-		System.out.println("\nPriority key");
-		//System.out.println(heapSort.extractMax(heapSort.A));
-		heapSort.increaseKey(heapSort.A, 9, 15);
-		heapSort.insert(heapSort.A, 17);
-		for (int i = 0; i < heapSort.heapSize; i++) {
-			System.out.print(heapSort.A[i] + " ");
-		}
-
+		
+		return null;
 	}
 
-	// get the parent of node i
-	Integer parent(Integer i) {
-		return (int) Math.floor(i / 2);
-	}
+	@Override
+	public RunTime runSort(SortType sortType, ArrayType arrayType, int arraySize, int numberOfTimes) {
+		
 
-	// get the left child of node i
-	Integer left(Integer i) {
-		return 2 * i;
-	}
+			switch (sortType) {
+				case BubbleSort:
 
-	// get the right child of node i
-	Integer right(Integer i) {
-		return 2 * i + 1;
-	}
+					bubble = new BubbleSort();
+					Integer[] bubbleArray;
+					
+					for (int counter = 0; counter < numberOfTimes; counter++) {
+						bubbleArray = createArray(arrayType, arraySize);
+						bubble.sort(bubbleArray);
 
-	//priority queue - extract the max key from maxheap
-	Integer extractMax(Integer[] A) throws Exception {
-		if (heapSize < 1) {
-			throw new Exception("Heap underflow!");
-		}
-		int max = A[0];
-		A[0] = A[heapSize - 1];
-		heapSize--;
-		maxHeapify(A, 1);
-		return max;
+					}
+					
+
+		
+					return bubble;
+				case InsertionSort:
+
+					insertion = new InsertionSort();
+					Integer[] insertionArray;
+					for (int counter = 0; counter < numberOfTimes; counter++) {
+						insertionArray = createArray(arrayType, arraySize);
+						insertion.sort(insertionArray);
+					}
+					
+					return insertion;
+				case SelectionSort:
+
+					selection = new SelectionSort();
+					Integer[] selectionArray;
+					for (int counter = 0; counter < numberOfTimes; counter++) {
+						selectionArray = createArray(arrayType, arraySize);
+						selection.sort(selectionArray);
+					}
+					
+					return selection;
+			} 
+
+		
+		return null;
 	}
 	
-	//priority queue  - increase the value of a key
-	void increaseKey(Integer A[], int i, int key) throws Exception {
-		if (key < A[i - 1]) {
-			throw new Exception("New key is smaller than current key");
-		}
-
-		A[i - 1] = key;
-		while (i > 1 && A[i - 1] > A[parent(i) - 1]) {
-			int temp = A[i - 1];
-			A[i - 1] = A[parent(i) - 1];
-			A[parent(i) - 1] = temp;
-			i = parent(i);
-		}
+	public void sortPrint(String sortType, String arrayType, String arraySize, RunTime run) {
+		
+		
+		System.out.println(sortType + "Sort, " + arrayType + ", " + arraySize);
+		System.out.println("--------------------------------------------------------------------------------------------------------------");
+		System.out.println(Arrays.toString(run.getRunTimes()) + " --- " + run.getAverageRunTime());
+		System.out.println();
 	}
 	
-	//insert a key to priority queue
-	void insert(Integer[] A, int key) throws Exception{
-		heapSize ++;
-		Integer[] temp = new Integer[heapSize];
-		System.arraycopy(A, 0, temp, 0, heapSize-1);
-		this.A = temp;
-		this.A[heapSize - 1] = Integer.MIN_VALUE;
-		increaseKey(this.A, heapSize, key);
+	public static void main(String[] args) {
+		
+		Driver testDrive = new Driver();
+		
+		System.out.println("Bubble Sort");
+		System.out.println("========================================================================");
+		System.out.println();
+		
+		
+		
+		
+		
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Equal, 1000, 10);
+		testDrive.sortPrint("Bubble", "Equal", "1,000", bubble);
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Random, 1000, 10);
+		testDrive.sortPrint("Bubble", "Random", "1,000", bubble);
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Increasing, 1000, 10);	
+		testDrive.sortPrint("Bubble", "Increasing", "1,000", bubble);
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Decreasing, 1000, 10);	
+		testDrive.sortPrint("Bubble", "Decreasing", "1,000", bubble);
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.IncreasingAndRandom, 1000, 10);	
+		testDrive.sortPrint("Bubble", "Increasing & Random", "1,000", bubble);
+		
+		
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Equal, 10000, 10);
+		testDrive.sortPrint("Bubble", "Equal", "10,000", bubble);	
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Random, 10000, 10);
+		testDrive.sortPrint("Bubble", "Random", "10,000", bubble);
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Increasing, 10000, 10);	
+		testDrive.sortPrint("Bubble", "Increasing", "10,000", bubble);
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.Decreasing, 10000, 10);
+		testDrive.sortPrint("Bubble", "Decreasing", "10,000", bubble);
+		
+		testDrive.runSort(SortType.BubbleSort, ArrayType.IncreasingAndRandom, 10000, 10);	
+		testDrive.sortPrint("Bubble", "Increasing & Random", "10,000", bubble);
+		
+		System.out.println();
+		System.out.println("Insertion Sort");
+		System.out.println("========================================================================");
+		System.out.println();
+		
+		
+		
+		
+		
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Equal, 1000, 10);
+		testDrive.sortPrint("Insertion", "Equal", "1,000", insertion);
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Random, 1000, 10);
+		testDrive.sortPrint("Insertion", "Random", "1,000", insertion);
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Increasing, 1000, 10);	
+		testDrive.sortPrint("Insertion", "Increasing", "1,000", insertion);
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Decreasing, 1000, 10);	
+		testDrive.sortPrint("Insertion", "Decreasing", "1,000", insertion);
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.IncreasingAndRandom, 1000, 10);	
+		testDrive.sortPrint("Insertion", "Increasing & Random", "1,000", insertion);
+		
+		
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Equal, 10000, 10);
+		testDrive.sortPrint("Insertion", "Equal", "10,000", insertion);	
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Random, 10000, 10);
+		testDrive.sortPrint("Insertion", "Random", "10,000", insertion);
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Increasing, 10000, 10);	
+		testDrive.sortPrint("Insertion", "Increasing", "10,000", insertion);
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.Decreasing, 10000, 10);
+		testDrive.sortPrint("Insertion", "Decreasing", "10,000", insertion);
+		
+		testDrive.runSort(SortType.InsertionSort, ArrayType.IncreasingAndRandom, 10000, 10);	
+		testDrive.sortPrint("Insertion", "Increasing & Random", "10,000", insertion);
+		
+		System.out.println();
+		System.out.println("Selection Sort");
+		System.out.println("========================================================================");
+		System.out.println();
+		
+		
+		
+		
+		
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Equal, 1000, 10);
+		testDrive.sortPrint("Selection", "Equal", "1,000", selection);
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Random, 1000, 10);
+		testDrive.sortPrint("Selection", "Random", "1,000", selection);
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Increasing, 1000, 10);	
+		testDrive.sortPrint("Selection", "Increasing", "1,000", selection);
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Decreasing, 1000, 10);	
+		testDrive.sortPrint("Selection", "Decreasing", "1,000", selection);
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.IncreasingAndRandom, 1000, 10);	
+		testDrive.sortPrint("Selection", "Increasing & Random", "1,000", selection);
+		
+		
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Equal, 10000, 10);
+		testDrive.sortPrint("Selection", "Equal", "10,000", selection);	
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Random, 10000, 10);
+		testDrive.sortPrint("Selection", "Random", "10,000", selection);
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Increasing, 10000, 10);	
+		testDrive.sortPrint("Selection", "Increasing", "10,000", selection);
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.Decreasing, 10000, 10);
+		testDrive.sortPrint("Selection", "Decreasing", "10,000", selection);
+		
+		testDrive.runSort(SortType.SelectionSort, ArrayType.IncreasingAndRandom, 10000, 10);	
+		testDrive.sortPrint("Selection", "Increasing & Random", "10,000", selection);
+		
 	}
+
 }

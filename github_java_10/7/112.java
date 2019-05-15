@@ -1,89 +1,58 @@
-import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.stream.IntStream;
 
-import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
+class Shellsort extends Geracao {
 
-/**
- * LeetCode 484 - Find Permutation
- * <p>
- * Topological sort
- * Build the graph based on "<"-relation on a[i]'s.
- * <p>
- * When doing the topological-sort, use a priority queue to hold all the array indices such that
- * smaller index always comes first.
- * Therefore, we can assign smaller numbers to smaller indices, which enforces the lexico-order.
- */
-public class _484 {
+   
+   public Shellsort(){
+      super();
+   }
 
-    static _484 sol = new _484();
 
-    public int[] findPermutation(String s) {
-        List<Integer>[] g = new List[s.length() + 1];
-        int[] inDegree = new int[g.length];
+   
+   public Shellsort(int tamanho){
+      super(tamanho);
+   }
 
-        for (int i = 0; i < g.length; i++) g[i] = new ArrayList<>();
-        for (int i = 0; i < s.length(); i++) {
-            int u, v;
-            if (s.charAt(i) == 'I') {
-                u = i;
-                v = i + 1;
-            } else {
-                u = i + 1;
-                v = i;
-            }
 
-            g[u].add(v);
-            inDegree[v]++;
-        }
+   
+   public static void shellsort() {
+      int h = 1;
 
-        int[] ans = new int[s.length() + 1];
-        int num = 1;
-        PriorityQueue<Integer> queue = new PriorityQueue<>(); // min-heap based on each position
-        for (int i = 0; i < inDegree.length; i++)
-            if (inDegree[i] == 0) queue.add(i);
-        while (!queue.isEmpty()) {
-            int u = queue.poll();
-            ans[u] = num++;
+      do { h = (h * 3) + 1; } while (h < n);
 
-            for (int v : g[u]) {
-                inDegree[v]--;
-                if (inDegree[v] == 0) queue.add(v);
-            }
-        }
+      do {
+         h /= 3;
+         for(int cor = 0; cor < h; cor++){
+            insercaoPorCor(cor, h);
+         }
+      } while (h != 1);
+   }
 
-        return ans;
-    }
 
-    @Test
-    public void test() {
-        List<Integer> expected;
-        List<Integer> actual;
-        String s;
+   
+   public static void insercaoPorCor(int cor, int h){
+      for (int i = (h + cor); i < n; i+=h) {
+         int tmp = array[i];
+         int j = i - h;
+         while ((j >= 0) && (array[j] > tmp)) {
+            array[j + h] = array[j];
+            j-=h;
+         }
+         array[j + h] = tmp;
+      }
+   }
 
-        s = "II";
-        expected = Arrays.asList(1, 2, 3);
-        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
-        assertEquals(expected, actual);
 
-        s = "DD";
-        expected = Arrays.asList(3, 2, 1);
-        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
-        assertEquals(expected, actual);
+   public static void main(String[] args) {
+      Shellsort shellsort = new Shellsort(100000000);
+      shellsort.aleatorio();
+      
 
-        s = "DDDI";
-        expected = Arrays.asList(4, 3, 2, 1, 5);
-        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
-        assertEquals(expected, actual);
+      long comeco = now();
+      shellsort.shellsort();
+      long fim = now();
 
-        s = "";
-        expected = Arrays.asList(1);
-        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
-        assertEquals(expected, actual);
-    }
+      
+      System.out.println("Tempo para ordenar: " + (fim-comeco)/1000.0 + " s.");
+   }
 }

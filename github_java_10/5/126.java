@@ -1,30 +1,64 @@
-package graphs;
 
-import java.util.Stack;
 
-public class DepthFirstSearch<T> {
+import java.awt.*;
+import javax.swing.*;
 
-    public void searchIterative(GraphNode<T> root) {
-        Stack<GraphNode<T>> stack = new Stack<>();
-        stack.push(root);
+public class BubbleSorter {
+	private int[] arr;
+	private int sorted= -1;
+	private int firstSpot = -1;
+	private int secondSpot = -1;
+	private JComponent component;
 
-        System.out.println("Visited node " + root.value);
-        while (!stack.isEmpty()) {
-            GraphNode<T> node = stack.pop();
-            if (!node.visited) {
-                node.visited = true;
-                node.children.forEach(stack::push);
-                System.out.println("Visited node " + node.value);
-            }
+	private static final int DELAY = 100;
 
-        }
-    }
+	
 
-    public void searchRecursive(GraphNode<T> node) {
-        node.visited = true;
-        System.out.println("Visited node " + node.value);
-        node.children.stream()
-                .filter(child -> !child.visited)
-                .forEachOrdered(this::searchRecursive);
-    }
+	public BubbleSorter(int[] arrayOne, JComponent element) {
+		arr = arrayOne;
+		component = element;
+	}
+
+
+	public void draw(Graphics var) {
+
+		int change = component.getWidth() / arr.length;
+		for (int i = 0; i < arr.length; i++) {
+			if (i == firstSpot) {
+				var.setColor(Color.PINK);
+			} else if (i == secondSpot) {
+				var.setColor(Color.GREEN);
+			} else if (i < sorted - 1) {
+				var.setColor(Color.BLACK);
+			} else if (i >= sorted) {
+				var.setColor(Color.GRAY);
+			}else {
+				var.setColor(Color.BLACK);
+			}
+			var.fillRect(i * change, 0, 5, 5*arr[i]);
+		}
+	} 
+	
+	 
+	public void sort() throws InterruptedException {
+
+		for (int i = 0; i < arr.length - 1; i++) {
+			for (int j = 0; j < arr.length - i - 1; j++) {
+				if (arr[j] > arr[j+1]) {
+					int temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j+1] = temp;
+				}
+				firstSpot = j+1;
+				sorted = arr.length-i;
+				pause(1);
+			}
+		}
+	}
+	public void pause(double o)
+			throws InterruptedException
+	{
+		component.repaint();
+		Thread.sleep((long) (o * DELAY));
+	}
 }

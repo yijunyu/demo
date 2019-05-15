@@ -1,25 +1,29 @@
-import java.io.*;
-import java.util.*;
-class CKP_Tower_Of_Hanoi
-{
-    static void HanoiLogic(int d,char a,char b,char c)
-    {
-        if(d==1)
-        {
-            System.out.println("MOVING THE DISK 1 FROM "+a+" TO "+b);
-            return;
-        }
-        HanoiLogic(d-1,a,c,b);
-        System.out.println("MOVING THE DISK "+d+" FROM "+a+" TO "+b);
-        HanoiLogic(d-1,c,b,a);
+package net.sf.anathema.graph.layering;
+
+import net.sf.anathema.graph.nodes.IRegularNode;
+import net.sf.anathema.graph.nodes.ISimpleNode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TopologyBuilder {
+
+  public static IRegularNode[] sortGraphByTopology(IRegularNode[] acyclicGraph) {
+    List<ISimpleNode> topologicalSort = new ArrayList<>();
+    for (IRegularNode node : acyclicGraph) {
+      if (node.isRootNode()) {
+        sortIntoSetRecursively(node, topologicalSort);
+      }
     }
-    public static void main(String[] args)
-    {
-        int num;
-        char A='A',B='B',C='C';
-        System.out.println("ENTER THE NUM OF DISK:");
-        Scanner s=new Scanner(System.in);
-        num=s.nextInt();
-        HanoiLogic(num,A,B,C);
+    return topologicalSort.toArray(new IRegularNode[topologicalSort.size()]);
+  }
+
+  private static void sortIntoSetRecursively(ISimpleNode node, List<ISimpleNode> topologicalSort) {
+    for (ISimpleNode child : node.getChildren()) {
+      sortIntoSetRecursively(child, topologicalSort);
     }
+    if (!topologicalSort.contains(node)) {
+      topologicalSort.add(0, node);
+    }
+  }
 }

@@ -1,74 +1,30 @@
-/**
- * Sorting algorithms
- */
-package com.anuragkapur.sorting;
 
-/**
- * Insertion Sort
- * 
- * @author anurag.kapur
- */
-public class InsertionSort {
-
-    public void sort(int a[]) {
-
-        if(a == null || a.length <= 1) {
-            return;
-        }
-
-        insertNumberAtIndexInSortedArray(a, 1);
-    }
-
-    private void insertNumberAtIndexInSortedArray(int a[], int index) {
-
-        if (index == a.length) {
-            return;
-        }
-
-        int number = a[index];
-        int i;
-        for (i=index-1; i >= 0; i--) {
-            if (number < a[i]) {
-                a[i+1] = a[i];
-            } else {
-                break;
-            }
-        }
-
-        a[i+1] = number;
-
-        insertNumberAtIndexInSortedArray(a, index+1);
-    }
-
-	/**
-	 * Iterative version of insertion sort.
-     *
-     * Running time:
-     *  Best case: O(n)
-     *  Worst Case: O(n^2)
-     *
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		// Array of numbers to sort
-		int a[] = {5,1,4,3,8,6,9,10,7,2};
-
-        // Insertion sort algo
-		for (int i = 1; i < a.length; i++) {
-			int key = a[i];
-			int j = i - 1;
-			while(j >= 0 && a[j] > key) {
-				a[j + 1] = a[j];
-				j --;
-			}
-			a[j + 1] = key;
-		}
-		
-		// Output the sorted array
-		for (int i = 0; i < a.length; i++) {
-			System.out.println(a[i]);
-		}
+void HeapSort(int[] n){
+	if(n==null || n.length<=1)
+		return;
+	int length = n.length;
+	for(int i=length/2; i>=1; i--){ //start from 1 since i=2*s; need s start with 1 in HeapAdjust();
+		HeapAdjust(n, i, length);
 	}
-
+	for(int i=length; i>1; i--){
+		int temp = n[i-1]; //start from 1, need i-1
+		n[i-1] = n[0];
+		n[0] = temp;
+		HeapAdjust(n, 1, i-1); //omit last i, start from 1
+	}
 }
+
+void HeapAdjust(int[] n, int s, int e){ //maximum heap
+	int val = n[s-1];
+	for(int i=2*s; i<=e; i*=2){
+		if(i<e && n[i+1-1]>n[i-1])
+			i++;
+		if(val>n[i-1])
+			break;
+		n[s-1] = n[i-1];
+		s = i;
+	}
+	n[s-1] = val;
+}
+
+//Radix sort suitable to: O(d*n), when n is big but d is small.

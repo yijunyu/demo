@@ -1,65 +1,32 @@
-package degree;
+package JavaConcepts;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Scanner;
 
-/**
- * An implementation of Degree using Breadth-First-Search.
- * 
- * @author anoopelias
- * 
- */
-public class DegreeBFS {
+public class Insertionsort {
 
-    private Graph g;
-
-    /**
-     * Initialize with graph g.
-     * 
-     * @param g
-     */
-    public DegreeBFS(Graph g) {
-        this.g = g;
-    }
-
-    /**
-     * Return the degree between u and v on the graph g.
-     * 
-     * @param u
-     * @param v
-     * @return
-     */
-    public int degree(int u, int v) {
-        Deque<Node> q = new ArrayDeque<Node>();
-        boolean[] marked = new boolean[g.n()];
-        q.addLast(new Node(u, 0));
-
-        while (!q.isEmpty()) {
-            Node n = q.pollFirst();
-
-            if (n.index == v)
-                return n.degree;
-
-            if (!marked[n.index]) {
-
-                for (Edge e : g.adj(n.index))
-                    q.addLast(new Node(e.other(n.index), n.degree + 1));
-
-                marked[n.index] = true;
-            }
-        }
-
-        return -1;
-    }
-
-    private class Node {
-        int index;
-        int degree;
-
-        Node(int index, int degree) {
-            this.index = index;
-            this.degree = degree;
-        }
-    }
-
+	public static int [] arr= new int[5];
+	
+	public static void main(String[] args) {
+	for (int i=0; i<arr.length;i++){
+		Scanner sn=  new Scanner(System.in);
+		arr[i] = sn.nextInt();
+	}
+	
+	for(int i=1;i<arr.length;i++){
+	int j=i-1;
+	while(j>=0 && arr[j]>arr[j+1]){
+		int temp= arr[j];
+		arr[j]=arr[j+1];
+		arr[j+1]=temp;
+		j--;
+	}
+		
+	}
+	for (int i=0; i<arr.length;i++){
+		System.out.println(arr[i] + " ");
+	}
+		
+	}
+	
+	
 }

@@ -1,82 +1,24 @@
-package com.sm.algorithms.graph;
-
-import com.google.common.base.Preconditions;
-
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+package com.example.tsnt.algorithm.sort;
 
 
-/**
- * 1. DFS Reverse post order (stack after recursion)
- * 2. Result Stack gives sequence
- *
- */
-public class TopologicalSort {
-  private int count;
-  private List<Integer>[] adjList;
-  private boolean[] visited;
-  private Deque<Integer> stack = new ArrayDeque<>();
 
-  public TopologicalSort(int count) {
-    this.count = count;
-    adjList = new LinkedList[count];
-    visited = new boolean[count];
-    for(int i = 0; i < count; i++) {
-      adjList[i]  = new LinkedList<>();
+public class ShellSort implements SortInterface {
+    @Override
+    public void sort(int[] nums) {
+        if (nums == null) return;
+        int d = nums.length;
+        while (d != 0) {
+            d /= 2;
+            for (int x = 0; x < d; x++) {
+                for (int i = x + d; i < nums.length; i += d) {
+                    int insertNum = nums[i];
+                    int j = i - d;
+                    for (; j >= 0 && insertNum < nums[j]; j -= d) {
+                        nums[j + d] = nums[j];
+                    }
+                    nums[j + d] = insertNum;
+                }
+            }
+        }
     }
-  }
-
-  public void dfs() {
-    for(int i = 0; i < count; i++) {
-      if (!visited[i]) {
-        dfs(i);
-      }
-    }
-  }
-
-  public  void addEdge(int src, int dest) {
-    Preconditions.checkArgument(src < count);
-    Preconditions.checkArgument(dest < count);
-    adjList[src].add(dest);
-  }
-
-  public Collection<Integer> getSequence() {
-    return stack;
-  }
-
-  private void dfs(int src) {
-    visited[src] = true;
-    for(int adj: adjList[src]) {
-      if (!visited[adj]) {
-        dfs(adj);
-      }
-    }
-    stack.push(src);
-  }
-
-  public static void main(String[] args) {
-    TopologicalSort topologicalSort = new TopologicalSort(13);
-    topologicalSort.addEdge(0, 5);
-    topologicalSort.addEdge(0, 1);
-    topologicalSort.addEdge(0, 6);
-    topologicalSort.addEdge(5, 4);
-    topologicalSort.addEdge(2, 0);
-    topologicalSort.addEdge(0, 3);
-    topologicalSort.addEdge(3, 5);
-    topologicalSort.addEdge(6, 4);
-    topologicalSort.addEdge(7, 6);
-    topologicalSort.addEdge(6, 9);
-    topologicalSort.addEdge(8, 7);
-    topologicalSort.addEdge(9, 10);
-    topologicalSort.addEdge(9, 11);
-    topologicalSort.addEdge(9, 12);
-    topologicalSort.addEdge(11, 12);
-
-    topologicalSort.dfs();
-    System.out.println("sequence: " + topologicalSort.getSequence());
-  }
-
 }

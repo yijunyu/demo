@@ -1,86 +1,133 @@
-package tree_visualization;
 
-import meetup_21_avl_tree.AvlBinarySearchTree;
-import tree_visualization.avl.AvlInsertActionListener;
-import tree_visualization.avl.AvlRemoveActionListener;
 
-import javax.swing.*;
-import java.awt.*;
 
-public class AvlTreeDemo {
-    public static boolean RIGHT_TO_LEFT = false;
+public class Merge {
 
-    public static void addComponentsToPane(GroupLayout layout, JFrame frame) {
-        JLabel valueLabel = new JLabel("Value:");
-        JTextField valueField = new JTextField();
+    
+    private Merge() { }
 
-        Insets buttonMargin = new Insets(0, 0, 0, 0);
-        JButton insertButton = new JButton("Insert");
-        insertButton.setMargin(buttonMargin);
+    
+    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+        
+        assert isSorted(a, lo, mid);
+        assert isSorted(a, mid+1, hi);
 
-        AvlBinarySearchTree<Integer> tree = new AvlBinarySearchTree<>();
-        TreePanel treePanel = new TreePanel();
-
-        JButton removeButton = new JButton("Remove");
-        removeButton.setMargin(buttonMargin);
-        insertButton.addActionListener(new AvlInsertActionListener(treePanel, valueField, frame, tree));
-        removeButton.addActionListener(new AvlRemoveActionListener(treePanel, valueField, frame, tree));
-
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(valueLabel)
-                                .addComponent(valueField)
-                                .addComponent(insertButton)
-                                .addComponent(removeButton))
-                        .addComponent(treePanel)));
-
-        layout.setVerticalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(valueLabel)
-                                .addComponent(valueField)
-                                .addComponent(insertButton)
-                                .addComponent(removeButton)))
-                .addComponent(treePanel));
-    }
-
-    private static void createAndShowGUI() {
-        JFrame frame = new JFrame("AVL Binary Search Tree Demo");
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        Container contentPane = frame.getContentPane();
-        GroupLayout layout = new GroupLayout(contentPane);
-        contentPane.setLayout(layout);
-
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
-
-        addComponentsToPane(layout, frame);
-
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        /* Use an appropriate Look and Feel */
-        try {
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k]; 
         }
 
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)              a[k] = aux[j++];   
+            else if (j > hi)               a[k] = aux[i++];
+            else if (less(aux[j], aux[i])) a[k] = aux[j++];
+            else                           a[k] = aux[i++];
+        }
+
+        
+        assert isSorted(a, lo, hi);
     }
 
+    
+    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, aux, lo, mid);
+        sort(a, aux, mid + 1, hi);
+        merge(a, aux, lo, mid, hi);
+    }
+
+    
+    public static void sort(Comparable[] a) {
+        Comparable[] aux = new Comparable[a.length];
+        sort(a, aux, 0, a.length-1);
+        assert isSorted(a);
+    }
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
+    }
+
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+   
+    
+    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = index[k]; 
+        }
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)                    index[k] = aux[j++];
+            else if (j > hi)                     index[k] = aux[i++];
+            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
+            else                                 index[k] = aux[i++];
+        }
+    }
+
+    
+    public static int[] indexSort(Comparable[] a) {
+        int N = a.length;
+        int[] index = new int[N];
+        for (int i = 0; i < N; i++)
+            index[i] = i;
+
+        int[] aux = new int[N];
+        sort(a, index, aux, 0, N-1);
+        return index;
+    }
+
+    
+    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, index, aux, lo, mid);
+        sort(a, index, aux, mid + 1, hi);
+        merge(a, index, aux, lo, mid, hi);
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readAllStrings();
+        Stopwatch timer = new Stopwatch();
+        Merge.sort(a);
+        System.out.println();
+        System.out.println("It took Merge " + timer.elapsedTime() + " seconds to sort the data");
+        show(a);
+    }
 }

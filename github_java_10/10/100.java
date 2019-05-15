@@ -1,36 +1,34 @@
-package com.ibm.assgnmnt;
+package sortAlg;
 
-public class Bubblesort {
-	 void bubblesort(int arr[])
-	    {
-	        int n = arr.length;
-	        for (int i = 0; i < n-1; i++)
-	            for (int j = 0; j < n-i-1; j++)
-	                if (arr[j] > arr[j+1])
-	                {
-	                    int temp = arr[j];
-	                    arr[j] = arr[j+1];
-	                    arr[j+1] = temp;
-	                }
-	    }
-	 
-	    void print(int arr[])
-	    {
-	        int n = arr.length;
-	        for (int i=0; i<n; ++i)
-	            System.out.print(arr[i] + " ");
-	        System.out.println();
-	    }		
-		 public static void main(String args[])
-		    {
-		    	// TODO Auto-generated method stub
-		        Bubblesort ob = new Bubblesort();
-		        int arr[] = {4, 3, 5, 1, 2, 0, -1};
-		        ob.bubblesort(arr);
-		        System.out.println("Sorted array");
-		        ob.print(arr);
-		    }
-		
+import java.util.ArrayList;
+import java.util.List;
+
+public class Bucket {
+	public  static List<Integer>  sort(int[] array){
+		List<Integer> out=new ArrayList<Integer>();
+		Integer[] b=new Integer[1000];
+		for (int i = 0; i < array.length; i++) {
+			if(b[array[i]]==null){
+				b[array[i]]=1;
+			}else{
+				b[array[i]]++;
+			}
+			
+		}
+		for (int j = 0; j < b.length; j++) {
+			if(b[j]!=null){
+				for (int k = 0; k< b[j]; k++) {
+					out.add(j);
+				}
+			}
+		}
+		return out;
 	}
-
-
+   public static void main(String[] args) {
+	  List<Integer> p= sort(new int[]{2,7,3,6,4,9,1,3,5});
+	  for (int i = 0; i < p.size(); i++) {
+		  System.out.print(p.get(i)+",");
+	}
+	  
+   }
+}

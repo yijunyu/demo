@@ -1,39 +1,75 @@
-// 最大値、最小値、中央値を決める
-void mergeSort(int[] array, int low, int high){
-  if(low < high){
-    int middle = (low + high) / 2;
-    mergeSort(array, low, middle);
-    mergeSort(array, middle + 1, high);
-    mergeSort(array, low, middle, high);
-  }
-}
-
-//ソート本体
-void merge(int[] array, int low, int middle, int high){
-  int[] helper = new int[array, lenght];
-  //最大値の分までhelperにarrayを代入する
-  for (int i = low ; i <= high ; i++){
-    helper[i] = array[i];
-  }
-  //変数定義
-  int helper = low;
-  int helperRight = middle + 1;
-  int current = low;
-
-  //middleよりも高いか低いかを分けて条件ないでソートする
-  while (helperLeft <= middle && helperRight <= high){
-    if (helper[helperLeft] <= helper[helperRight]){
-      array[current] = helper[helperLeft];
-      helperLeft++ ;
-    } else{
-      array[current] = helper[helperRight];
-      helper++;
+package sorting;
+import java.io.*;
+import java.util.*;
+ 
+class Radix {
+ 
+    static int getMax(int arr[], int n)
+    {
+        int mx = arr[0];
+        for (int i = 1; i < n; i++)
+            if (arr[i] > mx)
+                mx = arr[i];
+        return mx;
     }
-    current++;
-  }
 
-  int remaining = middle - helper;
-  for (int i = 0 <= remaining; i++){
-    array[current + i] = helper[helperLeft + i];
-  }
+    static void countSort(int arr[], int n, int exp)
+    {
+        int output[] = new int[n]; 
+        int i;
+        int count[] = new int[10];
+        Arrays.fill(count,0);
+ 
+        
+        for (i = 0; i < n; i++)
+            count[ (arr[i]/exp)%10 ]++;
+ 
+        
+        
+        for (i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+ 
+        
+        for (i = n - 1; i >= 0; i--)
+        {
+            output[count[ (arr[i]/exp)%10 ] - 1] = arr[i];
+            count[ (arr[i]/exp)%10 ]--;
+        }
+ 
+        
+        
+        for (i = 0; i < n; i++)
+            arr[i] = output[i];
+    }
+ 
+    
+    
+    static void radixsort(int arr[], int n)
+    {
+        
+        int m = getMax(arr, n);
+ 
+        
+        
+        
+        for (int exp = 1; m/exp > 0; exp *= 10)
+            countSort(arr, n, exp);
+    }
+ 
+    
+    static void print(int arr[], int n)
+    {
+        for (int i=0; i<n; i++)
+            System.out.print(arr[i]+" ");
+    }
+ 
+ 
+    
+    public static void main (String[] args)
+    {
+        int arr[] = {170, 45, 75, 90, 802, 24, 2, 66, 0};
+        int n = arr.length;
+        radixsort(arr, n);
+        print(arr, n);
+    }
 }

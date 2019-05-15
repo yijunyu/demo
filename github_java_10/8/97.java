@@ -1,68 +1,121 @@
-package HW7;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Scanner;
-import java.util.Vector; 
+package edu.princeton.algs4;
 
-public class editdistance {
+import edu.princeton.stdlib.StdIn;
+import edu.princeton.stdlib.StdOut;
+import edu.princeton.stdlib.StdRandom;
 
-    Vector<String> Ve= new Vector<String>(5,3);
-    Vector<String> Ne= new Vector<String>(5,3);
-    public  int min (int x, int y, int z){ //create a method to find the min value among 3 numbers
-		int temp =x; 
-		    if (temp > z) temp = z;
-		    System.out.print(temp);
-	}
+
+
+public class Quick {
+
     
-	public void readfile(String inputFile) throws FileNotFoundException {
-		InputStream in = new FileInputStream(inputFile);
-		Scanner scan = new Scanner(in);
-		while(scan.hasNext()) //read the file line by line
-		{
-			String str = scan.nextLine();
-		    Ve.add(str);
-		}
-		scan.close();
-	
-	for (int j=0 ; j<Ve.size(); j++){ //for each line, load each word in a vector 
-		Scanner scan2 = new Scanner(Ve.get(j));
-		while(scan2.hasNext()){
-	
-	    String str2 = scan2.next();
-		Ne.add(str2);
-		
-	}
-		scan2.close();}
-	
+    public static void sort(Comparable[] a) {
+        StdRandom.shuffle(a);
+        sort(a, 0, a.length - 1);
+    }
 
-	
-     for (int i=0 ; i<Ve.size()-1; i++){
-    	 String a = Ve.get(i);//get pair of stings
-    	 String b = Ve.get(i+1);
-    	 int c;
-    	 int contents[][] = new int[a.length()][b.length()];//declare a 2D vector to compare the distance of two strings
-    	 for(int j = 0; j <= a.length(); j ++) {contents[j][0] = j;};
-    	 for(int k = 0; k <= b.length();k ++) {contents[0][k] = k; };
-    	 for(int j = 1; j <= a.length(); j ++)  {             //use a double loop to calculate the distance between two strings.
-    	         for(int k = 1; k <= b.length(); k ++) {
-    	                 if(a.substring(j, j+1) == b.substring(k, k+1)) {c = 0;}
-    	                 else 
-    	                 {c = 1; 
-    	                 contents[j][k] = min(contents[j-1][k] + 1, contents[j][k-1] + 1, contents[j-1][k-1]+c);}
-    	                 System.out.print( contents[j][k]+" ");
-    	         }
-    	 }
-     }
-     
-	}
+    
+    private static void sort(Comparable[] a, int lo, int hi) { 
+        if (hi <= lo) return;
+        int j = partition(a, lo, hi);
+        sort(a, lo, j-1);
+        sort(a, j+1, hi);
+        assert isSorted(a, lo, hi);
+    }
+
+    
+    
+    private static int partition(Comparable[] a, int lo, int hi) {
+        int i = lo;
+        int j = hi + 1;
+        Comparable v = a[lo];
+        while (true) { 
+
+            
+            while (less(a[++i], v))
+                if (i == hi) break;
+
+            
+            while (less(v, a[--j]))
+                if (j == lo) break;      
+
+            
+            if (i >= j) break;
+
+            exch(a, i, j);
+        }
+
+        
+        exch(a, lo, j);
+
+        
+        return j;
+    }
+
+   
+    public static Comparable select(Comparable[] a, int k) {
+        if (k < 0 || k >= a.length) {
+            throw new RuntimeException("Selected element out of bounds");
+        }
+        StdRandom.shuffle(a);
+        int lo = 0, hi = a.length - 1;
+        while (hi > lo) {
+            int i = partition(a, lo, hi);
+            if      (i > k) hi = i - 1;
+            else if (i < k) lo = i + 1;
+            else return a[i];
+        }
+        return a[lo];
+    }
+
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
+    }
+
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readStrings();
+        Quick.sort(a);
+        show(a);
+
+        
+        StdOut.println();
+        for (int i = 0; i < a.length; i++) {
+            String ith = (String) Quick.select(a, i);
+            StdOut.println(ith);
+        }
+    }
+
 }
-	
-	
-	
-	
-	
-	
-	
-	
-	

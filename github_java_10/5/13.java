@@ -1,65 +1,55 @@
-package com.nicelife729.algo.graphs.depthfirstsearch;
+package sort;
 
-import com.nicelife729.algo.graphs.graph.DirectedGraph;
-import com.nicelife729.algo.graphs.graph.Graph;
-import com.nicelife729.algo.graphs.graph.Vertex;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 
-import java.util.Stack;
 
-/**
- * Rules:--
- * 1. If possible, visit an adjacent unvisited vertex, mark it, and push it on the stack.
- * 2. If you can’t follow Rule 1, then, if possible, pop a vertex off the stack.
- * 3. If you can’t follow Rule 1 or Rule 2, you’re done.
- * <p/>
- * Created by techpanja
- * Created on 1/20/14 1:31 PM.
- */
-public class DFS {
 
-    private static Stack<Vertex> stack = new Stack<>();
 
-    private DFS() {
+public class Bubble {
 
-    }
+   
+    private Bubble() { }
 
-    public static void dfs(Graph graph) {
-        Vertex vertex = graph.getFirstVertex();
-        if (vertex != null) {
-            vertex.setVisited(true);
-            stack.push(vertex);
-            System.out.println(vertex);
-            while (!stack.isEmpty()) {
-                Vertex tempVertex = getUnvisitedVertex(stack.peek());
-                if (tempVertex == null) {
-                    stack.pop();
-                } else {
-                    tempVertex.setVisited(true);
-                    stack.push(tempVertex);
-                    System.out.println(tempVertex);
+    
+    public static <Key extends Comparable<Key>> void sort(Key[] a) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            int exchanges = 0;
+            for (int j = n-1; j > i; j--) {
+                if (less(a[j], a[j-1])) {
+                    exch(a, j, j-1);
+                    exchanges++;
                 }
             }
+            if (exchanges == 0) break;
         }
     }
 
-    private static Vertex getUnvisitedVertex(Vertex vertex) {
-        for (Vertex temp : vertex.getDependsOn()) {
-            if (!temp.isVisited()) {
-                return temp;
-            }
-        }
-        return null;
+    
+    private static <Key extends Comparable<Key>> boolean less(Key v, Key w) {
+        return v.compareTo(w) < 0;
     }
 
+    
+    private static <Key extends Comparable<Key>> void exch(Key[] a, int i, int j) {
+        Key swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+   
+    private static <Key extends Comparable<Key>> void show(Key[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
     public static void main(String[] args) {
-        Graph graph = new DirectedGraph(6);
-        graph.addEdge("v1", "v2");
-        graph.addEdge("v2", "v3");
-        graph.addEdge("v3", "v4");
-        graph.addEdge("v1", "v5");
-        graph.addEdge("v1", "v6");
-        graph.displayGraphDependency();
-        dfs(graph);
+        String[] a = StdIn.readAllStrings();
+        Bubble.sort(a);
+        show(a);
     }
-
 }
+

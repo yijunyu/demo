@@ -1,48 +1,110 @@
 
 
-import java.io.*;
-class Tower
-{
-	public static void main(String args[])throws IOException
-	{
-		int n;
-		DataInputStream obj=new DataInputStream(System.in);
-		System.out.println("Enter the no of discs:");
-		n=Integer.parseInt(obj.readLine());
-		
-		hanoi(n,'A','C','B');
-	}
+package nz.ac.waikato.jdsl.graph.algo;
+
+import nz.ac.waikato.jdsl.core.api.Sequence;
+import nz.ac.waikato.jdsl.core.ref.NodeSequence;
+import nz.ac.waikato.jdsl.graph.api.*;
+
+
+
+
+public abstract class AbstractTopologicalSort {
+
+
+  
+  protected InspectableGraph graph_;
+
+
+  
+  protected boolean is_cyclic_;
+  
+
+
+  
+  public Object NUMBER_KEY_;
+  
+  
+  
+  protected Sequence queue_;
+
+
+
+  
+  public AbstractTopologicalSort(){
+  }
+
+
+
+  
+  public void execute(InspectableGraph g) throws InvalidEdgeException{
+    init(g);
+    sort();
+  }
+
+
+
+  
+  protected void init(InspectableGraph g) throws InvalidEdgeException{
+    graph_ = g;
+    NUMBER_KEY_ = new Object();
+    queue_ = new NodeSequence();
+
+    
+    EdgeIterator ei = graph_.edges();
+    while (ei.hasNext()){
+      Edge e = ei.nextEdge();
+      if (!graph_.isDirected(e)){
+	throw new InvalidEdgeException("All edges must be directed");
+      }
+    }
+  }
+
+
+  
+  protected abstract void sort();
+
+
+
+  
+
+  
+  public int number(Vertex v) throws
+    InvalidQueryException, InvalidVertexException {
+    if (is_cyclic_){
+      throw new InvalidQueryException("Can't get the numbering because the "
+				       + "graph contains cycles");
+    }
+    return ((Integer)v.get(NUMBER_KEY_)).intValue();
+  }
+
+
+
+
+
+  
+  public boolean isCyclic() throws InvalidQueryException{
+    return is_cyclic_;
+  }
+
+
+
+  
+  public void cleanup(){
+    if (graph_ != null){
+      VertexIterator vertices = graph_.vertices();
+      while(vertices.hasNext()){
+	Vertex currentVertex = vertices.nextVertex();
 	
-	static void hanoi(int n,char from,char to,char temp)
-	{
-		if (n==1)
-		{
-			System.out.println("Disc "+n+" from "+from+" to "+to);
-			return;
-		}
-		else
-                {hanoi(n-1,from,temp,to);
-		
-			System.out.println("Disc "+(n)+" from "+from+" to "+to);
 	
-		
-		
-		hanoi(n-1,temp,to,from);
-		
-		
-		}
+	if (currentVertex.has(NUMBER_KEY_)){
+	  currentVertex.destroy(NUMBER_KEY_);
 	}
+      }
+      
+      graph_ = null;
+    }
+  }
+
+
 }
-
-/*
-Enter the no of discs:
-3
-Disc 1 from A to C
-Disc 2 from A to B
-Disc 1 from C to B
-Disc 3 from A to C
-Disc 1 from B to A
-Disc 2 from B to C
-Disc 1 from A to C
-
-*/

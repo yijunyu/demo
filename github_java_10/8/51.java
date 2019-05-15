@@ -1,62 +1,73 @@
-package org.codeexample.algorithms.collected.spellchecker;
+package unittest;
+import java.util.Comparator;
 
-import java.util.ArrayList;
-import java.util.List;
+import queues.LinkedQueue;
+import queues.Queue;
 
-/**
- * Source: http://www.codeproject.com/Articles/36869/Fuzzy-Search
- * <p>
- * 
- */
-public class FuzzySearch
-{
-    public static void main(
-            String[] args)
-    {
-        String word = "Code Project";
-        List<String> wordList = new ArrayList<String>();
-        wordList.add("Code Project");
-        wordList.add("Code project");
-        wordList.add("codeproject");
-        wordList.add("Code Projekt");
-        wordList.add("Kode Project");
-        wordList.add("Other Project");
 
-        List<String> foundWords = FuzzySearch.Search(word, wordList, 0.70);
-        for (String str : foundWords)
-        {
-            System.out.println(str);
-        }
-        System.out.println("************ Split line ************");
-        foundWords = FuzzySearch.Search(word, wordList, 1);
-        for (String str : foundWords)
-        {
-            System.out.println(str);
-        }
-        // foundWords.ForEach(i => Console.WriteLine(i));
+class QuickSort {
+
+  
+  
+  public static <K> void quickSort(Queue<K> S, Comparator<K> comp) {
+    int n = S.size();
+    if (n < 2) return;                       
+    
+    K pivot = S.first();                     
+    Queue<K> L = new LinkedQueue<>();
+    Queue<K> E = new LinkedQueue<>();
+    Queue<K> G = new LinkedQueue<>();
+    while (!S.isEmpty()) {                   
+      K element = S.dequeue();
+      int c = comp.compare(element, pivot);
+      if (c < 0)                             
+        L.enqueue(element);
+      else if (c == 0)                       
+        E.enqueue(element);
+      else                                   
+        G.enqueue(element);
     }
+    
+    quickSort(L, comp);                      
+    quickSort(G, comp);                      
+    
+    while (!L.isEmpty())
+      S.enqueue(L.dequeue());
+    while (!E.isEmpty())
+      S.enqueue(E.dequeue());
+    while (!G.isEmpty())
+      S.enqueue(G.dequeue());
+  }
 
-    public static List<String> Search(
-            String word, List<String> wordList, double fuzzyness)
-    {
-        List<String> foundWords = new ArrayList<String>();
+  
+  
+  public static <K> void quickSortInPlace(K[] S, Comparator<K> comp) {
+    quickSortInPlace(S, comp, 0, S.length-1);
+  }
 
-        for (String s : wordList)
-        {
-            // Calculate the Levenshtein-distance:
-            int levenshteinDistance = LevenshteinDistanceMetric.distance(word, s);
-
-            // Length of the longer string:
-            int length = Math.max(word.length(), s.length());
-
-            // Calculate the score:
-            double score = 1.0 - (double) levenshteinDistance / length;
-
-            // Match?
-            if (score >= fuzzyness)
-                foundWords.add(s);
-        }
-        return foundWords;
+  
+  private static <K> void quickSortInPlace(K[] S, Comparator<K> comp,
+                                                                   int a, int b) {
+    if (a >= b) return;                
+    int left = a;
+    int right = b-1;
+    K pivot = S[b];
+    K temp;                            
+    while (left <= right) {
+      
+      while (left <= right && comp.compare(S[left], pivot) < 0) left++;
+      
+      while (left <= right && comp.compare(S[right], pivot) > 0) right--;
+      if (left <= right) {             
+        
+        temp = S[left]; S[left] = S[right]; S[right] = temp;
+        left++; right--;
+      }
     }
-
+    
+    temp = S[left]; S[left] = S[b]; S[b] = temp;
+    
+    quickSortInPlace(S, comp, a, left - 1);
+    quickSortInPlace(S, comp, left + 1, b);
+  }
 }

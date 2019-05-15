@@ -1,60 +1,27 @@
-package sac.graph;
+package com.arelikebrothers.learn.algorithm.base;
 
-import java.util.Comparator;
+import com.arelikebrothers.learn.algorithm.Sort;
+import com.arelikebrothers.learn.algorithm.aop.annotation.TimeCostLog;
 
-/**
- * Depth First Search algorithm.
- * 
- * @author Przemysław Klęsk (<a href="mailto:pklesk@wi.zut.edu.pl">wi.zut.edu.pl</a>)
- * @author Marcin Korzeń (<a href="mailto:mkorzen@wi.zut.edu.pl">wi.zut.edu.pl</a>)
- */
-public class DepthFirstSearch extends GraphSearchAlgorithm {
+import java.util.List;
 
-	/**
-	 * Creates new instance of Depth First Search algorithm.
-	 * 
-	 * @param initial reference to initial state
-	 * @param configurator reference to configurator object
-	 */
-	public DepthFirstSearch(GraphState initial, GraphSearchConfigurator configurator) {
-		super(initial, configurator);
-		setupOpenAndClosedSets(new DepthFirstSearchComparator());
-	}
+import static com.arelikebrothers.learn.algorithm.util.SortUtil.needSwap;
+import static java.util.Collections.swap;
 
-	/**
-	 * Creates new instance of Depth First Search algorithm.
-	 * 
-	 * @param initial reference to initial state
-	 */
-	public DepthFirstSearch(GraphState initial) {
-		this(initial, null);
-	}
+public class Bubble implements Sort{
+    @Override
+    @TimeCostLog
+    public void sort(List<? extends Comparable> list) {
+        for (int i = list.size() - 1; i > 0 ; i--) {
+            for (int j = 0; j < i; j++) {
+                if (needSwap(list.get(j), list.get(j+1))) {
+                    swap(list, j, j+1);
+                }
+            }
+        }
 
-	/**
-	 * Creates new instance of Depth First Search algorithm.
-	 */
-	public DepthFirstSearch() {
-		this(null, null);
-	}
+    }
 
-	/**
-	 * Comparator for Depth First Search algorithm.
-	 */
-	private class DepthFirstSearchComparator implements Comparator<GraphState> {
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-		 */
-		@Override
-		public int compare(GraphState gs1, GraphState gs2) {
-			double difference = -(gs1.getDepth() - gs2.getDepth());
-			if (difference == 0.0) {
-				return gs1.getIdentifier().compareTo(gs2.getIdentifier());
-			} else {
-				return (difference > 0.0) ? 1 : -1;
-			}
-		}
-	}
 }
+

@@ -1,34 +1,61 @@
-package com.algo.sorting;
+package org.ventry.commons.algorithm;
 
-public class InsertionSortJava {
+import org.ventry.commons.utils.ArrayUtils;
+import org.ventry.commons.utils.Console;
 
-	public static void print(int numbers[]) {
-		for (int i = 0; i < numbers.length - 1; i++) {
-			System.out.print(numbers[i] + " ");
-		}
-	}
+import java.util.Arrays;
 
-	public static int[] swap(int numbers[], int i, int j) {
-		int temp = numbers[i];
-		numbers[i] = numbers[j];
-		numbers[j] = temp;
-		return numbers;
-	}
+public class App {
 
-	public static int[] sort(int array[]) {
-		for (int index = 1; index < array.length; index++) {
-			for (int indexj = 0; indexj < index-1; indexj++)
-				if (array[indexj] > array[index]) {
-					array = swap(array, indexj, index);
-				}
-		}
-		return array;
-	}
+    public static void main(String[] args) {
+        int arraySize = 10000000;
+        int[] arrays = ArrayUtils.randomIntArrays(arraySize);
+        
 
-	public static void main(String[] args) {
-		int numbers[] = new int[] { 24, 67, 89, 24, 5, 7, 456, 789, 34, 98, -1 };
-		int num[] = sort(numbers);
-		print(num);
-	}
+        int iterator = 1;
+        long start = System.nanoTime();
+        for (int i = 0; i < iterator; i++) {
+            
+        }
+        Console.writeLine("insertion sort cost:" + (System.nanoTime() - start) / 1000000 + "ms");
 
+        
+        start = System.nanoTime();
+        for (int i = 0; i < iterator; i++) {
+            MergeSort.order(Arrays.copyOf(arrays, arraySize), 0, arraySize);
+        }
+        Console.writeLine("merge sort cost:" + (System.nanoTime() - start) / 1000000 + "ms");
+
+        
+        
+        
+        start = System.nanoTime();
+        for (int i = 0; i < iterator; i++) {
+            HeapSort.order(Arrays.copyOf(arrays, arraySize));
+        }
+        Console.writeLine("heap sort cost:" + (System.nanoTime() - start) / 1000000 + "ms");
+
+        
+        start = System.nanoTime();
+        for (int i = 0; i < iterator; i++) {
+            QuickSort.tailRecursiveOrder(Arrays.copyOf(arrays, arraySize), 0, arraySize - 1);
+        }
+        Console.writeLine("quick sort cost:" + (System.nanoTime() - start) / 1000000 + "ms");
+
+        start = System.nanoTime();
+        for (int i = 0; i < iterator; i++) {
+            CountingSort.order(Arrays.copyOf(arrays, arraySize), arraySize);
+        }
+        Console.writeLine("counting sort cost:" + (System.nanoTime() - start) / 1000000 + "ms");
+
+        
+        BitmapSort bitmapSort = new BitmapSort(4);
+        start = System.nanoTime();
+        for (int i = 0; i < iterator; i++) {
+            bitmapSort.order(Arrays.copyOf(arrays, arraySize), arraySize + 1);
+        }
+        Console.writeLine("bitmap sort cost:" + (System.nanoTime() - start) / 1000000 + "ms");
+
+        Console.writeLine(OrderStatistics.select(arrays, 0, arraySize - 1, 4));
+    }
 }

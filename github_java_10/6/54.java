@@ -1,49 +1,79 @@
-import java.io.*;
+package com.maddness.sorting;
+
 import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
-public class Solution {
-    private static long countInversions(int[] arr) {
-        int[] aux = arr.clone();
-        return countInversions(arr, 0, arr.length - 1, aux);
+import java.util.stream.IntStream;
+
+import static java.lang.Math.pow;
+import static java.lang.System.currentTimeMillis;
+
+
+public class Radix {
+
+    private List<Queue<Integer>> queues = createQueues();
+    private Queue<Integer> mainQueue = new LinkedList<>();
+
+    private List<Queue<Integer>> createQueues() {
+        List<Queue<Integer>> queues = new ArrayList<>();
+        IntStream.range(0, 10).forEach(i -> queues.add(new LinkedList<>()));
+        return queues;
     }
-    private static long countInversions(int[] arr, int lo, int hi, int[] aux) {
-        if (lo >= hi) return 0;
-        int mid = lo + (hi - lo) / 2;
-        long count = 0;
-        count += countInversions(aux, lo, mid, arr);
-        count += countInversions(aux, mid + 1, hi, arr);
-        count += merge(arr, lo, mid, hi, aux);
-        return count;
-    }
-    private static long merge(int[] arr, int lo, int mid, int hi, int[] aux) {
-        long count = 0;
-        int i = lo, j = mid + 1, k = lo;
-        while (i <= mid || j <= hi) {
-            if (i > mid) {
-                arr[k++] = aux[j++];
-            } else if (j > hi) {
-                arr[k++] = aux[i++];
-            } else if (aux[i] <= aux[j]) {
-                arr[k++] = aux[i++];
-            } else {
-                arr[k++] = aux[j++];
-                count += mid + 1 - i;
-            }
-        }
-        return count;
-    }
+
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int t = in.nextInt();
-        for(int a0 = 0; a0 < t; a0++){
-            int n = in.nextInt();
-            int arr[] = new int[n];
-            for(int arr_i=0; arr_i < n; arr_i++){
-                arr[arr_i] = in.nextInt();
+        List<Integer> vals = populateList(1000000);
+
+        long timer = currentTimeMillis();
+        new Radix().sort(vals);
+        System.out.println("Radix sort done: " + (currentTimeMillis() - timer) + " ms");
+
+        timer = currentTimeMillis();
+        Collections.sort(vals);
+        System.out.println("Quick sort done: " + (currentTimeMillis() - timer) + " ms");
+
+        System.out.println("\nResult - your code sucks");
+    }
+
+    private static List<Integer> populateList(int number) {
+        List<Integer> vals = new ArrayList<>(number);
+        Random rand = new Random();
+        IntStream.range(0, number).forEach(i -> vals.add(rand.nextInt(number)));
+        return vals;
+    }
+
+    private Queue<Integer> sort(List<Integer> vals) {
+        int maxLen = getMaxLen(vals);
+
+        IntStream.range(0, vals.size()).forEach(i -> mainQueue.offer(vals.get(i)));
+
+        for (int place = 1; place <= maxLen; place++) {
+
+            while (!mainQueue.isEmpty()) {
+                int value = mainQueue.poll();
+                queues.get(getDigit(value, place)).offer(value);
             }
-            System.out.println(countInversions(arr));
+
+            for (Queue<Integer> queue : queues) {
+                while (!queue.isEmpty()) {
+                    mainQueue.offer(queue.poll());
+                }
+            }
         }
+
+        return mainQueue;
+    }
+
+    public static int getMaxLen(List<Integer> vals) {
+        int maxLen = 0;
+        for (Integer val : vals) {
+            maxLen = Math.max(maxLen, length(val));
+        }
+        return maxLen;
+    }
+
+    public static int length(int val) {
+        return (int) (Math.log10(val)+1);
+    }
+
+    public static int getDigit(int val, int place) {
+        return (int) (val % pow(10, place)) / (int) pow(10, place - 1);
     }
 }

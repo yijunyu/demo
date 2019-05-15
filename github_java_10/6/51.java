@@ -1,126 +1,186 @@
-/*
- * Copyright 2014, Michael T. Goodrich, Roberto Tamassia, Michael H. Goldwasser
- *
- * Developed for use with the book:
- *
- *    Data Structures and Algorithms in Java, Sixth Edition
- *    Michael T. Goodrich, Roberto Tamassia, and Michael H. Goldwasser
- *    John Wiley & Sons, 2014
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-package dsaj.sorting;
 
-import net.datastructures.Queue;
-import net.datastructures.LinkedQueue;
-import java.util.Arrays;
-import java.util.Comparator;
 
-class MergeSort {
+package org.apache.spark.util.collection.unsafe.sort;
 
-  //-------- support for top-down merge-sort of arrays --------
-  /** Merge contents of arrays S1 and S2 into properly sized array S. */
-  public static <K> void merge(K[] S1, K[] S2, K[] S, Comparator<K> comp) {
-    int i = 0, j = 0;
-    while (i + j < S.length) {
-      if (j == S2.length || (i < S1.length && comp.compare(S1[i], S2[j]) < 0))
-        S[i+j] = S1[i++];                     // copy ith element of S1 and increment i
-      else
-        S[i+j] = S2[j++];                     // copy jth element of S2 and increment j
+import com.google.common.primitives.Ints;
+
+import org.apache.spark.unsafe.Platform;
+import org.apache.spark.unsafe.array.LongArray;
+
+public class RadixSort {
+
+  
+  public static int sort(
+      LongArray array, long numRecords, int startByteIndex, int endByteIndex,
+      boolean desc, boolean signed) {
+    assert startByteIndex >= 0 : "startByteIndex (" + startByteIndex + ") should >= 0";
+    assert endByteIndex <= 7 : "endByteIndex (" + endByteIndex + ") should <= 7";
+    assert endByteIndex > startByteIndex;
+    assert numRecords * 2 <= array.size();
+    long inIndex = 0;
+    long outIndex = numRecords;
+    if (numRecords > 0) {
+      long[][] counts = getCounts(array, numRecords, startByteIndex, endByteIndex);
+      for (int i = startByteIndex; i <= endByteIndex; i++) {
+        if (counts[i] != null) {
+          sortAtByte(
+            array, numRecords, counts[i], i, inIndex, outIndex,
+            desc, signed && i == endByteIndex);
+          long tmp = inIndex;
+          inIndex = outIndex;
+          outIndex = tmp;
+        }
+      }
+    }
+    return Ints.checkedCast(inIndex);
+  }
+
+  
+  private static void sortAtByte(
+      LongArray array, long numRecords, long[] counts, int byteIdx, long inIndex, long outIndex,
+      boolean desc, boolean signed) {
+    assert counts.length == 256;
+    long[] offsets = transformCountsToOffsets(
+      counts, numRecords, array.getBaseOffset() + outIndex * 8L, 8, desc, signed);
+    Object baseObject = array.getBaseObject();
+    long baseOffset = array.getBaseOffset() + inIndex * 8L;
+    long maxOffset = baseOffset + numRecords * 8L;
+    for (long offset = baseOffset; offset < maxOffset; offset += 8) {
+      long value = Platform.getLong(baseObject, offset);
+      int bucket = (int)((value >>> (byteIdx * 8)) & 0xff);
+      Platform.putLong(baseObject, offsets[bucket], value);
+      offsets[bucket] += 8;
     }
   }
 
-  /** Merge-sort contents of array S. */
-  public static <K> void mergeSort(K[] S, Comparator<K> comp) {
-    int n = S.length;
-    if (n < 2) return;                        // array is trivially sorted
-    // divide
-    int mid = n/2;
-    K[] S1 = Arrays.copyOfRange(S, 0, mid);   // copy of first half
-    K[] S2 = Arrays.copyOfRange(S, mid, n);   // copy of second half
-    // conquer (with recursion)
-    mergeSort(S1, comp);                      // sort copy of first half
-    mergeSort(S2, comp);                      // sort copy of second half
-    // merge results
-    merge(S1, S2, S, comp);               // merge sorted halves back into original
-  }
-
-  //-------- support for top-down merge-sort of queues --------
-  /** Merge contents of sorted queues S1 and S2 into empty queue S. */
-  public static <K> void merge(Queue<K> S1, Queue<K> S2, Queue<K> S,
-                                                        Comparator<K> comp) {
-    while (!S1.isEmpty() && !S2.isEmpty()) {
-      if (comp.compare(S1.first(), S2.first()) < 0)
-        S.enqueue(S1.dequeue());           // take next element from S1
-      else
-        S.enqueue(S2.dequeue());           // take next element from S2
+  
+  private static long[][] getCounts(
+      LongArray array, long numRecords, int startByteIndex, int endByteIndex) {
+    long[][] counts = new long[8][];
+    
+    
+    long bitwiseMax = 0;
+    long bitwiseMin = -1L;
+    long maxOffset = array.getBaseOffset() + numRecords * 8L;
+    Object baseObject = array.getBaseObject();
+    for (long offset = array.getBaseOffset(); offset < maxOffset; offset += 8) {
+      long value = Platform.getLong(baseObject, offset);
+      bitwiseMax |= value;
+      bitwiseMin &= value;
     }
-    while (!S1.isEmpty())
-      S.enqueue(S1.dequeue());             // move any elements that remain in S1
-    while (!S2.isEmpty())
-      S.enqueue(S2.dequeue());             // move any elements that remain in S2
-  }
-
-  /** Merge-sort contents of queue. */
-  public static <K> void mergeSort(Queue<K> S, Comparator<K> comp) {
-    int n = S.size();
-    if (n < 2) return;                     // queue is trivially sorted
-    // divide
-    Queue<K> S1 = new LinkedQueue<>();     // (or any queue implementation)
-    Queue<K> S2 = new LinkedQueue<>();
-    while (S1.size() < n/2)
-      S1.enqueue(S.dequeue());             // move the first n/2 elements to S1
-    while (!S.isEmpty())
-      S2.enqueue(S.dequeue());             // move remaining elements to S2
-    // conquer (with recursion)
-    mergeSort(S1, comp);                   // sort first half
-    mergeSort(S2, comp);                   // sort second half
-    // merge results
-    merge(S1, S2, S, comp);                // merge sorted halves back into original
-  }
-
-  //-------- support for bottom-up merge-sort of arrays --------
-  /** Merges in[start..start+inc-1] and in[start+inc..start+2*inc-1] into out. */
-  public static <K> void merge(K[] in, K[] out, Comparator<K> comp,
-                                                       int start, int inc) {
-    int end1 = Math.min(start + inc, in.length);      // boundary for run 1
-    int end2 = Math.min(start + 2 * inc, in.length);  // boundary for run 2
-    int x=start;                                      // index into run 1
-    int y=start+inc;                                  // index into run 2
-    int z=start;                                      // index into output
-    while (x < end1 && y < end2)
-      if (comp.compare(in[x], in[y]) < 0)
-        out[z++] = in[x++];                           // take next from run 1
-      else
-        out[z++] = in[y++];                           // take next from run 2
-    if (x < end1) System.arraycopy(in, x, out, z, end1 - x);       // copy rest of run 1
-    else if (y < end2) System.arraycopy(in, y, out, z, end2 - y);  // copy rest of run 2
-  }
-
-  @SuppressWarnings({"unchecked"})
-  /** Merge-sort contents of data array. */
-  public static <K> void mergeSortBottomUp(K[] orig, Comparator<K> comp) {
-    int n = orig.length;
-    K[] src = orig;                                   // alias for the original
-    K[] dest = (K[]) new Object[n];                   // make a new temporary array
-    K[] temp;                                         // reference used only for swapping
-    for (int i=1; i < n; i *= 2) {                    // each iteration sorts all runs of length i
-      for (int j=0; j < n; j += 2*i)                  // each pass merges two runs of length i
-        merge(src, dest, comp, j, i);
-      temp = src; src = dest; dest = temp;      // reverse roles of the arrays
+    long bitsChanged = bitwiseMin ^ bitwiseMax;
+    
+    for (int i = startByteIndex; i <= endByteIndex; i++) {
+      if (((bitsChanged >>> (i * 8)) & 0xff) != 0) {
+        counts[i] = new long[256];
+        
+        for (long offset = array.getBaseOffset(); offset < maxOffset; offset += 8) {
+          counts[i][(int)((Platform.getLong(baseObject, offset) >>> (i * 8)) & 0xff)]++;
+        }
+      }
     }
-    if (orig != src)
-      System.arraycopy(src, 0, orig, 0, n);           // additional copy to get result to original
+    return counts;
+  }
+
+  
+  private static long[] transformCountsToOffsets(
+      long[] counts, long numRecords, long outputOffset, long bytesPerRecord,
+      boolean desc, boolean signed) {
+    assert counts.length == 256;
+    int start = signed ? 128 : 0;  
+    if (desc) {
+      long pos = numRecords;
+      for (int i = start; i < start + 256; i++) {
+        pos -= counts[i & 0xff];
+        counts[i & 0xff] = outputOffset + pos * bytesPerRecord;
+      }
+    } else {
+      long pos = 0;
+      for (int i = start; i < start + 256; i++) {
+        long tmp = counts[i & 0xff];
+        counts[i & 0xff] = outputOffset + pos * bytesPerRecord;
+        pos += tmp;
+      }
+    }
+    return counts;
+  }
+
+  
+  public static int sortKeyPrefixArray(
+      LongArray array,
+      long startIndex,
+      long numRecords,
+      int startByteIndex,
+      int endByteIndex,
+      boolean desc,
+      boolean signed) {
+    assert startByteIndex >= 0 : "startByteIndex (" + startByteIndex + ") should >= 0";
+    assert endByteIndex <= 7 : "endByteIndex (" + endByteIndex + ") should <= 7";
+    assert endByteIndex > startByteIndex;
+    assert numRecords * 4 <= array.size();
+    long inIndex = startIndex;
+    long outIndex = startIndex + numRecords * 2L;
+    if (numRecords > 0) {
+      long[][] counts = getKeyPrefixArrayCounts(
+        array, startIndex, numRecords, startByteIndex, endByteIndex);
+      for (int i = startByteIndex; i <= endByteIndex; i++) {
+        if (counts[i] != null) {
+          sortKeyPrefixArrayAtByte(
+            array, numRecords, counts[i], i, inIndex, outIndex,
+            desc, signed && i == endByteIndex);
+          long tmp = inIndex;
+          inIndex = outIndex;
+          outIndex = tmp;
+        }
+      }
+    }
+    return Ints.checkedCast(inIndex);
+  }
+
+  
+  private static long[][] getKeyPrefixArrayCounts(
+      LongArray array, long startIndex, long numRecords, int startByteIndex, int endByteIndex) {
+    long[][] counts = new long[8][];
+    long bitwiseMax = 0;
+    long bitwiseMin = -1L;
+    long baseOffset = array.getBaseOffset() + startIndex * 8L;
+    long limit = baseOffset + numRecords * 16L;
+    Object baseObject = array.getBaseObject();
+    for (long offset = baseOffset; offset < limit; offset += 16) {
+      long value = Platform.getLong(baseObject, offset + 8);
+      bitwiseMax |= value;
+      bitwiseMin &= value;
+    }
+    long bitsChanged = bitwiseMin ^ bitwiseMax;
+    for (int i = startByteIndex; i <= endByteIndex; i++) {
+      if (((bitsChanged >>> (i * 8)) & 0xff) != 0) {
+        counts[i] = new long[256];
+        for (long offset = baseOffset; offset < limit; offset += 16) {
+          counts[i][(int)((Platform.getLong(baseObject, offset + 8) >>> (i * 8)) & 0xff)]++;
+        }
+      }
+    }
+    return counts;
+  }
+
+  
+  private static void sortKeyPrefixArrayAtByte(
+      LongArray array, long numRecords, long[] counts, int byteIdx, long inIndex, long outIndex,
+      boolean desc, boolean signed) {
+    assert counts.length == 256;
+    long[] offsets = transformCountsToOffsets(
+      counts, numRecords, array.getBaseOffset() + outIndex * 8L, 16, desc, signed);
+    Object baseObject = array.getBaseObject();
+    long baseOffset = array.getBaseOffset() + inIndex * 8L;
+    long maxOffset = baseOffset + numRecords * 16L;
+    for (long offset = baseOffset; offset < maxOffset; offset += 16) {
+      long key = Platform.getLong(baseObject, offset);
+      long prefix = Platform.getLong(baseObject, offset + 8);
+      int bucket = (int)((prefix >>> (byteIdx * 8)) & 0xff);
+      long dest = offsets[bucket];
+      Platform.putLong(baseObject, dest, key);
+      Platform.putLong(baseObject, dest + 8, prefix);
+      offsets[bucket] += 16;
+    }
   }
 }

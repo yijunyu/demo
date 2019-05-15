@@ -1,117 +1,142 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package org.apache.lucene.search.spell;
+package quicksort;
 
-import org.apache.lucene.util.IntsRef;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *  Damerau-Levenshtein (optimal string alignment) implemented in a consistent 
- *  way as Lucene's FuzzyTermsEnum with the transpositions option enabled.
- *  
- *  Notes:
- *  <ul>
- *    <li> This metric treats full unicode codepoints as characters
- *    <li> This metric scales raw edit distances into a floating point score
- *         based upon the shortest of the two terms
- *    <li> Transpositions of two adjacent codepoints are treated as primitive 
- *         edits.
- *    <li> Edits are applied in parallel: for example, "ab" and "bca" have 
- *         distance 3.
- *  </ul>
- *  
- *  NOTE: this class is not particularly efficient. It is only intended
- *  for merging results from multiple DirectSpellCheckers.
- */
-public final class LuceneLevenshteinDistance implements StringDistance {
-  
-  /**
-   * Creates a new comparator, mimicing the behavior of Lucene's internal
-   * edit distance.
-   */
-  public LuceneLevenshteinDistance() {}
 
-  @Override
-  public float getDistance(String target, String other) {
-    IntsRef targetPoints;
-    IntsRef otherPoints;
-    int n;
-    int d[][]; // cost array
+
+public class QuickSort implements Runnable {
+    public static int c;
+    public static int[] a;
+    public static String[][] s;
+    public static LinkedBlockingQueue<int[]> queue;
+    public static AtomicInteger queued = new AtomicInteger(1);
     
-    // NOTE: if we cared, we could 3*m space instead of m*n space, similar to 
-    // what LevenshteinDistance does, except cycling thru a ring of three 
-    // horizontal cost arrays... but this comparator is never actually used by 
-    // DirectSpellChecker, it's only used for merging results from multiple shards 
-    // in "distributed spellcheck", and it's inefficient in other ways too...
-
-    // cheaper to do this up front once
-    targetPoints = toIntsRef(target);
-    otherPoints = toIntsRef(other);
-    n = targetPoints.length;
-    final int m = otherPoints.length;
-    d = new int[n+1][m+1];
-    
-    if (n == 0 || m == 0) {
-      if (n == m) {
-        return 0;
-      }
-      else {
-        return Math.max(n, m);
-      }
-    } 
-
-    // indexes into strings s and t
-    int i; // iterates through s
-    int j; // iterates through t
-
-    int t_j; // jth character of t
-
-    int cost; // cost
-
-    for (i = 0; i<=n; i++) {
-      d[i][0] = i;
-    }
-    
-    for (j = 0; j<=m; j++) {
-      d[0][j] = j;
-    }
-
-    for (j = 1; j<=m; j++) {
-      t_j = otherPoints.ints[j-1];
-
-      for (i=1; i<=n; i++) {
-        cost = targetPoints.ints[i-1]==t_j ? 0 : 1;
-        // minimum of cell to the left+1, to the top+1, diagonally left and up +cost
-        d[i][j] = Math.min(Math.min(d[i-1][j]+1, d[i][j-1]+1), d[i-1][j-1]+cost);
-        // transposition
-        if (i > 1 && j > 1 && targetPoints.ints[i-1] == otherPoints.ints[j-2] && targetPoints.ints[i-2] == otherPoints.ints[j-1]) {
-          d[i][j] = Math.min(d[i][j], d[i-2][j-2] + cost);
+    @SuppressWarnings("empty-statement")
+    public static void main(String[] args) {
+        QuickSort qs = new QuickSort();
+        
+        QuickSort.c = Integer.parseInt(args[1]);
+        String file_in = args[0];
+        String file_out = args[3];
+        int thread_count = Integer.parseInt(args[2]);
+        
+        try {      
+            qs.load(file_in);
+        } catch (IOException ex) {
+            Logger.getLogger(QuickSort.class.getName()).log(Level.SEVERE, null, ex);
         }
-      }
+        
+        List<Thread> threads = new ArrayList<Thread>();
+        QuickSort.queue = new LinkedBlockingQueue<int[]>();
+       
+        for (int n = 0; n < thread_count; n++) {
+            Thread worker = new Thread(new QuickSort());
+            worker.setName(String.valueOf(n));
+            worker.start();
+            threads.add(worker);
+        }
+        
+        QuickSort.queue.offer(new int[] {0,QuickSort.a.length-1});
+        
+        while (QuickSort.queued.get() > 0);
+        
+        for ( Iterator<Thread> it = threads.iterator(); it.hasNext(); ) {
+            it.next().interrupt();
+        }
+        
+        try {        
+            qs.save(file_out);
+        } catch (IOException ex) {
+            Logger.getLogger(QuickSort.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public int load(String filename) throws IOException {
+        FileReader fr = new FileReader(filename);
+        BufferedReader br = new BufferedReader(fr);
+        String row = br.readLine();
+        ArrayList list = new ArrayList();
+        while(row != null) {
+            list.add(row);
+            row = br.readLine();        
+        }
+        Object[] x = list.toArray();
+        QuickSort.a = new int[x.length];
+        QuickSort.s = new String[x.length][];
+        for (int i = 0; i < x.length; i++) {
+            QuickSort.a[i] = i;
+            QuickSort.s[i] = ((String) x[i]).split("\t",-1);
+        }
+        br.close();
+        return x.length;
     }
     
-    return 1.0f - ((float) d[n][m] / Math.min(m, n));
-  }
-  
-  private static IntsRef toIntsRef(String s) {
-    IntsRef ref = new IntsRef(s.length()); // worst case
-    int utf16Len = s.length();
-    for (int i = 0, cp = 0; i < utf16Len; i += Character.charCount(cp)) {
-      cp = ref.ints[ref.length++] = Character.codePointAt(s, i);
+    public void save(String filename) throws IOException {
+        FileWriter fw = new FileWriter(filename);
+        for (int i = 0; i < QuickSort.a.length; i++) {
+            String x = "";
+            for (int j = 0; j < QuickSort.s[QuickSort.a[i]].length; j++) {
+                x += QuickSort.s[QuickSort.a[i]][j] + "\t";
+            }
+            x = x.substring(0,x.length()-1);
+            fw.write(x + "\n");
+        }
+        fw.close();
     }
-    return ref;
-  }
+    
+    public void print_a() {
+        for (int n = 0; n < QuickSort.a.length; n++) {
+            System.out.print(QuickSort.s[QuickSort.a[n]][0] + "|");
+        }
+    }
+    
+    public void swap(int one, int two) {
+        int tmp = QuickSort.a[one];
+        QuickSort.a[one] = QuickSort.a[two];
+        QuickSort.a[two] = tmp;
+    }   
+    
+    @SuppressWarnings("empty-statement")
+    public void sort(int left, int right) {
+        if (right > left) {
+            String pivot = QuickSort.s[QuickSort.a[right]][QuickSort.c];
+            int i=left-1, j=right, tmp;
+            for (;;) {
+                String rs = QuickSort.s[QuickSort.a[right]][QuickSort.c];
+                while(QuickSort.s[QuickSort.a[++i]][QuickSort.c].compareTo(rs) < 0);
+                while(QuickSort.s[QuickSort.a[--j]][QuickSort.c].compareTo(rs) > 0 && j > i);
+                if(i >= j) break;
+                this.swap(i,j);
+            }
+            this.swap(i,right);
+            QuickSort.queue.offer(new int[] {i+1,right});
+            QuickSort.queue.offer(new int[] {left,i-1});
+            QuickSort.queued.addAndGet(2);
+        }
+        QuickSort.queued.decrementAndGet();
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                
+                int[] vars = QuickSort.queue.take();
+                this.sort(vars[0],vars[1]);
+            } catch (InterruptedException e) {
+                
+                return;
+            }
+        }       
+    }
 }

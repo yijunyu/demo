@@ -1,58 +1,68 @@
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
+package Lab04.A;
 
-public class Solution {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
 
-    private static long countInversions(int[] arr) {
-        int[] aux = arr.clone();
-        return countInversions(arr, 0, arr.length - 1, aux);
-    }
 
-    private static long countInversions(int[] arr, int lo, int hi, int[] aux) {
-        if (lo >= hi) return 0;
+public class radixsort {
 
-        int mid = lo + (hi - lo) / 2;
+    private static final String INPUT_FILE_NAME = "radixsort.in";
+    private static final String OUTPUT_FILE_NAME = "radixsort.out";
 
-        long count = 0;
-        count += countInversions(aux, lo, mid, arr);
-        count += countInversions(aux, mid + 1, hi, arr);
-        count += merge(arr, lo, mid, hi, aux);
+    private static void radixSort(String[] a, int w, int k) {
 
-        return count;
-    }
+        int n = a.length;
+        int size = 256;   
+        String[] aux = new String[n];
 
-    private static long merge(int[] arr, int lo, int mid, int hi, int[] aux) {
-        long count = 0;
-        int i = lo, j = mid + 1, k = lo;
-        while (i <= mid || j <= hi) {
-            if (i > mid) {
-                arr[k++] = aux[j++];
-            } else if (j > hi) {
-                arr[k++] = aux[i++];
-            } else if (aux[i] <= aux[j]) {
-                arr[k++] = aux[i++];
-            } else {
-                arr[k++] = aux[j++];
-                count += mid + 1 - i;
+        for (int d = w - 1; d >= w - k; d--) {
+
+            int[] count = new int[size + 1];
+
+            for (String anA : a) {
+                count[anA.charAt(d) + 1]++;
             }
+
+            for (int r = 0; r < size; r++) {
+                count[r + 1] += count[r];
+            }
+
+            for (String anA : a) {
+                aux[count[anA.charAt(d)]++] = anA;
+            }
+
+            System.arraycopy(aux, 0, a, 0, n);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader in = new BufferedReader(new FileReader(INPUT_FILE_NAME));
+
+        StringTokenizer stringTokenizer = new StringTokenizer(in.readLine());
+
+        int n = Integer.parseInt(stringTokenizer.nextToken());
+        int m = Integer.parseInt(stringTokenizer.nextToken());
+        int k = Integer.parseInt(stringTokenizer.nextToken());
+
+        String[] array = new String[n];
+
+        for (int i = 0; i < n; i++) {
+            array[i] = in.readLine();
         }
 
-        return count;
-    }
+        radixSort(array, m, k);
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int t = in.nextInt();
-        for(int a0 = 0; a0 < t; a0++){
-            int n = in.nextInt();
-            int arr[] = new int[n];
-            for(int arr_i=0; arr_i < n; arr_i++){
-                arr[arr_i] = in.nextInt();
-            }
-            System.out.println(countInversions(arr));
+        PrintWriter out = new PrintWriter(OUTPUT_FILE_NAME);
+
+        for (String s : array) {
+            out.println(s);
         }
+
+        in.close();
+        out.close();
     }
 }

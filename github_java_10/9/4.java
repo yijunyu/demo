@@ -1,56 +1,30 @@
-package sorting;
 
-public class Heapsort 
-{
-	public void sort(Comparable[] a)
-	{
-		int N = a.length - 1;
-		this.displayArray(a);
-		for (int k = N/2; k >= 1; k--) 
-		{
-			this.sink(a, k, N);
-			//this.displayArray(a);
-		}
-		while (N > 1)
-		{
-			this.exchange(a, 1, N--);
-			//this.displayArray(a);
-			this.sink(a, 1, N);
-			//this.displayArray(a);
-		}
-	}
+
+
+
+
+public class Selectionsort {
 	
-	public void sink(Comparable[] a, int k, int N)
-	{
-		while (2*k <= N)
-		{
-			int j = 2*k;
-			if (j < N && a[j].compareTo(a[j + 1]) < 0)
-			{
-				j++;
+	public static int[] sort(int[] list){
+		if (list == null || list.length < 2)
+			return null;
+
+		int indexOfMin; 
+		for (int i = 0; i < list.length - 1; i++){
+			indexOfMin = i;
+			
+			for (int j = i + 1; j < list.length; j++){
+				if (list[j] < list[indexOfMin])
+					indexOfMin = j;
 			}
-			if (a[k].compareTo(a[j]) >= 0)
-			{
-				break;
+			
+			if (i != indexOfMin && list[i] != list[indexOfMin]){
+				int temp = list[i];
+				list[i] = list[indexOfMin];
+				list[indexOfMin] = temp;
 			}
-			this.exchange(a, k, j);
-			k = j;
 		}
-	}
-	
-	private void exchange(Comparable[] a, int i, int j)
-	{
-		Comparable t = a[i];
-		a[i] = a[j];
-		a[j] = t;
-	}
-	
-	public void displayArray(Comparable[] a)
-	{
-		for (int i = 0; i < a.length; i++) 
-		{			
-			System.out.print(a[i].toString() + ", ");
-		}
-		System.out.println();
+		
+		return list;
 	}
 }

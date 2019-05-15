@@ -1,32 +1,23 @@
-package HackerRank;
+package java_programs_missing_line;
+import java.util.*;
 
-public class Bubblesort {
 
-	/**
-	 * @param args
-	 */
-	static void bubble(int arr[]){
-		boolean swapped = true ;
-		while(swapped){
-			swapped =false;
-		for(int i=0;(i<arr.length)&&(i+1<arr.length);i++){
-			if(arr[i] > arr[i+1]){
-				int temp = arr[i];
-				arr[i] = arr[i+1];
-				arr[i+1] = temp;
-				swapped = true;
-			}
-		}
-		}
-	}
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int arr[] = {5,4,4,2,2,8};
-		bubble(arr);
-		for(int v : arr){
-			System.out.println(v);
-		}
-		
-	}
 
+
+public class BUCKETSORT {
+    public static ArrayList<Integer> bucketsort(ArrayList<Integer> arr, int k) {
+        ArrayList<Integer> counts = new ArrayList<Integer>(Collections.nCopies(k,0));
+        for (Integer x : arr) {
+            
+        }
+
+        ArrayList<Integer> sorted_arr = new ArrayList<Integer>(100);
+	int i = 0;
+        for (Integer count : counts) { 
+	    sorted_arr.addAll(Collections.nCopies(count, i));
+	    i++;
+        }
+
+        return sorted_arr;
+    }
 }

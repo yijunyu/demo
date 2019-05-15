@@ -1,87 +1,34 @@
-/*
- * Copyright (c) 2007, 2012, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-/*
- */
-package com.oracle.graal.jtt.micro;
+package leetcode;
 
-import com.oracle.graal.jtt.*;
-import org.junit.*;
 
-public class Bubblesort extends JTTTest {
+public class FirstMissingPositive {
+	public int firstMissingPositive(int[] A) {
+		if (A == null || A.length == 0)
+			return 1;
 
-    public static int test(int num) {
-        final int[] array = {23, 8, -9, 5, 882, 0, 0, 1};
+		
+		int n = A.length;
+		for (int i = 0; i < n; i++) {
+			while (A[i] != i + 1) {
+				if (A[i] <= 0 || A[i] > n || A[i] == (A[A[i] - 1]))
+					break;
+				
+				int temp = A[A[i] - 1];
+				A[A[i] - 1] = A[i];
+				A[i] = temp; 
+			}
+		}
 
-        for (int i = 0; i < array.length; i++) {
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[j] < array[i]) {
-                    final int tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-                }
-            }
-        }
-        return array[num];
-    }
-
-    @Test
-    public void run0() throws Throwable {
-        runTest("test", 0);
-    }
-
-    @Test
-    public void run1() throws Throwable {
-        runTest("test", 1);
-    }
-
-    @Test
-    public void run2() throws Throwable {
-        runTest("test", 2);
-    }
-
-    @Test
-    public void run3() throws Throwable {
-        runTest("test", 3);
-    }
-
-    @Test
-    public void run4() throws Throwable {
-        runTest("test", 4);
-    }
-
-    @Test
-    public void run5() throws Throwable {
-        runTest("test", 5);
-    }
-
-    @Test
-    public void run6() throws Throwable {
-        runTest("test", 6);
-    }
-
-    @Test
-    public void run7() throws Throwable {
-        runTest("test", 7);
-    }
-
+		for (int i = 0; i < n; i++) {
+			if (A[i] != (i + 1))
+				return i + 1;
+		}
+		return n + 1;
+	}
+	
+	public static void main(String args[]) {
+		FirstMissingPositive solution = new FirstMissingPositive();
+		int[] A = {2, 1};
+		System.out.println(solution.firstMissingPositive(A));
+	}
 }

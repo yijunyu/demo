@@ -1,38 +1,49 @@
-public class mergesort {	
-	public static void Sort(int[] array,int num) 
-    { 
-        int[] workArray = new int[array.length]; 
-        Sort(array, workArray, 0, num); 
-    } 
-    private static void Sort(int[] array, int[] workArray, int start, int count)
-    { 
-        if (count < 2) 
-            return; 
-      
-        Sort(array, workArray, start, count / 2); 
-        Sort(array, workArray, start + count / 2, count - count / 2); 
-        Merge(array, workArray, start, count / 2, start + count / 2, count - count / 2); 
-    } 
-      
-    private static void Merge(int[] array, int[] workArray, int leftStart, int leftCount, int rightStart, int rightCount) 
-    { 
-        int i = leftStart, j = rightStart, leftBound = leftStart + leftCount, rightBound = rightStart + rightCount, index = leftStart; 
-        while (i < leftBound || j < rightBound) 
-        { 
-            if (i < leftBound && j < rightBound) 
-            { 
-                if (array[j] < array[i]) 
-                    workArray[index] = array[j++]; 
-                else
-                    workArray[index] = array[i++]; 
-            } 
-            else if (i < leftBound) 
-                workArray[index] = array[i++]; 
-            else
-                workArray[index] = array[j++]; 
-            ++index; 
-        } 
-        for (i = leftStart; i < index; ++i) 
-            array[i] = workArray[i]; 
+package sort;
+
+
+public class Sort_09_RadixSort {
+
+    public static int[] radixSort(int[] arr) {
+        if (arr == null || arr.length < 2)
+            return null;
+        int a = 1;
+        int m = 1;
+        int k = 0;
+        
+        int[][] number = new int[10][arr.length];
+        
+        int[] count = new int[10];
+        while (m <= 4) {
+            for (int j = 0; j < arr.length; j++) {
+                int lsd = ((arr[j] / a) % 10);
+                number[lsd][count[lsd]] = arr[j];
+                count[lsd]++;
+            }
+            for (int p = 0; p < 10; p++) {
+                
+                if (count[p] != 0) {
+                    for (int q = 0; q < count[p]; q++) {
+                        arr[k] = number[p][q];
+                        k++;
+                    }
+                }
+                count[p] = 0;
+            }
+            k = 0;
+            a *= 10;
+            m++;
+        }
+        return arr;
+    }
+
+    public static void printArray(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {21, 5, 4, 8, 2, 3, 0, 9, 7, 4, 5, 10};
+        printArray(radixSort(arr));
     }
 }

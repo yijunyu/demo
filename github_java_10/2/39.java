@@ -1,152 +1,176 @@
-package AVLTree;
-
-/* Implementacja drzew AVL.
-
- */
-
-public class AvlTree<T extends Comparable<T>> implements Tree<T> {
-
-    public Node<T> root;
-
-    public Node<T> getRoot() {
-        return root;
-    }
-
-    public int findHeight(Node<T> root){
-        if ( root == null) return -1;
-
-        int leftH = findHeight(root.getLeftChild());
-        int rightH = findHeight(root.getRightChild());
-
-        if(leftH > rightH){
-            return leftH + 1;
-        } else {
-            return rightH + 1;
-        }
-    }
-
-    @Override
-    public void insert(T data) {
-        root = insert(root, data);
-    }
-
-    private Node<T> insert(Node<T> node, T data) {
-
-        if( node == null) {
-            return new Node<>(data);
-        }
-
-        if(data.compareTo(node.getData()) < 0){
-            node.setLeftChild( insert(node.getLeftChild(), data) );
-        } else {
-            node.setRightChild( insert(node.getRightChild(), data) );
-        }
-
-        node.setHeight( Math.max( height(node.getLeftChild()), height(node.getRightChild())) + 1);
-
-        node = settleViolation(data, node);
-
-        return node;
-    }
-
-    private Node<T> settleViolation(T data, Node<T> node) {
-
-        int balance = getBalance(node);
-
-        // Case I:
-        if(balance > 1 && data.compareTo(node.getLeftChild().getData()) < 0){
-            return rightRotation(node);
-        }
-
-        // Case II:
-        if(balance < -1 && data.compareTo(node.getRightChild().getData()) > 0){
-            return leftRotation(node);
-        }
-
-        // Case III - left-right heavy situation
-        if(balance > 1 && data.compareTo(node.getLeftChild().getData()) > 0){
-            node.setLeftChild(leftRotation(node.getLeftChild()));
-            return rightRotation(node);
-        }
-
-        // Case IV - right left heavy situation
-        if(balance < -1 && data.compareTo(node.getLeftChild().getData()) < 0){
-            node.setRightChild(rightRotation(node.getRightChild()));
-            return leftRotation(node);
-        }
-
-        return node;
-    }
-
-    private Node<T> rightRotation(Node<T> node){
-
-        //System.out.println("Rotating to the right on node: " + node.toString());
-
-        Node<T> tempLeftNode = node.getLeftChild();
-        Node<T> t = tempLeftNode.getRightChild();
-
-        tempLeftNode.setRightChild(node);
-        node.setLeftChild(t);
-
-        node.setHeight( Math.max( height(node.getLeftChild()), height(node.getRightChild())) + 1);
-        tempLeftNode.setHeight( Math.max( height(tempLeftNode.getLeftChild()), height(tempLeftNode.getRightChild())) + 1);
-
-        return tempLeftNode;
-    }
-
-    private Node<T> leftRotation(Node<T> node){
-
-        //System.out.println("Rotating to the left on node: " + node.toString());
-
-        Node<T> tempRightNode = node.getRightChild();
-        Node<T> t = tempRightNode.getLeftChild();
-
-        tempRightNode.setLeftChild(node);
-        node.setRightChild(t);
-
-        node.setHeight( Math.max( height(node.getLeftChild()), height(node.getRightChild())) + 1);
-        tempRightNode.setHeight( Math.max( height(tempRightNode.getLeftChild()), height(tempRightNode.getRightChild())) + 1);
-
-        return tempRightNode;
-    }
 
 
-    private int height(Node<T> node){
-        if(node == null){
-            return -1;
-        }
+package problemset06;
 
-        return node.getHeight();
+import java.util.Comparator;
 
-    }
-    // calculating the "balance" of the given node
-    // meaning the difference between left and right paths
-    private int getBalance(Node<T> node){
 
-        if( node == null) return 0;
+public class Merge {
+	private static final int CUTOFF = 7;
 
-        return height(node.getLeftChild()) - height(node.getRightChild());
-    }
+	
+	private Merge() {
+	}
 
-    @Override
-    public void traverse() {
+	
 
-        if( root == null) return;
+	
+	private static boolean less(Object a, Object b, Comparator comparator) {
+		return comparator.compare(a, b) < 0;
+	}
 
-        inOrderTraversal(root);
+	
+	private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+		
+		
+		
 
-    }
+		
+		for (int k = lo; k <= hi; k++) {
+			aux[k] = a[k];
+		}
 
-    private void inOrderTraversal(Node<T> node) {
+		
+		int i = lo, j = mid + 1;
+		for (int k = lo; k <= hi; k++) {
+			if (i > mid)
+				a[k] = aux[j++];
+			else if (j > hi)
+				a[k] = aux[i++];
+			else if (less(aux[j], aux[i]))
+				a[k] = aux[j++];
+			else
+				a[k] = aux[i++];
+		}
 
-        if(node.getLeftChild() != null){
-            inOrderTraversal(node.getLeftChild());
-        }
+		
+		
+	}
 
-        System.out.print(node+" ");
+	
+	private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
+		
+		
+		
+		if (hi <= lo + CUTOFF) {
+			insertionSort(aux, lo, hi);
+			return;
+		}
 
-        if(node.getRightChild() != null){
-            inOrderTraversal(node.getRightChild());
-        }
-    }
+		int mid = lo + (hi - lo) / 2;
+		sort(a, aux, lo, mid);
+		sort(a, aux, mid + 1, hi);
+		merge(a, aux, lo, mid, hi);
+	}
+
+	
+	public static void sort(Comparable[] a) {
+		Comparable[] aux = new Comparable[a.length];
+		sort(a, aux, 0, a.length - 1);
+		assert isSorted(a);
+	}
+
+	
+	private static void insertionSort(Comparable[] a, int lo, int hi) {
+		for (int i = lo; i <= hi; i++)
+			for (int j = i; j > lo && less(a[j], a[j - 1]); j--)
+				exch(a, j, j - 1);
+	}
+
+	
+
+	
+	private static boolean less(Comparable v, Comparable w) {
+		return v.compareTo(w) < 0;
+	}
+
+	
+	private static void exch(Object[] a, int i, int j) {
+		Object swap = a[i];
+		a[i] = a[j];
+		a[j] = swap;
+	}
+
+	
+	private static boolean isSorted(Comparable[] a) {
+		return isSorted(a, 0, a.length - 1);
+	}
+
+	private static boolean isSorted(Comparable[] a, int lo, int hi) {
+		for (int i = lo + 1; i <= hi; i++)
+			if (less(a[i], a[i - 1]))
+				return false;
+		return true;
+	}
+
+	
+	
+	private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
+
+		
+		for (int k = lo; k <= hi; k++) {
+			aux[k] = index[k];
+		}
+
+		
+		int i = lo, j = mid + 1;
+		for (int k = lo; k <= hi; k++) {
+			if (i > mid)
+				index[k] = aux[j++];
+			else if (j > hi)
+				index[k] = aux[i++];
+			else if (less(a[aux[j]], a[aux[i]]))
+				index[k] = aux[j++];
+			else
+				index[k] = aux[i++];
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi, Comparator comparator) {
+		
+		if (hi <= lo + CUTOFF) {
+			insertionSort(a, lo, hi, comparator);
+			return;
+		}
+		int mid = lo + (hi - lo) / 2;
+		sort(a, index, aux, lo, mid, comparator);
+		sort(a, index, aux, mid + 1, hi, comparator);
+		merge(a, index, aux, lo, mid, hi);
+	}
+
+	
+	private static void show(Comparable[] a) {
+		for (int i = 0; i < a.length; i++) {
+			StdOut.println(a[i]);
+		}
+	}
+
+	
+	private static void insertionSort(Comparable[] a, int lo, int hi, Comparator comparator) {
+		for (int i = lo; i <= hi; i++)
+			for (int j = i; j > lo && less(a[j], a[j - 1], comparator); j--)
+				exch(a, j, j - 1);
+	}
+
+	
+	public static void main(String[] args) {
+		String[] a = StdIn.readAllStrings();
+		Merge.sort(a);
+		show(a);
+	}
 }
+
+

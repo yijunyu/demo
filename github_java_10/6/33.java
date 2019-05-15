@@ -1,96 +1,135 @@
-package arithmetic;
-//归并排序
-public class MergeSort {
-	private long[] theArray;
-	private int nElems;
+
+
+package org.neeraj.algorithms.sorting;
+
+
+
+public class RadixSort 
+{
+    
+    final private int NO_RADIX = -1;
+
+    
+    final private int NO_DIGITS = -1;
+
+    
+    private int radix;
+
+    
+    private int digits;
+
+    
+    private static class RadixKeyExtractor implements CountingSort.KeyExtractor
+    {
 	
-	public MergeSort(int max){
-		theArray = new long[max];
-		nElems = 0;
+	private int extractorRadix;
+
+	
+	private int divisor;
+	
+	
+	public RadixKeyExtractor(int radix, int divisor)
+	{
+	    extractorRadix = radix;
+	    this.divisor = divisor;
 	}
-	public void insert(long value){
-		theArray[nElems] = value;
-		nElems++;
+
+	
+	public int extract(int value)
+	{
+	    return (value / divisor) % extractorRadix;
 	}
-	public void display(){
-		for(int j=0;j<nElems;j++){
-			System.out.print(theArray[j]+" ");
-		}
-		System.out.println("");
+
+	
+	public int extract(NonNegativeInteger value)
+	{
+	    return extract(value.getKey());
 	}
-	public void mergeSort(){
-		long[] workSpace = new long[nElems];
-		recMergeSort(workSpace,0,nElems-1);
+    }
+
+    
+    public RadixSort()
+    {
+	radix = NO_RADIX;
+	digits = NO_DIGITS;
+    }
+
+    
+    public RadixSort(int radix)
+    {
+	this.radix = radix;
+	this.digits = NO_DIGITS;
+    }
+
+    
+    public RadixSort(int radix, int digits)
+    {
+	this.radix = radix;
+	this.digits = digits;
+    }
+
+    
+    private static int calculateDigits(int radix, int max)
+    {
+	int i = 0;		
+	int ri = 1;		
+
+	while (ri <= max) {	
+	    i++;		
+	    ri *= radix;	
 	}
-	private void recMergeSort(long[] workSpace,int lowerBound,int upperBound){
-		if(lowerBound==upperBound){
-			return;
-		}else{
-			int mid = (lowerBound+upperBound)/2;
-			recMergeSort(workSpace, lowerBound, mid);
-			recMergeSort(workSpace, mid+1, upperBound);
-			merge(workSpace,lowerBound,mid+1,upperBound);
-		}
+
+	return i;
+    }	
+
+    
+    public void sort(NonNegativeInteger[] array)
+    {
+	if (radix == NO_RADIX) {
+	    
+	    
+	    CountingSort cs = new CountingSort();
+	    int max = cs.findMax(array); 
+	    int bits = calculateDigits(2, max);
+	    int lgn =
+		(int) (Math.floor(Math.log(array.length) / Math.log(2.0)));
+
+	    if (bits < lgn)
+		radixSort(array, bits, calculateDigits(bits, max));
+	    else
+		radixSort(array, lgn, calculateDigits(lgn, max));
+	} 
+	else if (digits == NO_DIGITS)
+	    radixSort(array, radix);
+	else
+	    radixSort(array, radix, digits);
+    }
+
+    
+    public void radixSort(NonNegativeInteger[] array, int radix)
+    {
+	CountingSort cs = new CountingSort();
+	int max = cs.findMax(array); 
+
+	radixSort(array, radix, calculateDigits(radix, max));
+    }
+
+     
+    public void radixSort(NonNegativeInteger[] array, int r, int d)
+    {
+	CountingSort cs = new CountingSort(r-1);
+	int divisor = 1;	
+	
+	for (int i = 0; i < d; i++) {
+	    cs.setExtractor(new RadixKeyExtractor(r, divisor));
+	    cs.sort(array);
+	    divisor *= r;
 	}
-	private void merge(long[] workSpace,int lowPtr,int highPtr,int upperBound){
-		int j=0;
-		int lowerBound = lowPtr;
-		int mid = highPtr-1;
-		int n = upperBound-lowerBound+1;
-		while(lowPtr<=mid&&highPtr<=upperBound){
-			if(theArray[lowPtr]<theArray[highPtr]){
-				workSpace[j++]=theArray[lowPtr++];
-			}else{
-				workSpace[j++] = theArray[highPtr++];
-			}
-		}
-		while(lowPtr<=mid){
-			workSpace[j++]=theArray[lowPtr++];
-		}
-		while(highPtr<=upperBound){
-			workSpace[j++]=theArray[highPtr++];
-		}
-		for(j=0;j<n;j++){
-			theArray[lowerBound+j]=workSpace[j];
-		}
-	}
-	public static void main(String[] args) {
-		int maxSize = 100;
-		MergeSort mergeSort;
-		mergeSort = new MergeSort(maxSize);
-		
-		mergeSort.insert(64);
-		mergeSort.insert(21);
-		mergeSort.insert(33);
-		mergeSort.insert(70);
-		mergeSort.insert(12);
-		mergeSort.insert(85);
-		mergeSort.insert(44);
-		mergeSort.insert(3);
-		mergeSort.insert(99);
-		mergeSort.insert(0);
-		mergeSort.insert(108);
-		mergeSort.insert(36);
-		
-		mergeSort.display();
-		mergeSort.mergeSort();
-		mergeSort.display();
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}
+    }
+} 
+
+
+
+
+
+

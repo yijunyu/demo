@@ -1,76 +1,76 @@
-package Sorting;
+package algosound.data.algorithms;
 
-/**
- * Heapsort is a comparision-based sorting algorithm.
- * 1. Build the heap using all elements of the array
- * 2. Poll the highest element of the heap
- * 3. Swap it with the last element of the heap
- * 4. Reduce heap size by 1
- * 5. Repaire the heap
- * 6. If there are any elements remaining in the heap, go to 2
- * 7. Array is sorted according to priority of the elements in reverse order
- *
- * Complexity: O(n log(n))
- *
- * @author kkmonlee
- */
-public class Heapsort {
+import algosound.data.audio.Sonification;
+import algosound.data.audio.OSC;
+import algosound.util.AlgosoundUtil;
 
-    /**
-     * Heapsort
-     * @param array array to be sorted
-     * @param descending descending true if the array should be sorted in ascending order,
-     *                   false if array to be sorted in descending order
-     */
-    public static void heapSort(Comparable[] array, boolean descending) {
+import static algosound.data.audio.Sonification.SELECTIONSORT_SCALE;
+import static algosound.data.audio.Sonification.SELECTIONSORT_WAVE;
+import static algosound.util.AlgosoundUtil.expmap;
+import static processing.core.PApplet.map;
 
-        for (int i = array.length / 2 - 1; i >= 0; i--) {
-            repairTop(array, array.length - 1, i, descending ? 1 : -1);
-        }
 
-        for (int i = array.length - 1; i > 0; i--) {
-            swap(array, 0, i);
-            repairTop(array, i - 1, 9, descending ? 1 : -1);
-        }
+public class Selectionsort extends SortingAlgorithm {
+
+    
+    
+    public static final String SUFFIX = "SELECTIONSORT";
+
+    public Selectionsort(int N) {
+        super(N);
+        name = "Selectionsort";
+        suffix = SUFFIX;
+        sonifications.add(SELECTIONSORT_WAVE);
+        sonifications.add(SELECTIONSORT_SCALE);
+        selected_sonification = sonifications.get(0);
     }
 
-    /**
-     * Move the top of the heap to the correct place
-     * @param array array to be sorted
-     * @param bottom last index that can be moved
-     * @param topIndex index of the top of the heap
-     * @param order 1 == descending order, -1 == ascending order
-     */
-    private static void repairTop(Comparable[] array, int bottom, int topIndex, int order) {
-        Comparable temp = array[topIndex];
+    @Override
+    public void run() {
+        System.out.println("--- selectionsort-thread has started.");
 
-        int succ = topIndex * 2 + 1;
-        if (succ < bottom && array[succ].compareTo(array[succ + 1]) == order) {
-            succ++;
+        OSC osc = OSC.getInstance();
+        Sonification sel = selected_sonification;
+        if (sel == SELECTIONSORT_WAVE) {
+            osc.sendMessage(sel.STARTPATH);
+        } else if (sel == SELECTIONSORT_SCALE) {
+            int[] args = {FREQ_MIN, FREQ_MAX};
+            osc.sendMessage(sel.STARTPATH, args);
         }
-
-        while (succ <= bottom && temp.compareTo(array[succ]) == order) {
-            array[topIndex] = array[succ];
-            topIndex = succ;
-            succ = succ * 2 + 1;
-
-            if (succ < bottom && array[succ].compareTo(array[succ + 1]) == order) {
-                succ++;
-            }
+        
+        synchronized (this) {
+            
+            notifyFrameReady();
+            
+            int start = 0;
+            do {
+                int minIndex = start;
+                for (int i = minIndex + 1; i < a.length & !isInterrupted(); ++i) {
+                    int arg1 = expmap(a[i], 0, AlgosoundUtil.H, FREQ_MIN, FREQ_MAX);
+                    float pan = map(i, 0, elements.length - 1, -1, 1);
+                    if (a[i] < a[minIndex]) {
+                        minIndex = i;
+                        int arg2 = expmap(a[minIndex], 0, AlgosoundUtil.H, FREQ_MIN, FREQ_MAX);
+                        float[] args = {arg2, 0};
+                        osc.sendMessage(sel.MODPATHS.size() == 2 ? sel.MODPATHS.get(1) : sel.MODPATHS.get(0), args);
+                    }
+                    
+                    mark(minIndex);
+                    mark(i);
+                    float[] args = {arg1, pan};
+                    osc.sendMessage(sel.MODPATHS.get(0), args);
+                    notifyFrameReady();
+                }
+                int tmp = a[minIndex];
+                a[minIndex] = a[start];
+                a[start] = tmp;
+                swap(minIndex, start);
+                elements[start].setSorted();
+                notifyFrameReady();
+                start++;
+            } while (start < a.length & !isInterrupted());
         }
-        array[topIndex] = temp;
-    }
-
-    /**
-     * Swaps 2 elements of the heap
-     * @param array array
-     * @param left index of the first element
-     * @param right index of the second element
-     */
-    private static void swap(Comparable[] array, int left, int right) {
-        Comparable temp = array[right];
-
-        array[right] = array[left];
-        array[left] = temp;
+        osc.sendMessage(sel.FREEPATH);
+        System.out.println("--- selectionsort-thread has terminated.");
     }
 }

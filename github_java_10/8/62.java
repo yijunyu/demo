@@ -1,103 +1,116 @@
-package edu.kit.informatik;
+package quicksort;
 
-/**
- * Calculates the Levenshtein-Distance of two Strings.
- * 
- * @author Markus Iser
- * @author Philipp Merkle
- * @version 1.3
- */
-public class Levenshtein {
+import java.util.Arrays;
+import java.util.Random;
 
-    private final String w1;
-    private final String w2;
-    private int[][] distance;
 
-    /**
-     * Creates a new Levenshtein distance object.
-     * <p>
-     * Passing null as an argument sets the respective parameter to the empty String.
-     * 
-     * @param w1
-     *            the first word
-     * @param w2
-     *            the second word
-     */
-    public Levenshtein(String w1, String w2) {
-        this.w1 = w1 == null ? "." : "." + w1.toLowerCase();
-        this.w2 = w2 == null ? "." : "." + w2.toLowerCase();
-        this.distance = new int[this.w2.length()][this.w1.length()];
+public class Quicksort {
+
+    
+    public void quicksort(int A[], int p, int r) {
+        if (p < r) { 
+            int q = partition(A, p, r);
+            quicksort(A, p, q - 1);
+            quicksort(A, q + 1, r);
+        }
     }
 
-    /**
-     * Returns the first word.
-     * 
-     * @return the first word, or an empty String if the first word is {@code null}
-     */
-    public String getFirstWord() {
-        return w1.substring(1);
+    
+    public void randomizedQuicksort(int[] A, int p, int r) {
+        if (p < r) {
+            Random rand = new Random();
+            int x = rand.nextInt(A.length);
+            swap(A, x, r);
+            int q = partition(A, p, r);
+            randomizedQuicksort(A, p, q - 1);
+            randomizedQuicksort(A, q + 1, r);
+        }
     }
 
-    /**
-     * Returns the second word.
-     * 
-     * @return the second word, or an empty String if the second word is {@code null}
-     */
-    public String getSecondWord() {
-        return w2.substring(1);
-    }
-
-    /**
-     * Calculates and returns the edit distance of the two words.
-     * 
-     * @return the Levenshtein distance of the two words
-     */
-    public double getDistance() {
-        distance[0][0] = 0;
-        for (int i = 0; i < w2.length(); i++) {
-            for (int j = 0; j < w1.length(); j++) {
-                if (i != 0 || j != 0) {
-                    distance[i][j] = Math.min(replace(i, j), Math.min(delete(i, j), insert(i, j)));
-                }
+    
+    private int partition(int A[], int p, int r) {
+        int x = A[r];
+        int i = p - 1;
+        for (int j = p; j < r; j++) {
+            if (A[j] <= x) {
+                i = i + 1;
+                swap(A, i, j);
             }
+            swap(A, i + 1, r);
         }
-        return distance[w2.length() - 1][w1.length() - 1];
+        return i + 1;
     }
 
-    private int getDistanceAt(int i, int j) {
-        if (i < 0 || j < 0 || i > w2.length() || j > w1.length()) {
-            return Integer.MAX_VALUE - 1;
-        }
-        return distance[i][j];
+    
+    private void swap(int A[], int i, int j) {
+        int temp = A[i];
+        A[i] = A[j];
+        A[j] = temp;
     }
 
-    private int delete(int i, int j) {
-        return getDistanceAt(i, j - 1) + 1;
+    
+    public static void main(String[] args) {
+        
+        Quicksort sort = new Quicksort();
+        int a[] = {1, 2, 5, 3, 4};
+        int a1[] = {1, 2, 5, 3, 4};
+        int b[] = {10, 20, 1, 3};
+        int b1[] = {10, 20, 1, 3};
+        int c[] = {5, 100, 119, 50, 6, 20};
+        int c1[] = {5, 100, 119, 50, 6, 20};
+        int d[] = {20, 50, 100, 75, 25, 15};
+        int d1[] = {20, 50, 100, 75, 25, 15};
+        int e[] = {70, 80, 1000, 3000, 40, 25, 27, 84, 90, 100};
+        int e1[] = {70, 80, 1000, 3000, 40, 25, 27, 84, 90, 100};
+
+        
+        System.out.println("Original: ");
+        System.out.println(Arrays.toString(a));
+        sort.quicksort(a, 0, a.length - 1);
+        System.out.println("Quicksort: ");
+        System.out.println(Arrays.toString(a));
+        sort.randomizedQuicksort(a1, 0, a1.length - 1);
+        System.out.println("Randomized Quicksort: ");
+        System.out.println(Arrays.toString(a1));
+        System.out.println();
+
+        System.out.println("Original: ");
+        System.out.println(Arrays.toString(b));
+        sort.quicksort(b, 0, b.length - 1);
+        System.out.println("Quicksort: ");
+        System.out.println(Arrays.toString(b));
+        sort.randomizedQuicksort(b1, 0, b1.length - 1);
+        System.out.println("Randomized Quicksort: ");
+        System.out.println(Arrays.toString(b1));
+        System.out.println();
+
+        System.out.println("Original: ");
+        System.out.println(Arrays.toString(c));
+        sort.quicksort(c, 0, c.length - 1);
+        System.out.println("Quicksort: ");
+        System.out.println(Arrays.toString(c));
+        sort.randomizedQuicksort(c1, 0, c1.length - 1);
+        System.out.println("Randomized Quicksort: ");
+        System.out.println(Arrays.toString(c1));
+        System.out.println();
+
+        System.out.println("Original: ");
+        System.out.println(Arrays.toString(d));
+        sort.quicksort(d, 0, d.length - 1);
+        System.out.println("Quicksort: ");
+        System.out.println(Arrays.toString(d));
+        sort.randomizedQuicksort(d1, 0, d1.length - 1);
+        System.out.println("Randomized Quicksort: ");
+        System.out.println(Arrays.toString(d1));
+        System.out.println();
+
+        System.out.println("Original: ");
+        System.out.println(Arrays.toString(e));
+        sort.quicksort(e, 0, e.length - 1);
+        System.out.println("Quicksort: ");
+        System.out.println(Arrays.toString(e));
+        sort.randomizedQuicksort(e1, 0, e1.length - 1);
+        System.out.println("Randomized Quicksort: ");
+        System.out.println(Arrays.toString(e1));
     }
-
-    private int insert(int i, int j) {
-        return getDistanceAt(i - 1, j) + 1;
-    }
-
-    private int replace(int i, int j) {
-        return w2.charAt(i) == w1.charAt(j) ? getDistanceAt(i - 1, j - 1) : getDistanceAt(i - 1, j - 1) + 1;
-    }
-
-    /**
-     * Calculates and returns the normalized distance
-     * @return the normalized distance
-     */
-    public double getNormalizedLevenshteinDistance() {
-        double dist = getDistance();
-
-        int length;
-        if (getFirstWord().length() > getSecondWord().length()) {
-            length = getFirstWord().length();
-        } else {
-            length = getSecondWord().length();
-        }
-
-        return dist / length;
-    }
-
 }

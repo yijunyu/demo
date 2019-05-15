@@ -1,214 +1,66 @@
-/*
- * Minecraft Forge
- * Copyright (c) 2016.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation version 2.1
- * of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+package algorithm.sort.shell;
 
-package net.minecraftforge.fml.common.toposort;
+import algorithm.sort.SortUtil;
+import common.Utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import net.minecraftforge.fml.common.FMLLog;
+public class ShellSort {
+    static int[] arr0 = new int[]{100, 70, 80, 1, 60, 88, 60, 77, 10, 30, 7,};
+    static int[] arr3 = new int[]{100, 70, 80, 1, 60, 88, 60, 77, 10, 30, 7,};
 
-import com.google.common.collect.Sets;
-import com.google.common.collect.Sets.SetView;
+    public static void main(String[] args) {
+        shellSort0(arr0);
+        shellSort3(arr3);
 
-/**
- * Topological sort for mod loading
- *
- * Based on a variety of sources, including http://keithschwarz.com/interesting/code/?dir=topological-sort
- * @author cpw
- *
- */
-public class TopologicalSort
-{
-    public static class DirectedGraph<T> implements Iterable<T>
-    {
-        private final Map<T, SortedSet<T>> graph = new HashMap<T, SortedSet<T>>();
-        private List<T> orderedNodes = new ArrayList<T>();
+    }
 
-        public boolean addNode(T node)
-        {
-            // Ignore nodes already added
-            if (graph.containsKey(node))
-            {
-                return false;
-            }
-
-            orderedNodes.add(node);
-            graph.put(node, new TreeSet<T>(new Comparator<T>()
-            {
-                @Override
-                public int compare(T o1, T o2) {
-                    return orderedNodes.indexOf(o1)-orderedNodes.indexOf(o2);
+    public static void shellSort0(int[] array) {
+        Utils.log("���룺");
+        SortUtil.logArray(array);
+        int step;
+        
+        for (step = array.length / 2; step > 0; step /= 2) {
+            
+            for (int i = 0; i < step; i++) {
+                
+                for (int j = i; j < array.length - step; j += step) {
+                    for (int k = j + step; k - step >= 0; k -= step) {
+                        if (array[k - step] > array[k]) {
+                            int temp = array[k - step];
+                            array[k - step] = array[k];
+                            array[k] = temp;
+                        } else {
+                            break;
+                        }
+                    }
                 }
-            }));
-            return true;
-        }
-
-        public void addEdge(T from, T to)
-        {
-            if (!(graph.containsKey(from) && graph.containsKey(to)))
-            {
-                throw new NoSuchElementException("Missing nodes from graph");
             }
-
-            graph.get(from).add(to);
+            SortUtil.logArray(step, array);
         }
-
-        public void removeEdge(T from, T to)
-        {
-            if (!(graph.containsKey(from) && graph.containsKey(to)))
-            {
-                throw new NoSuchElementException("Missing nodes from graph");
-            }
-
-            graph.get(from).remove(to);
-        }
-
-        public boolean edgeExists(T from, T to)
-        {
-            if (!(graph.containsKey(from) && graph.containsKey(to)))
-            {
-                throw new NoSuchElementException("Missing nodes from graph");
-            }
-
-            return graph.get(from).contains(to);
-        }
-
-        public Set<T> edgesFrom(T from)
-        {
-            if (!graph.containsKey(from))
-            {
-                throw new NoSuchElementException("Missing node from graph");
-            }
-
-            return Collections.unmodifiableSortedSet(graph.get(from));
-        }
-        @Override
-        public Iterator<T> iterator()
-        {
-            return orderedNodes.iterator();
-        }
-
-        public int size()
-        {
-            return graph.size();
-        }
-
-        public boolean isEmpty()
-        {
-            return graph.isEmpty();
-        }
-
-        @Override
-        public String toString()
-        {
-            return graph.toString();
-        }
+        Utils.log("�����");
+        SortUtil.logArray(array);
     }
 
-    /**
-     * Sort the input graph into a topologically sorted list
-     *
-     * Uses the reverse depth first search as outlined in ...
-     * @param graph
-     * @return The sorted mods list.
-     */
-    public static <T> List<T> topologicalSort(DirectedGraph<T> graph)
-    {
-        DirectedGraph<T> rGraph = reverse(graph);
-        List<T> sortedResult = new ArrayList<T>();
-        Set<T> visitedNodes = new HashSet<T>();
-        // A list of "fully explored" nodes. Leftovers in here indicate cycles in the graph
-        Set<T> expandedNodes = new HashSet<T>();
+    public static void shellSort3(int[] array) {
+        SortUtil.logArray("���룺", array);
 
-        for (T node : rGraph)
-        {
-            explore(node, rGraph, sortedResult, visitedNodes, expandedNodes);
-        }
-
-        return sortedResult;
-    }
-
-    public static <T> DirectedGraph<T> reverse(DirectedGraph<T> graph)
-    {
-        DirectedGraph<T> result = new DirectedGraph<T>();
-
-        for (T node : graph)
-        {
-            result.addNode(node);
-        }
-
-        for (T from : graph)
-        {
-            for (T to : graph.edgesFrom(from))
-            {
-                result.addEdge(to, from);
+        int step, i, j, length = array.length;
+        int temp;
+        for (step = length / 2; step > 0; step /= 2) {
+            Utils.log("step=" + step);
+            for (i = step; i < length; i++) {
+                temp = array[i];
+                j = i - step;
+                while (j >= 0 && temp < array[j]) {
+                    array[j + step] = array[j];
+                    j -= step;
+                    SortUtil.logArray("����j" + i + "=", array);
+                }
+                array[j + step] = temp;
+                SortUtil.logArray("i" + i + "=", array);
             }
         }
 
-        return result;
-    }
-
-    public static <T> void explore(T node, DirectedGraph<T> graph, List<T> sortedResult, Set<T> visitedNodes, Set<T> expandedNodes)
-    {
-        // Have we been here before?
-        if (visitedNodes.contains(node))
-        {
-            // And have completed this node before
-            if (expandedNodes.contains(node))
-            {
-                // Then we're fine
-                return;
-            }
-
-            FMLLog.severe("Mod Sorting failed.");
-            FMLLog.severe("Visiting node %s", node);
-            FMLLog.severe("Current sorted list : %s", sortedResult);
-            FMLLog.severe("Visited set for this node : %s", visitedNodes);
-            FMLLog.severe("Explored node set : %s", expandedNodes);
-            SetView<T> cycleList = Sets.difference(visitedNodes, expandedNodes);
-            FMLLog.severe("Likely cycle is in : %s", cycleList);
-            throw new ModSortingException("There was a cycle detected in the input graph, sorting is not possible", node, cycleList);
-        }
-
-        // Visit this node
-        visitedNodes.add(node);
-
-        // Recursively explore inbound edges
-        for (T inbound : graph.edgesFrom(node))
-        {
-            explore(inbound, graph, sortedResult, visitedNodes, expandedNodes);
-        }
-
-        // Add ourselves now
-        sortedResult.add(node);
-        // And mark ourselves as explored
-        expandedNodes.add(node);
+        SortUtil.logArray("�����", array);
     }
 }

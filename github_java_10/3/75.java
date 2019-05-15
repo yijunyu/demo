@@ -1,42 +1,71 @@
-package com.InterviewPaperTest;
 
+import java.util.Scanner;
+import java.util.Stack;
 
-/*
- * tower(N,Src,Aux,Dest)
- * Step#1: tower(N-1,Src,End,Aux) : Move (N-1) Src to Aux
- * Step#2: tower(  1,Src,Aux,End) : Move (1) Src to End
- * Step#3: tower(N-1,Aux,Beg,End) : Move (N-1) Aux to End
- * 
- * */
-
-
-public class TowerOfHanoi {
-
-	static int stepCount=1;
-		public static void tower(int disk, String sourceRod, String auxiliaryRod,String destinationRod) {
-			
-			int count=stepCount;
-			
-			if (disk == 1) {
-				count=stepCount++;
-				System.out.println("stepCount#"+ count +" Move the disk " + disk + " from " + sourceRod+ " to " + destinationRod); //Move (1) Src to End
-			}
-			else{
-			
-									tower(disk - 1, sourceRod, destinationRod, auxiliaryRod); //Move (N-1) Src to Aux
-									count=stepCount++;
-				System.out.println("stepCount#"+ count +" Move the disk " + disk + " from " + sourceRod+ " to " + destinationRod); //Move (1) Src to End
-									tower(disk - 1, auxiliaryRod, sourceRod, destinationRod); //Move (N-1) Aux to End		
-				}
-		}
-
-		public static void main(String[] args) {
-			System.out.println("tower(3, 'Src', 'Aux', 'Dest')");
-			tower(3, "Src", "Aux", "Dest");
-		}
-
-	
-	
-	
-	
+public class TopologicalSort
+{
+    private Stack<Integer> stack;
+    public TopologicalSort()
+    {
+        stack=new Stack<Integer>();
+    }
+    public int[] Topological(int adjacencyMatrix[][],int source)
+    {
+        int number_of_nodes=adjacencyMatrix[source].length-1;
+        int[] topological_sort=new int[number_of_nodes+1];
+        int pos=1;
+        int j;
+        int visited[]=new int[number_of_nodes+1];
+        int element=source;
+        int i=source;
+        visited[source]=1;
+        stack.push(source);
+        
+        while(!stack.isEmpty())
+        {
+            element=stack.peek();
+            while(i<=number_of_nodes)
+            {
+                if(adjacencyMatrix[element][i]==1 && visited[i]==1)
+                {
+                    System.out.println("TOPOLOGICAL SORT NOT POSSIBLE");
+                    return null;
+                }
+                if(adjacencyMatrix[element][i]==1 && visited[i]==0)
+                {
+                    stack.push(i);
+                    visited[i]=1;
+                    element=i;
+                    i=1;
+                    continue;
+                }
+                i++;
+            }
+            j=stack.pop();
+            topological_sort[pos++]=j;
+            i=++j;
+        }
+        return topological_sort;
+    }
+    public static void main(String args[])
+    {
+        Scanner d=new Scanner(System.in);
+        int number_of_nodes=d.nextInt();
+        int adjacency_matrix[][]=new int[number_of_nodes+1][number_of_nodes+1];
+        for(int i=1;i<=number_of_nodes;i++)
+        {
+            for(int j=1;j<=number_of_nodes;j++)
+                adjacency_matrix[i][j]=d.nextInt();
+        }
+        int source=d.nextInt();
+        TopologicalSort topsort=new TopologicalSort();
+        int topological_sort[]=topsort.Topological(adjacency_matrix,source);
+        System.out.println();
+        for(int i=topological_sort.length-1;i>=0;i--)
+        {
+            if(topological_sort[i]!=0)
+                System.out.print(topological_sort[i]+"\t");
+        }
+        d.close();
+    }
 }

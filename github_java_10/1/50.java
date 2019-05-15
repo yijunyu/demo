@@ -1,32 +1,25 @@
-package me.codebase.algorithm.search;
 
-import me.codebase.algorithm.structure.TreeNode;
+package algorithm.sort.stable;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
 
-/**
- * Created by chendong on 2017/10/9.
- */
-public class BinaryTreeBFS {
-
-    //Breadth-First-Search
-    public static void bfs(TreeNode root) {
-        if (root != null) {
-            Queue<TreeNode> queue = new ArrayDeque<>();
-            queue.add(root);
-
-            while (!queue.isEmpty()) {
-                TreeNode tmp = queue.poll();
-                System.out.print(tmp.value);
-                if (tmp.left != null) {
-                    queue.add(tmp.left);
-                }
-
-                if (tmp.right != null) {
-                    queue.add(tmp.right);
-                }
-            }
-        }
-    }
+public class Insertion_InsertionSort {
+	
+	public static void sort(Comparable[] data) {
+		long start = System.nanoTime();
+		int len = data.length;
+		for (int i = 1; i < len; i++) {
+			Comparable c = data[i];
+			int position = 0;
+			for (position = i; position > 0; position--) {
+				if (c.compareTo(data[position - 1]) < 0) {
+					data[position] = data[position - 1];
+				} else {
+					break;
+				}
+			}
+			data[position] = c;
+		}
+		long end = System.nanoTime();
+		System.out.println("\nInsertionSort Execute time:" + (end - start));
+	}
 }

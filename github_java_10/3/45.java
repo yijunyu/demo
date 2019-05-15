@@ -1,128 +1,185 @@
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.NumberFormat;
-import java.util.Stack;
 
-/**
- * This program lists the steps to solve the Tower of Hanoi problem with 3 pegs
- * The number of disks to start with can be input as an argument.
- * The steps are printed on screen up to 10 disks. For more than that, the steps
- * are written to a file as the output grows exponentially with the number of disks
- * 
- * The solution to Tower of Hanoi takes exponential time 
- * Big O(n) = 2 ^ n 
- *
- */
-public class TowerOfHanoi {
-    private class HanoiStack extends Stack<Integer> {
-        private static final long serialVersionUID = 6707553568893645305L;
+
+package net.minecraftforge.fml.common.toposort;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import net.minecraftforge.fml.common.FMLLog;
+
+import com.google.common.collect.Sets;
+import com.google.common.collect.Sets.SetView;
+
+
+public class TopologicalSort
+{
+    public static class DirectedGraph<T> implements Iterable<T>
+    {
+        private final Map<T, SortedSet<T>> graph = new HashMap<T, SortedSet<T>>();
+        private List<T> orderedNodes = new ArrayList<T>();
+
+        public boolean addNode(T node)
+        {
+            
+            if (graph.containsKey(node))
+            {
+                return false;
+            }
+
+            orderedNodes.add(node);
+            graph.put(node, new TreeSet<T>(new Comparator<T>()
+            {
+                @Override
+                public int compare(T o1, T o2) {
+                    return orderedNodes.indexOf(o1)-orderedNodes.indexOf(o2);
+                }
+            }));
+            return true;
+        }
+
+        public void addEdge(T from, T to)
+        {
+            if (!(graph.containsKey(from) && graph.containsKey(to)))
+            {
+                throw new NoSuchElementException("Missing nodes from graph");
+            }
+
+            graph.get(from).add(to);
+        }
+
+        public void removeEdge(T from, T to)
+        {
+            if (!(graph.containsKey(from) && graph.containsKey(to)))
+            {
+                throw new NoSuchElementException("Missing nodes from graph");
+            }
+
+            graph.get(from).remove(to);
+        }
+
+        public boolean edgeExists(T from, T to)
+        {
+            if (!(graph.containsKey(from) && graph.containsKey(to)))
+            {
+                throw new NoSuchElementException("Missing nodes from graph");
+            }
+
+            return graph.get(from).contains(to);
+        }
+
+        public Set<T> edgesFrom(T from)
+        {
+            if (!graph.containsKey(from))
+            {
+                throw new NoSuchElementException("Missing node from graph");
+            }
+
+            return Collections.unmodifiableSortedSet(graph.get(from));
+        }
         @Override
-        public Integer push(Integer element) {
-            // good to check, but considerably affects runtime during high volume disk swaps
-            // if (this.size()>0 && element > this.peek()) {
-            //    throw new RuntimeException("Push error: trying to push " + element + " on top of " + this.peek());
-            // }
-            // every push is counted as a move in solving the problem 
-            TowerOfHanoi.this.stepCount++;
-            Integer i = super.push(element);
-            // display the state after every PUSH move
-            TowerOfHanoi.this.printStacks();
-            return i;
+        public Iterator<T> iterator()
+        {
+            return orderedNodes.iterator();
+        }
+
+        public int size()
+        {
+            return graph.size();
+        }
+
+        public boolean isEmpty()
+        {
+            return graph.isEmpty();
+        }
+
+        @Override
+        public String toString()
+        {
+            return graph.toString();
         }
     }
+
     
-    public HanoiStack source = new HanoiStack();
-    public HanoiStack dest = new HanoiStack();
-    public HanoiStack swap = new HanoiStack();
-    private String filename;
-    private PrintWriter out;
-    private int stepCount;
-    
-    public void transfer(int count, HanoiStack source, HanoiStack dest, HanoiStack swap) throws IOException{
-        // for more than 2 disks
-        // 1. move all but the last disk from source to swap peg
-        // 2. move the last disk from source to destination peg
-        // 3. move back the swapped disks to destination peg
-        if (count > 2) {
-            transfer (count-1, source, swap, dest);
-            dest.push(source.pop());
-            transfer (count-1, swap, dest, source);
-        }
-        // for 2 or less disks, move them right away without recursion
-        switch (count) {
-        case 0: break;
-        case 1: dest.push(source.pop());
-                break;
-        case 2: swap.push(source.pop());
-                dest.push(source.pop());
-                dest.push(swap.pop());
-                break;
-        }
-    }
-    
-    public void printStacks () {
-        out.print("Step " + stepCount + "\tSource :\t");
-        for (int i=0; i<this.source.size(); i++) {
-            out.print(this.source.elementAt(i) + " ");
-        }
-        out.print("\tDestination :\t");
-        for (int i=0; i<this.dest.size(); i++) {
-            out.print(this.dest.elementAt(i) + " ");
-        }
-        out.print("\tSwap :\t");
-        for (int i=0; i<this.swap.size(); i++) {
-            out.print(this.swap.elementAt(i) + " ");
-        }
-        out.println(" ");
-    }
-    
-    public static void main(String[] args) throws IOException {
-        int count = 8; // default, if no argument is provided for the count
-        int SYS_OUT_LIMIT = 10; // limit after which output will be written to a file
-        TowerOfHanoi tower = new TowerOfHanoi();
+    public static <T> List<T> topologicalSort(DirectedGraph<T> graph)
+    {
+        DirectedGraph<T> rGraph = reverse(graph);
+        List<T> sortedResult = new ArrayList<T>();
+        Set<T> visitedNodes = new HashSet<T>();
         
-        if (args.length>0) {
-            try {
-                count = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input for count. Defaulting to " + count);
+        Set<T> expandedNodes = new HashSet<T>();
+
+        for (T node : rGraph)
+        {
+            explore(node, rGraph, sortedResult, visitedNodes, expandedNodes);
+        }
+
+        return sortedResult;
+    }
+
+    public static <T> DirectedGraph<T> reverse(DirectedGraph<T> graph)
+    {
+        DirectedGraph<T> result = new DirectedGraph<T>();
+
+        for (T node : graph)
+        {
+            result.addNode(node);
+        }
+
+        for (T from : graph)
+        {
+            for (T to : graph.edgesFrom(from))
+            {
+                result.addEdge(to, from);
             }
         }
-        
-        if (count > SYS_OUT_LIMIT) {
-            System.out.println(count + " disks !! That's gonna take " 
-                + NumberFormat.getIntegerInstance().format((int)Math.pow(2, count) - 1) 
-                + " steps. Output will be written to a file. Here we go ...");
-            tower.filename = System.getProperty("java.io.tmpdir") + "towerOfHanoi.txt";
-            tower.out = new PrintWriter(tower.filename);
-        } else {
-            tower.out = new PrintWriter(System.out, true);
-        }
-        
-        // set up the disks on the source peg to start
-        for (int i=count; i>0; i--) {
-            tower.source.push(new Integer(i));
-        }
-        tower.stepCount = 0; // reset the step count (would have been incremented when the source peg was set up)
-        
-        long start = System.currentTimeMillis();
-        tower.out.println("... Start ...");
 
-        tower.transfer(count, tower.source, tower.dest, tower.swap);
+        return result;
+    }
+
+    public static <T> void explore(T node, DirectedGraph<T> graph, List<T> sortedResult, Set<T> visitedNodes, Set<T> expandedNodes)
+    {
         
-        tower.out.println("... End ...");
-        long end = System.currentTimeMillis();
-        long elapsed = end - start;
-        long min = elapsed/60000;
-        long sec = (elapsed/1000)%60;
-        tower.out.println("Elapsed Time : " + (min>0 ? min + " mintue(s) " : "") 
-            + (sec>0 ? sec + " second(s)" : elapsed + " milliseconds"));
-        
-        tower.out.println("Total Steps : " + NumberFormat.getIntegerInstance().format(tower.stepCount));
-        tower.out.flush();
-        tower.out.close();
-        if (count > SYS_OUT_LIMIT) {
-            System.out.println("Output available at " + tower.filename);
+        if (visitedNodes.contains(node))
+        {
+            
+            if (expandedNodes.contains(node))
+            {
+                
+                return;
+            }
+
+            FMLLog.severe("Mod Sorting failed.");
+            FMLLog.severe("Visiting node %s", node);
+            FMLLog.severe("Current sorted list : %s", sortedResult);
+            FMLLog.severe("Visited set for this node : %s", visitedNodes);
+            FMLLog.severe("Explored node set : %s", expandedNodes);
+            SetView<T> cycleList = Sets.difference(visitedNodes, expandedNodes);
+            FMLLog.severe("Likely cycle is in : %s", cycleList);
+            throw new ModSortingException("There was a cycle detected in the input graph, sorting is not possible", node, cycleList);
         }
+
+        
+        visitedNodes.add(node);
+
+        
+        for (T inbound : graph.edgesFrom(node))
+        {
+            explore(inbound, graph, sortedResult, visitedNodes, expandedNodes);
+        }
+
+        
+        sortedResult.add(node);
+        
+        expandedNodes.add(node);
     }
 }

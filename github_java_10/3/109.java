@@ -1,51 +1,41 @@
-import java.util.Scanner;
+package MiscQuestions;
 
-public class TowerOfHanoi {
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-	/**
-	 * @param args
-	 */
-	static int count = 0;
+import Common.GraphNode;
+
+
+public class ToplogicalSort {
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Stack[] Stacks = new Stack[3];
-		for(int i = 0; i < Stacks.length; i++){
-			Stacks[i] = new Stack();
+	public static List<Integer> topologicalSort(Set<GraphNode<Integer>> graph) {
+		Set<GraphNode<Integer>> visited = new HashSet<>();
+		LinkedList<Integer> ret = new LinkedList<Integer>();
+		for (GraphNode<Integer> n : graph) {
+			if (!visited.contains(n)) {
+				DFS(n, visited, ret);
+			}
 		}
-		
-		System.out.println("Input number of disk (under 100) :");
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
-		
-		for(int i = 0; i < n; i++){
-			Stacks[0].push_back(i + 1);
-		}
-		
-		TowerOfHanoi(n, Stacks[0], Stacks[1], Stacks[2]);
-
-		int x = 0;
-		for(Stack s : Stacks){
-			x++;
-			System.out.print(s.getClass().getName() + x +  " : ");
-			s.toString();
-		}
-		
-		System.out.println("\nNumber of movement : " + count);
-		
-		sc.close();
+		return ret;
 	}
-
-	public static void TowerOfHanoi(int n, Stack From, Stack Tmp, Stack To){
+	
+	private static void DFS(GraphNode<Integer> node, Set<GraphNode<Integer>> visited, LinkedList<Integer> ret) {
+		if (node == null) {
+			return;
+		}
 		
-		if( n == 1){
-			To.push_back(From.pop());
+		visited.add(node);
+		Set<GraphNode<Integer>> nbs = node.getChildren();
+		Iterator<GraphNode<Integer>> iter = nbs.iterator();
+		while (iter.hasNext()) {
+			GraphNode<Integer> n = iter.next();
+			if (!visited.contains(n)) {
+				DFS(n, visited, ret);
+			}
 		}
-		else{
-			TowerOfHanoi(n-1, From, To, Tmp);
-			To.push_back(From.pop());
-			TowerOfHanoi(n-1, Tmp, From, To);
-		}
-		count++;
+		ret.addFirst(node.getValue());
 	}
 }

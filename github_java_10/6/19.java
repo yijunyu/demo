@@ -1,73 +1,174 @@
-package me.lirui.algo.sort;
+package sort;
 
-import java.util.Arrays;
+public class RadixSort {
 
-/**
- * An Implementation of merge sort
- *
- * <p>Complexity Analysis: Time complexity : O(N log N) Space complexity : No auxiliary space
- *
- * <p>Pseudo Code: merge-sort(A, p, r) if p < r q = [(p+r) / 2] merge-sort(A, p, q) merge-sort(A, q
- * + 1, r) Merge(A, p, q, r )
- *
- * <p>Created by RichardLee on 2017/4/2.
- */
-public class MergeSort extends SortStub {
-  @Override
-  public int[] onPrepareInputData() {
-    return new int[] {4, 3, 2, 1};
-  }
+	private static void sort(int[] data) {
+		
+		int max = 0;
+		for (int i = 0; i < data.length; i++) {
+			if (data[i] > max) {
+				max = data[i];
+			}
+		}
 
-  @Override
-  public void onDoSort(int[] inputData) {
-    super.onDoSort(inputData);
-    _mergeSort(inputData);
-    System.out.println("");
-  }
+		
+		int time = 0;
+		while (max > 0) {
+			max = max / 10;
+			time++;
+		}
 
-  private void _mergeSort(int[] array) {
-    if (array == null || array.length < 2) return;
+		int radix = 10;
 
-    int mid = array.length / 2;
-    int[] leftArray = Arrays.copyOfRange(array, 0, mid);
-    int[] rightArray = Arrays.copyOfRange(array, mid, array.length);
+		
+		for (int i = 0; i < time; i++) {
 
-    _mergeSort(leftArray);
-    _mergeSort(rightArray);
+			
+			int[] buckets = new int[radix];
+			for (int j = 0; j < data.length; j++) {
+				int key = (data[j] / (int) Math.pow(10, i)) % radix;
+				buckets[key]++;
+			}
 
-    _mergeArrarys(array, leftArray, rightArray);
-  }
+			int[] count = new int[buckets.length];
 
-  private void _mergeArrarys(int[] array, int[] leftArray, int[] rightArray) {
-    if (array == null) return;
-    if (leftArray == null) {
-      array = rightArray;
-      return;
-    }
-    if (rightArray == null) {
-      array = leftArray;
-      return;
-    }
+			
+			for (int k = 1; k < buckets.length; k++) {
+				count[k] = count[k - 1] + buckets[k - 1];
+			}
 
-    int leftLength = leftArray.length;
-    int rightLength = rightArray.length;
+			
+			
 
-    int i = 0;
-    int j = 0;
-    int k = 0;
-    while (i < leftLength && j < rightLength) {
-      if (leftArray[i] > rightArray[j]) {
-        array[k++] = rightArray[j++];
-      } else {
-        array[k++] = leftArray[i++];
-      }
-    }
-    while (i < leftLength) {
-      array[k++] = leftArray[i++];
-    }
+			int[] temp = new int[data.length];
 
-    while (j < rightLength) {
-      array[k++] = rightArray[j++];
-    }
-  }
+			for (int j = 0; j < data.length; j++) {
+				int key = (data[j] / (int) Math.pow(10, i)) % radix;
+				int position = count[key];
+				count[key]++;
+				temp[position] = data[j];
+			}
+
+			for (int j = 0; j < data.length; j++) {
+				data[j] = temp[j];
+			}
+		}
+	}
+
+	private static void LSDsort(int[] data) {
+		
+		int max = 0;
+		for (int i = 0; i < data.length; i++) {
+			if (data[i] > max) {
+				max = data[i];
+			}
+		}
+
+		
+		int time = 0;
+		while (max > 0) {
+			max = max / 10;
+			time++;
+		}
+
+		
+		int radix = 10;
+
+		
+		for (int i = 0; i < time; i++) {
+			
+			
+			int[] buckets = new int[radix + 1];
+			
+			
+			for (int j = 0; j < data.length; j++) {
+				int key = (data[j] / (int) Math.pow(10, i)) % radix;
+				buckets[key + 1]++;
+			}
+
+			
+			for (int k = 1; k < buckets.length; k++) {
+				buckets[k] = buckets[k] + buckets[k - 1];
+			}
+
+			
+			int[] temp = new int[data.length];
+
+			
+			
+			
+			for (int j = 0; j < data.length; j++) {
+				int key = (data[j] / (int) Math.pow(10, i)) % radix;
+				int position = buckets[key]++;
+				temp[position] = data[j];
+			}
+
+			
+			for (int j = 0; j < data.length; j++) {
+				data[j] = temp[j];
+			}
+		}
+	}
+
+	private static void MSDsort(int[] data) {
+		
+		int max = 0;
+		for (int i = 0; i < data.length; i++) {
+			if (data[i] > max) {
+				max = data[i];
+			}
+		}
+
+		
+		int time = 0;
+		while (max > 0) {
+			max = max / 10;
+			time++;
+		}
+
+		int radix = 10;
+
+		
+		for (int i = 0; i < time; i++) {
+
+			
+			int[] buckets = new int[radix + 1];
+			for (int j = 0; j < data.length; j++) {
+				int key = (data[j] / (int) Math.pow(10, i)) % radix;
+				buckets[key + 1]++;
+			}
+
+			
+			for (int k = 1; k < buckets.length; k++) {
+				buckets[k] = buckets[k] + buckets[k - 1];
+			}
+
+			
+			
+
+			int[] temp = new int[data.length];
+
+			for (int j = 0; j < data.length; j++) {
+				int key = (data[j] / (int) Math.pow(10, i)) % radix;
+				int position = buckets[key]++;
+				temp[position] = data[j];
+			}
+
+			
+			for (int j = 0; j < data.length; j++) {
+				data[j] = temp[j];
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		int[] a = new int[] { 1, 2, 4, 12, 4, 6, 2, 1, 3, 7743, 2, 0 };
+		RadixSort.LSDsort(a);
+		for (int i = 0; i < a.length; i++) {
+
+			System.out.print(a[i] + " ");
+		}
+
+	}
+
 }

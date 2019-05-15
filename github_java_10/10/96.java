@@ -1,40 +1,109 @@
-import java.util.Arrays;
-import java.util.Scanner;
+package com.redmond.coding.sort;
 
-public class Sort_BubbleSort {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        // Може да се използва за малки множества или за множества,
-        // където има елементи близо до очакваното си място.
-        // Сравнява първия и втория елемент,
-        // и ако първият е по-голям от втория, ги разменя.
-        //най-добър вариант N итерации.
-        //среден и най-лош N квадрат - стабилен
+import java.util.ArrayList;
+import java.util.List;
 
-        int n = Integer.parseInt(scanner.nextLine());
-        int[] array = new int[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = scanner.nextInt();
-        }
-        BubbleSort(array);
-        System.out.println(Arrays.toString(array));
-    }
-    public static void BubbleSort(int[] array) {
-        for (int j = 0; j < array.length; j++) {
-            boolean isSwapped = false;
-            for (int i = 0; i < array.length - 1 - j; i++) {
-                if (array[i] > array[i + 1]) {
-                    swap(array, i, i + 1);
-                    isSwapped = true;
-                }
-            }
-            if (!isSwapped)
-                return;
-        }
-    }
-    public static void swap(int[] array, int index1, int index2) {
-        int temp = array[index1];
-        array[index1] = array[index2];
-        array[index2] = temp;
-    }
+import com.redmond.coding.GeneralUtils;
+
+public class BucketSort implements Sort{
+	
+	public int bucketSize = 100;
+	public Sort sort = new BubbleSort();
+	
+	public BucketSort() {
+		
+	}
+	
+	public BucketSort(int bucketSize) {
+		super();
+		this.bucketSize = bucketSize;
+	}
+	
+	public BucketSort(int bucketSize, Sort sort) {
+		super();
+		this.bucketSize = bucketSize;
+		this.sort = sort;
+	}
+
+	public void sort(int[] values) {
+		
+		List<List<Integer>> buckets = new ArrayList<List<Integer>>();
+		
+		for (int value : values) {
+			int bucket = value / bucketSize;
+			if (buckets.size() <= bucket) {
+				for (int size = buckets.size();size <= bucket;size++) {
+					buckets.add(null);
+				}
+			}
+			List<Integer> mybuckets = buckets.get(bucket);
+			if (mybuckets == null) {
+				mybuckets = new ArrayList<Integer>();
+				buckets.set(bucket, mybuckets);
+			}
+			mybuckets.add(value);
+		}
+		
+		int i = 0;
+		for (List<Integer> bucket : buckets) {
+			if (bucket == null) {
+				continue;
+			}
+			
+			if (bucket.size() == 1) {
+				values[i++] = bucket.get(0);
+			} else {
+				int[] myvalues = new int[bucket.size()];
+				for (int j = 0;j<bucket.size();j++) {
+					myvalues[j] = bucket.get(j);
+				}
+				
+				sort.sort(myvalues);
+				for (int j = 0;j<bucket.size();j++) {
+					values[i++] = myvalues[j];
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		
+		Sort sort = new BucketSort();
+
+		{
+			int[] test = { 4, 6, 2, 10, 5 };
+			sort.sort(test);
+			System.out.println("res = " + GeneralUtils.toString(test));
+		}
+
+		{
+			int[] test = { 1, 300, 4, 6, 7, 100, 2, 10, 5, 10102, 0, 504 };
+			sort.sort(test);
+			System.out.println("res = " + GeneralUtils.toString(test));
+		}
+
+		{
+			int[] test = { 1, 300, 4, 6, 7, 100, 2, 10, 5, 10102, 0, 504, 80,
+					34, 28 };
+			sort.sort(test);
+			System.out.println("res = " + GeneralUtils.toString(test));
+		}
+
+		{
+			int[] test = { 1, 300, 4, 6, 7, 100, 2, 10, 5, 10102, 0, 504, 80,
+					34, 28, 50000 };
+			sort.sort(test);
+			System.out.println("res = " + GeneralUtils.toString(test));
+		}
+		
+		{
+			int[] test = new int[10000];
+			for (int i = 0;i<test.length;i++) {
+				test[i] = 100;
+			}
+			sort.sort(test);
+			System.out.println("res = " + GeneralUtils.toString(test));
+		}
+
+	}
 }

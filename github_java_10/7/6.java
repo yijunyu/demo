@@ -1,73 +1,32 @@
-/*************************************************************************
- *  Compilation:  javac Topoological.java
- *  Dependencies: Digraph.java DepthFirstOrder.java DirectedCycle.java
- *                EdgeWeightedDigraph.java EdgeWeightedDirectedCycle.java
- *  Data files:   http://algs4.cs.princeton.edu/42directed/jobs.txt
- *
- *  Compute topological ordering of a DAG or edge-weighted DAG.
- *  Runs in O(E + V) time.
- *
- *  % java Topological jobs.txt "/"
- *  Calculus
- *  Linear Algebra
- *  Introduction to CS
- *  Programming Systems
- *  Algorithms
- *  Theoretical CS
- *  Artificial Intelligence
- *  Machine Learning
- *  Neural Networks
- *  Robotics
- *  Scientific Computing
- *  Computational Biology
- *  Databases
- *
- *
- *************************************************************************/
+package mainpackage.algorithms;
 
-package edu.princeton.cs.algorithms;
+public class Shellsort {
+    
+    public static int[] sort(int[] arr) {
+        return sort(arr, arr.length);
+    }
+    
+    private static int[] sort(int[] arr, int n) {
+        int i, j, h, x;
+        
+        for(h = 1; h < n; h = 3 * h + 1);
+        h /= 9;
+            
+        if(h == 0)
+            h++;
 
-import edu.princeton.cs.algorithms.stdlib.StdOut;
-
-public class Topological {
-    private Iterable<Integer> order; // topological order
-
-    // topological sort in a digraph
-    public Topological(Digraph G) {
-        DirectedCycle finder = new DirectedCycle(G);
-        if (!finder.hasCycle()) {
-            DepthFirstOrder dfs = new DepthFirstOrder(G);
-            order = dfs.reversePost();
+        while(h > 0) {
+            for(j = n - h - 1; j >= 0; j--) {
+                x = arr[j];
+                i = j + h;
+                while((i < n) && (x > arr[i])) {
+                    arr[i - h] = arr[i];
+                    i += h;
+                }
+                arr[i - h] = x;
+            }
+            h /= 3;
         }
+        return arr;
     }
-
-    // topological sort in an edge-weighted digraph
-    public Topological(EdgeWeightedDigraph G) {
-        EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
-        if (!finder.hasCycle()) {
-            DepthFirstOrder dfs = new DepthFirstOrder(G);
-            order = dfs.reversePost();
-        }
-    }
-
-    // return topological order if a DAG; null otherwise
-    public Iterable<Integer> order() {
-        return order;
-    }
-
-    // does digraph have a topological order?
-    public boolean hasOrder() {
-        return order != null;
-    }
-
-    public static void main(String[] args) {
-        String filename = args[0];
-        String delimiter = args[1];
-        SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
-        Topological topological = new Topological(sg.G());
-        for (int v : topological.order()) {
-            StdOut.println(sg.name(v));
-        }
-    }
-
 }

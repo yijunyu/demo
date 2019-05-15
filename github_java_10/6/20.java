@@ -1,55 +1,55 @@
+package exercise2;
 
-public class Sort_MergeSort {
-	public static void main(String[] args) {
-		int arr[] = {12, 11, 13, 5, 6, 7};
-		mergesort(arr);
-	}
-	
-	//O(nlogn) in avg and worst case
-	public static void mergesort(int[] array) {
-		int[] helper = new int[array.length];
-		sort(array, helper, 0, array.length -1);
-	}
-	
-	public static void sort(int[] array, int[] helper, int low, int high) {
-		if(low < high) {
-			int middle = (low + high) / 2;
-			sort(array, helper, low, middle); //sort left
-			sort(array, helper, middle+1, high); //sort right
-			merge(array, helper, low, middle, high); //merge
-		}
-	}
-	
-	public static void merge(int[] array, int[] helper, int low, int middle, int high) {
-		//copy both halves into a helper array
-		for(int i = low; i <= high; i++) {
-			helper[i] = array[i];
-			System.out.println(helper[i]);
-		}
-		
-		int helperLeft = low;
-		int helperRight = middle+1;
-		int current = low;
-		
-		//Iterate through the helper array.
-		//Compared the left and right half, copying back the smaller 
-		//element from the two halves into the original array.
-		while(helperLeft <= middle && helperRight <= high) {
-			if(helper[helperLeft] <= helper[helperRight]) {
-				array[current] = helper[helperLeft];
-				helperLeft++;
-			}
-			else {
-				array[current] = helper[helperRight];
-				helperRight++;
-			}
-			current++;
-		}
-		
-		//copy rest of the left side of the array into the target array
-		int remaining = middle - helperLeft;
-		for(int i = 0; i <= remaining; i++) {
-			array[current + i] = helper[helperLeft + i];
-		}
-	}
+import java.lang.*;
+import java.io.*;
+
+public class RadixSort{
+
+    public static void radixSort(int[] arr){
+        if(arr.length == 0)
+            return;
+        int[][] np = new int[arr.length][2];
+        int[] q = new int[0x100];
+        int i,j,k,l,f = 0;
+        for(k=0;k<4;k++){
+            for(i=0;i<(np.length-1);i++)
+                np[i][1] = i+1;
+            np[i][1] = -1;
+            for(i=0;i<q.length;i++)
+                q[i] = -1;
+            for(f=i=0;i<arr.length;i++){
+                j = ((0xFF<<(k<<3))&arr[i])>>(k<<3);
+                if(q[j] == -1)
+                    l = q[j] = f;
+                else{
+                    l = q[j];
+                    while(np[l][1] != -1)
+                        l = np[l][1];
+                    np[l][1] = f;
+                    l = np[l][1];
+                }
+                f = np[f][1];
+                np[l][0] = arr[i];
+                np[l][1] = -1;
+            }
+            for(l=q[i=j=0];i<0x100;i++)
+                for(l=q[i];l!=-1;l=np[l][1])
+                        arr[j++] = np[l][0];
+        }
+    }
+
+    public static void main(String[] args){
+        int i;
+        int[] arr = new int[15];
+        System.out.print("original: ");
+        for(i=0;i<arr.length;i++){
+            arr[i] = (int)(Math.random() * 1024);
+            System.out.print(arr[i] + " ");
+        }
+        radixSort(arr);
+        System.out.print("\nsorted: ");
+        for(i=0;i<arr.length;i++)
+            System.out.print(arr[i] + " ");
+        System.out.println("\nDone ;-)");
+    }
 }

@@ -1,233 +1,443 @@
-/******************************************************************************
- *  Compilation:  javac Insertion.java
- *  Execution:    java Insertion < input.txt
- *  Dependencies: StdOut.java StdIn.java
- *  Data files:   http://algs4.cs.princeton.edu/21elementary/tiny.txt
- *                http://algs4.cs.princeton.edu/21elementary/words3.txt
- *  
- *  Sorts a sequence of strings from standard input using insertion sort.
- *
- *  % more tiny.txt
- *  S O R T E X A M P L E
- *
- *  % java Insertion < tiny.txt
- *  A E E L M O P R S T X                 [ one string per line ]
- *
- *  % more words3.txt
- *  bed bug dad yes zoo ... all bad yet
- *
- *  % java Insertion < words3.txt
- *  all bad bed bug dad ... yes yet zoo   [ one string per line ]
- *
- ******************************************************************************/
 
-package edu.princeton.cs.algs4;
+package org.terrier.sorting;
 
-import java.util.Comparator;
+public class HeapSortInt {
 
-/**
- *  The {@code Insertion} class provides static methods for sorting an
- *  array using insertion sort.
- *  <p>
- *  This implementation makes ~ 1/2 n^2 compares and exchanges in
- *  the worst case, so it is not suitable for sorting large arbitrary arrays.
- *  More precisely, the number of exchanges is exactly equal to the number
- *  of inversions. So, for example, it sorts a partially-sorted array
- *  in linear time.
- *  <p>
- *  The sorting algorithm is stable and uses O(1) extra memory.
- *  <p>
- *  See <a href="http://algs4.cs.princeton.edu/21elementary/InsertionPedantic.java.html">InsertionPedantic.java</a>
- *  for a version that eliminates the compiler warning.
- *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/21elementary">Section 2.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Insertion {
+   	
+	private static int buildMaxHeap(int[] A, int[] B, int[] C) {
+		final int heapSize = A.length;
+		for (int i = heapSize/2; i > 0; i--)
+			maxHeapify(A, B, C, i, heapSize);
+		return heapSize;
+	}
 
-    // This class should not be instantiated.
-    private Insertion() { }
-
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static void sort(Comparable[] a) {
-        int n = a.length;
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j > 0 && less(a[j], a[j-1]); j--) {
-                exch(a, j, j-1);
-            }
-            assert isSorted(a, 0, i);
-        }
-        assert isSorted(a);
+    private static int buildMaxHeap(int[] A, int[] B, int[] C, int[] D) {
+        final int heapSize = A.length;
+        for (int i = heapSize/2; i > 0; i--)
+            maxHeapify(A, B, C, D, i, heapSize);
+        return heapSize;
     }
 
-    /**
-     * Rearranges the subarray a[lo..hi) in ascending order, using the natural order.
-     * @param a the array to be sorted
-     * @param lo left endpoint (inclusive)
-     * @param hi right endpoint (exclusive)
-     */
-    public static void sort(Comparable[] a, int lo, int hi) {
-        for (int i = lo; i < hi; i++) {
-            for (int j = i; j > lo && less(a[j], a[j-1]); j--) {
-                exch(a, j, j-1);
-            }
-        }
-        assert isSorted(a, lo, hi);
+    private static int buildMaxHeap(int[][] A) {
+        final int heapSize = A[0].length;
+        for (int i = heapSize/2; i > 0; i--)
+            maxHeapify(A, i, heapSize);
+        return heapSize;
     }
 
-    /**
-     * Rearranges the array in ascending order, using a comparator.
-     * @param a the array
-     * @param comparator the comparator specifying the order
-     */
-    public static void sort(Object[] a, Comparator comparator) {
-        int n = a.length;
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j > 0 && less(a[j], a[j-1], comparator); j--) {
-                exch(a, j, j-1);
-            }
-            assert isSorted(a, 0, i, comparator);
-        }
-        assert isSorted(a, comparator);
-    }
-
-    /**
-     * Rearranges the subarray a[lo..hi) in ascending order, using a comparator.
-     * @param a the array
-     * @param lo left endpoint (inclusive)
-     * @param hi right endpoint (exclusive)
-     * @param comparator the comparator specifying the order
-     */
-    public static void sort(Object[] a, int lo, int hi, Comparator comparator) {
-        for (int i = lo; i < hi; i++) {
-            for (int j = i; j > lo && less(a[j], a[j-1], comparator); j--) {
-                exch(a, j, j-1);
-            }
-        }
-        assert isSorted(a, lo, hi, comparator);
-    }
+   	
+	private static int buildMaxHeap(int[] A, int[] B) {
+		final int heapSize = A.length;
+		for (int i = heapSize/2; i > 0; i--)
+			maxHeapify(A, B, i, heapSize);
+		return heapSize;
+	}
 
 
-    // return a permutation that gives the elements in a[] in ascending order
-    // do not change the original array a[]
-    /**
-     * Returns a permutation that gives the elements in the array in ascending order.
-     * @param a the array
-     * @return a permutation {@code p[]} such that {@code a[p[0]]}, {@code a[p[1]]},
-     *    ..., {@code a[p[n-1]]} are in ascending order
-     */
-    public static int[] indexSort(Comparable[] a) {
-        int n = a.length;
-        int[] index = new int[n];
-        for (int i = 0; i < n; i++)
-            index[i] = i;
+	
+	public static void ascendingHeapSort(int[] A, int[] B, int[] C) {
+		int heapSize = buildMaxHeap(A, B, C);
 
-        for (int i = 0; i < n; i++)
-            for (int j = i; j > 0 && less(a[index[j]], a[index[j-1]]); j--)
-                exch(index, j, j-1);
+		
+		int tmpDouble;
+		int tmpInt;
+		int tmpShort;
 
-        return index;
-    }
+		for (int i = A.length; i > 0; i--) {
+			
+			tmpDouble = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpDouble;
 
-   /***************************************************************************
-    *  Helper sorting functions.
-    ***************************************************************************/
-    
-    // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
-        return v.compareTo(w) < 0;
-    }
+			tmpInt = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpInt;
 
-    // is v < w ?
-    private static boolean less(Object v, Object w, Comparator comparator) {
-        return comparator.compare(v, w) < 0;
-    }
+			tmpShort = C[i - 1];
+			C[i - 1] = C[0];
+			C[0] = tmpShort;
+
+			heapSize--;
+			maxHeapify(A, B, C, 1, heapSize);
+		}
+	}
+	
+    public static void ascendingHeapSort(int[] A, int[] B, int[] C, int[] D) {
+        int heapSize = buildMaxHeap(A, B, C, D);
+
         
-    // exchange a[i] and a[j]
-    private static void exch(Object[] a, int i, int j) {
-        Object swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
+        int tmpDouble;
+        int tmpInt;
+        int tmpShort;
 
-    // exchange a[i] and a[j]  (for indirect sort)
-    private static void exch(int[] a, int i, int j) {
-        int swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
+        for (int i = A.length; i > 0; i--) {
+            
+            tmpDouble = A[i - 1];
+            A[i - 1] = A[0];
+            A[0] = tmpDouble;
 
-   /***************************************************************************
-    *  Check if array is sorted - useful for debugging.
-    ***************************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        return isSorted(a, 0, a.length);
-    }
+            tmpInt = B[i - 1];
+            B[i - 1] = B[0];
+            B[0] = tmpInt;
 
-    // is the array a[lo..hi) sorted
-    private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo+1; i < hi; i++)
-            if (less(a[i], a[i-1])) return false;
-        return true;
-    }
+            tmpShort = C[i - 1];
+            C[i - 1] = C[0];
+            C[0] = tmpShort;
 
-    private static boolean isSorted(Object[] a, Comparator comparator) {
-        return isSorted(a, 0, a.length, comparator);
-    }
+			tmpShort = D[i - 1];
+            D[i - 1] = D[0];
+            D[0] = tmpShort;
 
-    // is the array a[lo..hi) sorted
-    private static boolean isSorted(Object[] a, int lo, int hi, Comparator comparator) {
-        for (int i = lo+1; i < hi; i++)
-            if (less(a[i], a[i-1], comparator)) return false;
-        return true;
-    }
 
-   // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
+            heapSize--;
+            maxHeapify(A, B, C, D, 1, heapSize);
         }
     }
 
-    /**
-     * Reads in a sequence of strings from standard input; insertion sorts them;
-     * and prints them to standard output in ascending order.
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        edu.princeton.cs.algs4.Insertion.sort(a);
-        show(a);
-    }
-}
+	
+	public static void ascendingHeapSort(int[] A, int[] B) {
+		int heapSize = buildMaxHeap(A, B);
 
-/******************************************************************************
- *  Copyright 2002-2016, Robert Sedgewick and Kevin Wayne.
- *
- *  This file is part of algs4.jar, which accompanies the textbook
- *
- *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,
- *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.
- *      http://algs4.cs.princeton.edu
- *
- *
- *  algs4.jar is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  algs4.jar is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with algs4.jar.  If not, see http://www.gnu.org/licenses.
- ******************************************************************************/
+		
+		int tmpDouble;
+		int tmpInt;
+		
+
+		for (int i = A.length; i > 0; i--) {
+			
+			tmpDouble = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpDouble;
+
+			tmpInt = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpInt;
+
+			heapSize--;
+			maxHeapify(A, B, 1, heapSize);
+		}
+	}
+	
+	
+	public static void descendingHeapSort(int[] A, int[] B) {
+		ascendingHeapSort(A, B);
+		reverse(A, B, A.length);
+	}
+	
+	
+	public static void ascendingHeapSort(int[][] A) {
+		int heapSize = buildMaxHeap(A);
+
+		
+		
+		int tmpInt;
+		
+
+		for (int i = A[0].length; i > 0; i--) {
+			
+			for(int j=0;j<A.length;j++)
+			{
+				tmpInt = A[j][i-1];
+				A[j][i-1] = A[j][0];
+				A[j][0] = tmpInt;
+			}
+
+			heapSize--;
+			maxHeapify(A, 1, heapSize);
+		}
+	}
+
+	
+	public static void descendingHeapSort(int[] A, int[] B, int[] C) {
+		HeapSortInt.ascendingHeapSort(A, B, C);
+		reverse(A, B, C, A.length);
+	}
+
+	
+	 
+    public static void descendingHeapSort(int[] A, int[] B, int[] C, int[] D) {
+        HeapSortInt.ascendingHeapSort(A, B, C, D);
+        reverse(A, B, C, D, A.length);
+    }
+
+	
+	public static void ascendingHeapSort(int[] A, int[] B, int[] C, int topElements) {
+		int heapSize = buildMaxHeap(A, B, C);
+		int end = A.length - topElements;
+
+		
+		int tmpDouble;
+		int tmpInt;
+		int tmpShort;
+
+
+		for (int i = A.length; i > end; i--) {
+			
+			tmpDouble = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpDouble;
+
+			tmpInt = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpInt;
+
+			tmpShort = C[i - 1];
+			C[i - 1] = C[0];
+			C[0] = tmpShort;
+
+			heapSize--;
+			maxHeapify(A, B, C, 1, heapSize);
+		}
+	}
+	
+	private static void reverse(final int[] A, final int[] B, final int[] C, final int topElements) {
+		
+		final int length = A.length;
+		final int elems = 
+			topElements > length/2 
+			? length/2 
+			: topElements;
+		
+		
+
+
+		int j;
+		
+		int tmpDouble;
+		int tmpInt;
+		int tmpShort;
+
+		for (int i=0; i<elems; i++) {
+			j = length - i - 1;
+			
+			tmpDouble = A[i]; A[i] = A[j]; A[j] = tmpDouble;
+			tmpInt = B[i]; B[i] = B[j]; B[j] = tmpInt;
+			tmpShort = C[i]; C[i] = C[j]; C[j] = tmpShort;
+		}
+	}
+	
+	
+	private static void reverse(final int[] A, final int[] B, final int topElements) {
+		
+		final int length = A.length;
+		final int elems = 
+			topElements > length/2 
+			? length/2 
+			: topElements;
+		
+		
+
+
+		int j;
+		
+		int tmpDouble;
+		int tmpInt;
+		
+
+		for (int i=0; i<elems; i++) {
+			j = length - i - 1;
+			
+			tmpDouble = A[i]; A[i] = A[j]; A[j] = tmpDouble;
+			tmpInt = B[i]; B[i] = B[j]; B[j] = tmpInt;
+			
+		}
+	}
+
+    private static void reverse(final int[] A, final int[] B, final int[] C, final int[] D, final int topElements) {
+        
+        final int length = A.length;
+        final int elems = 
+            topElements > length/2
+            ? length/2
+            : topElements;
+        
+        
+
+
+        int j;
+        
+        int tmpDouble;
+        int tmpInt;
+        int tmpShort;
+
+        for (int i=0; i<elems; i++) {
+            j = length - i - 1;
+            
+            tmpDouble = A[i]; A[i] = A[j]; A[j] = tmpDouble;
+            tmpInt = B[i]; B[i] = B[j]; B[j] = tmpInt;
+            tmpShort = C[i]; C[i] = C[j]; C[j] = tmpShort;
+			tmpShort = D[i]; D[i] = D[j]; D[j] = tmpShort;
+        }
+    }
+
+	
+	public static void descendingHeapSort(final int[] A, final int[] B, final int[] C, final int topElements) {
+		ascendingHeapSort(A, B, C, topElements);
+		reverse(A, B, C, topElements);
+	}
+	
+	private static void maxHeapify(final int[] A, final int[] B, final int[] C, final int i, final int heapSize) {
+		final int l = 2 * i;
+		final int r = 2 * i + 1;
+
+		int largest = 
+			(l <= heapSize && A[l - 1] > A[i - 1])
+				? l
+				: i;
+		
+		
+		
+		
+		if (r <= heapSize && A[r - 1] > A[largest - 1])
+			largest = r;
+
+		
+		int tmpDouble;
+		int tmpInt;
+		int tmpShort;
+
+
+		if (largest != i) {
+			tmpDouble = A[largest - 1];
+			A[largest - 1] = A[i - 1];
+			A[i - 1] = tmpDouble;
+			tmpInt = B[largest - 1];
+			B[largest - 1] = B[i - 1];
+			B[i - 1] = tmpInt;
+			tmpShort = C[largest -1];
+			C[largest -1] = C[i - 1];
+			C[i - 1] = tmpShort;
+			maxHeapify(A, B, C, largest, heapSize);
+		}
+	}
+
+    private static void maxHeapify(final int[] A, final int[] B, final int[] C, final int[] D, final int i, final int heapSize) {
+        final int l = 2 * i;
+        final int r = 2 * i + 1;
+
+        int largest =
+            (l <= heapSize && A[l - 1] > A[i - 1])
+                ? l
+                : i;
+        
+        
+        
+        
+        if (r <= heapSize && A[r - 1] > A[largest - 1])
+            largest = r;
+
+        
+        int tmpDouble;
+        int tmpInt;
+        int tmpShort;
+
+
+        if (largest != i) {
+            tmpDouble = A[largest - 1];
+            A[largest - 1] = A[i - 1];
+            A[i - 1] = tmpDouble;
+            tmpInt = B[largest - 1];
+            B[largest - 1] = B[i - 1];
+            B[i - 1] = tmpInt;
+            tmpShort = C[largest -1];
+            C[largest -1] = C[i - 1];
+            C[i - 1] = tmpShort;
+
+            tmpShort = D[largest -1];
+            D[largest -1] = D[i - 1];
+            D[i - 1] = tmpShort;
+
+            maxHeapify(A, B, C, D, largest, heapSize);
+        }
+    }
+
+
+	
+	private static void maxHeapify(final int[] A, final int[] B, final int i, final int heapSize) {
+		final int l = 2 * i;
+		final int r = 2 * i + 1;
+
+		int largest = 
+			(l <= heapSize && A[l - 1] > A[i - 1])
+				? l
+				: i;
+		
+		
+		
+		
+		if (r <= heapSize && A[r - 1] > A[largest - 1])
+			largest = r;
+
+		
+		int tmpDouble;
+		int tmpInt;
+		
+
+
+		if (largest != i) {
+			tmpDouble = A[largest - 1];
+			A[largest - 1] = A[i - 1];
+			A[i - 1] = tmpDouble;
+			tmpInt = B[largest - 1];
+			B[largest - 1] = B[i - 1];
+			B[i - 1] = tmpInt;
+			maxHeapify(A, B, largest, heapSize);
+		}
+	}
+
+
+	private static void maxHeapify(final int[][] A, final int i, final int heapSize) {
+		final int l = 2 * i;
+		final int r = 2 * i + 1;
+
+		int largest = 
+			(l <= heapSize && A[0][l - 1] > A[0][i - 1])
+				? l
+				: i;
+		
+		
+		
+		
+		if (r <= heapSize && A[0][r - 1] > A[0][largest - 1])
+			largest = r;
+
+		
+		int tmpInt;
+		
+
+
+		if (largest != i) {
+			for(int j=0;j<A.length;j++)
+			{
+				tmpInt = A[j][largest - 1];
+				A[j][largest - 1] = A[j][i - 1];
+				A[j][i - 1] = tmpInt;
+			}
+			maxHeapify(A, largest, heapSize);
+		}
+	}
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+}

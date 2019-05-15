@@ -1,45 +1,51 @@
-package ctcilib;
 
-import java.util.Arrays;
 
-public class Mergesort {
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-    public static void sort(int[] arr) {
-        sort(arr, 0, arr.length-1);
-    }
-    
-    private static void sort(int[] arr, int left, int right) {
-        if (left >= right) return;
-        int mid = (left + right) / 2;
-        sort(arr, left, mid);
-        sort(arr, mid+1, right);
-        merge(arr, left, right);  
-    }
-    
-    private static void merge(int[] arr, int left, int right) {
-        int l = left;
-        int mid = (left + right) / 2;
-        int midRight = mid + 1;
-        int index = 0;
-        int[] tmp = new int[right-left+1];
-        while(left <= mid && midRight <= right) {
-            if (arr[left] <= arr[midRight]) {
-                tmp[index] = arr[left];
-                left++;
-            } else {
-                tmp[index] = arr[midRight];
-                midRight++;
-            }
-            index++;
-        }
-        for (int i = 0; i < tmp.length; i++) {
-            arr[i+l] = tmp[i];
-        }
-    }
 
-    public static void main(String[] args) {
-        int[] arr1 = {1,5,2,5,7,3,4};
-        sort(arr1);
-        System.out.println(Arrays.toString(arr1));
-    }
+class Ideone
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		int n =Integer.parseInt(br.readLine());
+		int a[]=new int[n];
+		String[] str=br.readLine().split(" ");
+		for(int i=0;i<n;i++) a[i]=Integer.parseInt(str[i]);
+		
+		radix(a);
+	
+		 
+		 
+		 
+	}
+	
+	public static void radix(int[] a){
+	int n =a.length;
+	 int m =max(a);
+	 for(int exp=1;m/exp>0;exp*=10){
+	 	countsort(a,exp);
+	 }
+		
+	}
+	
+	public static void countsort(int[] a,int exp){
+		int n =a.length;
+		int out[]=new int[n];
+		int i=0; 
+		int count[]=new int[10];
+		
+	}
+	
+	public static int max(int[] a){
+		int max=a[0];
+		for(int i=1;i<n;i++){
+			if(a[i]>max) max=a[i];
+		}
+		return max;
+	}
+	
 }

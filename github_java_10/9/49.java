@@ -1,46 +1,48 @@
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
+public class Main {
+   static Scanner scn = new Scanner(System.in);
 
-/**
- * Created by maggie on 6/20/16.
- */
-public class Sort_HeapSort {
-    //heapSort can be implemented by Priority Queue
+	public static void main(String[] args) {
+		
+		int[] arr = takeInput();
 
-    public class IntegerDescendingComparator implements Comparator<Integer>{
-        @Override
-        public int compare(Integer x, Integer y){
-            if(x > y) return -1;
-            if(x < y) return 1;
-            return 0;
-        }
+	    selectionsort(arr);
+	    display(arr);
+	}
+	public static int[] takeInput() {
+	
+		int n = scn.nextInt();
+		int[] arr = new int[n];
+	
+		for (int i = 0; i < n; i++) {
+			arr[i] = scn.nextInt();
+		}
+		return arr;
+	}
 
-    }
+	public static void display(int[] arr)
 
+	{
+	
 
-    public int[] heapSort(int[] num){
-        Comparator<Integer> comparator = new IntegerDescendingComparator();
+		for (int val : arr) {
+			System.out.println(val);
+		}
+	}
+	public static void selectionsort(int[] arr) {
+		int n = arr.length;
+		for (int i = 0; i < n - 1; i++) {
+			int min = i;
+			for (int j = i + 1; j < n; j++) {
+				if (arr[j] < arr[min]) {
+					min = j;
+				}
+			}
 
-        if(num.length == 0 || num.length == 1) return num;
-        int[] res = new int[num.length];
-        PriorityQueue pq = new PriorityQueue(comparator);
-        for(int i = 0; i < num.length; i++){
-            pq.add(num[i]);
-        }
-        for(int i = 0; i < num.length;i++){
-            int tmp = (Integer)pq.remove();
-            res[i] = tmp;
-            System.out.print(res[i]+ ",");
-        }
-
-        return res;
-
-    }
-
-    public static void main(String[] args){
-        int[] arr = new int[]{2,3,1,3,8,4};
-        Sort_HeapSort t = new Sort_HeapSort();
-        t.heapSort(arr);
-    }
-
+			
+			int temp = arr[i];
+			arr[i] = arr[min];
+			arr[min] = temp;
+		}
+	}
 }

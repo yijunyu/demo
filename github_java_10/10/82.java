@@ -1,48 +1,75 @@
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
+package sort.distributive;
 
-public class Solution {
+import java.util.Random;
+import java.util.concurrent.locks.ReentrantLock;
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        int a[] = new int[n];
-        for(int a_i=0; a_i < n; a_i++){
-            a[a_i] = in.nextInt();
-        }
-        //System.out.println("KK");
-        int temp,total=0,swap=0;
-        for(int i=0;i<n;i++){
-        	for(int j=0;j<n-1;j++){
-        		if(a[j]>a[j+1]){
-        			temp=a[j];
-        			a[j]=a[j+1];
-        			a[j+1]=temp;
-        			//printarray(a);
-        			total++;
-        			swap=1;
-        		}
-        		
-        	}
-        	
-        	if(swap==0)break;
-        }
-        
-        /*for(int a_i=0; a_i < n; a_i++){
-            System.out.print(a[a_i]+" ");
-        }*/
-        
-        System.out.println("Array is sorted in "+(total)+" swaps.");
-    	System.out.println("First Element: "+a[0]+"\nLast Element: "+a[n-1]);
-    }
+import sort.Sort;
+import sort.swap.QuickSort;
 
-	private static void printarray(int[] a) {
-		// TODO Auto-generated method stub
-		for(int i=0;i<a.length;i++)
-			System.out.print(a[i]+" ");
-		System.out.println();
+public class BucketSort extends Sort {
+
+	
+	
+	private static  int i =0;
+	public int a(){
+		return  i++;
 	}
+	public int b(){
+		return ++i;
+	}
+	public static void main(String[] args) {
+		BucketSort a = new BucketSort();
+		System.out.println(a.a());
+		System.out.println(a.b());
+		BucketSort b = new BucketSort();
+		System.out.println(b.a());
+
+		
+	
+		
+	
+	}
+	
+	class Node{
+		int num = 0;
+		int[] node = new int[10];
+	}
+	
+	public void bucketSort(int[] data){
+		int max = data[0] , min = data[0];
+		for (int i = 0; i < data.length; i++) {
+			if(max < data[i]){
+				max = data[i];
+			}
+			if(min > data[i]){
+				min = data[i];
+			}
+		}
+		
+		int bucketSize = (max - min + 1)/10 + 1;
+		Node[] bucket = new Node[bucketSize];
+		for (int i = 0; i < bucket.length; i++) {
+			bucket[i] = new Node();
+		}
+		
+		for (int i = 0; i < data.length; i++) {
+			int k = (data[i] - min + 1)/10;
+			bucket[k].node[bucket[k].num] = data[i];
+			bucket[k].num++;
+		}
+		
+		int pos = 0 ; 
+		
+		QuickSort qs = new QuickSort();
+		for (int i = 0; i < bucket.length; i++) {
+			qs.quickSortInt(bucket[i].node, bucket[i].num, 0, bucket[i].num-1);
+			
+			for (int j = 0; j < bucket[i].num; j++ , pos++) {
+				data[pos] = bucket[i].node[j];
+			}
+		}
+		
+		
+	}
+
 }

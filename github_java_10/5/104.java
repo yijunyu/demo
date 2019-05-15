@@ -1,76 +1,55 @@
-import java.util.Scanner;
-import java.util.List;
+package Algorithm.CheatSheet.Sorting;
 
-public class connectDots {
 
-	static int Count;
-	static int m;
-	static int n;
 
-	public static void main(String[] args) {
 
-		Scanner in = new Scanner(System.in);
-		int temp;
 
-		m = in.nextInt();
-		n = in.nextInt();
 
-		int[][] Space;
-		Space = new int[m + 2][n + 2];
+public class Bubble {
 
-		for (int i = 0; i < m + 2; i++) {
-			for (int j = 0; j < n + 2; j++) {
-				if (i == 0 || j == 0 || i == m + 1 || j == n + 1) {
-					Space[i][j] = 0;
-					continue;
-				}
+    
+    private Bubble() {
+    }
 
-				Space[i][j] = in.nextInt();
-			}
-		}
+    
+    public static <Key extends Comparable<Key>> void sort(Key[] a) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            int exchanges = 0;
+            for (int j = n - 1; j > i; j--) {
+                if (less(a[j], a[j - 1])) {
+                    exch(a, j, j - 1);
+                    exchanges++;
+                }
+            }
+            if (exchanges == 0) break;
+        }
+    }
 
-		for (int i = 1; i <= m; i++) {
-			for (int j = 1; j <= n; j++) {
-				if (Space[i][j] == 1) {
-					temp = depthFirstSearch(Space, i, j);
-					if (Count < temp) {
-						Count = temp;
-					}
-				}
-			}
-		}
+    
+    private static <Key extends Comparable<Key>> boolean less(Key v, Key w) {
+        return v.compareTo(w) < 0;
+    }
 
-		System.out.println(Count);
+    
+    private static <Key extends Comparable<Key>> void exch(Key[] a, int i, int j) {
+        Key swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
 
-	}
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
 
-	public static int depthFirstSearch(int[][] Space, int i, int j) {
-
-		if (Space[i][j] == 0)
-			return 0;
-		else {
-			Space[i][j] = 0 ;
-			return 1 + depthFirstSearch(Space, i + 1, j)
-					+ depthFirstSearch(Space, i - 1, j)
-					+ depthFirstSearch(Space, i, j + 1)
-					+ depthFirstSearch(Space, i, j - 1)
-					+ depthFirstSearch(Space, i+1, j+1)
-					+ depthFirstSearch(Space, i-1, j-1)
-					+ depthFirstSearch(Space, i+1, j-1)
-					+ depthFirstSearch(Space, i-1, j+1);
-		}
-
-	}
-
-	static void printGrid(int[][] Space) {
-
-		for (int i = 1; i <= m; i++) {
-			for (int j = 1; j <= n; j++) {
-				System.out.print(Space[i][j] + " ");
-			}
-			System.out.println();
-		}
-
-	}
-
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readAllStrings();
+        Bubble.sort(a);
+        show(a);
+    }
 }
+

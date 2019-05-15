@@ -1,33 +1,84 @@
-/**
- * 
- */
-package algorithm.sort.stable;
+package algs.sort;
 
-/**
- * @author aaaajl
- * 
- */
-public class Insertion_InsertionSort {
-	/**
-	 * Worst case performance O(n2) Best case performance O(n) Average case
-	 * performance O(n2) Worst case space complexity O(n) total, O(1) auxiliary
-	 * */
-	public static void sort(Comparable[] data) {
-		long start = System.nanoTime();
-		int len = data.length;
-		for (int i = 1; i < len; i++) {
-			Comparable c = data[i];
-			int position = 0;
-			for (position = i; position > 0; position--) {
-				if (c.compareTo(data[position - 1]) < 0) {
-					data[position] = data[position - 1];
-				} else {
-					break;
-				}
-			}
-			data[position] = c;
-		}
-		long end = System.nanoTime();
-		System.out.println("\nInsertionSort Execute time:" + (end - start));
-	}
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Scanner;
+
+import static algs.sort.Sort.*;
+
+public class Heap {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private Heap() { }
+
+    
+    public static void sort(Comparable[] pq) {
+        int n = pq.length;
+        for (int k = n/2; k >= 1; k--)
+            sink(pq, k, n);
+        while (n > 1) {
+            exch(pq, 1, n--);
+            sink(pq, 1, n);
+        }
+    }
+
+    
+
+    private static void sink(Comparable[] pq, int k, int n) {
+        while (2*k <= n) {
+            int j = 2*k;
+            if (j < n && less(pq, j, j+1)) j++;
+            if (!less(pq, k, j)) break;
+            exch(pq, k, j);
+            k = j;
+        }
+    }
+
+    
+    private static boolean less(Comparable[] pq, int i, int j) {
+        return pq[i-1].compareTo(pq[j-1]) < 0;
+    }
+
+    private static void exch(Object[] pq, int i, int j) {
+        Object swap = pq[i-1];
+        pq[i-1] = pq[j-1];
+        pq[j-1] = swap;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        File file = new File("C:\\Users\\qianji\\IdeaProjects\\Algorithms\\src\\words.txt");
+        InputStream inputStream = new FileInputStream(file);
+        Scanner scanner = new Scanner(inputStream);
+        String s = scanner.nextLine();
+        String[] a = s.split(" ");
+
+
+
+
+
+        Heap.sort(a);
+        show(a);
+    }
 }

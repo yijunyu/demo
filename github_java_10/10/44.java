@@ -1,43 +1,61 @@
-package com.sysmech.simpulse.experiment;
+package com.meiliinc.mls.algorithm.sort;
 
-import net.jcip.annotations.NotThreadSafe;
 
-/**
- * An example (untested) bubble sort algorithm.
- *
- * @author Alan Christie
- */
-@NotThreadSafe
-public class JavaBubbleSort {
-
-    public int[] recursiveBubble(final int[] args,
-                                 final int startIndex,
-                                 final int endIndex) {
-
-        if(startIndex > endIndex){
-            return args;
+public class SortAlgoBucketSort {
+    
+    public static int[] bucketSort(int[] arr){
+        
+        int bucketNum = 10;
+        Integer[][] buckets = new Integer[bucketNum][arr.length];
+        for (int num : arr){
+            int bucketIdx = num / 10;
+            
+            for (int j = 0; j < arr.length; j++){
+                if (buckets[bucketIdx][j] == null){
+                    buckets[bucketIdx][j] = num;
+                    break;
+                }
+            }
         }
 
-        if (startIndex == endIndex - 1) {
-
-            recursiveBubble(args, 0, endIndex - 1);
-
-        } else if (args[startIndex] > args[startIndex+1]) {
-
-            int currentNumber = args[startIndex];
-            args[startIndex] = args[startIndex + 1];
-            args[startIndex + 1] = currentNumber;
-
-            recursiveBubble(args, startIndex + 1, endIndex);
-
-        } else  {
-
-            recursiveBubble(args, startIndex + 1, endIndex);
-
+        
+        
+        for (int i = 0; i < buckets.length; i++){
+            
+            for (int j = 1; j < buckets[i].length; ++j){
+                if(buckets[i][j] == null){
+                    break;
+                }
+                int value = buckets[i][j];
+                int position = j;
+                while (position > 0 && buckets[i][position-1] > value){
+                    buckets[i][position] = buckets[i][position-1];
+                    position--;
+                }
+                buckets[i][position] = value;
+            }
         }
-
-        return args;
-
+        int k = 0;
+        
+        for (int i = 0; i < bucketNum; i++){
+            for (int j = 0; j < buckets[i].length; j++){
+                if (null == buckets[i][j]){
+                    continue;
+                }
+                arr[k++] = buckets[i][j];
+            }
+        }
+        return arr;
     }
 
+    private static void printArray(int[] arr){
+        for (int num : arr){
+            System.out.printf("%d,", num);
+        }
+    }
+    public static void main(String[] args) {
+        int[] arr = new int[]{3,1,41,62,73,22};
+        arr = bucketSort(arr);
+        printArray(arr);
+    }
 }

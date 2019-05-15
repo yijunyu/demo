@@ -1,55 +1,82 @@
-/*Edit Distance
-question: http://www.lintcode.com/en/problem/edit-distance/
-answer:  http://www.jiuzhang.com/solutions/edit-distance/
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
-Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
-You have the following 3 operations permitted on a word:
+public class Quicksort {
 
-Insert a character
-Delete a character
-Replace a character
+    private static int comparisonsCount = 0;
 
-Example
-Given word1 = "mart" and word2 = "karma", return 3.
-*/
-package twoSequenceDP;
+    public static void main(String[] args) throws FileNotFoundException {
+        List<Integer> input = loadData("data.txt");
 
-public class EditDistance {
-	public static int minstep(String A, String B){
-		if (A == null || A.length() == 0){
-			return B.length();
-		}
-		if (B == null || B.length() == 0){
-			return A.length();
-		}
-		int n = A.length();
-		int m = B.length();
-		//1. state: min[i][j] means the minimum step for changing the first i of A to first j  of B
-		int[][] min = new int[n + 1][m + 1];
-		//2. initialization
-		for (int i = 0; i < n + 1; i++){
-			min[i][0] = i;
-		}
-		for (int j = 0; j < m + 1; j++){
-			min[0][j] = j;
-		}
-		//3. function
-		for (int i = 1; i < n + 1; i++){
-			for (int j = 1; j < m + 1; j++){
-				if (A.charAt(i - 1) == B.charAt(j - 1)){
-					min[i][j] = min[i - 1][j - 1];
-				}else{
-					min[i][j] = 1 + Math.min(min[i - 1][j - 1], Math.min(min[i - 1][j], min[i][j - 1]));
-				}
-			}
-		}		
-		return min[n][m];		
-	}
+        int number = quickSort(input, 0, input.size()-1);
+        System.out.println(number);
+    }
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		String A = "mart";
-		String B = "karma";
-		System.out.println(minstep(A,B));
-	}
+    public static List<Integer> loadData(String fileName) throws FileNotFoundException {
+        List<Integer> result = new ArrayList<>();
+        Scanner scan = new Scanner(new File(fileName));
+        while(scan.hasNextLine()) {
+            int element = Integer.parseInt(scan.nextLine());
+            result.add(element);
+        }
+
+        return result;
+    }
+
+    public static int quickSort(List<Integer> array, int start, int end) {
+        if (start >= end) {
+            return 0;
+        }
+
+        int pivotIndex = chooseMedianPivot(array, start, end);
+
+
+        int pivot = array.get(pivotIndex);
+
+        swap(array, pivotIndex, start);
+        int wallIndex = start +1 ;
+
+        for (int i= start + 1; i <= end; i++) {
+            if (array.get(i) < pivot) {
+                swap(array, i, wallIndex);
+                wallIndex++;
+            }
+        }
+        wallIndex--;
+
+        swap(array, start, wallIndex);
+        return end - start + quickSort(array, start, wallIndex - 1) + quickSort(array, wallIndex + 1 , end);
+    }
+
+    public static void swap(List<Integer> array, int first, int second) {
+        int temp1 = array.get(first);
+        int temp2 = array.get(second);
+
+        array.set(first, temp2);
+        array.set(second, temp1);
+    }
+
+    public static int chooseMedianPivot(List<Integer> array, int start, int end) {
+        int mid = (start + end) / 2;
+
+        int min = Math.min(array.get(mid), Math.min(array.get(start), array.get(end) ));
+        int max = Math.max(array.get(mid), Math.max(array.get(start), array.get(end) ));
+
+        int median = array.get(mid) + array.get(start) + array.get(end) - min - max;
+
+        int[] indexes = new int[]{start, mid, end};
+
+        for (int i: indexes) {
+            if (array.get(i) == median) {
+                return i;
+            }
+        }
+
+        return mid;
+    }
 }
+

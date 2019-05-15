@@ -1,45 +1,25 @@
-package algorithms;
+package com.datstruct;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+public class InsertionSort {
+	public static void main(String[] args) {
+		int[] list = { 1, 8, 4, 6, 0, 3, 5, 2, 7, 9 };
+		int valueToInsert;
+		int holePosition;
+		for (int i = 1; i < list.length; i++) {
+			valueToInsert = list[i];
+			holePosition = i;
 
-import components.Edge;
-import components.Graph;
-import components.Node;
-
-/**
- * 
- * Breadth-First-Search Implementation
- * 
- * @author Antonios Georgiadis
- *
- */
-
-public class BFS {
-
-	public static void search(Graph graph, Node root, Node goal) {
-
-		Queue<Node> queue = new LinkedList<Node>();
-		Set<Node> visited = new HashSet<Node>();
-
-		Node current;
-		queue.add(root);
-		visited.add(root);
-
-		while (queue.size() > 0) {
-			current = queue.poll();
-			System.out.println(current.ID + " ");
-			if (current.equals(goal)) break;
-
-			for (Edge connection : current.getConnections()) {
-				if (!visited.contains(connection.destination)) {
-					queue.add(connection.destination);
-					visited.add(connection.destination);
-				}
+			while (holePosition > 0 && list[holePosition - 1] > valueToInsert) {
+				list[holePosition] = list[holePosition - 1];
+				holePosition--;
 			}
+			if (i != holePosition) {
+				list[holePosition] = valueToInsert;
+			}
+		}
+		
+		for (int i = 0; i < list.length; i++) {
+			System.out.println(list[i]);
 		}
 	}
 }

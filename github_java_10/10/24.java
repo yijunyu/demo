@@ -1,85 +1,91 @@
-/******************************************************************************
- *  Compilation:  javac Bubble.java
- *  Execution:    java  Bubble N
- *  Dependencies: StdOut.java 
- *
- *  Read strings from standard input and bubblesort them.
- *
- ******************************************************************************/
+package Sort;
 
-/**
- *  The <tt>Bubble</tt> class provides static methods for sorting an
- *  array using bubble sort.
- *  <p>
- *  This implementation makes ~ 1/2 N^2 compares and exchanges in
- *  the worst case, so it is not suitable for sorting large arbitrary arrays.
- *  Bubble sort is seldom useful because it is substantially slower than
- *  insertion sort on most inputs. The one class of inputs where bubble sort
- *  might be faster than insertion sort is arrays for which only
- *  a few passes of bubble sort are needed. This includes sorted arrays,
- *  but it does not include most partially-sorted arrays; for example,
- *  bubble sort takes quadratic time to sort arrays of the form
- *  [N, 1, 2, 3, 4, ..., N-1], whereas insertion sort takes linear time on
- *  such inputs.
- *  <p>
- *  The sorting algorithm is stable and uses O(1) extra memory.
- *  <p>
- *  For additional documentation,
- *  see <a href="http://algs4.cs.princeton.edu/21elementary">Section 2.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Bubble {
+import java.util.ArrayList;
 
-   // This class should not be instantiated.
-    private Bubble() { }
+import static Sort.SelectSort.selectSort;
 
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static <Key extends Comparable<Key>> void sort(Key[] a) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
-            int exchanges = 0;
-            for (int j = N-1; j > i; j--) {
-                if (less(a[j], a[j-1])) {
-                    exch(a, j, j-1);
-                    exchanges++;
+
+public class BucketSort {
+
+    public static int[] bucketSort(int [] tab){
+        double bucketSize;
+        ArrayList<ArrayList<Integer>> buckets = new ArrayList<>();
+        if(tab.length<=1000){
+            bucketSize = Integer.MAX_VALUE;
+        }else{
+            bucketSize  = Double.valueOf(2147483647000.0/tab.length);
+        }
+        for(int i = 0; i<tab.length/1000+1; i++){
+            buckets.add(new ArrayList<Integer>());
+        }
+
+        System.out.println("Allocating numbers to buckets...");
+
+        for(int i=0; i<tab.length; i++){
+            for(int j=0; j<=tab.length/1000; j++){
+                if(tab[i]>=j*bucketSize && tab[i]<=(j+1)*bucketSize){
+                    buckets.get(j).add(tab[i]);
+                    break;
                 }
             }
-            if (exchanges == 0) break;
         }
-    }
-
-    // is v < w ?
-    private static <Key extends Comparable<Key>> boolean less(Key v, Key w) {
-        return v.compareTo(w) < 0;
-    }
-
-    // exchange a[i] and a[j]
-    private static <Key extends Comparable<Key>> void exch(Key[] a, int i, int j) {
-        Key swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
-
-   // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
+        System.out.println("Sorting buckets...");
+        for(ArrayList ar: buckets){
+            threads t = new threads(ar);
+            t.start();
+            
         }
+
+        int[] tabs = new int[tab.length];
+        ArrayList<Integer> ar = new ArrayList<>();
+
+        System.out.println("Joining buckets...");
+
+        for(ArrayList arr: buckets){
+            ar.addAll(arr);
+        }
+
+        for(int i = 0; i<tabs.length; i++){
+            tabs[i]=ar.get(i);
+        }
+        System.out.println("Sorting complete!");
+        return tabs;
+
     }
 
-    /**
-     * Reads in a sequence of strings from standard input; bubble sorts them;
-     * and prints them to standard output in ascending order.
-     */
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        Bubble.sort(a);
-        show(a);
+
+    static class threads implements Runnable{
+        private Thread t;
+        private ArrayList<Integer> list;
+
+        threads(ArrayList<Integer> list){
+            this.list = list;
+        }
+
+        public void run(){
+            selectSort(list);
+        }
+
+        public void start(){
+            if(t == null){
+                t = new Thread(this);
+                t.run();
+            }
+        }
+
+
+    }
+
+
+
+
+
+    public static boolean check(int [] tab){
+        for(int i = tab.length-1; i>1; --i){
+            if(tab[i]<tab[i-1]){
+                return false;
+            }
+        }
+        return true;
     }
 }

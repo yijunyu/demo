@@ -1,43 +1,40 @@
-import java.util.Iterator;
-import java.util.LinkedList;
+package com.basicsort;
 
-public class BreadthFirstSearch {
+import java.util.Arrays;
 
-    public static void main(String args[]) {
-        Graph g = new Graph(4);
 
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
-        g.addEdge(2, 0);
-        g.addEdge(2, 3);
-        g.addEdge(3, 3);
-
-        System.out.println("BFS: From vertex 2");
-
-        BFS(g,2);
-    }
-
-    public static void BFS(Graph g, int s) {
-        boolean visited[] = new boolean[g.V];
-        LinkedList<Integer> queue = new LinkedList<>();
-
-        visited[s]=true;
-        queue.add(s);
-
-        while (queue.size() != 0) {
-            s = queue.poll();
-            System.out.print(s+" ");
-
-            Iterator<Integer> i = g.adjListArray[s].listIterator();
-            while (i.hasNext()) {
-                int n = i.next();
-                if (!visited[n]) {
-                    visited[n] = true;
-                    queue.add(n);
-                }
-            }
-        }
-    }
+public class Insertionsort {
+	
+	public static void sort(int[] arr) {
+		for(int i=1;i<arr.length;i++) {
+			for(int j=i;j>0;j--) {
+				if(arr[j]<arr[j-1]) {
+					int temp = arr[j];
+					arr[j] = arr[j-1];
+					arr[j-1] = temp;
+				}else {
+					break;
+				}
+			}
+		}
+	}
+	
+	
+	public static void sort2(int[] arr) {
+		for(int i=0;i<arr.length;i++) {
+			int j = i;
+			int temp = arr[i];
+			for(;j>0&&arr[j-1]>temp;j--) {
+				arr[j] = arr[j-1];
+			}
+			arr[j] = temp;
+		}
+	}
+	
+	public static void main(String[] args) {
+		int[] arr = SortTestHelp.generateRandomArray(10, 1, 100);
+		System.out.println(Arrays.toString(arr));
+		sort2(arr);
+		System.out.println(Arrays.toString(arr));
+	}
 }
-

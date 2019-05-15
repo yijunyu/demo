@@ -1,61 +1,90 @@
-package com.interview.prep.sorting;
 
-public class Insertionsort {
-	
-	/**
-	 * PSEUDO CODE :
-	 * Start from index No :1 
-	 *if (index1 < index 0){swap the indexes;
-	 *increment the index by 1
-	 *}
-	 *
-	 *now see: index 2 
-	 *if(index2 < index 1)
-	 * swap
-	 * 
-	 * This way we sort the index each time and at a given time , till a given index the lists we have is sorted
-	 * @param args
-	 */
-	static int [] array;
-	void insertionsort(){
-		
-		int arrayLength = array.length;
-		for(int i =0; i<arrayLength-1;i++){
-			
-			for(int j =1; j<arrayLength-1 ;j++ ){
-				if(array [j-1] < array[j] ){
-					swapElements(j, j-1);
-					
-				}
-			}
-		}
-		
-	}
-	
-	void swapElements(int currentIndex, int indexToswap){
-		
-		int temp;
-		temp = array[currentIndex];
-		array[currentIndex] = array[indexToswap];
-		array[indexToswap] = temp;
-	}
-	
-	public static void main(String args[]){
-		
-		Insertionsort sort = new Insertionsort();
-		array = new int [11];
-		array[0] = 7;
-		array[1] = 1;
-		array[2] = 2;
-		array[3] = 5;
-		array[4] = 8;
-		array[5] = 15;
-		array[6] = 100;
-		array[7] = 45;
-		array[8] = 32;
-		array[9] = 4;
-		array[10] = 0;
-		sort.insertionsort();
-	}
+package heapsortjava;
+import java.util.*;
 
+class sorting<T extends Comparable<T>>{
+  
+    
+
+ public void HeapSort(T[] arr){
+ buildHeap(arr);
+ for (int i = arr.length - 1; i > 0; i--) {
+ swap(arr,0, i);
+ ReHeap(arr, 0, i - 1);
+}
+}
+public void buildHeap(T[] arr){
+ int c;
+   int p;
+    for (int i = 1; i < arr.length; i++) {
+        c=i;
+        while(c>0){
+         p=(c-1)/2;
+            if (arr[c].compareTo(arr[p])>0) {
+                swap(arr,c,p);
+            }
+            c=p;
+               p=(c-1)/2;
+        }
+        
+    }
+}
+public void swap(T arr[],int f, int l){
+ T a = arr[f];
+                arr[f] = arr[l];
+                arr[l] =a;
+}
+ public void ReHeap(T[] arr, int L, int U){ 
+     while(L<U){
+     int left = 2*L +1;
+     int right = 2*L +2;
+         if (left<=U && right<=U) {
+         if (arr[left].compareTo(arr[L])>0 && arr[left].compareTo(arr[L])>0){
+             swap(arr,left,L);
+             L = left;
+         }
+         else if (arr[right].compareTo(arr[L])>0 && arr[right].compareTo(arr[L])>0){
+             swap(arr,right,L);
+         L=right;
+         }
+         else {}
+         }
+         else if(left<=U && right>U){
+            if (arr[left].compareTo(arr[L])>0) {
+             swap(arr,left,L);
+         }
+            else{
+            L=left;
+            }
+         }
+         else{
+         L=left;
+         }
+         
+         }
+         
+         
+     }
+
+void Display(T [] arr){
+    for (int i = 0; i < arr.length; i++) {
+        System.out.print( arr[i] + " ");
+    }
+} 
+}
+
+public class HeapSortJava {
+
+   
+    public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    sorting<Integer> s = new sorting<>();
+    Integer [] arr =new Integer[5];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = in.nextInt();
+        }
+    
+ s.HeapSort(arr);
+ s.Display(arr);
+}
 }

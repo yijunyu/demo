@@ -1,91 +1,128 @@
-/******************************************************************************
- *  Compilation:  javac Bubble.java
- *  Execution:    java  Bubble N
- *  Dependencies: StdOut.java 
- *
- *  Read strings from standard input and bubblesort them.
- *
- ******************************************************************************/
+package RR.prediction.clusterers.CanopySVM;
 
-/**
- *  The {@code Bubble} class provides static methods for sorting an
- *  array using bubble sort.
- *  <p>
- *  This implementation makes ~ 1/2 n^2 compares and exchanges in
- *  the worst case, so it is not suitable for sorting large arbitrary arrays.
- *  Bubble sort is seldom useful because it is substantially slower than
- *  insertion sort on most inputs. The one class of inputs where bubble sort
- *  might be faster than insertion sort is arrays for which only
- *  a few passes of bubble sort are needed. This includes sorted arrays,
- *  but it does not include most partially-sorted arrays; for example,
- *  bubble sort takes quadratic time to sort arrays of the form
- *  [n, 1, 2, 3, 4, ..., n-1], whereas insertion sort takes linear time on
- *  such inputs.
- *  <p>
- *  The sorting algorithm is stable and uses O(1) extra memory.
- *  <p>
- *  For additional documentation,
- *  see <a href="https://algs4.cs.princeton.edu/21elementary">Section 2.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Bubble {
 
-   // This class should not be instantiated.
-    private Bubble() { }
 
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static <Key extends Comparable<Key>> void sort(Key[] a) {
-        int n = a.length;
-        for (int i = 0; i < n; i++) {
-            int exchanges = 0;
-            for (int j = n-1; j > i; j--) {
-                if (less(a[j], a[j-1])) {
-                    exch(a, j, j-1);
-                    exchanges++;
-                }
-            }
-            if (exchanges == 0) break;
-        }
-    }
 
-    // is v < w ?
-    private static <Key extends Comparable<Key>> boolean less(Key v, Key w) {
-        return v.compareTo(w) < 0;
-    }
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import RR.prediction.classifiers.SVM.SVM;
+import weka.clusterers.Canopy;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instance;
+import weka.core.Instances;
 
-    // exchange a[i] and a[j]
-    private static <Key extends Comparable<Key>> void exch(Key[] a, int i, int j) {
-        Key swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
+public class CanopyWork {
 
-    // print array to standard output
-    /*
-      private static void show(Comparable[] a) causes the following compilation warning:
-      Warning: java.lang.Comparable is a raw type. References to generic type java.lang.Comparable<T> should be parameterized
-    */
-    private static <T> void show(Comparable<T>[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
-        }
-    }
 
-    /**
-     * Reads in a sequence of strings from standard input; bubble sorts them;
-     * and prints them to standard output in ascending order.
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        Bubble.sort(a);
-        show(a);
-    }
+	
+	
+	public Instance[][] matrix(int canopySize, int csvSize, Instances data, Canopy canopy) {
+		Instance[][] matrix = new Instance[canopySize][csvSize]; 
+		try {
+
+			
+			
+			for (int y = 0; y < csvSize; y++) {
+				Instance check = data.get(y);
+				double classified = canopy.clusterInstance(check);
+
+				matrix[(int) Math.round(classified)][y] = check;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return matrix;
+	}
+	
+	
+	
+		
+	public ArrayList<String> saveClusters(Instance[][] matrix, int outliers,String prefix, String dir1) {
+
+		
+		
+		ArrayList<String> files = new ArrayList<String>();
+		int filenameSuffix = 0;
+		int depth = matrix[0].length;
+		int width = matrix.length;
+		for (int y = 0; y < width; y++) {
+			ArrayList<Instance> cannopyN = new ArrayList<Instance>();
+			int countData = 0;
+			for (int r = 0; r < depth; r++) {
+				Instance dbl = matrix[y][r];
+				if (dbl != null) {
+					cannopyN.add(dbl);
+					countData++;
+				}
+			}
+
+			if (countData > outliers) {
+				writeInstanceToFile(dir1, prefix, "" + filenameSuffix, cannopyN);
+				files.add(dir1 + prefix + filenameSuffix + ".csv");
+				filenameSuffix++;
+			}
+		}
+		return files;
+	}
+	
+
+		
+	public ArrayList<String> trainAndSaveClusters(ArrayList<String> files, String options) {
+		ArrayList<String> svmFiles = new ArrayList<String>();
+		for (int t = 0; t < files.size(); t++) {
+			String filename = files.get(t);
+			SVM svm = new SVM();
+			svm.loadCSV(filename);
+			svm.buildModel(options);
+			String toSave = filename.substring(0, filename.lastIndexOf("."))
+					+ ".model";
+			svm.saveModelToFile(toSave);
+			svmFiles.add(toSave);
+
+		}
+		return svmFiles;
+
+	}
+	
+	
+		
+	public Instance makeInstance(String row, String delimiters) {
+		Instance ret = null;
+		try {
+			String[] split = row.split(delimiters);
+			int sz = split.length;
+			double[] raw = new double[split.length];
+			for (int t = 0; t < sz; t++) {
+				raw[t] = Double.parseDouble(split[t]);
+			}
+			ArrayList<Attribute> atts = new ArrayList<Attribute>(sz);
+			for (int t = 0; t < sz + 1; t++) {
+				atts.add(new Attribute("name" + t, t));
+			}
+			ret = (Instance) new DenseInstance(1.0, raw);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	
+	
+			
+	private void writeInstanceToFile(String dir, String prefix, String suffix, ArrayList<Instance> instanceArr) {
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(dir
+					+ prefix + suffix + ".csv"));
+			for (int t = 0; t < instanceArr.size(); t++) {
+				Instance get = instanceArr.get(t);
+				out.write(get.toString() + "\n");
+			}
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

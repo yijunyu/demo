@@ -1,74 +1,32 @@
-package com.lbc.algorithms.sort;
+package PukyungUniv;
 
-public class Heapsort {
+import static org.junit.Assert.assertEquals;
 
-	private static int heapsize = 0;
+import java.util.Arrays;
 
-	public static void main(String[] args) {
-		int[] a = { 4, 1, 3, 2, 16, 9, 10, 14, 8, 7 };
-		heapsize = a.length;
-		build_max_heap(a);
-		sort(a);
-		printarr(a);
-	}
+import org.junit.Test;
 
-	public static int parent(int i) {
-		return (i - 1) >> 1;
-	}
+public class Sort_SelectionSort {
 
-	public static int left(int i) {
-		return (i << 1) + 1;
-	}
+    @Test
+    public void test() {
+        int[] data = { 1, 3, 5, 7, 2, 4, 6, 8 };
+        Sort_SelectionSort.sort(data);
+        assertEquals(Arrays.toString(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }), Arrays.toString(data));
+    }
+    
+    public static void sort(int[] data) {
+        for (int k = data.length - 1; k > 0; k--) {
+            int largestIdx = 0;
+            for (int i = 0; i <= k; i++) {
+                if (data[i] > data[largestIdx]) {
+                    largestIdx = i;
+                }
+            }
+            int tmp = data[k];
+            data[k] = data[largestIdx];
+            data[largestIdx] = tmp;
+        }
+    }
 
-	public static int right(int i) {
-		return (i + 1) << 1;
-	}
-
-	/**
-	 * Heap sort procedure.
-	 * 
-	 * @param a
-	 */
-	public static void sort(int[] a) {
-		while (heapsize-- >= 2) {
-			exch(a, 0, heapsize);
-			maxheapify(a, 0);
-		}
-	}
-
-	public static void build_max_heap(int[] a) {
-		int ceil = (a.length >> 1);
-		for (int i = ceil; i >= 0; i--) {
-			maxheapify(a, i);
-		}
-	}
-
-	public static void maxheapify(int[] a, int i) {
-		int l = left(i);
-		int r = right(i);
-		int largest = 0;
-		if (l < heapsize && a[l] > a[i]) {
-			largest = l;
-		} else
-			largest = i;
-		if (r < heapsize && a[r] > a[largest]) {
-			largest = r;
-		}
-		if (largest != i) {
-			exch(a, largest, i);
-			maxheapify(a, largest);
-		}
-	}
-
-	static void exch(int[] a, int i, int j) {
-		int tmp = a[i];
-		a[i] = a[j];
-		a[j] = tmp;
-	}
-
-	static void printarr(int[] a) {
-		for (int i = 0; i < a.length; i++) {
-			System.out.print(a[i] + " ");
-		}
-	}
 }

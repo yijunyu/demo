@@ -1,104 +1,159 @@
-/* Java program for Merge Sort */
-class MergeSort
-{
-    // Merges two subarrays of arr[].
-    // First subarray is arr[l..m]
-    // Second subarray is arr[m+1..r]
-    void merge(int arr[], int l, int m, int r)
-    {
-        // Find sizes of two subarrays to be merged
-        int n1 = m - l + 1;
-        int n2 = r - m;
- 
-        /* Create temp arrays */
-        int L[] = new int [n1];
-        int R[] = new int [n2];
- 
-        /*Copy data to temp arrays*/
-        for (int i=0; i<n1; ++i)
-            L[i] = arr[l + i];
-        for (int j=0; j<n2; ++j)
-            R[j] = arr[m + 1+ j];
- 
- 
-        /* Merge the temp arrays */
- 
-        // Initial indexes of first and second subarrays
-        int i = 0, j = 0;
- 
-        // Initial index of merged subarry array
-        int k = l;
-        while (i < n1 && j < n2)
-        {
-            if (L[i] <= R[j])
-            {
-                arr[k] = L[i];
-                i++;
-            }
-            else
-            {
-                arr[k] = R[j];
-                j++;
-            }
-            k++;
-        }
- 
-        /* Copy remaining elements of L[] if any */
-        while (i < n1)
-        {
-            arr[k] = L[i];
-            i++;
-            k++;
-        }
- 
-        /* Copy remaining elements of L[] if any */
-        while (j < n2)
-        {
-            arr[k] = R[j];
-            j++;
-            k++;
-        }
-    }
- 
-    // Main function that sorts arr[l..r] using
-    // merge()
-    void sort(int arr[], int l, int r)
-    {
-        if (l < r)
-        {
-            // Find the middle point
-            int m = (l+r)/2;
- 
-            // Sort first and second halves
-            sort(arr, l, m);
-            sort(arr , m+1, r);
- 
-            // Merge the sorted halves
-            merge(arr, l, m, r);
-        }
-    }
- 
-    /* A utility function to print array of size n */
-    static void printArray(int arr[])
-    {
-        int n = arr.length;
-        for (int i=0; i<n; ++i)
-            System.out.print(arr[i] + " ");
-        System.out.println();
-    }
- 
-    // Driver method
-    public static void main(String args[])
-    {
-        int arr[] = {12, 11, 13, 5, 6, 7};
- 
-        System.out.println("Given Array");
-        printArray(arr);
- 
-        MergeSort ob = new MergeSort();
-        ob.sort(arr, 0, arr.length-1);
- 
-        System.out.println("\nSorted array");
-        printArray(arr);
-    }
+
+package lbms.plugins.mldht.utils;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+
+import lbms.plugins.mldht.kad.Key;
+import lbms.plugins.mldht.kad.Prefix;
+
+public class RadixSort {
+	
+	public final static void radixSort(final Radixable[] toSort) {
+		radixSort(toSort, 0, toSort.length, 0);
+	}
+	
+	
+	private final static void radixSort(final Radixable[] toSort, final int startIdx, final int endIdx, final int depth)
+	{
+		final int bins = 256;
+			
+		int[] count = new int[bins];
+		
+		int lowestBin = bins;
+		int highestBin = 0;
+		boolean ascendingRun = true;
+		int prevRadix = -1;
+		
+		for(int i=startIdx;i<endIdx;i++)
+		{
+			int radix = toSort[i].getRadix(depth);
+			if(lowestBin > radix)
+				lowestBin = radix;
+			if(highestBin < radix)
+				highestBin = radix;
+			if(prevRadix > radix)
+				ascendingRun = false;
+			prevRadix = radix;
+			count[radix]++;
+		}
+		
+		if(ascendingRun)
+		{
+			
+			int bucketStart = startIdx;
+			for(int i=lowestBin;i<=highestBin;i++)
+			{
+				int bucketLength = count[i];
+				int bucketEnd = bucketStart + bucketLength; 
+				doRecursion(toSort, bucketStart, bucketEnd, depth);
+				bucketStart = bucketEnd;
+			}
+			return;
+		}
+		
+		int[] startIndices = new int[bins];
+		
+		int[] endIndices = count;
+		
+		startIndices[lowestBin] = startIdx;
+		for(int i=lowestBin+1;i<=highestBin;i++)
+		{
+			
+			startIndices[i] =  count[i-1] + startIndices[i-1];
+			endIndices[i-1] = startIndices[i-1];
+		}
+
+		
+		endIndices[highestBin] = startIndices[highestBin];
+		int currentBin = lowestBin;
+		
+		for(int currentPointer=startIdx;currentPointer<endIdx;)
+		{
+			Radixable current = toSort[currentPointer];
+			int radix, target = -1;
+			
+			while((radix = current.getRadix(depth)) != currentBin)
+			{
+				target = endIndices[radix];
+				Radixable newCurrent = toSort[target];
+				toSort[target] = current;
+				endIndices[radix] = target+1;
+				current = newCurrent;
+			}
+			
+			
+			if(target != -1)
+				toSort[currentPointer] = current;
+			
+			
+			endIndices[ currentBin ] = ++currentPointer;  
+			  
+
+			
+			boolean needsUpdate = false;
+			
+			while(currentBin < bins-1 && endIndices[ currentBin ] == startIndices[ currentBin +1 ])
+			{
+				int bin = currentBin++;
+				needsUpdate = true;
+				
+				
+				
+				
+				
+			}	
+			
+			
+			if(needsUpdate)
+				currentPointer = Math.max(currentPointer, endIndices[ currentBin ]);
+		
+		}
+		
+		for(int recursionBin = lowestBin;recursionBin<=highestBin;recursionBin++)
+			doRecursion(toSort,startIndices[recursionBin ],endIndices[recursionBin ],depth);
+		
+	}
+	
+	private final static void doRecursion(final Radixable[] toSort, final int startIdx, final int endIdx, final int depth)
+	{
+		int inBin = endIdx - startIdx; 
+		if(inBin < 2)
+			return;
+		if(inBin > 32)
+			radixSort(toSort,startIdx,endIdx,depth+1);
+		else
+			Arrays.sort(toSort, startIdx, endIdx);
+	}
+	
+	public static void main(String[] args) {
+		
+		Prefix p = Prefix.WHOLE_KEYSPACE;
+		for(int i=0;i<64;i++)
+			p = p.splitPrefixBranch(false);
+		
+		Key[] values = new Key[5000000];
+		for(int i=0;i<values.length;i++)
+			values[i] = p.createRandomKeyFromPrefix();
+		
+		Comparator<Key> k = new Key.DistanceOrder(Key.createRandomKey());
+		
+		
+		Collections.shuffle(Arrays.asList(values));
+		
+		for(int i=0;i<200;i++)
+		{
+			System.gc();
+			Key[] toSort = values.clone();
+			long start = System.nanoTime();
+			radixSort(toSort);
+			
+			System.out.println((System.nanoTime()-start)/1000/1000);
+			for(int j=1;j<toSort.length;j++)
+				if(toSort[j-1].compareTo(toSort[j]) > 1)
+					System.out.println("error");
+		}
+	}
+	
 }

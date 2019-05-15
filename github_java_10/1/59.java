@@ -1,25 +1,39 @@
-package com.abhishek.tutorial.delete;
-
-public class App {
-
-	public static void main(String[] args) {
-		
-		BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch();
-		
-		Vertex vertex1 = new Vertex(1);
-		Vertex vertex2 = new Vertex(2);
-		Vertex vertex3 = new Vertex(3);
-		Vertex vertex4 = new Vertex(4);
-		Vertex vertex5 = new Vertex(5);
-		
-		vertex1.addNeighbour(vertex2);
-		vertex1.addNeighbour(vertex4);
-		vertex4.addNeighbour(vertex5);
-		vertex2.addNeighbour(vertex3);
-		
-		breadthFirstSearch.bfs(vertex1);
-		System.out.println();
-		breadthFirstSearch.bfs(vertex4);
-
+class insertionsort
+	{public static void main(String[] args) throws java.lang.Exception
+	{int array[] = {12,34,23,3423,2,3};
+	System.out.println("array before sorting");
+	for(int i=0;i<6;i++)
+	System.out.println(array[i]);
+	System.out.println("array after sorting");
+	insertionSort(array);
+	for(int i=0;i<6;i++)
+	System.out.println(array[i]);
+	
 	}
+	
+	public static void insertionSort(int[] arr) {
+
+      int i, j, newValue;
+
+      for (i = 1; i < arr.length; i++) {
+
+            newValue = arr[i];
+
+            j = i;
+
+            while (j > 0 && arr[j - 1] > newValue) {
+
+                  arr[j] = arr[j - 1];
+
+                  j--;
+
+            }
+
+            arr[j] = newValue;
+
+      }
+
 }
+	
+}
+	

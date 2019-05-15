@@ -1,29 +1,85 @@
-package PukyungUniv;
+package algs24;
+import stdlib.*;
 
-import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
+public class Heap {
 
-import org.junit.Test;
+	public static <T extends Comparable<? super T>> void sort(T[] pq) {
+		int N = pq.length;
+		for (int k = N/2; k >= 1; k--) {
+			sink(pq, k, N);
+		}
+		while (N > 1) {
+			exch(pq, 1, N);
+			N--;
+			sink(pq, 1, N);
+		}
+	}
 
-public class Sort_InsertionSort {
+	
 
-    @Test
-    public void test() {
-        int[] data = { 1, 3, 5, 7, 2, 4, 6, 8 };
-        Sort_InsertionSort.sort(data);
-        assertEquals(Arrays.toString(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }), Arrays.toString(data));
-    }
-    
-    public static void sort(int[] data) {
-        for (int k = 1; k < data.length; k++) {
-            int tmp = data[k];
-            int t = k;
-            while (t > 0 && data[t - 1] > tmp) {
-                data[t] = data[t - 1];
-                t--;
-            }
-            data[t] = tmp;
-        }
-    }
+	private static <T extends Comparable<? super T>> void sink(T[] pq, int k, int N) {
+		while (2*k <= N) {
+			int j = 2*k;
+			if (j < N && less(pq, j, j+1)) j++;
+			if (!less(pq, k, j)) break;
+			exch(pq, k, j);
+			k = j;
+		}
+	}
+
+	
+	private static <T extends Comparable<? super T>> boolean less(T[] pq, int i, int j) {
+		if (COUNT_OPS) DoublingTest.incOps ();
+		return pq[i-1].compareTo(pq[j-1]) < 0;
+	}
+
+	private static <T> void exch(T[] pq, int i, int j) {
+		if (COUNT_OPS) DoublingTest.incOps ();
+		T swap = pq[i-1];
+		pq[i-1] = pq[j-1];
+		pq[j-1] = swap;
+	}
+
+	
+	private static <T extends Comparable<? super T>> boolean less(T v, T w) {
+		if (COUNT_OPS) DoublingTest.incOps ();
+		return (v.compareTo(w) < 0);
+	}
+
+
+	
+	private static <T extends Comparable<? super T>> boolean isSorted(T[] a) {
+		for (int i = 1; i < a.length; i++)
+			if (less(a[i], a[i-1])) return false;
+		return true;
+	}
+
+
+	
+	private static <T> void show(T[] a) {
+		for (T element : a) {
+			StdOut.println(element);
+		}
+	}
+
+
+	
+	private static boolean COUNT_OPS = false;
+	public static void main(String[] args) {
+		
+		
+
+		
+		
+		
+
+		String[] a = StdIn.readAllStrings();
+		sort(a);
+		show(a);
+
+		DoublingTest.run (2000, 5, N -> ArrayGenerator.integerRandomUnique (N),          (Integer[] x) -> sort (x));
+		DoublingTest.run (2000, 5, N -> ArrayGenerator.integerRandom (N, 2),             (Integer[] x) -> sort (x));
+		DoublingTest.run (2000, 5, N -> ArrayGenerator.integerPartiallySortedUnique (N), (Integer[] x) -> sort (x));
+	}
 }

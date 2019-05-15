@@ -1,24 +1,35 @@
+package sort;
 
 
- 1 Breadth-First-Search(Graph, root):
- 2 
- 3     for each node n in Graph:            
- 4         n.distance = INFINITY        
- 5         n.parent = NIL
- 6 
- 7     create empty queue Q      
- 8 
- 9     root.distance = 0
-10     Q.enqueue(root)                      
-11 
-12     while Q is not empty:        
-13     
-14         current = Q.dequeue()
-15     
-16         for each node n that is adjacent to current:
-17             if n.distance == INFINITY:
-18                 n.distance = current.distance + 1
-19                 n.parent = current
-20                 Q.enqueue(n)
+public class Sort_03_InsertionSort {
 
+    public static int[] insertionSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = i; j != 0; j--) {
+                if (arr[j-1] > arr[j]) {
+                    swap(arr, j-1, j);
+                } else {
+                    break;
+                }
+            }
+        }
+        return arr;
+    }
 
+    public static void swap(int[] arr, int index1, int index2) {
+        int temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
+    }
+
+    public static void printArray(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 5, 4, 8, 2, 3, 0, 9, 7, 4, 5};
+        printArray(insertionSort(arr));
+    }
+}

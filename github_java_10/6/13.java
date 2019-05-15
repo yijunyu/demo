@@ -1,176 +1,279 @@
-package class2_2;
+package apps;
 
-import edu.princeton.cs.algs4.*;
+import java.io.IOException;
+import java.util.Scanner;
 
-/******************************************************************************
- *  Compilation:  javac Merge.java
- *  Execution:    java Merge < input.txt
- *  Dependencies: StdOut.java StdIn.java
- *  Data files:   http://algs4.cs.princeton.edu/22mergesort/tiny.txt
- *                http://algs4.cs.princeton.edu/22mergesort/words3.txt
- *   
- *  Sorts a sequence of strings from standard input using mergesort.
- *   
- *  % more tiny.txt
- *  S O R T E X A M P L E
- *
- *  % java Merge < tiny.txt
- *  A E E L M O P R S T X                 [ one string per line ]
- *    
- *  % more words3.txt
- *  bed bug dad yes zoo ... all bad yet
- *  
- *  % java Merge < words3.txt
- *  all bad bed bug dad ... yes yet zoo    [ one string per line ]
- *  
- ******************************************************************************/
+import structures.Node;
 
-/**
- *  The {@code Merge} class provides static methods for sorting an
- *  array using mergesort.
- *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/22mergesort">Section 2.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *  For an optimized version, see {@link MergeX}.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Merge {
 
-    // This class should not be instantiated.
-    private Merge() { }
+public class Radixsort {
 
-    // stably merge a[lo .. mid] with a[mid+1 ..hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
-        // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
-        assert isSorted(a, lo, mid);
-        assert isSorted(a, mid+1, hi);
+	
+	Node<String> masterListRear;
+	
+	
+	Node<String>[] buckets;
+	
+	
+	int radix=10;
+	
+	
+	public Radixsort() {
+		masterListRear = null;
+		buckets = null;
+	}
+	
+	
+	public Node<String> sort(Scanner sc) 
+	throws IOException {
+		
+		if (!sc.hasNext()) 
+		{ 
+			return null;
+		}
+		
+		
+		radix = sc.nextInt();
+		buckets = (Node<String>[])new Node[radix];
+		
+		
+		createMasterListFromInput(sc);
+		
+		
+		int maxDigits = getMaxDigits();
+		
+		for (int i=0; i < maxDigits; i++)  
+		{
+			scatter(i);
+			gather();
+		}
+		
+		return masterListRear;
+	} 
+	
+	
+	public void createMasterListFromInput(Scanner sc) 
+	throws IOException 
+	{
+		
+				Node<String> front = new Node<String>(sc.next(),null); 
+				Node<String> ptr=front;
+				Node<String> cLL=null; 
+				
+					while(sc.hasNext()) 
+						{
+						 cLL = new Node<String>(sc.next(),null);
+						 ptr.next=cLL;
+						 ptr=ptr.next; 
+	 				    }
+					 
+					masterListRear=cLL; 
+					masterListRear.next=front;
+	}
+	
+	
+	public int getMaxDigits() {
+		int maxDigits = masterListRear.data.length();
+		Node<String> ptr = masterListRear.next;
+		while (ptr != masterListRear) {
+			int length = ptr.data.length();
+			if (length > maxDigits) {
+				maxDigits = length;
+			}
+			ptr = ptr.next;
+		}
+		return maxDigits;
+	}
+	
+	
+	public void scatter(int pass) 
+	{
+		
+				Node<String> temp=null;
+				
+				do 
+					{ 
+					  temp = masterListRear.next; 
+			 		  int index=temp.data.length()-1-pass;
+					  char tempCh;
+					  int tempInt=0;
+					  if(index>=0)
+					  { 
+						tempCh=temp.data.charAt(index); 
+					    tempInt=Character.digit(tempCh,radix); 
+					  }
+			 	  
+				 for(int x=0; x<buckets.length;x++) 
+				    {  	   
+					  if(index>=0) 
+			           { 
+						   if(tempInt == x)
+						   {
+							   if(buckets[x]==null) 
+							   { 
+								
+								 Node<String> nextPtr=temp.next; 
+								 temp.next=temp; 
+								 System.out.println("When we add to an empty bucket " + temp.data);
+								 buckets[x]=temp; 
+								 masterListRear.next=nextPtr;
+								 temp=nextPtr;  
+								
+								 break; 
+							   }
+							   
+							   else 
+							   {
+							     Node<String> nextPtr=temp.next;  
+								 temp.next=buckets[x].next;
+								 System.out.println("When we add to a non empty bucket " + temp.data);
+								 buckets[x].next=temp;
+								 buckets[x]=temp; 								 
+								 masterListRear.next=nextPtr; 
+								 temp=nextPtr; 
+								 break;
+						       }  
+						   }
+						   
+			          }
+					
+					  else
+						{
+						   if(buckets[0]==null) 
+						   {
+							Node<String> nextPtr=temp.next;
+							temp.next=temp;
+							System.out.println("Add to bucket 0 when index is negative " + temp.data);
+							buckets[0]=temp; 
+							masterListRear.next=nextPtr;  
+							temp=nextPtr;
+							break; 
+						   }
+						   else 
+						   {
+							 Node<String> nextPtr=temp.next;
+							 temp.next=buckets[x].next;
+							 System.out.println("Add to bucket 0 when index is negative and populated " + temp.data);
+							 buckets[0].next=temp;
+							 buckets[0]=temp;
+							 masterListRear.next=nextPtr;
+							 temp=nextPtr;
+						     break; 
+						   }
+					   }	     
+			     
+				 }
+			  } 
+				
+			 while(temp!=masterListRear); 
+				
+		     if(temp==masterListRear)  
+		     {  
+		       int tempIndex=temp.data.length()-1-pass;
+		       int tempInt=0; 
+		       
+		       if(tempIndex>=0)
+		       {     
+			        if(tempIndex>=0)  
+			    	{	
+			        char tempCh=temp.data.charAt(tempIndex); 
+				    tempInt=Character.digit(tempCh,radix); 
+			    	}
+				   for(int x=0; x<buckets.length;x++)
+			    	{
+				      if(tempInt==x)
+			    	  {
+			    		 if(buckets[x]==null)
+			    		 {
+			    			 temp.next=temp;
+			    			 buckets[x]=temp;
+			    			 System.out.println("The index is " + x);
+			    			 System.out.println("Temp is " + temp.data + "Temp.next is " + temp.next.data); 
+			    			 System.out.println("buckets[x] is " + buckets[x].data);
+			    			 masterListRear=null;
+			    			 break;
+			    			 
+			    		 }
+			    		 else
+			    		 {
+			    			 System.out.println("The index is " + x);
+			    			 temp.next=buckets[x].next; 
+			    			 System.out.println("Temp is " + temp.data + " Temp.next is " + temp.next.data);
+			    			 buckets[x].next=temp;
+			    			 buckets[x]=temp; 
+			    			 System.out.println("buckets[x] is " + buckets[x].data);
+			    			 masterListRear=null;
+			    			 break;  
+			    		 }
+			    	  }
+				      
+			    	}
+		       } 
+		       else 
+		       {
+		    	   if(buckets[0]==null)
+			    	 {
+		    		     temp.next=temp;
+			   			 buckets[0]=temp;
+			   			 System.out.println("Temp is " + temp.data + "Temp.next is " + temp.next.data);
+			   			 temp.next=buckets[0]; 
+			   			 masterListRear=null;
+		    			 
+			    	 }
+			       else
+			         {
+			    		 temp.next=buckets[0].next; 
+			    		 System.out.println("Temp is " + temp.data + " Temp.next is " + temp.next.data);
+			    		 buckets[0].next=temp;
+			    		 buckets[0]=temp;
+			    		 masterListRear=null;
+			    			 
+			    	 }
+			      }
+		       	}
+		      
+		}
+						
+	
+	 
+   
 
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = a[k]; 
-        }
+	
+	public void gather() 
+	{
+	    
+		   Node<String> tempPtrFront=null;
+		   Node<String> begin=null; 
+		   for(int x=0; x<buckets.length;x++) 
+		   {   
+			   if(buckets[x]!=null) 
+			   {
+				 begin=buckets[x].next; 
+				 tempPtrFront=buckets[x]; 
+				 buckets[x]=null;  
+				 break;
+			   }
+		   }
 
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)              a[k] = aux[j++];
-            else if (j > hi)               a[k] = aux[i++];
-            else if (less(aux[j], aux[i])) a[k] = aux[j++];
-            else                           a[k] = aux[i++];
-        }
-
-        // postcondition: a[lo .. hi] is sorted
-        assert isSorted(a, lo, hi);
+		   
+		   Node<String> tempPtr=null; 
+		   Node<String> tempPtrFront2=tempPtrFront; 
+		   for(int x=0; x<buckets.length;x++)
+		   {
+			   if(buckets[x]!=null) 
+			   {
+				  tempPtr=buckets[x]; 
+				  tempPtrFront2.next=tempPtr.next;  
+				  tempPtrFront2=tempPtr; 
+				  buckets[x]=null; 
+			   }
+		   }
+		 
+		 masterListRear=tempPtrFront2; 
+		 masterListRear.next=begin;  
+		  
+		
     }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, aux, lo, mid);
-        sort(a, aux, mid + 1, hi);
-        merge(a, aux, lo, mid, hi);
-    }
-
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static void sort(Comparable[] a) {
-        Comparable[] aux = new Comparable[a.length];
-        sort(a, aux, 0, a.length-1);
-        assert isSorted(a);
-    }
-
-
-   /***************************************************************************
-    *  Helper sorting function.
-    ***************************************************************************/
-    
-    // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
-        return v.compareTo(w) < 0;
-    }
-        
-   /***************************************************************************
-    *  Check if array is sorted - useful for debugging.
-    ***************************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        return isSorted(a, 0, a.length - 1);
-    }
-
-    private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo + 1; i <= hi; i++)
-            if (less(a[i], a[i-1])) return false;
-        return true;
-    }
-
-
-   /***************************************************************************
-    *  Index mergesort.
-    ***************************************************************************/
-    // stably merge a[lo .. mid] with a[mid+1 .. hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
-
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = index[k]; 
-        }
-
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)                    index[k] = aux[j++];
-            else if (j > hi)                     index[k] = aux[i++];
-            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
-            else                                 index[k] = aux[i++];
-        }
-    }
-
-    /**
-     * Returns a permutation that gives the elements in the array in ascending order.
-     * @param a the array
-     * @return a permutation {@code p[]} such that {@code a[p[0]]}, {@code a[p[1]]},
-     *    ..., {@code a[p[N-1]]} are in ascending order
-     */
-    public static int[] indexSort(Comparable[] a) {
-        int n = a.length;
-        int[] index = new int[n];
-        for (int i = 0; i < n; i++)
-            index[i] = i;
-
-        int[] aux = new int[n];
-        sort(a, index, aux, 0, n-1);
-        return index;
-    }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, index, aux, lo, mid);
-        sort(a, index, aux, mid + 1, hi);
-        merge(a, index, aux, lo, mid, hi);
-    }
-
-    // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
-        }
-    }
-
-    /**
-     * Reads in a sequence of strings from standard input; mergesorts them; 
-     * and prints them to standard output in ascending order. 
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        Merge.sort(a);
-        show(a);
-    }
+	
 }
+

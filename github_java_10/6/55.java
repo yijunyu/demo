@@ -1,89 +1,238 @@
-import java.util.stream.*;
-import java.util.*;
+package apps;
 
-class Main {
+import java.io.IOException;
+import java.util.Scanner;
 
-	// Time Complexity: O(nlogn), Space Complexity: O(n)
-	public static void mergeSort(int A[]) {
-		mergeSort(A, 0, A.length - 1);
+import structures.Node;
+
+
+public class Radixsort
+{
+
+	
+	Node<String> masterListRear;
+
+	
+	Node<String>[] buckets;
+
+	
+	int radix = 10;
+
+	
+	public Radixsort()
+	{
+		masterListRear = null;
+		buckets = null;
 	}
 
-	public static void mergeSort(int A[], int l, int r) {
-		if(l < r) {
-			int m = l + (r - l) / 2;
-
-			mergeSort(A, l, m);
-			mergeSort(A, m + 1, r);
-			merge(A, l, m, r);
+	
+	@SuppressWarnings("unchecked")
+	public Node<String> sort(Scanner sc) throws IOException
+	{
+		
+		if (!sc.hasNext())
+		{ 
+			return null;
 		}
+
+		
+		radix = sc.nextInt();
+		buckets = (Node<String>[]) new Node[radix];
+
+		
+		createMasterListFromInput(sc);
+
+		
+		int maxDigits = getMaxDigits();
+
+		for (int i = 0; i < maxDigits; i++)
+		{
+			scatter(i);
+			gather();
+		}
+		return masterListRear;
 	}
 
-	public static void merge(int A[], int l, int m, int r) {
-		int n1 = m - l + 1, n2 = r - m;
-
-		int left[] = new int[n1];
-		int right[] = new int[n2];
-
-
-		for(int i = 0; i < n1; i++)
-			left[i] = A[l + i];
-
-		for(int i = 0; i < n2; i++) {
-			right[i] = A[m + 1 + i];
-		}
-
-		int i = 0, j = 0, k = l;
-
-		while(i < n1 && j < n2) {
-			if(left[i] <= right[j]) {
-				A[k] = left[i];
-				i++;
+	
+	public void createMasterListFromInput(Scanner sc) throws IOException
+	{
+		String readLine = null;
+		Node<String> tmp = null;
+		while (sc.hasNext())
+		{
+			readLine = sc.next();
+			if (!readLine.isEmpty())
+			{
+				if (null == masterListRear)
+				{
+					masterListRear = new Node<String>(readLine, masterListRear);
+					tmp = masterListRear;
+				} else
+				{
+					tmp.setNext(new Node<String>(readLine, masterListRear));
+					tmp = tmp.getNext();
+				}
 			}
+		}
+		setListAsRequired();
+	}
 
-			else {
-				A[k] = right[j];
-				j++;
+	
+	public int getMaxDigits()
+	{
+		int maxDigits = masterListRear.getData().length();
+		Node<String> ptr = masterListRear.getNext();
+		while (ptr != masterListRear)
+		{
+			int length = ptr.getData().length();
+			if (length > maxDigits)
+			{
+				maxDigits = length;
+			}
+			ptr = ptr.getNext();
+		}
+		return maxDigits;
+	}
+
+	
+	public void scatter(int pass)
+	{
+		int position = -1, count = 0;
+		char[] tmpData = null;
+		String tmpBucketData = null;
+		Node<String> tmpNode = null;
+
+		while (null != masterListRear)
+		{
+			
+			if(0 == count)
+			{
+				masterListRear = masterListRear.getNext();
+				++count;
 			}
 			
-			k++;
-
-		}
-
-		if(i == n1) {
-			while(j < n2) {
-				A[k] = right[j];
-				j++;
-				k++;
+			tmpData = masterListRear.getData().toCharArray();
+			if(0 <= tmpData.length - 1 - pass)
+			{
+				position = Character.digit(tmpData[tmpData.length - 1 - pass], radix);
+			}
+			else
+			{
+				position = 0;
 			}
 
-		}
+			if (-1 == position)
+			{
+				return;
+			}
 
-		if(j == n2) {
-			while(i < n1) {
-				A[k] = left[i];
-				i++;
-				k++;
+			if (null == buckets[position])
+			{
+				buckets[position] = masterListRear;
+				setListRearToNextOne();
+				buckets[position].setNext(buckets[position]);
+
+			} else
+			{
+				tmpBucketData = buckets[position].getData();
+				tmpNode = buckets[position];
+				
+				
+				while(!tmpBucketData.equals(tmpNode.getNext().getData()))
+				{
+					tmpNode = tmpNode.getNext();
+				}
+				
+				tmpNode.setNext(masterListRear);
+				setListRearToNextOne();
+				tmpNode.getNext().setNext(buckets[position]);
 			}
 		}
-
-		// System.out.print(Arrays.asList(l, r) + " ");
-		// System.out.println(Arrays.stream(A).boxed().collect(Collectors.toList()));
 	}
 
-	public static void main(String args[]) {
-		int A[] = {1, 5, 4, 2, 18, 8};
+	
+	private void setListRearToNextOne()
+	{
+		
+		if (null == masterListRear)
+		{
+			return;
+		}
 
-		mergeSort(A);
+		String tmpData = masterListRear.getData();
 
-		System.out.println(Arrays.stream(A).boxed().collect(Collectors.toList()));
+		
+		if (tmpData.equals(masterListRear.getNext().getData()))
+		{
+			masterListRear = null;
+		}
+		
+		else
+		{
+			while (!tmpData.equals(masterListRear.getNext().getData()))
+			{
+				masterListRear = masterListRear.getNext();
+			}
+			masterListRear.setNext(masterListRear.getNext().getNext());
+
+			masterListRear = masterListRear.getNext();
+		}
 	}
+
+	
+	public void gather()
+	{
+		String tmpData = null;
+		Node<String> tmpNode = null;
+		
+		for (int i = 0; i < buckets.length; ++i)
+		{
+			if (null == buckets[i])
+			{
+				continue;
+			} else if (null == masterListRear)
+			{
+				masterListRear = buckets[i];
+			} else
+			{
+				tmpData = masterListRear.getData();
+				tmpNode = masterListRear;
+				
+				while(!tmpData.equals(tmpNode.getNext().getData()))
+				{
+					tmpNode = tmpNode.getNext();
+				}
+				
+				tmpNode.setNext(buckets[i]);
+				
+				tmpData = buckets[i].getData();
+				tmpNode = tmpNode.getNext();
+				
+				while(!tmpData.equals(tmpNode.getNext().getData()))
+				{
+					tmpNode = tmpNode.getNext();
+				}
+				tmpNode.setNext(masterListRear);
+				tmpNode = null;
+				tmpData = null;
+			}
+
+			buckets[i] = null;
+		}
+		
+		
+		setListAsRequired();
+	}
+
+	
+	private void setListAsRequired()
+	{
+		String tmp = masterListRear.getData();
+		
+		while(!tmp.equals(masterListRear.getNext().getData()))
+		{
+			masterListRear = masterListRear.getNext();
+		}
+	}
+
 }
-
-
-// Merge Sort - https://www.geeksforgeeks.org/merge-sort/
-
-// Merge Sort for Linked List - https://www.geeksforgeeks.org/merge-sort-for-linked-list/
-
-// Counting Inversions - https://www.geeksforgeeks.org/counting-inversions/
-
-// Runtime Analysis - https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/analysis-of-merge-sort

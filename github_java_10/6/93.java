@@ -1,48 +1,41 @@
 
-package algorithms.Sorting;
 
-/**
- *
- * @author JoseLlorens
- * Testing version.
- */
-public class Mergesort {
-    public static <T extends Comparable<T>> void mergesort(T[] ar){
-        mergesort (ar,0,ar.length-1);
-    }
-    public static <T extends Comparable<T>> void mergesort (T[] ar, int i, int f){
-        if(i<f){
-            int m = (i+f)/2;
-            mergesort(ar,i,m);
-            mergesort(ar,m+1,f);
-            merge(ar,i,f,m);
-        }
-    }
-    public static <T extends Comparable<T>> void merge(T[] ar, int i, int f,int m){
-        T[] aux = (T[]) new Comparable[f-i+1];
-        int k=0,a=i,b=m+1;
-        while(a<=m && b <= f){
-            if(ar[a].compareTo(ar[b])<0){
-                aux[k] = ar[a];
-                k++;
-                a++;
-            }else{
-                aux[k]=ar[b];
-                k++;
-                b++;
+package radixsort_java;
+
+
+public class RadixSort_Java {
+
+    
+    static int [] a = {99, 86, 48,61,93,62,91,94,41,67};
+    static int size = 10;
+    private static void radixSort(int maxDigit) {
+        int b[][] = new int[10][10000];
+        int len[] = new int[10];
+        int h = 1;
+        for (int i = 0; i < maxDigit; i++) {
+            for (int j = 0; j < 10; j++) {
+                len[j] = 0;
             }
+            for (int j = 0; j < 10; j++) {
+                int digit = a[j] / h % 10;
+                b[digit][len[digit]++] = a[j];
+            }
+            int index = 0;
+            for (int j = 0; j < 10; j++) {
+                for (int k = 0; k < len[j]; k++) {
+                    a[index++] = b[j][k];
+                }
+            }
+            h *= 10;
         }
-        while(a<=m){
-            aux[k]=ar[a];
-            k++;
-            a++;
+    }
+    
+    public static void main(String[] args) {
+        
+        radixSort(2);
+        for (int i = 0; i < size; i++) {
+            System.out.print(a[i] + " ");
         }
-        while(b<=f){
-            aux[k]=ar[b];
-            k++;
-            b++;
-        }
-        for(a=i,k=0;a<=f;a++,k++) ar[a]=aux[k];
     }
     
 }

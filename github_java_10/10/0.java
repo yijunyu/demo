@@ -1,44 +1,62 @@
-import java.util.Scanner;
+package sortsAndSearches;
 
-public class Problems {
-    public static void main(String args[]) {
-        Scanner stdin = new Scanner(System.in);
-        System.out.println("Enter n, then values: ");
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
-        int n = Integer.parseInt(stdin.nextLine());
-        String input = stdin.nextLine();
-        String[] splitIn = input.split(" ");
+public class BucketSort {
 
-        int t;
-        int swapCount = 0;
-        int passCount = 1;
+    public static void main(String[] args) {
+        int[] input1 = {};
+        int[] input2 = {1};
+        int[] input3 = {2 , 1};
+        int[] input4 = {6, 7 ,2,4,3, 1, 1, 6};
+        int[] input5 = {111, 1 , 43, 2 , 5, 7, 0 , -3 , 6, 7 ,2,4 , -7,3, 1, 13 , 1, 6};
+        bucketSort(input1);
+        bucketSort(input2);
+        bucketSort(input3);
+        bucketSort(input4);
+        bucketSort(input5);
+        System.out.println(Arrays.toString(input1));
+        System.out.println(Arrays.toString(input2));
+        System.out.println(Arrays.toString(input3));
+        System.out.println(Arrays.toString(input4));
+        System.out.println(Arrays.toString(input5));
+    }
 
-        int[] intValues = new int[n];
+    
+    
+    private static void bucketSort(int[] list) {
+        int max = 0;
 
-        for (int k = 0; k < n; k++) {
-            intValues[k] = Integer.parseInt(splitIn[k]);
+        
+        
+        for(int i = 0; i < list.length; i++) {
+            max = Math.max(max , list[i]);
         }
-        /////////////////////////////
-        while (!sortCheck(intValues, n)) {
-            for (int i = 0; i < n - 1; i++) {
-                if (intValues[i] > intValues[i + 1]) {
-                    swapCount++;
-                    t = intValues[i];
-                    intValues[i] = intValues[i + 1];
-                    intValues[i + 1] = t;
+        int bucketIncrement = (int)Math.pow(10 , String.valueOf(max).length() - 1);
+
+        
+        PriorityQueue<Integer>[] buckets = new PriorityQueue[10];
+
+        
+        for(int i = 0; i < list.length; i++) {
+            int tempIndex = list[i] / bucketIncrement;
+            if(buckets[tempIndex] == null) {
+                buckets[tempIndex] = new PriorityQueue<>();
+            }
+            buckets[tempIndex].add(list[i]);
+        }
+
+        
+        
+        int indexOfList = 0;
+        for(int i = 0; i < buckets.length; i++) {
+            if(buckets[i] != null) {
+                while(!buckets[i].isEmpty()) {
+                    list[indexOfList] = buckets[i].poll();
+                    indexOfList++;
                 }
             }
-        passCount++;
         }
-        System.out.println(passCount + " " + swapCount);
-    }
-    private static boolean sortCheck(int[] intValues, int n) {
-        boolean check = true;
-        for(int j=0; j<n-1; j++) {
-            if(intValues[j]>intValues[j+1]) {
-                check = false;
-            }
-        }
-        return check;
     }
 }

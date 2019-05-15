@@ -1,34 +1,50 @@
+package com.fengqiliu.test.algorithm;
 
-public class editdistance {
-	public static void main(String[] args){
-		int a=minDistance("zoologicoarchaeologist","zoogeologist");
-				System.out.println(a);
-		/* return number of deletes,replace or insert logic is if == equal to diagonal else minimum(of 3) +1*/
-	}
-	  public static int minDistance(String word1, String word2) {
-	        
-	        int m=word1.length();
-	        int n=word2.length();
-	        if(m==0) return n;
-	        if(n==0) return m;
 
-	        int[][] grid=new int[m+1][n+1];
-	        for(int i=0;i<grid[0].length;i++){
-	            grid[0][i]=i;
-	        }
-	        for(int i=0;i<grid.length;i++){
-	            grid[i][0]=i;
-	        }
-	        for(int i=1;i<grid.length;i++){
-	            for(int j=1;j<grid[0].length;j++){
-	                if(word1.charAt(i-1)==word2.charAt(j-1)){
-	                    grid[i][j]=grid[i-1][j-1];
-	                }else{
-	                    grid[i][j]=1+Math.min(grid[i-1][j-1],Math.min(grid[i-1][j],grid[i][j-1]));
-	                }
-	            }
-	        }
-	        
-	        return grid[m][n];
-	    }
+public class Quicksort {
+    int[] arr;
+
+    private void swap(int x, int y) {
+        int temp = arr[x];
+        arr[x] = arr[y];
+        arr[y] = temp;
+    }
+
+    private void quick_sort_recursive(int start, int end) {
+        if (start >= end)
+            return;
+        int mid = arr[end];
+        int left = start, right = end - 1;
+        while (left < right) {
+            while (arr[left] < mid && left < right)
+                left++;
+            while (arr[right] >= mid && left < right)
+                right--;
+            swap(left, right);
+        }
+        if (arr[left] >= arr[end])
+            swap(left, end);
+        else
+            left++;
+        quick_sort_recursive(start, left - 1);
+        quick_sort_recursive(left + 1, end);
+    }
+
+    public void sort(int[] arrin) {
+        arr = arrin;
+        quick_sort_recursive(0, arr.length - 1);
+    }
+
+    public static void main(String[] args) {
+        int[] data = new int[]{2,3,65,23,57,86,34535,86,868,575,46,345,65564,4322,566,567,78678,9989};
+        Quicksort quicksort = new Quicksort();
+        quicksort.sort(data);
+
+        int i = 0;
+        while (i< quicksort.arr.length){
+            System.out.printf(quicksort.arr[i] + ",");
+            i++;
+        }
+
+    }
 }

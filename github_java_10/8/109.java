@@ -1,106 +1,73 @@
-package ro.unibuc.nlp.cognates.metrics;
+package com.java.se7.data.structures.algos.sorting;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.java.se7.data.structures.queue.LinkedQueue;
+import com.java.se7.data.structures.queue.Queue;
 
-import org.apache.log4j.Logger;
+import java.util.Comparator;
 
-/**
- * Computes the edit distance or similarity between two input strings.
- * 
- * @author alina
- */
-public class Edit implements Metric {
+class QuickSort {
 
-	private static final Logger logger = Logger.getLogger(Edit.class);
-	
-	private Map<String, Double> distanceMap;
-	
-	public Edit() {
-		distanceMap = new HashMap<String, Double>();
-	}
+  
+  
+  public static <K> void quickSort(Queue<K> S, Comparator<K> comp) {
+    int n = S.size();
+    if (n < 2) return;                       
+    
+    K pivot = S.first();                     
+    Queue<K> L = new LinkedQueue<>();
+    Queue<K> E = new LinkedQueue<>();
+    Queue<K> G = new LinkedQueue<>();
+    while (!S.isEmpty()) {                   
+      K element = S.dequeue();
+      int c = comp.compare(element, pivot);
+      if (c < 0)                             
+        L.enqueue(element);
+      else if (c == 0)                       
+        E.enqueue(element);
+      else                                   
+        G.enqueue(element);
+    }
+    
+    quickSort(L, comp);                      
+    quickSort(G, comp);                      
+    
+    while (!L.isEmpty())
+      S.enqueue(L.dequeue());
+    while (!E.isEmpty())
+      S.enqueue(E.dequeue());
+    while (!G.isEmpty())
+      S.enqueue(G.dequeue());
+  }
 
-	/**
-	 * Computes the unnormalized edit distance between the input strings.
-	 * 
-	 * @param a the first string
-	 * @param b the second string
-	 * @return the unnormalized edit distance between the input strings
-	 * @throws IllegalArgumentException
-	 */
-	public double computeEdit(String a, String b) throws IllegalArgumentException {
-		
-		MetricUtils.validate(a, b);
-		
-		int cost = 0;
+  
+  
+  public static <K> void quickSortInPlace(K[] S, Comparator<K> comp) {
+    quickSortInPlace(S, comp, 0, S.length-1);
+  }
 
-		 Double computedDistance = distanceMap.get(a + "__" + b);
-		 
-		 if (computedDistance != null && computedDistance != 0d) {
-			 return computedDistance;
-		 }
-		 
-		 if(a.length() == 0) {
-			 return b.length();
-		 }
-		 else if(b.length() == 0) {
-			 return a.length();
-		 }
-		 else {
-			 if(a.charAt(0) != b.charAt(0)) {
-				 cost = 1;
-			 }
-			 double distance =  Math.min(
-					            	Math.min(computeEdit(a.substring(1), b) + 1,
-					            			 computeEdit(a, b.substring(1)) + 1),
-					            			 computeEdit(a.substring(1), b.substring(1)) + cost);
-			 
-			 distanceMap.put(a + "__" + b, distance);
-			 
-			 return distance;
-		 }
-	}
-	
-	/**
-	 * Computes the normalized edit distance between the input strings.
-	 * 
-	 * @param a the first string
-	 * @param b the second string
-	 * @return the normalized edit distance between the input strings
-	 * @throws IllegalArgumentException
-	 */
-	public double computeDistance(String a, String b) throws IllegalArgumentException {
-
-		logger.info("Computing the edit distance between strings " + a + " " + b);
-		
-		double distance = computeEdit(a, b);
-		int maxLength = Math.max(a.length(), b.length());
-		
-		if (maxLength == 0) {
-			return 0;
-		}
-					
-		return distance/maxLength;
-	}
-	/**
-	 * Computes the normalized edit similarity between the input strings.
-	 * 
-	 * @param a the first string
-	 * @param b the second string
-	 * @return the normalized edit similarity between the input strings
-	 * @throws IllegalArgumentException
-	 */
-	public double computeSimilarity(String a, String b) throws IllegalArgumentException {
-
-		logger.info("Computing the edit similarity between strings " + a + " " + b);
-		
-		double distance = computeEdit(a, b);
-		int maxLength = Math.max(a.length(), b.length());
-		
-		if (maxLength == 0) {
-			return 1;
-		}
-		
-		return 1 - distance/maxLength;
-	}
+  
+  private static <K> void quickSortInPlace(K[] S, Comparator<K> comp,
+                                                                   int a, int b) {
+    if (a >= b) return;                
+    int left = a;
+    int right = b-1;
+    K pivot = S[b];
+    K temp;                            
+    while (left <= right) {
+      
+      while (left <= right && comp.compare(S[left], pivot) < 0) left++;
+      
+      while (left <= right && comp.compare(S[right], pivot) > 0) right--;
+      if (left <= right) {             
+        
+        temp = S[left]; S[left] = S[right]; S[right] = temp;
+        left++; right--;
+      }
+    }
+    
+    temp = S[left]; S[left] = S[b]; S[b] = temp;
+    
+    quickSortInPlace(S, comp, a, left - 1);
+    quickSortInPlace(S, comp, left + 1, b);
+  }
 }

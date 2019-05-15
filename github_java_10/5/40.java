@@ -1,34 +1,37 @@
-package com.algorithms;
-import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-public class ConnectedComponents {
+public class Bubble {
+    public static void main(String[] args) {
+        
+        
+        
 
-	int componenetCount = 0;
-	int [] connectedComponentsList;
-	boolean [] discovered;
-	Graph graph;
-	public ConnectedComponents(Graph graph) {
-		// TODO Auto-generated constructor stub
-		this.graph = graph;
-	}
+        
+        System.out.println(bubble(new int[] {34, 12, 24, 9, 5}));
+        
+        System.out.println(advancedBubble(new int[] {34, 12, 24, 9, 5}, true));
+        
+    }
 
-	public int countNumberOfConnectedGraph(){
-		DepthFirstSearch depthFirstSearch = new DepthFirstSearch(this.graph);
-		depthFirstSearch.dfs_stack(0);
-		++componenetCount;
-		for (int i =0;i<depthFirstSearch.discovered.length;++i) {
-			if(!depthFirstSearch.discovered[i]){
-				++componenetCount;
-				depthFirstSearch.dfs_stack(i);
-			}
-		}
-		return componenetCount;
-	}
-	
-	public static void main(String[] args) throws IOException {
-		final Graph graph = Graph.readGraph();
-		ConnectedComponents cc = new ConnectedComponents(graph);
-		int countNumberOfConnectedGraph = cc.countNumberOfConnectedGraph();
-		System.out.println(countNumberOfConnectedGraph);
-	}
+    public static String bubble(int[] numbers) {
+        Arrays.sort(numbers);
+        return Arrays.toString(numbers);
+    }
+
+    public static String advancedBubble(int[] numbers, boolean isDescending) {
+        if (isDescending = true) {
+            Arrays.sort(numbers);
+            for (int i = 0; i < numbers.length / 2; i++) {
+                int temp = numbers[i];
+                numbers[i] = numbers[numbers.length - 1 - i];
+                numbers[numbers.length - 1 - i] = temp;
+            }
+        } else {
+            Arrays.sort(numbers);
+            }
+        return Arrays.toString(numbers);
+    }
 }

@@ -1,55 +1,100 @@
-/**
 
- * - http://www.lintcode.com/problem/merge-sort/
- */
+import asdlab.libreria.Ordinamento.*;
 
-public class Solution {
-    /**
-     * @param A an integer array
-     * @return void
-     */
-    public void sortIntegers2(int[] A) {
-        // use a shared temp array, the extra memory is O(n) at least
-        int[] temp = new int[A.length];
-        mergeSort(A, 0, A.length - 1, temp);
-    }
+public class Ordinamento_Interi {
 
-    private void mergeSort(int[] A, int start, int end, int[] temp) {
-        if (start >= end) {
-            return;
-        }
+    public static void main(String[] args) {
+    	String name, path, base_str;
 
-        int left = start, right = end;
-        int mid = (start + end) / 2;
+    	
+    	long time_integer=0, time_quick=0, time_merge=0, time_heap=0, time_radix=0;
+    	
+    	int array_random[], dimensione, scelta, base;
+    	
+    	AlgoritmiOrdinamento alg= new AlgoritmiOrdinamento();
 
-        mergeSort(A, start, mid, temp);
-        mergeSort(A, mid+1, end, temp);
-        merge(A, start, mid, end, temp);
-    }
+    	System.out.println("Crea un array di numeri casuali\n"); 
 
-    private void merge(int[] A, int start, int mid, int end, int[] temp) {
-        int left = start;
-        int right = mid+1;
-        int index = start;
+		dimensione = CreaArray.decidi_dimensione(); 
+		array_random = new int [dimensione]; 		
+		CreaArray.interi(array_random, dimensione); 
 
-        // merge two sorted subarrays in A to temp array
-        while (left <= mid && right <= end) {
-            if (A[left] < A[right]) {
-                temp[index++] = A[left++];
-            } else {
-                temp[index++] = A[right++];
-            }
-        }
-        while (left <= mid) {
-            temp[index++] = A[left++];
-        }
-        while (right <= end) {
-            temp[index++] = A[right++];
-        }
+		
+		
+		System.out.println("Inserisci il percorso dove salvare il file\nEs: C:\\percorso\\file\\\n");
+		path = Read.readString();
+		System.out.println("Inserisci il nome del file\nEs:test.txt\n");
+		name = Read.readString();
 
-        // copy temp back to A
-        for (index = start; index <= end; index++) {
-            A[index] = temp[index];
-        }
+		do {
+
+		
+
+			System.out.println("Crea un nuovo array di numeri casuali oppure scegli il tipo di algoritmo che vuoi utilizzare per ordinare l'array\n"+
+							   "0 - Crea array random;\n"+
+							   "1 - IntegerSort;\n"+
+							   "2 - QuickSort;\n"+
+							   "3 - MergeSort;\n"+
+							   "4 - HeapSort;\n"+
+							   "5 - RadixSort;\n"+
+							   "6 - Se si desidera uscire;\n");
+			scelta = Read.readInt();
+			while(scelta<0 || scelta>6){
+				System.out.println("Scelta non valida: Inserire un numero comreso tra 0 e 7\n");
+				scelta = Read.readInt();
+			}
+
+		
+
+		 	
+
+    	 	switch (scelta) {
+ 				case 0:														
+ 					dimensione = CreaArray.decidi_dimensione();				
+ 					array_random = new int [dimensione];					
+ 					CreaArray.interi(array_random, dimensione);	
+ 				break;
+
+ 				case 1:
+ 					
+					time_integer = Ordinamento.integersort(array_random, dimensione, alg);
+					System.out.println("Tempo ordinamento array di "+dimensione+" elementi con IntegerSort: "+(double) time_integer/1000000+"ms\n");
+					FileWrite.salva("IntegerSort", (double) time_integer/1000000, dimensione, path, name);
+				break;
+
+ 				case 2:
+ 					
+ 					time_quick = Ordinamento.quicksort(array_random, dimensione, alg);
+					System.out.println("Tempo ordinamento array di "+dimensione+" elementi con QuickSort: "+(double) time_quick/1000000+"ms\n");
+					FileWrite.salva("QuickSort", (double) time_quick/1000000, dimensione, path, name);
+ 				break;
+
+ 				case 3:
+ 					
+ 					time_merge = Ordinamento.mergesort(array_random, dimensione, alg);
+					System.out.println("Tempo ordinamento array di "+dimensione+" elementi con MergeSort: "+(double) time_merge/1000000+"ms\n");
+					FileWrite.salva("MergeSort", (double) time_merge/1000000, dimensione, path, name);
+ 				break;
+
+ 				case 4:
+ 					
+ 					time_heap = Ordinamento.heapsort(array_random, dimensione, alg);
+					System.out.println("Tempo ordinamento array di "+dimensione+" elementi con HeapSort: "+(double) time_heap/1000000+"ms\n");
+					FileWrite.salva("HeapSort", (double) time_heap/1000000, dimensione, path, name);
+ 				break;
+
+ 				case 5:
+ 					
+ 					System.out.println("Scegliere la base del Radix-Sort: \n");
+ 					base = Read.readInt();
+ 					time_radix = Ordinamento.radixsort(array_random, dimensione, alg, base);
+					System.out.println("Tempo ordinamento array di "+dimensione+" elementi con Radix-Sort: "+(double) time_radix/1000000+"ms\n");
+					base_str = Integer.toString(base);
+					FileWrite.salva("Radix-Sort base "+base_str+" " , (double) time_radix/1000000, dimensione, path, name);
+ 				break;
+ 			}
+
+		} while (scelta != 6);
+
     }
 }

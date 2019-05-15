@@ -1,64 +1,36 @@
-import java.util.*;
 
-public class Example {
 
-   public static void main(String[] args) {
+public class SelectionSort{
 
-      int[] arr = {99, 77, 55, 33, 11, 88, 66, 44, 22};
-      System.out.println("Unsorted: " + Arrays.toString(arr));
+    public static void main(String[] args){
+        int[] meuArray = {3, 8, 15, 10, 1, 2, 3};
+        exibirValores(meuArray);
+        ordenarSelectionSort(meuArray);
+        exibirValores(meuArray);
+    }
 
-      heapSort(arr);
-      System.out.println("Sorted  : " + Arrays.toString(arr));
-   }
+    private static void ordenarSelectionSort(int meuArray[]){
 
-   public static void heapSort(int[] arr) {
+        for(int i = 0; i < meuArray.length - 1; ++i){
+            int indiceMenorNumero = i;
 
-      int size = arr.length;
+            for(int j = i + 1; j < meuArray.length; j++){
+                if(meuArray[j] < meuArray[indiceMenorNumero]){
+                    indiceMenorNumero = j;
+                }
+            }
 
-      for (int i = size / 2 - 1; i >= 0; i--) {
-         heapify(i, arr, size);
-      }
+            int temporario = meuArray[indiceMenorNumero];
+            meuArray[indiceMenorNumero] = meuArray[i];
+            meuArray[i] = temporario;
+        }
+    }
 
-      for (int i = arr.length - 1; i >= 0; i--) {
-         swap(arr, 0, i);
-         size = size - 1;
-         heapify(0, arr, size);
-      }
-
-   }
-
-   public static void heapify(int i, int[] arr, int size) {
-      int largestIndex = i;
-
-      int leftIndex = leftChild(i);
-      if (leftIndex < size && arr[leftIndex] > arr[largestIndex]) {
-         largestIndex = leftIndex;
-      }
-
-      int rightIndex = rightChild(i);
-      if (rightIndex < size && arr[rightIndex] > arr[largestIndex]) {
-         largestIndex = rightIndex;
-      }
-
-      if (largestIndex != i) {
-         swap(arr, i, largestIndex);
-         heapify(largestIndex, arr, size);
-      }
-   }
-
-   static int leftChild(int i) {
-      return 2 * i + 1;
-   }
-
-   static int rightChild(int i) {
-      return 2 * i + 2;
-   }
-
-   static void swap(int[] arr, int index1, int index2) {
-      int temp = arr[index1];
-      arr[index1] = arr[index2];
-      arr[index2] = temp;
-   }   
+    private static void exibirValores(int meuArray[]){
+        for(int i = 0; i < meuArray.length; ++i){
+            System.out.print(meuArray[i] + " ");
+        }
+        System.out.println();
+    }
+    
 }
-
-

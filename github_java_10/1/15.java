@@ -1,204 +1,138 @@
-package com.xiedang.www.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
 
-/**
- * 单据文件
- * BillFiles
- * 数据库表：bill_files
- */
-public class BillFiles {
+package edu.princeton.cs.algs4;
 
-    /**
-     * 文件id
-     * 表字段 : bill_files.BFS_ID
-     */
-    private String bfsId;
+import java.util.Comparator;
 
-    /**
-     * 文件名
-     * 表字段 : bill_files.BFS_NAME
-     */
-    private String bfsName;
 
-    /**
-     * 文件地址
-     * 表字段 : bill_files.BFS_PATH
-     */
-    private String bfsPath;
+public class Insertion {
 
-    /**
-     * 文件类型
-     * 表字段 : bill_files.BFS_TYPE
-     */
-    private String bfsType;
+    
+    private Insertion() { }
 
-    /**
-     * 详细见BillFileTypeEnum枚举(1质检单；2散船运单；3仓库保管单；6散船货物交接单；7散船放货通知单；11货权带过来的运单附件；14凭证；16散船服务合同补登；17散船委托合同补登；20开票交易商附件；21开票附件；22开票服务商附件；25散船放货单模板)
-     * 表字段 : bill_files.BFS_BILL_TYPE
-     */
-    private String bfsBillType;
-
-    /**
-     * 单据ID
-     * 表字段 : bill_files.BFS_BILL_ID
-     */
-    private String bfsBillId;
-
-    /**
-     * 软删除状态
-     * 表字段 : bill_files.BFS_STATUS
-     */
-    private BigDecimal bfsStatus;
-
-    /**
-     * 创建时间
-     * 表字段 : bill_files.BFS_CREATE_TIME
-     */
-    private Date bfsCreateTime;
-
-    /**
-     * 获取 文件id 字段:bill_files.BFS_ID
-     *
-     * @return bill_files.BFS_ID, 文件id
-     */
-    public String getBfsId() {
-        return bfsId;
+    
+    public static void sort(Comparable[] a) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j > 0 && less(a[j], a[j-1]); j--) {
+                exch(a, j, j-1);
+            }
+            assert isSorted(a, 0, i);
+        }
+        assert isSorted(a);
     }
 
-    /**
-     * 设置 文件id 字段:bill_files.BFS_ID
-     *
-     * @param bfsId the value for bill_files.BFS_ID, 文件id
-     */
-    public void setBfsId(String bfsId) {
-        this.bfsId = bfsId == null ? null : bfsId.trim();
+    
+    public static void sort(Comparable[] a, int lo, int hi) {
+        for (int i = lo; i <= hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1]); j--) {
+                exch(a, j, j-1);
+            }
+        }
+        assert isSorted(a, lo, hi);
     }
 
-    /**
-     * 获取 文件名 字段:bill_files.BFS_NAME
-     *
-     * @return bill_files.BFS_NAME, 文件名
-     */
-    public String getBfsName() {
-        return bfsName;
+    
+    public static void sort(Object[] a, Comparator comparator) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j > 0 && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
+            }
+            assert isSorted(a, 0, i, comparator);
+        }
+        assert isSorted(a, comparator);
     }
 
-    /**
-     * 设置 文件名 字段:bill_files.BFS_NAME
-     *
-     * @param bfsName the value for bill_files.BFS_NAME, 文件名
-     */
-    public void setBfsName(String bfsName) {
-        this.bfsName = bfsName == null ? null : bfsName.trim();
+    
+    public static void sort(Object[] a, int lo, int hi, Comparator comparator) {
+        for (int i = lo; i <= hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
+            }
+        }
+        assert isSorted(a, lo, hi, comparator);
     }
 
-    /**
-     * 获取 文件地址 字段:bill_files.BFS_PATH
-     *
-     * @return bill_files.BFS_PATH, 文件地址
-     */
-    public String getBfsPath() {
-        return bfsPath;
+
+    
+    
+    
+    public static int[] indexSort(Comparable[] a) {
+        int n = a.length;
+        int[] index = new int[n];
+        for (int i = 0; i < n; i++)
+            index[i] = i;
+
+        for (int i = 0; i < n; i++)
+            for (int j = i; j > 0 && less(a[index[j]], a[index[j-1]]); j--)
+                exch(index, j, j-1);
+
+        return index;
     }
 
-    /**
-     * 设置 文件地址 字段:bill_files.BFS_PATH
-     *
-     * @param bfsPath the value for bill_files.BFS_PATH, 文件地址
-     */
-    public void setBfsPath(String bfsPath) {
-        this.bfsPath = bfsPath == null ? null : bfsPath.trim();
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return v.compareTo(w) < 0;
     }
 
-    /**
-     * 获取 文件类型 字段:bill_files.BFS_TYPE
-     *
-     * @return bill_files.BFS_TYPE, 文件类型
-     */
-    public String getBfsType() {
-        return bfsType;
+    
+    private static boolean less(Object v, Object w, Comparator comparator) {
+        return comparator.compare(v, w) < 0;
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
     }
 
-    /**
-     * 设置 文件类型 字段:bill_files.BFS_TYPE
-     *
-     * @param bfsType the value for bill_files.BFS_TYPE, 文件类型
-     */
-    public void setBfsType(String bfsType) {
-        this.bfsType = bfsType == null ? null : bfsType.trim();
+    
+    private static void exch(int[] a, int i, int j) {
+        int swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
     }
 
-    /**
-     * 获取 详细见BillFileTypeEnum枚举(1质检单；2散船运单；3仓库保管单；6散船货物交接单；7散船放货通知单；11货权带过来的运单附件；14凭证；16散船服务合同补登；17散船委托合同补登；20开票交易商附件；21开票附件；22开票服务商附件；25散船放货单模板) 字段:bill_files.BFS_BILL_TYPE
-     *
-     * @return bill_files.BFS_BILL_TYPE, 详细见BillFileTypeEnum枚举(1质检单；2散船运单；3仓库保管单；6散船货物交接单；7散船放货通知单；11货权带过来的运单附件；14凭证；16散船服务合同补登；17散船委托合同补登；20开票交易商附件；21开票附件；22开票服务商附件；25散船放货单模板)
-     */
-    public String getBfsBillType() {
-        return bfsBillType;
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
     }
 
-    /**
-     * 设置 详细见BillFileTypeEnum枚举(1质检单；2散船运单；3仓库保管单；6散船货物交接单；7散船放货通知单；11货权带过来的运单附件；14凭证；16散船服务合同补登；17散船委托合同补登；20开票交易商附件；21开票附件；22开票服务商附件；25散船放货单模板) 字段:bill_files.BFS_BILL_TYPE
-     *
-     * @param bfsBillType the value for bill_files.BFS_BILL_TYPE, 详细见BillFileTypeEnum枚举(1质检单；2散船运单；3仓库保管单；6散船货物交接单；7散船放货通知单；11货权带过来的运单附件；14凭证；16散船服务合同补登；17散船委托合同补登；20开票交易商附件；21开票附件；22开票服务商附件；25散船放货单模板)
-     */
-    public void setBfsBillType(String bfsBillType) {
-        this.bfsBillType = bfsBillType == null ? null : bfsBillType.trim();
+    
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo+1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
     }
 
-    /**
-     * 获取 单据ID 字段:bill_files.BFS_BILL_ID
-     *
-     * @return bill_files.BFS_BILL_ID, 单据ID
-     */
-    public String getBfsBillId() {
-        return bfsBillId;
+    private static boolean isSorted(Object[] a, Comparator comparator) {
+        return isSorted(a, 0, a.length - 1, comparator);
     }
 
-    /**
-     * 设置 单据ID 字段:bill_files.BFS_BILL_ID
-     *
-     * @param bfsBillId the value for bill_files.BFS_BILL_ID, 单据ID
-     */
-    public void setBfsBillId(String bfsBillId) {
-        this.bfsBillId = bfsBillId == null ? null : bfsBillId.trim();
+    
+    private static boolean isSorted(Object[] a, int lo, int hi, Comparator comparator) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1], comparator)) return false;
+        return true;
     }
 
-    /**
-     * 获取 软删除状态 字段:bill_files.BFS_STATUS
-     *
-     * @return bill_files.BFS_STATUS, 软删除状态
-     */
-    public BigDecimal getBfsStatus() {
-        return bfsStatus;
+   
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
     }
 
-    /**
-     * 设置 软删除状态 字段:bill_files.BFS_STATUS
-     *
-     * @param bfsStatus the value for bill_files.BFS_STATUS, 软删除状态
-     */
-    public void setBfsStatus(BigDecimal bfsStatus) {
-        this.bfsStatus = bfsStatus;
-    }
-
-    /**
-     * 获取 创建时间 字段:bill_files.BFS_CREATE_TIME
-     *
-     * @return bill_files.BFS_CREATE_TIME, 创建时间
-     */
-    public Date getBfsCreateTime() {
-        return bfsCreateTime;
-    }
-
-    /**
-     * 设置 创建时间 字段:bill_files.BFS_CREATE_TIME
-     *
-     * @param bfsCreateTime the value for bill_files.BFS_CREATE_TIME, 创建时间
-     */
-    public void setBfsCreateTime(Date bfsCreateTime) {
-        this.bfsCreateTime = bfsCreateTime;
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readAllStrings();
+        Insertion.sort(a);
+        show(a);
     }
 }
+
+

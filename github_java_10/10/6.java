@@ -1,44 +1,107 @@
-import java.util.Arrays;
-/*
- * CSCI 355 Project 1
- * Chai Grindean
- * 
- * BubbleSort
- * Time Complexity: O(n^2)
- */
 
-public class BubbleSort {
-	static void bubbleSortFunction(int[]numList) {
-		int n = numList.length; //Set n to length of the numList
-		int t = 0; //t = Temporary variable
-		//Creating Loop, using i as a counter
-		for(int i=0; i < n; i++) { //outer loop
-			for(int j = 1; j < (n-i); j++ ) { //inner loop
-				if(numList[j-1] < numList[j]) {
-					//If the number on the left is < than number on the right
-					//Switch places
-					t = numList[j-1];
-					numList[j-1] = numList[j];
-					numList[j] = t;
-				}
-			}
-			System.out.println(Arrays.toString(numList)); //Prints out each line to show the sorting process
-		}
-	}
-	public static void main(String[]args) {
-		int numList[] = {4, 5, 7, 9, 1, 3, 2, 6, 0, 8};
-		System.out.println("List of Numbers");
-		
-		//Creating loop to print entire numList
-		for(int i=0; i<numList.length; i++) {
-			System.out.print(numList[i]+" ");
-		}
-		System.out.println(); //line break
-		bubbleSortFunction(numList); //Call bubbleSortFunction to sort numList
-		
-		System.out.println("Sorted List of Numbers");
-		for(int i=0; i<numList.length; i++) {
-			System.out.print(numList[i]+" ");
-		}
-	}
+import java.util.ArrayList;
+import java.util.ArrayDeque;
+
+public class Bucketsort {
+
+    public static final int MAX_VALUE = 10000;
+    public static final int MIN_VALUE = 0;
+
+    public static int[] bucketsort(int[] vec , int nBuckets){
+        
+        int [] sortedVec = new int[vec.length];
+
+        
+        ArrayList<ArrayDeque<Integer>> buckets = new ArrayList<ArrayDeque<Integer>>(nBuckets);
+        for(int i = 0; i < nBuckets; i++ ){
+            buckets.add(new ArrayDeque<Integer>() );
+        }
+
+        
+        for(Integer x: vec){
+            buckets.get( chooseBucket(x, nBuckets) ).push(x);
+        }
+
+        
+        int idx = 0;
+        for(ArrayDeque<Integer> bucket: buckets){
+            while( ! bucket.isEmpty() )
+                sortedVec[idx++] = bucket.remove();
+        }
+        
+        inplace_insertionSort(sortedVec);
+
+        return sortedVec;
+    }
+
+    public static void inplace_insertionSort(int[] vec){
+        int cmp_counter = 0;
+        int swap_counter = 0;
+        int tmp = 0;
+        for(int i = 0; i < vec.length ; i++){
+            cmp_counter++;
+            for(int j  = i ; j >0 && (vec[j-1] > vec[j])  ; j-- ){
+                cmp_counter++;
+                if(vec[j-1] > vec[j] ){
+                    swap_counter++;
+                    tmp = vec[j-1];
+                    vec[j-1] = vec[j];
+                    vec[j] = tmp;
+                }
+            }
+        }
+        System.out.println("Insertion sort");
+        System.out.println("# of comparisons "+Integer.toString(cmp_counter));
+        System.out.println("# of swaps "+Integer.toString(swap_counter));
+        System.out.println();
+    }
+
+
+    
+    public static int chooseBucket(int value, int nBuckets){
+        int bucketLimit = (MAX_VALUE-MIN_VALUE+1)/nBuckets;
+        int bucket = (value - MIN_VALUE) / bucketLimit;
+        
+        if(bucket == nBuckets)
+            bucket = nBuckets - 1;
+        return bucket;
+    }
+
+    public static boolean isSorted(int [] vec){
+        boolean sorted = true;
+        int i;
+        for( i = 1; i< vec.length && sorted;i++){
+            sorted = vec[i-1] <= vec[i];
+
+        }
+        return sorted;
+    }
+
+    
+    public static void main(String[] args) {
+
+        int nBuckets = 50;
+
+        int[] vec = new int[100];
+        for(int i = 0;i<100; i++){
+            vec[i] = (int)(Math.random() * 10000);
+        }
+        System.out.println("Bucket sort for normal array");
+        int[] vec_sorted = bucketsort(vec, nBuckets);
+
+        for(Integer x: vec_sorted){
+            System.out.print(Integer.toString(x)+" ");
+        }
+        System.out.println("\nSorted: "+Boolean.toString(isSorted(vec_sorted)));
+
+        System.out.println();
+        System.out.println("Insertion sort for normal array");
+        inplace_insertionSort(vec);
+        for(Integer x: vec){
+            System.out.print(Integer.toString(x)+" ");
+        }
+
+
+    }
+
 }

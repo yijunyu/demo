@@ -1,29 +1,35 @@
-package net.sf.anathema.graph.layering;
+package com.algorithmhelper.generalalgorithms.sorting;
 
-import net.sf.anathema.graph.nodes.IRegularNode;
-import net.sf.anathema.graph.nodes.ISimpleNode;
+public class ShellSort {
 
-import java.util.ArrayList;
-import java.util.List;
+    
+    public static void sort(Comparable[] arr) {
+        if (arr == null)
+            throw new IllegalArgumentException("sort with null arr");
 
-public class TopologyBuilder {
+        int n = arr.length;
+        int h = 1;
+        while (h < n/3)
+            h = 3*h + 1;
 
-  public static IRegularNode[] sortGraphByTopology(IRegularNode[] acyclicGraph) {
-    List<ISimpleNode> topologicalSort = new ArrayList<>();
-    for (IRegularNode node : acyclicGraph) {
-      if (node.isRootNode()) {
-        sortIntoSetRecursively(node, topologicalSort);
-      }
+        while (h >= 1) {
+            for (int i = h; i < n; i++) {
+                for (int j = i; j >= h && less(arr[j], arr[j-h]); j -= h)
+                    swap(arr, j, j-h);
+            }
+            h /= 3;
+        }
     }
-    return topologicalSort.toArray(new IRegularNode[topologicalSort.size()]);
-  }
 
-  private static void sortIntoSetRecursively(ISimpleNode node, List<ISimpleNode> topologicalSort) {
-    for (ISimpleNode child : node.getChildren()) {
-      sortIntoSetRecursively(child, topologicalSort);
+    
+    private static boolean less(Comparable x, Comparable y) {
+        return x.compareTo(y) < 0;
     }
-    if (!topologicalSort.contains(node)) {
-      topologicalSort.add(0, node);
+
+    
+    private static void swap(Comparable[] arr, int i, int j) {
+        Comparable temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
-  }
 }

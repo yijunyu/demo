@@ -1,78 +1,82 @@
-/**
- * 
- */
-package com.learning.basic.sort;
+package net.brian.coding.algorithm.crazyjavaimpl;
 
-/**
- * @author viap
- * 
- */
-public class BubbleSort {
+import java.util.Arrays;
 
-	public int nElement;
-
-	public long[] arrLong;
-
-	BubbleSort(int size) {
-		arrLong = new long[size];
-		nElement = 0;
+class BucketSortDataWrap implements Comparable<BucketSortDataWrap>
+{
+	int data;
+	String flag;
+	public BucketSortDataWrap(int data, String flag)
+	{
+		this.data = data;
+		this.flag = flag;
 	}
-
-	public void insert(int value) {
-		arrLong[nElement] = value;
-		nElement++;
+	public String toString()
+	{
+		return data + flag;
 	}
-
-	public void display() {
-		for (int i = 0; i < arrLong.length; i++)
-			if (arrLong[i] != 0)
-				System.out.println("Values : " + arrLong[i]);
+	
+	public int compareTo(BucketSortDataWrap dw)
+	{
+		return this.data > dw.data ? 1 
+			: (this.data == dw.data ? 0 : -1);
 	}
-
-	public void sortValue() {
-		int in, out;
-
-		for (out = nElement - 1; out > 0; out--) {
-			for (in = 0; in < out; in++) {
-				if (arrLong[in] < arrLong[in + 1])
-					swap(in, in + 1);
-			}
+}
+public class BucketSort
+{
+	public static void bucketSort(BucketSortDataWrap[] data 
+		, int min , int max)
+	{
+		System.out.println("��ʼ����");
+		
+		int arrayLength = data.length;
+		BucketSortDataWrap[] tmp = new BucketSortDataWrap[arrayLength];
+		
+		
+		int[] buckets = new int[max - min];	
+		
+		for(int i = 0 ; i < arrayLength ; i++)
+		{
+			
+			buckets[data[i].data - min]++;
+		}
+		System.out.println( Arrays.toString(buckets));
+		
+		for(int i = 1 ; i < max - min; i++)
+		{
+			
+			buckets[i] = buckets[i] + buckets[i - 1];
+		}
+		
+		
+		
+		System.out.println( Arrays.toString(buckets));
+		
+		System.arraycopy(data, 0, tmp, 0, arrayLength);
+		
+		for(int k = arrayLength - 1 ; k >=  0 ; k--)
+		{
+			data[--buckets[tmp[k].data - min]] = tmp[k];
 		}
 	}
-
-	public void swap(int one, int two) {
-		long temp = arrLong[one];
-		arrLong[one] = arrLong[two];
-		arrLong[two] = temp;
-	}
-
-	public void reverse() {
-		for (int i = nElement - 1; i >= 0; i--) {
-			System.out.println("Reverse Value : " + arrLong[i]);
-		}
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int max = 7;
-
-		BubbleSort bubbleSort = new BubbleSort(max);
-
-		bubbleSort.insert(10);
-		bubbleSort.insert(40);
-		bubbleSort.insert(30);
-		bubbleSort.insert(50);
-		bubbleSort.insert(20);
-
-		bubbleSort.sortValue();
-		System.out.println("After sorting");
-		bubbleSort.display();
-
-		System.out.println("Reverse sorting");
-		bubbleSort.reverse();
-
+	public static void main(String[] args)
+	{
+		BucketSortDataWrap[] data = {
+			new BucketSortDataWrap(9 , ""),
+			new BucketSortDataWrap(5, ""),
+			new BucketSortDataWrap(-1, ""),
+			new BucketSortDataWrap(8 , ""),
+			new BucketSortDataWrap(5 , "*"),
+			new BucketSortDataWrap(7 , ""),
+			new BucketSortDataWrap(3 , ""),
+			new BucketSortDataWrap(-3, ""),
+			new BucketSortDataWrap(1 , ""),
+			new BucketSortDataWrap(3 , "*")
+		};
+		System.out.println("����֮ǰ��\n"
+			+ java.util.Arrays.toString(data));
+		bucketSort(data , -3 , 10);
+		System.out.println("����֮��\n" 
+			+ java.util.Arrays.toString(data));
 	}
 }

@@ -1,57 +1,45 @@
-package sortieralgorithmen;
+package priorityqueues;
 
+import tools.Tools;
 
-public class Insertion {
-	
-	/**
-	 * Rekursive Implementierung des Insertion-Sort Algorithmus
-	 * @param a Integer-Array
-	 * @param sortiert Anzahl der bereits sortierten Stellen
-	 * @return sortiertes Array
-	 */
-	public static int[] sortiereRekursiv(int[] a, int sortiert) {
-		//Abbruchkriterium
-		if(sortiert >= a.length) return a;
+public class Heapsort
+{
+	public static void sort(Comparable[] a)
+	{
+		int N = a.length-1;
 		
-		int i = 1;
-		
-		//Position der neuen Zahl finden
-		while (a[i] < a[sortiert]) i++;
-		
-		//Zahlen tauschen bis Reihenfolge wiederhergestellt
-		while (i < sortiert) {
-			a[0] = a[i];
-			a[i] = a[sortiert];
-			a[sortiert] = a[0];
-			i++;
+		for (int k=N/2; k>=0; k--)
+		{
+			sink(a, k, N);
 		}
-		//Sentinel resetten
-		a[0] = -1;
-		return sortiereRekursiv(a, sortiert + 1);
+		
+		while (N>0)
+		{
+			Tools.exch(a, 0, N--);
+			sink(a, 0, N);
+		}
 	}
-	
-	/**
-	 * Rekursive Implementierung des Insertion-Sort Algorithmus
-	 * @param a Integer-Array
-	 * @return sortiertes Integer-Array
-	 */
-	public static int[] sortiereIterativ(int[] a){
-		for(int sortiert = 0; sortiert < a.length; sortiert++) {
-			int i = 1;
-		
-			//Position der neuen Zahl finden
-			while (a[i] < a[sortiert]) i++;
-			
-			//Zahlen tauschen bis Reihenfolge wiederhergestellt
-			while (i < sortiert) {
-				a[0] = a[i];
-				a[i] = a[sortiert];
-				a[sortiert] = a[0];
-				i++;
-			}
-			//Sentinel resetten
-			a[0] = -1;
+
+	private static void sink(Comparable[] a, int k, int N)
+	{	
+		while (2*k+1 <= N)
+		{
+			int j = 2*k+1;
+			if ( j<N && Tools.less(a[j], a[j+1]) ) 	j++ ; 	
+			if ( !Tools.less(a[k], a[j]) ) break;			
+			Tools.exch(a, k, j);
+			k = j;
 		}
-		return a;
+	}
+
+	public static void main(String[] args)
+	{
+		String[] test = {"S", "O", "R", "T", "E", "X", "A", "M", "P", "L", "E"};
+		sort(test);
+		Tools.show(test);
+
+		Integer[] test2 = {4,3,7,1,8,0,2,5,6};
+		sort(test2);
+		Tools.show(test2);
 	}
 }

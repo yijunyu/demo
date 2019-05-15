@@ -1,23 +1,36 @@
-import java.util.Scanner;
+package magicalzhu.github.io.Sort;
 
-class TestClass {
-    static void bubbleSort(int[] arr, int n) {
-        for (int i = 0; i < n - 1; i++) {
-            for (int index = n - 1; index >= i + 1; index--) {
-                if (arr[index] < arr[index - 1]) {
-                    int temp = arr[index];
-                    arr[index] = arr[index - 1];
-                    arr[index - 1] = temp;
-                }
-            }
-        }
-    }
+import java.util.Arrays;
 
-    public static void main(String[] args) {
-        int[] arr = {31, 41, 59, 26, 41, 58};
-        bubbleSort(arr, arr.length);
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-    }
+
+public class BucketSort {
+	public static void bucketSort(DataWrap[] data, int min, int max) {
+		System.out.println("开始排序");
+		int arrayLength = data.length;
+		DataWrap[] temp = new DataWrap[arrayLength];
+		int[] buckets = new int[max - min];
+		for (int i = 0; i < arrayLength; i++) {
+			buckets[data[i].data - min]++;
+		}
+		System.out.println(Arrays.toString(buckets));
+		for (int i = 1; i < max - min; i++) {
+			buckets[i] = buckets[i] + buckets[i - 1];
+		}
+		System.out.println(Arrays.toString(buckets));
+		System.arraycopy(data, 0, temp, 0, arrayLength);
+		for (int k = arrayLength - 1; k >= 0; k--) {
+			data[--buckets[temp[k].data - min]] = temp[k];
+		}
+	}
+
+	public static void main(String[] args) {
+		DataWrap[] data = { new DataWrap(9, ""), new DataWrap(5, ""),
+				new DataWrap(-1, ""), new DataWrap(8, ""),
+				new DataWrap(5, "*"), new DataWrap(7, ""),
+				new DataWrap(3, ""), new DataWrap(-3, ""),
+				new DataWrap(1, ""),new DataWrap(3, "*")};
+		System.out.println("排序之前：\n" + java.util.Arrays.toString(data));
+		bucketSort(data, -3, 10);
+		System.out.println("排序之后：\n" + java.util.Arrays.toString(data));
+	}
 }

@@ -1,55 +1,31 @@
-/*
- * Hibernate, Relational Persistence for Idiomatic Java
- *
- * License: GNU Lesser General Public License (LGPL), version 2.1 or later.
- * See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
- */
-package org.hibernate.envers.internal.tools.graph;
+package com.base.排序;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import org.junit.Test;
 
-/**
- * Topological sorting of a graph - based on DFS.
- *
- * @author Adam Warski (adam at warski dot org)
- */
-public class TopologicalSort<R> {
-	private List<R> sorted;
-	private int time;
 
-	private void process(Vertex<R> v) {
-		if ( v.getStartTime() != 0 ) {
-			// alread processed
-			return;
-		}
+public class shellsort {
+	int[] a = { 89, 87, 67, 69, 100, 75, 99, 90 };
+	
+	@Test
+	public void shellsort1() {
+		int i, j, gap;
 
-		v.setStartTime( time++ );
-
-		for ( Vertex<R> n : v.getNeighbours() ) {
-			process( n );
-		}
-
-		v.setEndTime( time++ );
-
-		sorted.add( v.getRepresentation() );
-	}
-
-	public List<R> sort(Collection<Vertex<R>> vertices) {
-		sorted = new ArrayList<>( vertices.size() );
-
-		time = 1;
-
-		for ( Vertex<R> v : vertices ) {
-			if ( v.getEndTime() == 0 ) {
-				process( v );
+		for (gap = a.length / 2; gap > 0; gap /= 2)
+			for (i = 0; i < gap; i++) 
+			{
+				for (j = i + gap; j < a.length; j += gap)
+					if (a[j] < a[j - gap]) {
+						int temp = a[j];
+						int k = j - gap;
+						while (k >= 0 && a[k] > temp) {
+							a[k + gap] = a[k];
+							k -= gap;
+						}
+						a[k + gap] = temp;
+					}
 			}
+		for (i = 0; i < a.length; i++) {
+			System.out.print(a[i] + "\t");
 		}
-
-		Collections.reverse( sorted );
-
-		return sorted;
 	}
 }

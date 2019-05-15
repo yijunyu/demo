@@ -1,63 +1,87 @@
-/**
- * Programming Fundamental Assignment 4
- * 
- * Tower of Hanoi
- * List<String> towerOfHanoi(String source, String destination, String temp, int numOfDisk)
- *
- * @author Prateek Jain
- * Dated 18/07/2017
- *
- */
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
 
-public class TowerOfHanoi {
-	List<String> towerOfHanoi(String source, String destination,
-			String temporary, int numOfDisk) {
-		List<String> movements = new ArrayList<String>();
-		// Show error if number of disks is less than 1
-		try {
-			if (numOfDisk <= 0) {
-				throw new IllegalArgumentException("Number of disks Should be greater than 0");
-			}
-			/*
-			 * if number of disk is 1 then Move single disk from source to
-			 * destination else move smaller disks
-			 */
-			if (numOfDisk == 1) {
-				movements.add("Move disk " + numOfDisk + " from " + source+ " to " + destination + "\n");
-			} else {
-				// Moving smaller disks form source to temporary
-				movements.addAll(towerOfHanoi(source, temporary, destination,numOfDisk - 1)); 
-				movements.add("Move disk " + numOfDisk + " from " + source+ " to " + destination + "\n"); 
-				// Moving Smaller disk from temporary to destination
-				movements.addAll(towerOfHanoi(temporary, destination, source,numOfDisk - 1)); 
-			}
-		} catch (IllegalArgumentException exception) {
-			System.out.println(exception.getMessage());
+
+
+import java.util.*;
+
+public class Topologicalsort{
+
+	class Vertex{
+		int data;
+		ArrayList<Vertex> edges;
+		
+		public Vertex(int data){
+			this.data = data;
+			this.edges = new ArrayList<Vertex>();
 		}
-		return movements;
+
+		public void addEdge(Vertex edge){
+			this.edges.add(edge);
+		}
+
 	}
 
-	public static void main(String[] args) throws InputMismatchException {
-		TowerOfHanoi towerOfHanoi = new TowerOfHanoi();
-		Scanner scanner = new Scanner(System.in);
-		int numberOfDisk;
-		System.out.println("Enter the Number of disks to move from A to B");
-		try {
-			//Enter the number of disks to move from A to B
-			 numberOfDisk = scanner.nextInt();
-			// hanoiTower contains the list of movements required for moving disks
-			List<String> hanoiTower = towerOfHanoi.towerOfHanoi("A", "B", "C",numberOfDisk);
-			for (String string : hanoiTower) {
-				System.out.println(string);
-			}
-		} catch (InputMismatchException exception) {
-			System.out.println("Enter the correct input");
-		} finally {
-			scanner.close();
+
+	class Graph{
+		ArrayList<Vertex> v;
+		
+		public Graph(){
+			this.v = new ArrayList<Vertex>();
 		}
+
+		public void add(int data){
+			v.add(new Vertex(data));
+		}
+
 	}
+
+	public static void topologicalSearch(HashMap<Integer, HashSet<Integer>> graph, ArrayList<Integer> visited, Stack<Integer> st, ArrayList<Integer> result, int vertex){
+		for (int key : graph.get(vertex)){
+			if(!visited.contains(key)){
+				
+				visited.add(key);
+				st.push(key);
+				System.out.println(key);
+				topologicalSearch(graph, visited, st, result, key);
+			}
+		}
+		result.add(st.pop());
+
+	}
+
+
+	public static ArrayList<Integer> topologicalSort(HashMap<Integer, HashSet<Integer>> graph){
+		Stack<Integer> st = new Stack<Integer>();
+		ArrayList<Integer> visited = new ArrayList<Integer>();
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		for (int key : graph.keySet()){
+			if(!visited.contains(key)){
+				visited.add(key);
+				st.push(key);
+				topologicalSearch(graph, visited, st,result, key);
+			}
+		}
+
+		if(!st.isEmpty())
+			result.add(st.pop());
+	
+		return result;
+	}
+
+
+	public static void main(String[] args){
+		HashMap<Integer, HashSet<Integer>> graph = new HashMap<Integer, HashSet<Integer>>();
+
+		graph.put(1, new HashSet<Integer>(Arrays.asList(2,3)));
+		graph.put(2, new HashSet<Integer>());
+		graph.put(3, new HashSet<Integer>());
+		graph.put(4, new HashSet<Integer>(Arrays.asList(1,3)));
+		System.out.println(graph);
+		System.out.println(topologicalSort(graph));
+		
+	}
+
+
 }
+
+
+

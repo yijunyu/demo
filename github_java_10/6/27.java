@@ -1,159 +1,164 @@
-package com.diwayou.algs.book;
+package apps;
 
-import com.diwayou.algs.util.StdIn;
-import com.diwayou.algs.util.StdOut;
+import java.io.IOException;
+import java.util.Scanner;
 
-/*************************************************************************
- *  Compilation:  javac Merge.java
- *  Execution:    java Merge < input.txt
- *  Dependencies: StdOut.java StdIn.java
- *  Data files:   http://algs4.cs.princeton.edu/22merge/tiny.txt
- *                http://algs4.cs.princeton.edu/22merge/words3.txt
- *   
- *  Sorts a sequence of strings from standard input using mergesort.
- *   
- *  % more tiny.txt
- *  S O R T E X A M P L E
- *
- *  % java Merge < tiny.txt
- *  S O R T E X A M P L E A               [ one string per line ]
- *    
- *  % more words3.txt
- *  bed bug dad yes zoo ... all bad yet
- *  
- *  % java Merge < words3.txt
- *  all bad bed bug dad ... yes yet zoo    [ one string per line ]
- *  
- *************************************************************************/
-
-public class Merge {
-
-    // stably merge a[lo .. mid] with a[mid+1 .. hi] using aux[lo .. hi]
-    public static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
-
-        // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
-        assert isSorted(a, lo, mid);
-        assert isSorted(a, mid+1, hi);
-
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = a[k]; 
-        }
-
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)              a[k] = aux[j++];
-            else if (j > hi)               a[k] = aux[i++];
-            else if (less(aux[j], aux[i])) a[k] = aux[j++];
-            else                           a[k] = aux[i++];
-        }
-
-        // postcondition: a[lo .. hi] is sorted
-        assert isSorted(a, lo, hi);
-    }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, aux, lo, mid);
-        sort(a, aux, mid + 1, hi);
-        merge(a, aux, lo, mid, hi);
-    }
-
-    public static void sort(Comparable[] a) {
-        Comparable[] aux = new Comparable[a.length];
-        sort(a, aux, 0, a.length-1);
-        assert isSorted(a);
-    }
+import structures.Node;
 
 
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
-    
-    // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
-    }
-        
-    // exchange a[i] and a[j]
-    private static void exch(Object[] a, int i, int j) {
-        Object swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
+public class Radixsort {
+
+	
+	Node<String> masterListRear;
+	
+	
+	Node<String>[] buckets;
+	
+	
+	int radix=10;
+	
+	
+	public Radixsort() {
+		masterListRear = null;
+		buckets = null;
+	}
+	
+	
+	public Node<String> sort(Scanner sc) 
+	throws IOException {
+		
+		if (!sc.hasNext()) { 
+			return null;
+		}
+		
+		
+		radix = sc.nextInt();
+		buckets = (Node<String>[])new Node[radix];
+		
+		
+		createMasterListFromInput(sc);
+		
+		
+		int maxDigits = getMaxDigits();
+		for (int i=0; i <maxDigits; i++) {
+			scatter(i);
+			gather();
+		}
+		
+		return masterListRear;
+	}
+	
+	
+	public void createMasterListFromInput(Scanner sc) 
+	throws IOException{
+		masterListRear=new Node<String>(sc.next(),null);
+		if(!sc.hasNext()){
+			masterListRear.next=masterListRear;
+		}
+		Node<String> tmp=null;
+		while(sc.hasNext()){
+			Node<String> n=new Node<String>(sc.next(), tmp);
+			if(tmp==null){
+				masterListRear.next=n;
+				tmp=masterListRear;
+				masterListRear=n;
+				masterListRear.next=tmp;
+			}else{
+				masterListRear.next=n;
+				masterListRear=n;
+			}
+		}
+	}
+	
+	
+	public int getMaxDigits() {
+		int maxDigits = masterListRear.data.length();
+		Node<String> ptr = masterListRear.next;
+		while (ptr != masterListRear) {
+			int length = ptr.data.length();
+			if (length > maxDigits) {
+				maxDigits = length;
+			}
+			ptr = ptr.next;
+		}
+		return maxDigits;
+	}
+	
+	
+	public void scatter(int pass) {
+	
+		for(int i=0;i<buckets.length;i++){
+			buckets[i]=null;
+		}
+		Node<String> tmp=masterListRear.next;
+		Node<String> post=masterListRear.next.next;
+		do{
+			int digit=0;
+			if(pass+1>tmp.data.length())
+				digit=0;
+			else
+				digit=Character.digit(tmp.data.charAt(tmp.data.length()-pass-1), radix);
+			
+			if(buckets[digit]==null){
+				buckets[digit]=tmp;
+				tmp.next=buckets[digit];
+			}else{
+				
+				tmp.next=buckets[digit].next;
+				buckets[digit].next=tmp;
+				buckets[digit]=tmp;
+			}
+			masterListRear.next=post;
+			tmp=post;
+			post=post.next;
+			if(tmp==masterListRear){
+				if(pass+1>tmp.data.length())
+					digit=0;
+				else
+					digit=Character.digit(tmp.data.charAt(tmp.data.length()-pass-1), radix);
+				if(buckets[digit]==null){
+					buckets[digit]=tmp;
+					tmp.next=buckets[digit];
+				}else{
+					tmp.next=buckets[digit].next;
+					buckets[digit].next=tmp;
+					buckets[digit]=tmp;
+				
+				}
+			}
+			
+		}while(tmp!=masterListRear);
+		
 
 
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        return isSorted(a, 0, a.length - 1);
-    }
-
-    private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo + 1; i <= hi; i++)
-            if (less(a[i], a[i-1])) return false;
-        return true;
-    }
 
 
-   /***********************************************************************
-    *  Index mergesort
-    ***********************************************************************/
-    // stably merge a[lo .. mid] with a[mid+1 .. hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
+	
+	}
 
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = index[k]; 
-        }
+	
+	public void gather() {
+	
+	
 
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)                    index[k] = aux[j++];
-            else if (j > hi)                     index[k] = aux[i++];
-            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
-            else                                 index[k] = aux[i++];
-        }
-    }
-
-    // return a permutation that gives the elements in a[] in ascending order
-    // do not change the original array a[]
-    public static int[] indexSort(Comparable[] a) {
-        int N = a.length;
-        int[] index = new int[N];
-        for (int i = 0; i < N; i++)
-            index[i] = i;
-
-        int[] aux = new int[N];
-        sort(a, index, aux, 0, N-1);
-        return index;
-    }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, index, aux, lo, mid);
-        sort(a, index, aux, mid + 1, hi);
-        merge(a, index, aux, lo, mid, hi);
-    }
-
-    // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
-        }
-    }
-
-    // Read strings from standard input, sort them, and print.
-    public static void main(String[] args) {
-        String[] a = StdIn.readStrings();
-        Merge.sort(a);
-        show(a);
-    }
+		masterListRear=null;
+		
+		boolean first=true;
+		Node<String> count=null;
+		for(int i=0;i<buckets.length;i++){
+			if(masterListRear!=null&&buckets[i]!=null)
+				masterListRear.next=buckets[i].next;
+			if(buckets[i]!=null){
+				if(first){
+					count=buckets[i].next;
+					first=false;
+				}
+				masterListRear=buckets[i];
+			}
+		}
+		masterListRear.next=count;
+		
+		Node<String> ptr2 = masterListRear.next;
+	}	
 }
+

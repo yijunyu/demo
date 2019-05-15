@@ -1,99 +1,89 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
-/*
-@author Keerthi Bala Sundram
-This class does the BFS traversal and finds the shortest paths from the root to the other nodes.
-* Date : 03/24/2016
-*/
-public class BFS {
-	/*
-	 * Procedure that computes the BFS of the given graph G.
-	 * 
-	 * @param g : The Directed graph for which the BFS traversal has to be made
-	 * pre-condition : Graph is directed
-	 * 
-	 */
-	public void BFS(Graph g) {
 
-		for (Vertex u : g.verts) {
-			u.parent = null;
-			u.distance = 0;
-			u.seen = false;
-		}
+package com.mycompany.snsp1;
 
-		Queue<Vertex> queue = new LinkedList();
-		// adding root
-		Vertex root = g.verts.get(1);
-		queue.add(root);
+import java.util.Comparator;
 
-		root.distance = 0;
-		root.seen = true;
 
-		//BFS traversal
-		while (!queue.isEmpty()) {
-			Vertex u = queue.remove();
+public class Merge {
 
-			for (Edge e : u.Adj) {
-				Vertex v = e.otherEnd(u);
+    
+    private Comparable[] array;
+    private Comparable[] mergeArr;
 
-				if (!v.seen) {
-					//distance of the node is the parents distance plus the selected edge's weight
-					v.distance = u.distance + e.Weight;
-					v.parent = u;
-					v.seen = true;
-					queue.add(v);
-				}
+    Comparator<Student> comp = new Comparator<Student>() {
+        @Override
+        public int compare(Student t1, Student t2) {
+            return t1.compareTo(t2);
+        }
+    };
 
-			}
+    
+    public Merge(Comparable[] array) {
+        this.array = array;
+        this.mergeArr = new Comparable[array.length];
 
-		}
+        chop(0, array.length - 1, comp);
+    }
 
-		printBFS(g);
+    
+    private void chop(int laag, int hoog, Comparator comp) {
+        if (laag < hoog) {
+            if (hoog - laag < 10) {
+                insertionSort(array, laag, hoog, comp);
+            }
+            int middel = laag + (hoog - laag) / 2;
 
-	}
-	/*
-	 * Procedure that prints the shortest path of all the nodes in the given graph g
-	 * 
-	 * @param g : The Directed graph for which the BFS shortest path has to be printed
-	 * 
-	 * pre-condition : Graph is directed
-	 * 
-	 */
-	public void printBFS(Graph g) {
-		
-		
-		
-		int total = 0;
+            chop(laag, middel, comp);
+            chop(middel + 1, hoog, comp);
+            mergeAll(laag, middel, hoog, comp);
+        }
 
-		for (Vertex u:g) {
+    }
 
-			Vertex current = u;
-		
-			while (current.parent != null) {
-				current = current.parent;
-			}
-			if (current.name != g.verts.get(1).name) {
-				u.distance = -1;
-			} else {
-				total += u.distance;
-			}
+    
+    private void mergeAll(int laag, int middel, int hoog, Comparator comp) {
+        for (int i = laag; i <= hoog; i++) {
+            mergeArr[i] = array[i];
+        }
+        int i = laag;
+        int j = middel + 1;
+        int k = laag;
+        while (i <= middel && j <= hoog) {
+            if (comp.compare(mergeArr[i], mergeArr[j]) < 0) {
+                array[k] = mergeArr[i];
+                i++;
+            } else {
+                array[k] = mergeArr[j];
+                j++;
+            }
+            k++;
+        }
 
-		}
-		System.out.print("BFS "+" " + total);
-		
-		System.out.println();
-		if (g.verts.size() <= 101) {
-			for (Vertex u : g) {
-				
-				String shortPath = u.distance != -1 ? String.valueOf(u.distance) : "INF";
-				String parent = u.parent == null ? "-" : u.parent.toString();
-				System.out.print(u + " " + shortPath + " " + parent);
-				System.out.println();
-			}
-		}
-	}
+        while (i <= middel) {
+            array[k] = mergeArr[i];
+            k++;
+            i++;
+        }
+    }
 
-	}
+    
+    private void insertionSort(Comparable[] a, int laag, int hoog, Comparator comp) {
+        for (int i = laag; i < hoog; i++) {
+            for (int j = i; j > laag && isLager(a[j], a[j - 1], comp); j--) {
+                isHoger(a, j, j - 1, comp);
+            }
+        }
+    }
+
+    
+    private void isHoger(Comparable[] a, int i, int j, Comparator comp) {
+        Comparable temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+
+    
+    private boolean isLager(Comparable a, Comparable b, Comparator comp) {
+        return a.compareTo(b) < 0;
+    }
+}

@@ -1,52 +1,78 @@
-package com.Stack;
+package topologicalsort;
+import java.util.*;
 
-import java.util.Stack;
+public class TopologicalSort {
 
-public class TowerOfHanoi {
 	public static void main(String[] args) {
-		Stack<Integer> src = new Stack<Integer>();
-		Stack<Integer> aux = new Stack<Integer>();
-		Stack<Integer> dest = new Stack<Integer>();
-		src.push(3);src.push(2);src.push(1);
-		Tower(src,aux,dest);
-		for(int i=0;i<=dest.size()+1;i++){
-			System.out.println("dest : "+dest.pop());
-		}
+		String s = "std, ieee, des_system_lib, dw01, dw02, dw03, dw04, dw05,"
+				+ "dw06, dw07, dware, gtech, ramlib, std_cell_lib, synopsys";
+
+        Graph g = new Graph(s, new int[][]{
+            {2, 0}, {2, 14}, {2, 13}, {2, 4}, {2, 3}, {2, 12}, {2, 1},
+            {3, 1}, {3, 10}, {3, 11},
+            {4, 1}, {4, 10},
+            {5, 0}, {5, 14}, {5, 10}, {5, 4}, {5, 3}, {5, 1}, {5, 11},
+            {6, 1}, {6, 3}, {6, 10}, {6, 11},
+            {7, 1}, {7, 10},
+            {8, 1}, {8, 10},
+            {9, 1}, {9, 10},
+            {10, 1},
+            {11, 1},
+            {12, 0}, {12, 1},
+            {13, 1}
+        });
+
+		System.out.println("Topologically sorted order: ");
+		System.out.println(g.topoSort());
+	}
+}
+
+class Graph {
+	String[] vertices;
+	int[][] adjacency;
+	int numVertices;
+
+	public Graph(String s, int[][] edges) {
+		vertices = s.split(",");
+		numVertices = vertices.length;
+		adjacency = new int[numVertices][numVertices];
+
+		for (int[] edge : edges)
+			adjacency[edge[0]][edge[1]] = 1;
 	}
 
-	private static void Tower(Stack<Integer> src, Stack<Integer> aux,
-			Stack<Integer> dest) {
-		int ops = (int) (Math.pow(2, 3)-1);
-		for(int i=1 ; i<=ops ; i++){
-			//System.out.println("i%3 == "+(i%3));
-			if(i%3==1){
-				move(src,dest);
-			}else if(i%3==2){
-				move(src,aux);
-			}else if(i%3==0){
-				move(aux,dest);
+	List<String> topoSort() {
+		List<String> result = new ArrayList<>();
+		List<Integer> todo = new LinkedList<>();
+
+		for (int i = 0; i < numVertices; i++)
+			todo.add(i);
+
+		try {
+			outer:
+			while (!todo.isEmpty()) {
+				for (Integer r : todo) {
+					if (!hasDependency(r, todo)) {
+						todo.remove(r);
+						result.add(vertices[r]);
+						 
+						continue outer;
+					}
+				}
+				throw new Exception("Graph has cycles");
 			}
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
 		}
+		return result;
 	}
 
-	private static void move(Stack<Integer> src, Stack<Integer> dest) {
-		// TODO Auto-generated method stub
-		int data;
-		if(src.size()==0 && dest.size()>0){			
-			data = dest.pop();
-			src.push(data);
-		}else if(dest.size()==0 && src.size()>0){
-			data = src.pop();
-			dest.push(data);
-		}else if(src.peek() > dest.peek()){
-			data = dest.pop();
-			src.push(data);
-		}else if(dest.peek() > src.peek()){
-			data = src.pop();
-			dest.push(data);
-		}else{
-			System.out.println("failed");
+	boolean hasDependency(Integer r, List<Integer> todo) {
+		for (Integer c : todo) {
+			if (adjacency[r][c] > 0)
+				return true;
 		}
+		return false;
 	}
-
 }

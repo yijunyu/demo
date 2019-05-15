@@ -1,41 +1,62 @@
-package graph;
-
-public class DFS {
-
-    public static void main(String[] args) {
-        Graph_AdjacencyList graph = new Graph_AdjacencyList(4);
-
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 0);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 3);
-
-        dfs(graph, 2, 4);
-    }
-
-    private static void dfs(Graph_AdjacencyList graph, int start, int noOfNodes) {
-
-        boolean[] visited = new boolean[noOfNodes];
-
-        dfsRecursive(graph, start, noOfNodes, visited);
-    }
-
-    private static void dfsRecursive(Graph_AdjacencyList graph, int start, int noOfNodes, boolean[] visited) {
-
-    	// Mark visited
-        visited[start] = true;
-
-        System.out.println(start + " ");
-
-        // Recurse all the vertices adjacent to this vertex
-        for (int v : graph.getAdjacencyList()[start]) {
-            if ( !visited[v] ) {
-                dfsRecursive(graph, v, noOfNodes, visited);
-            }
-        }
-    }
 
 
+
+
+package sortingPackage;
+
+
+import java.util.Random;
+
+public class FunWithSorting
+{
+	public static void print (int [] n)
+	
+	{
+		for ( int i = 0; i < n.length; i++ )
+			System.out.print( n[i] + " " );
+		System.out.println( );
+		
+	}
+	
+	public static void sort( int [] numbers, int array_Size )
+	
+	{
+		int i, j, temp;
+		int counter = 0;
+		
+		for ( i = (array_Size - 1); i >= 0; i-- )
+		{
+			for ( j = 1; j <= i; j++ )
+			{
+				if ( numbers[j-1] > numbers[j] )
+				{
+					temp = numbers[j-1];
+					numbers[j-1] = numbers[j];
+					numbers[j] = temp;
+					counter++;
+					
+				}
+				
+			}
+			
+		}
+		System.out.println(counter);
+	}
+	
+	public static void main( String [] args )
+	{
+		int [] numArray = new int [ 100 ];
+		Random rand = new Random( );
+		
+		for ( int i = 0; i < numArray.length; i++ )
+		{
+			numArray[i] = rand.nextInt( 1000 ) + 1;
+		}
+		
+		print (numArray);
+		sort(numArray, numArray.length);
+		print (numArray);
+		
+	}
+	
 }

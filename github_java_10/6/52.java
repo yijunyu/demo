@@ -1,73 +1,46 @@
-/**
- * Created by maggie on 6/18/16.
- */
-public class Sort_MergeSort {
-    public int[] mergeSort(int[] num){
-        if(num.length == 0 || num.length == 1) return num;
-        int left = 0;
-        int right = num.length-1;
-        mergeSortHelper(num, left, right);
-        System.out.print( "[");
-        for(int i =0; i< num.length; i++){
-           System.out.print(num[i] + ",");
+package sort;
+
+
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class RadixSort implements Solution {
+    @Override
+    public int[] sort(int[] num) {
+        
+        int max = num[0], count = 0;
+        for (int i = 1; i < num.length; i++) {
+            if (num[i] > max)
+                max = num[i];
         }
-        System.out.print( "]");
+
+        for (; max > 0; max /= 10)
+            count++;
+
+        radixSort(num, count);
         return num;
     }
 
-    // divided array and sorted array
-    public void mergeSortHelper(int[] num, int left, int right){
-        if(left < right){
-            int middle = left + (right - left)/2;
-            mergeSortHelper(num, left, middle);
-            mergeSortHelper(num, middle+1, right);
-            merge(num,left,middle,right);
-        }
-    }
+    private void radixSort(int[] num, int count) {
+        Queue<Integer>[] bucket = new Queue[10];
+        for (int i = 0; i < 10; i++)
+            bucket[i] = new LinkedList<Integer>();
 
-    // this method is aiming at sort two sorted list into on list
-    public void merge(int[] num, int left, int middle, int right){
-        int[] tmp = new int[right+1 - left];
-
-        int j = middle+1;
-        int i = left;
-        int k = 0;
-        while(i<= middle && j<= right){
-            if(num[i] < num[j]){
-                tmp[k] = num[i];
-                i++;
-
-            }else{
-                tmp[k] = num[j];
-                j++;
+        for (int i = 0; i < count; i++) {
+            for (int j = 0; j < num.length; j++) {  
+                int key = num[j] % (int) Math.pow(10, i + 1) / (int) Math.pow(10, i);
+                bucket[key].add(num[j]);
             }
 
-            k++;
-        }
-        while(k < tmp.length){
-            if(i <= middle){
-                tmp[k] = num[i];
-                i++;
+            int index = 0;
+            for (int k = 0; k < 10; k++) {  
+                if (bucket[k].size() == 0)
+                    continue;
 
+                while (!bucket[k].isEmpty())
+                    num[index++] = bucket[k].poll();
             }
-            if(j<= right){
-                tmp[k] = num[j];
-                j++;
-            }
-            k++;
         }
-
-        for(int e = 0; e< tmp.length; e++){
-            num[left+e] = tmp[e];
-        }
-    }
-
-
-    public static void main(String[] args){
-        //int[] arr = new int[]{2,2,3,1,6,7,5,6,7,4,8};
-        int[] arr = new int[]{2,3,1,3,8,4};
-        Sort_MergeSort t = new Sort_MergeSort();
-        //t.merge(arr,0,1,3);
-        t.mergeSort(arr);
     }
 }

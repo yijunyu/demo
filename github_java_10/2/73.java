@@ -1,156 +1,106 @@
-package com.example.searchtree;
-
-import com.example.tree.BinaryTree;
+package com.java.se7.data.structures.algos.sorting;
 
 
-/**
- * Created by debasishc on 1/11/16.
- */
-public class AVLTree<E extends Comparable<E>> extends BinarySearchTree<E>{
-    public static class Node<E extends Comparable<E>> extends BinaryTree.Node{
-        protected int height = 0;
-        public Node(BinaryTree.Node parent,
-                    BinaryTree containerTree, E value) {
-            super(parent, containerTree, value);
-        }
+import com.java.se7.data.structures.queue.LinkedQueue;
+import com.java.se7.data.structures.queue.Queue;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+class MergeSort {
+
+  
+  
+  public static <K> void merge(K[] S1, K[] S2, K[] S, Comparator<K> comp) {
+    int i = 0, j = 0;
+    while (i + j < S.length) {
+      if (j == S2.length || (i < S1.length && comp.compare(S1[i], S2[j]) < 0))
+        S[i+j] = S1[i++];                     
+      else
+        S[i+j] = S2[j++];                     
     }
+  }
 
-    @Override
-    protected BinaryTree.Node<E> newNode(
-            BinaryTree.Node<E> parent, BinaryTree<E> containerTree,
-            E value) {
-        return new Node(parent, containerTree, value);
+  
+  public static <K> void mergeSort(K[] S, Comparator<K> comp) {
+    int n = S.length;
+    if (n < 2) return;                        
+    
+    int mid = n/2;
+    K[] S1 = Arrays.copyOfRange(S, 0, mid);   
+    K[] S2 = Arrays.copyOfRange(S, mid, n);   
+    
+    mergeSort(S1, comp);                      
+    mergeSort(S2, comp);                      
+    
+    merge(S1, S2, S, comp);               
+  }
+
+  
+  
+  public static <K> void merge(Queue<K> S1, Queue<K> S2, Queue<K> S,
+                               Comparator<K> comp) {
+    while (!S1.isEmpty() && !S2.isEmpty()) {
+      if (comp.compare(S1.first(), S2.first()) < 0)
+        S.enqueue(S1.dequeue());           
+      else
+        S.enqueue(S2.dequeue());           
     }
+    while (!S1.isEmpty())
+      S.enqueue(S1.dequeue());             
+    while (!S2.isEmpty())
+      S.enqueue(S2.dequeue());             
+  }
 
-    @Override
-    protected void rotate(BinaryTree.Node<E> node, boolean left) {
-        Node<E> n = (Node<E>) node;
-        Node<E> child;
-        if(left){
-            child = (Node<E>) n.getRight();
-        }else{
-            child = (Node<E>) n.getLeft();
-        }
-        super.rotate(node, left);
-        if(node!=null){
-            nullSafeComputeHeight(n);
-        }
-        if(child!=null){
-            nullSafeComputeHeight(child);
-        }
+  
+  public static <K> void mergeSort(Queue<K> S, Comparator<K> comp) {
+    int n = S.size();
+    if (n < 2) return;                     
+    
+    Queue<K> S1 = new LinkedQueue<>();     
+    Queue<K> S2 = new LinkedQueue<>();
+    while (S1.size() < n/2)
+      S1.enqueue(S.dequeue());             
+    while (!S.isEmpty())
+      S2.enqueue(S.dequeue());             
+    
+    mergeSort(S1, comp);                   
+    mergeSort(S2, comp);                   
+    
+    merge(S1, S2, S, comp);                
+  }
+
+  
+  
+  public static <K> void merge(K[] in, K[] out, Comparator<K> comp,
+                                                       int start, int inc) {
+    int end1 = Math.min(start + inc, in.length);      
+    int end2 = Math.min(start + 2 * inc, in.length);  
+    int x=start;                                      
+    int y=start+inc;                                  
+    int z=start;                                      
+    while (x < end1 && y < end2)
+      if (comp.compare(in[x], in[y]) < 0)
+        out[z++] = in[x++];                           
+      else
+        out[z++] = in[y++];                           
+    if (x < end1) System.arraycopy(in, x, out, z, end1 - x);       
+    else if (y < end2) System.arraycopy(in, y, out, z, end2 - y);  
+  }
+
+  @SuppressWarnings({"unchecked"})
+  
+  public static <K> void mergeSortBottomUp(K[] orig, Comparator<K> comp) {
+    int n = orig.length;
+    K[] src = orig;                                   
+    K[] dest = (K[]) new Object[n];                   
+    K[] temp;                                         
+    for (int i=1; i < n; i *= 2) {                    
+      for (int j=0; j < n; j += 2*i)                  
+        merge(src, dest, comp, j, i);
+      temp = src; src = dest; dest = temp;      
     }
-
-    protected void rebalance(Node<E> node){
-        if(node==null){
-            return;
-        }
-        nullSafeComputeHeight(node);
-        int leftHeight = nullSafeHeight((Node<E>) node.getLeft());
-        int rightHeight = nullSafeHeight((Node<E>) node.getRight());
-        switch (leftHeight-rightHeight){
-            case -1:
-            case 0:
-            case 1:
-                rebalance((Node<E>) node.getParent());
-                break;
-            case 2:
-                int childLeftHeight = nullSafeHeight(
-                        (Node<E>) node.getLeft().getLeft());
-                int childRightHeight = nullSafeHeight(
-                        (Node<E>) node.getLeft().getRight());
-                if(childRightHeight > childLeftHeight){
-                    rotate(node.getLeft(), true);
-                }
-                Node<E> oldParent = (Node<E>) node.getParent();
-                rotate(node, false);
-                rebalance(oldParent);
-                break;
-            case -2:
-                childLeftHeight = nullSafeHeight(
-                        (Node<E>) node.getRight().getLeft());
-                childRightHeight = nullSafeHeight(
-                        (Node<E>) node.getRight().getRight());
-                if(childLeftHeight > childRightHeight){
-                    rotate(node.getRight(), false);
-                }
-                oldParent = (Node<E>) node.getParent();
-                rotate(node, true);
-                rebalance(oldParent);
-                break;
-        }
-    }
-
-    @Override
-    public BinaryTree.Node<E> insertValue(E value) {
-        Node<E> node = (Node<E>) super.insertValue(value);
-        if(node!=null)
-            rebalance(node);
-        return node;
-    }
-
-    @Override
-    public BinaryTree.Node<E> deleteValue(E value) {
-        Node<E> node = (Node<E>) super.deleteValue(value);
-        if(node==null){
-            return null;
-        }
-        Node<E> parentNode = (Node<E>) node.getParent();
-        rebalance(parentNode);
-        return node;
-    }
-
-    private int nullSafeHeight(Node<E> node){
-        if(node==null){
-            return 0;
-        }else{
-            return node.height;
-        }
-    }
-
-    private void nullSafeComputeHeight(Node<E> node){
-        Node<E> left = (Node<E>) node.getLeft();
-        Node<E> right = (Node<E>) node.getRight();
-        int leftHeight = left==null? 0 : left.height;
-        int rightHeight = right==null? 0 :right.height;
-        node.height =  Math.max(leftHeight, rightHeight)+1;
-    }
-
-    protected void testSanity(Node<E> n){
-        if(n==null){
-            return;
-        }else{
-            int leftHeight = nullSafeHeight((Node<E>) n.getLeft());
-            int rightHeight = nullSafeHeight((Node<E>) n.getRight());
-            if(n.height != Math.max(leftHeight, rightHeight)+1){
-                throw new IllegalStateException("Height computation don't match");
-            }else if(Math.abs(leftHeight-rightHeight)>1){
-                throw new IllegalStateException("Unbalanced tree");
-            }
-            testSanity((Node<E>) n.getLeft());
-            testSanity((Node<E>) n.getRight());
-        }
-    }
-
-    public static void main(String [] args){
-        AVLTree<Integer> tree = new AVLTree<>();
-        for(int i=0;i<20;i++){
-            tree.insertValue(i);
-        }
-        //tree.displayText();
-        tree.insertValue(9);
-        //tree.displayText();
-        tree.deleteValue(12);
-        tree.deleteValue(14);
-        tree.displayText();
-        //testSanity((Node<Integer>) tree.getRoot());
-        for(int i=0;i<2000000;i++){
-            tree.insertValue((int)(Math.random()*10000000));
-        }
-        //tree.testSanity((Node<Integer>) tree.getRoot());
-        for(int i=0;i<2000;i++){
-            tree.deleteValue((int)(Math.random()*10000000));
-        }
-
-        tree.testSanity((Node<Integer>) tree.getRoot());
-    }
+    if (orig != src)
+      System.arraycopy(src, 0, orig, 0, n);           
+  }
 }

@@ -1,34 +1,40 @@
-package de.masternoir.sort_algorithms.bubblesort;
 
-import functions.functions;
+package bucketsort;
 
-public class bubblesort {
-	
-	/** Vergleichsbasierter Sortieralgorithmus.
-	 * Sortiert in-place, stabil und hat eine O(n^2)-Laufzeit im 
-	 * Durchschnitt.
-	 * Wird in der Praxis kaum eingesetzt, da schlechte Performance.
-	 */
-	public static double[] bubblesort(double[] list, boolean ascending){
-		
-		double[] sortedList = list;
-		double switchPos;
-		boolean cont;
-		
-		do{
-			cont  = false;
-			for (int i = 0; i < sortedList.length-1; i++){
-				if (!functions.compare(sortedList[i], sortedList[i+1], ascending)){
-					cont = true;
-					switchPos = sortedList[i];
-					sortedList[i] = sortedList[i+1];
-					sortedList[i+1] = switchPos;
-				}
-			}
-		}while(cont);
-		
-		return sortedList;
-	}
-	
-	
+import java.util.Arrays;
+import javax.swing.JOptionPane;
+
+public class Bucketsort {
+    
+    public static void main(String[] args) {
+      int [] numbers= {3,1,4,1,5,9,2,6,5,3,5,8,9,7,9,3}; 
+      bucketSort(numbers);
+      System.out.println("bucketsort:  " + Arrays.toString(numbers));
+   }
+    
+    public static void bucketSort(int[] arr) {
+      int maxValue = arr[0];
+      for (int i = 1; i < arr.length; i++) {
+          if (arr[i] > maxValue) {
+              maxValue = arr[i];
+          }
+      }
+  
+      int [] bucket=new int[maxValue+1];
+ 
+      for (int i=0; i<bucket.length; i++) {
+         bucket[i]=0;
+      }
+ 
+      for (int i=0; i<arr.length; i++) {
+         bucket[arr[i]]++;
+      }
+ 
+      int pos=0;
+      for (int i=0; i<bucket.length; i++) {
+         for (int j=0; j<bucket[i]; j++) {
+            arr[pos++]=i;
+         }
+      }
+   }
 }

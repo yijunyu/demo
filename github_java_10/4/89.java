@@ -1,72 +1,75 @@
-package ue4;
+package Interview;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Arrays;
+import java.util.Random;
 
-public class Insertionsort {
 
-	public static void main(String[] args) {
-		
-		ArrayList<Integer> n = new ArrayList<>();
-		int max = 100000;
-		int min = 1;
-		
-//		for (int i = 0; i < 300; i++) {
-//			n.add(i*100000000);
-//			int[] conv = convertIntegers(n);
-//			long timeStart = System.nanoTime();
-//			insertionSort(conv);
-//			long timeStop = System.nanoTime();
-//			System.out.println(conv.length+";"+(timeStop - timeStart));
-//		}
+public class Heapsort {
+    private int[] x;
+    private int[] origin;
 
-		long midel = 0;
-		long lg = 0;
-		
-		for (int k = 0; k < 100; k++) {
-			for (int i = 0; i < 500; i++) {
-				int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
-				n.add(randomNum);
-			}
-			int[] conv = convertIntegers(n);
-			long timeStart = System.nanoTime();
-			insertionSort(conv);
-			long timeStop = System.nanoTime();
-			midel += (timeStop - timeStart);
-			lg += conv.length;
-			System.out.println(lg/100 + ";" + midel/100);
-			
-		}
-	}
-	
-	public static void insertionSort(int[] A)
-	{
-	    int i, key;
-	    for (int j=1; j<A.length; j++){
-	        key=A[j];
-	        i=j-1;
-	        while (i>=0 && A[i]>key){
-	            A[i+1]=A[i];
-	            i--;
-	        }
-	        A[i+1]=key;
-	    }
-	    
-	    
-	}
-	
-	public static int[] convertIntegers(List<Integer> integers)
-	{
-	    int[] ret = new int[integers.size()];
-	    Iterator<Integer> iterator = integers.iterator();
-	    for (int i = 0; i < ret.length; i++)
-	    {
-	        ret[i] = iterator.next().intValue();
-	    }
-	    return ret;
-	}
+    public Heapsort(int[] arr) {
+        
+        origin = arr;
+        x = new int[arr.length + 1];
+        for (int i = 0; i < arr.length; i ++) {
+            x[i + 1] = arr[i];
+        }
+    }
 
+    public void sort() {
+        for (int i = 1; i < x.length; i ++) {
+            siftup(i);
+        }
+        for (int i = x.length - 1; i >= 2; i --) {
+            swap(1, i);
+            siftdown(i - 1);
+        }
+        for (int i = 0; i < origin.length; i ++) {
+            origin[i] = x[i + 1];
+        }
+    }
+
+    private void swap(int i, int j) {
+        int t = x[i];
+        x[i] = x[j];
+        x[j] = t;
+    }
+
+    private void siftup(int n) {
+        int i = n;
+        while (true) {
+            if (i == 1) break;
+            int p = i / 2;
+            if (x[p] >= x[i]) break;
+            swap(p, i);
+            i = p;
+        }
+    }
+    private void siftdown(int n) {
+        int i = 1;
+        while (true) {
+            int c = 2 * i;
+            if (c > n) break;
+            if (c + 1 <= n) {
+                if (x[c + 1] > x[c]) {
+                    c ++;
+                }
+            }
+            if (x[i] >= x[c]) break;
+            swap(c, i);
+            i = c;
+        }
+    }
+
+    public static void main(String[] args) {
+        Random rand = new Random();
+        int[] arr = new int[10];
+        for (int i = 0; i < arr.length; i ++) {
+            arr[i] = rand.nextInt(500);
+        }
+        System.out.println(Arrays.toString(arr));
+        new Heapsort(arr).sort();
+        System.out.println(Arrays.toString(arr));
+    }
 }
-

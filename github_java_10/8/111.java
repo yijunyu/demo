@@ -1,48 +1,84 @@
-package matching;
-import java.lang.*;
 
-import java.io.*;
-public class editdistance 
-{
-    public static int min(int a,int b)
-    {
-        return a<b?a:b; 
-    }     
-    
-    
-    public static int min3(int a,int b,int c)
-    {
-        return min(min(a,b),c);
-    }
-    
-    
-    public static int EditDistance( String X, String Y, int m, int n )
-    {
-    	
-/*    	for(int i=0;i<X.length();i++)
-    	{
-    		if(Y.charAt(i)=='-')
-    		{y[i]=(char) (Y.charAt(i)+Y.charAt(i+1)); i++;}
-    		else
-    			y[i]=Y.charAt(i);	
-    		System.out.print("Y"+y[i]);
+package dsaj.sorting;
 
-    	}
-    	for(int i=0;i<Y.length();i++)
-    	{
-    		if(Y.charAt(i)=='-')
-    		{y[i]=(char) (Y.charAt(i)+Y.charAt(i+1)); i++;}
-    		else
-    			y[i]=Y.charAt(i);	
-    		System.out.print("Y"+y[i]);
-    	}
-  */  	
-    	
-    	if(Y.contains(X))
-    return 0;
-    	else
-    return 1;
-    }
- 
+import java.util.Comparator;
+
+import net.datastructures.LinkedQueue;
+import net.datastructures.Queue;
+
+class QuickSort {
+
+	
+	
+	public static <K> void quickSort(Queue<K> S, Comparator<K> comp) {
+		int n = S.size();
+		if (n < 2)
+			return; 
+		
+		K pivot = S.first(); 
+		Queue<K> L = new LinkedQueue<>();
+		Queue<K> E = new LinkedQueue<>();
+		Queue<K> G = new LinkedQueue<>();
+		while (!S.isEmpty()) { 
+			K element = S.dequeue();
+			int c = comp.compare(element, pivot);
+			if (c < 0) 
+				L.enqueue(element);
+			else if (c == 0) 
+				E.enqueue(element);
+			else 
+				G.enqueue(element);
+		}
+		
+		quickSort(L, comp); 
+		quickSort(G, comp); 
+		
+		while (!L.isEmpty())
+			S.enqueue(L.dequeue());
+		while (!E.isEmpty())
+			S.enqueue(E.dequeue());
+		while (!G.isEmpty())
+			S.enqueue(G.dequeue());
+	}
+
+	
+	
+	public static <K> void quickSortInPlace(K[] S, Comparator<K> comp) {
+		quickSortInPlace(S, comp, 0, S.length - 1);
+	}
+
+	
+	private static <K> void quickSortInPlace(K[] S, Comparator<K> comp, int a, int b) {
+		if (a >= b)
+			return; 
+		int left = a;
+		int right = b - 1;
+		K pivot = S[b];
+		K temp; 
+		while (left <= right) {
+			
+			
+			while (left <= right && comp.compare(S[left], pivot) < 0)
+				left++;
+			
+			
+			while (left <= right && comp.compare(S[right], pivot) > 0)
+				right--;
+			if (left <= right) { 
+				
+				temp = S[left];
+				S[left] = S[right];
+				S[right] = temp;
+				left++;
+				right--;
+			}
+		}
+		
+		temp = S[left];
+		S[left] = S[b];
+		S[b] = temp;
+		
+		quickSortInPlace(S, comp, a, left - 1);
+		quickSortInPlace(S, comp, left + 1, b);
+	}
 }
-

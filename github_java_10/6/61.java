@@ -1,71 +1,54 @@
-// jiadai Merge Sort c++, beats 53%
-//shaun merge sort java, beats 70%, use merge2, beats 75.60
-// merge2 is from merge two sorted array
 
-public class Solution {
-    /*
-     * @param A: an integer array
-     * @return: 
-     */
-    public void sortIntegers2(int [] A) {
-        int n = A.length;
-        if (n > 0) {
-            int [] temp = new int[n];
-            mergeSort(A, 0, n - 1, temp);
-        }
-    }
-    
+ 
+import java.util.Scanner;
+ 
 
-    private void mergeSort(int [] A, int start, int end, int [] temp) {
-        //divide and conquer
-        if (start < end) {
-            int mid = start + (end - start) / 2;
-            mergeSort(A, start, mid, temp);
-            mergeSort(A, mid + 1, end, temp);
-            
-            //merge two sorted array
-            merge2(A, start, mid, end, temp);
-        }
-    }
+public class RadixSort 
+{
     
-    private void merge2(int [] A, int start, int mid, int end, int [] temp) {
-        int i = mid, j = end, k = end; //from tail
-        //merge two sorted array start to mid, mid+1 to end into temp
-        while (i >= start && j >= mid+1) {
-            if (A[i] > A[j]) {
-                temp[k--] = A[i--];
-            }
-            else {
-                temp[k--] = A[j--];
-            }
+    public static void sort( int[] a)
+    {
+        int i, m = a[0], exp = 1, n = a.length;
+        int[] b = new int[10];
+        for (i = 1; i < n; i++)
+            if (a[i] > m)
+                m = a[i];
+        while (m / exp > 0)
+        {
+            int[] bucket = new int[10];
+ 
+            for (i = 0; i < n; i++)
+                bucket[(a[i] / exp) % 10]++;
+            for (i = 1; i < 10; i++)
+                bucket[i] += bucket[i - 1];
+            for (i = n - 1; i >= 0; i--)
+                b[--bucket[(a[i] / exp) % 10]] = a[i];
+            for (i = 0; i < n; i++)
+                a[i] = b[i];
+            exp *= 10;        
         }
-        //exit i < start or j < mid+1
-        if (i < start) {
-            while (j >= mid+1) temp[k--] = A[j--];
-        }
-        if (j < mid+1) {
-            while (i >= start) temp[k--] = A[i--];
-        }
-        
-        for (int p = start; p <= end; ++p) {
-            A[p] = temp[p];
-        }
-    }
+    }    
     
-    private void merge(int [] A, int start, int mid, int end, int [] temp) {
-        int i = start, j = mid + 1, k = start;
-        //merge two sorted array start to mid, mid+1 to end into temp
-        while (i <= mid || j <= end) {
-            if (j > end || (i <= mid && A[i] <= A[j])) {
-                temp[k++] = A[i++];
-            }
-            else {
-                temp[k++] = A[j++];
-            }
-        }
+    public static void main(String[] args) 
+    {
+        Scanner scan = new Scanner( System.in );        
+        System.out.println("Radix Sort Test\n");
+        int n, i;
         
-        for (int p = start; p <= end; ++p) {
-            A[p] = temp[p];
-        }
-    }
-};
+        System.out.println("Enter number of integer elements");
+        n = scan.nextInt();
+        
+        int arr[] = new int[ n ];
+        
+        System.out.println("\nEnter "+ n +" integer elements");
+        for (i = 0; i < n; i++)
+            arr[i] = scan.nextInt();
+        
+        sort(arr);
+        
+        System.out.println("\nElements after sorting ");        
+        for (i = 0; i < n; i++)
+            System.out.print(arr[i]+" ");            
+        System.out.println();                     
+    }    
+}

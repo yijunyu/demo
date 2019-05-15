@@ -1,40 +1,43 @@
-// Main.java
-// Rye Programming Language
-// Jacob Paisley
-//TODO: Implement lambda expressions
-//TODO: Implement functions as a first class object
-//TODO: Implement AVL-tree dictionary
-//TODO: Implement the Sieve of Eratosthenes
-public class Main {
-    protected static int lineNumber = 1;
-    protected static void runFile(String filename) {
-        Parser p = new Parser(filename);
-        try {
-          Lexeme lexTree = p.parseRecursive();
-          Evaluator e = new Evaluator(lexTree);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
+package src;
 
-    private static void printFile(String filename) {
-      FileScanner f = new FileScanner(filename);
-    }
+public class Mergesort implements Sortable {
+	
 
-    public static void main(String[] args) {
-        String filename = args[0];
-        String flag = "-x";
-
-        if(args.length == 2){
-          flag = args[1];
-        }
-
-        if(flag.contains("r")){
-          printFile(filename);
-        }
-
-        if(flag.contains("x")){
-          runFile(filename);
-        }
-    }
+	@Override
+	public void sort(int[] array) {
+		int[] tmp = new int[array.length];
+		mergeSort(array, tmp,  0,  array.length - 1);
+	}
+	
+	private static void mergeSort(int[] array, int[] tmp, int left, int right) {
+		if(left < right) {
+			int center = (left + right) / 2;
+			mergeSort(array, tmp, left, center);
+			mergeSort(array, tmp, center + 1, right);
+			merge(array, tmp, left, center + 1, right);
+		}
+		
+	}
+	
+	private static void merge(int[] array, int[] tmp, int left, int right, int rightEnd) {
+		int leftEnd = right - 1;
+		int k = left;
+		int num = rightEnd - left + 1;
+		
+		while(left <= leftEnd && right <= rightEnd)
+			if(array[left] <= (array[right]))
+				tmp[k++] = array[left++];
+			else
+				tmp[k++] = array[right++];
+		
+		while(left <= leftEnd)
+			tmp[k++] = array[left++];
+		
+		while(right <= rightEnd)
+			tmp[k++] = array[right++];
+			
+		for(int i = 0; i < num; i++, rightEnd--)
+			array[rightEnd] = tmp[rightEnd];
+	}
 }
+

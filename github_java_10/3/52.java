@@ -1,62 +1,173 @@
-package com.jagerdown.towerofhanoi.impl;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 
-import com.jagerdown.towerofhanoi.TowerOfHanoi;
+package cpw.mods.fml.common.toposort;
 
-/**
- * 
- * Tower of Hanoi Rules: 
- * 1: Only one disk can be moved at a time. 
- * 2: Each move consists of taking the upper disk from one of the stacks and placing it on top of
- * another stack i.e. a disk can only be moved if it is the uppermost disk on a stack. 
- * 3: No disk may be placed on top of a smaller disk.
- * 
- * @author jagerdown
- *
- */
-public class TowerOfHanoiSolution implements TowerOfHanoi {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-  //private static final Logger LOG = LoggerFactory.getLogger(TowerOfHanoi.class);
 
-  private Tower towerOfHanoi;
-  private int numberOfDisks;
-  private int numberOfRods;
+public class TopologicalSort
+{
+    public static class DirectedGraph<T> implements Iterable<T>
+    {
+        private final Map<T, SortedSet<T>> graph = new HashMap<T, SortedSet<T>>();
+        private List<T> orderedNodes = new ArrayList<T>();
 
-  public TowerOfHanoiSolution(int numberOfDisks, int numberOfRods) {
-    this.towerOfHanoi = null;
-    this.numberOfDisks = numberOfDisks;
-    this.numberOfRods = numberOfRods;
+        public boolean addNode(T node)
+        {
+            
+            if (graph.containsKey(node))
+            {
+                return false;
+            }
 
-    // Probably shouln't be in the constructor
-    this.initiateTowerOfHanoi();
-  }
+            orderedNodes.add(node);
+            graph.put(node, new TreeSet<T>(new Comparator<T>()
+            {
+                public int compare(T o1, T o2) {
+                    return orderedNodes.indexOf(o1)-orderedNodes.indexOf(o2);
+                }
+            }));
+            return true;
+        }
 
-  public Tower getTower() {
-    return this.towerOfHanoi;
-  }
+        public void addEdge(T from, T to)
+        {
+            if (!(graph.containsKey(from) && graph.containsKey(to)))
+            {
+                throw new NoSuchElementException("Missing nodes from graph");
+            }
 
-  public void initiateTowerOfHanoi() {
-    this.towerOfHanoi = new Tower(numberOfDisks, numberOfRods);
-  }
+            graph.get(from).add(to);
+        }
 
-  /**
-   * Recursively go through all (but the last disk )the disks in rod0, and move them the rod1, so that we can can move the last disk on rod0 to rod2, and the
-   * recurse again to move the remaining disks from rod1 to rod2.
-   * 
-   * @param depth
-   * @param rod0
-   * @param rod1
-   * @param rod2
-   */
-  public void recursiveSolveTowerOfHanoi(int depth, int rod0, int rod1, int rod2) {
-    if (depth == 1) {
-      towerOfHanoi.getTower().get(rod2).push(towerOfHanoi.getTower().get(rod0).pop());
-      return;
+        public void removeEdge(T from, T to)
+        {
+            if (!(graph.containsKey(from) && graph.containsKey(to)))
+            {
+                throw new NoSuchElementException("Missing nodes from graph");
+            }
+
+            graph.get(from).remove(to);
+        }
+
+        public boolean edgeExists(T from, T to)
+        {
+            if (!(graph.containsKey(from) && graph.containsKey(to)))
+            {
+                throw new NoSuchElementException("Missing nodes from graph");
+            }
+
+            return graph.get(from).contains(to);
+        }
+
+        public Set<T> edgesFrom(T from)
+        {
+            if (!graph.containsKey(from))
+            {
+                throw new NoSuchElementException("Missing node from graph");
+            }
+
+            return Collections.unmodifiableSortedSet(graph.get(from));
+        }
+        @Override
+        public Iterator<T> iterator()
+        {
+            return orderedNodes.iterator();
+        }
+
+        public int size()
+        {
+            return graph.size();
+        }
+
+        public boolean isEmpty()
+        {
+            return graph.isEmpty();
+        }
+
+        @Override
+        public String toString()
+        {
+            return graph.toString();
+        }
     }
-    recursiveSolveTowerOfHanoi(depth - 1, rod0, rod2, rod1);
-    towerOfHanoi.getTower().get(rod2).push(towerOfHanoi.getTower().get(rod0).pop());
-    recursiveSolveTowerOfHanoi(depth - 1, rod1, rod0, rod2);
-  }
+
+    
+    public static <T> List<T> topologicalSort(DirectedGraph<T> graph)
+    {
+        DirectedGraph<T> rGraph = reverse(graph);
+        List<T> sortedResult = new ArrayList<T>();
+        Set<T> visitedNodes = new HashSet<T>();
+        
+        Set<T> expandedNodes = new HashSet<T>();
+
+        for (T node : rGraph)
+        {
+            explore(node, rGraph, sortedResult, visitedNodes, expandedNodes);
+        }
+
+        return sortedResult;
+    }
+
+    public static <T> DirectedGraph<T> reverse(DirectedGraph<T> graph)
+    {
+        DirectedGraph<T> result = new DirectedGraph<T>();
+
+        for (T node : graph)
+        {
+            result.addNode(node);
+        }
+
+        for (T from : graph)
+        {
+            for (T to : graph.edgesFrom(from))
+            {
+                result.addEdge(to, from);
+            }
+        }
+
+        return result;
+    }
+
+    public static <T> void explore(T node, DirectedGraph<T> graph, List<T> sortedResult, Set<T> visitedNodes, Set<T> expandedNodes)
+    {
+        
+        if (visitedNodes.contains(node))
+        {
+            
+            if (expandedNodes.contains(node))
+            {
+                
+                return;
+            }
+
+            System.out.printf("%s: %s\n%s\n%s\n", node, sortedResult, visitedNodes, expandedNodes);
+            throw new ModSortingException("There was a cycle detected in the input graph, sorting is not possible", node, visitedNodes);
+        }
+
+        
+        visitedNodes.add(node);
+
+        
+        for (T inbound : graph.edgesFrom(node))
+        {
+            explore(inbound, graph, sortedResult, visitedNodes, expandedNodes);
+        }
+
+        
+        sortedResult.add(node);
+        
+        expandedNodes.add(node);
+    }
 }

@@ -1,77 +1,59 @@
-public class Mergesort
-{
-  private static double[] temp;
+package codemonk.sorting.tle;
 
-  // Sorts a[0], ..., a[size-1] in ascending order
-  //   using the Mergesort algorithm.
-  public static void sort(double[] a)
-  {
-    int n = a.length;
-    temp = new double[n];
-    recursiveSort(a, 0, n-1);
-  }
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-  // Recursive helper method: sorts a[from], ..., a[to]
-  private static void recursiveSort(double[] a, int from, int to)
-  {
-    if (to - from < 2)       // Base case: 1 or 2 elements
-    {
-      if (to > from && a[to] < a[from])
-      {
-        double aTemp = a[to];  // swap a[to] and a[from]
-        a[to] = a[from];
-        a[from] = aTemp;
-      }
-    }
-    else                     // Recursive case
-    {
-      int middle = (from + to) / 2;
-      recursiveSort(a, from, middle);
-      recursiveSort(a, middle + 1, to);
-      merge(a, from, middle, to);
-    }
-  }
 
-  // Merges a[from] ... a[middle] and a[middle+1] ... a[to]
-  //   into one sorted array a[from] ... a[to]
-  private static void merge(double[] a, int from, int middle, int to)
-  {
-    int i = from, j = middle + 1, k = from;
+public class MonkAndSortingAlgorithm {
 
-    // While both arrays have elements left unprocessed:
-    while (i <= middle && j <= to)
-    {
-      if (a[i] < a[j])
-      {
-        temp[k] = a[i];   // Or simply temp[k] = a[i++];
-        i++;
-      }
-      else
-      {
-        temp[k] = a[j];
-        j++;
-      }
-      k++;
+    private static int maxLen;
+    private static int chunkIndex;
+    private static Map<String, String> actualInputMap;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        String[] input = br.readLine().split(" ");
+        actualInputMap = new HashMap<>();
+        maxLen = Integer.MIN_VALUE;
+        for (int i = 0; i < N; i++) {
+            maxLen = Math.max(maxLen, input[i].length());
+        }
+        char[] suffix = new char[maxLen];
+        Arrays.fill(suffix, '0');
+        String leftPad = new String(suffix);
+        for (int i = 0; i < N; i++) {
+            String number = leftPad.substring(input[i].length()) + input[i];
+            actualInputMap.put(number, input[i]);
+            input[i] = number;
+        }
+        chunkIndex = 1;
+        StringBuilder output = new StringBuilder();
+        while (5 * (chunkIndex - 1) < maxLen) {
+            Arrays.sort(input, (o1, o2) -> {
+                int start = Math.max(0, maxLen - 5 * chunkIndex);
+                int end = Math.max(0, maxLen - 5 * (chunkIndex - 1));
+                String sub1 = o1.substring(start, end);
+                String sub2 = o2.substring(start, end);
+                return Integer.compare(Integer.parseInt(sub1), Integer.parseInt(sub2));
+            });
+            chunkIndex++;
+            output.append(printArray(input));
+            output.append("\n");
+        }
+        System.out.println(output);
+
     }
 
-    // Copy the tail of the first half, if any, into temp:
-    while (i <= middle)
-    {
-      temp[k] = a[i];     // Or simply temp[k++] = a[i++]
-      i++;
-      k++;
+    private static String printArray(String[] arr) {
+        StringBuilder result = new StringBuilder();
+        for (String item : arr) {
+            result.append(actualInputMap.get(item) + " ");
+        }
+        return result.toString().trim();
     }
 
-    // Copy the tail of the second half, if any, into temp:
-    while (j <= to)
-    {
-      temp[k] = a[j];     // Or simply temp[k++] = a[j++]
-      j++;
-      k++;
-    }
-
-    // Copy temp back into a
-    for (k = from; k <= to; k++)
-      a[k] = temp[k];
-  }
 }

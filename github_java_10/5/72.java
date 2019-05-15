@@ -1,30 +1,33 @@
-package leetcode.algorithm;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-import leetcode.util.*;
-
-import java.util.Stack;
-
-public class DepthFirstSearch {
-    public static void main(String[] args) {
-
-    }
-
-    public void depthFirstSearch(TreeNode root) {
-        Stack<TreeNode> stack = new Stack<>();
-
-        TreeNode point = root;
-        stack.add(point);
-
-        while (!stack.isEmpty()) {
-            point = stack.pop();
-
-            //注意！！！先压的是右子树！！
-            if (point.getRight() != null) {
-                stack.add(point.getRight());
-            }
-            if (point.getLeft() != null) {
-                stack.add(point.getLeft());
-            }
-        }
-    }
+class Solution
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner sc = new Scanner(System.in);
+		int size = sc.nextInt();
+		int a[] = new int[size];
+		for(int i = 0; i < size; i++)
+			a[i] = sc.nextInt();
+		Solution solution = new Solution();
+		solution.bubbleSort(a);
+		for(int i = 0 ;i < a.length; i++)
+		System.out.print(a[i] + " ");
+	}
+	
+	public void bubbleSort(int a[]){
+		for(int i = 0; i < a.length - 1; i++){
+			for(int j =  0; j< a.length - i -1; j++){
+				if(a[j] > a[j + 1]){
+					int temp = a[j];
+					a[j] = a[j+1];
+					a[j+1] = temp;
+				}
+			}
+		}
+		
+	}
 }
+

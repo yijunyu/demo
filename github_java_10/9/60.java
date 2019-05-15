@@ -1,48 +1,70 @@
-import java.util.Arrays;
+package Sorting;
+
+import java.util.Iterator;
 
 
-public class Sort_HeapSort {
-	public static void main(String[] args) throws Exception {
-		//MinHeap for sorting Sort
-		HeapSort hs = new HeapSort();
-		hs.sort(new int[]{3,4,0,1,2});
-	}
-}
 
-class HeapSort {
-	
-	public void sort(int arr[]){
-		
-		int len= arr.length;
-		for(int i=len/2-1;i>=0;i--){
-			minHeapify(arr,len,i);
-		}
-		System.out.println(Arrays.toString(arr));
-		for(int i=0,lastInd=len-1;i<len;i++,lastInd--){
-			System.out.println(arr[0]);
-			int currentElement = arr[0];
-			arr[0]=arr[lastInd];
-			arr[lastInd]=currentElement;
-			minHeapify(arr, lastInd, 0);
-		}
-	}
 
-	private void minHeapify(int[] arr, int len, int i) {
-		int min=i;
-		int left=2*i+1;
-		int right=2*i+2;
-		
-		if(left<len&&arr[left]<arr[min])
-			min=left;
-		if(right<len&&arr[right]<arr[min])
-			min=right;
-		if(min!=i){
-			//System.out.println(Arrays.toString(arr)+" -before");
-			int swap = arr[min];
-			arr[min]=arr[i];
-			arr[i]=swap;
-			//System.out.println(Arrays.toString(arr)+" -after");
-			minHeapify(arr, len, min);
-		}
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public class SelectionSort_JAVA {
+    public static void sorting (int[] list, int n) {
+        int i, j, least, temp;
+        
+        for (i = 0; i < n - 1; i++) {
+            least = i;
+            
+            
+            
+            for (j = i + 1; j < n; j++) {
+                if (list[j] < list[least]) {
+                    least = j;
+                }
+            }
+            
+            
+            if (i != least) {
+                temp = list[i];
+                list[i] = list[least];
+                list[least] = temp;
+            }
+        }
+    }
+    
+    public static void main(String[] args) {
+        int test[]  = {10, 9, 2, 7, 80};
+        
+        sorting(test, test.length);
+        
+        for (int data : test) {
+            System.out.print(data + ", ");
+        }
+    }
 }

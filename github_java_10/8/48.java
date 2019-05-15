@@ -1,40 +1,34 @@
-package stringex;
+package chapter2_Sort;
 
+import java.util.concurrent.Exchanger;
 
-public class Editdistance {
+public class Sort_QuickSort extends Sort_Base {
 
-    public static void main(String a[]){
-       String C = "kitten";
-        String D = "sitting";
-        System.out.printf("len"+findDistance(C.toCharArray(),C.length(),D.toCharArray(),D.length()));
+    public static void Sort(Comparable[] a) {
+        SortDivide(a, 0, a.length - 1);
+    }
+
+    private static void SortDivide(Comparable[] a, int lo, int hi) {
+        if (lo >= hi) return;
+
+        int pivot = Partation(a, lo, hi);
+        SortDivide(a, lo, pivot - 1);
+        SortDivide(a, pivot + 1, hi);
 
     }
-     public static int findDistance(char[] X,int m,char[] Y,int n){
-         int[][] T = new int[m][n];
-         for (int i = 1; i < m; i++)
-             T[i][0] = i;
-         for (int j = 1; j < n; j++)
-             T[0][j] = j;
 
-         int cost =0;
-            for (int i=1;i<m;i++){
-                for (int j=1;j<n;j++){
-                    if(X[i-1]==Y[j-1]){
-                        cost=0;
-                    } else {
-                        cost=1;
-
-                    }
-
-                 T[i][j]=Math.min(Math.min(T[i - 1][j] + 1,        // deletion
-                            T[i][j - 1] + 1),        // insertion
-                            T[i - 1][j - 1] + cost);
-                }
-
-            }
-
-         return T[m-1][n-1];
-     }
-
+    private static int Partation(Comparable[] a, int lo, int hi) {
+        int i = lo, j = hi + 1;
+        Comparable pivot = a[lo];
+        while (true) {
+            while (Less(a[++i], pivot)) if (i >= hi) break;
+            while (Less(pivot, a[--j])) if (j <= lo) break;
+            if (i >= j)
+                break;
+            Exchange(a, i, j);
+        }
+        Exchange(a, j, lo);
+        return j;
+    }
 
 }

@@ -1,102 +1,61 @@
-// File: AVL.java
-
-import java.io.*;
 import java.util.*;
 
-/** 
- *
- * Provides command line access to the AVL tree class
- *
- * This file has been provided to make it easier to test your AVL tree code.
- *
- * DO NOT SUBMIT THIS FILE
- **/
+public class Example {
 
-public class AVL{
+   public static void main(String[] args) {
 
-  public static void main(String[] args) throws IOException{
+      int[] list = {97,75,53,31,19,86,64,42,20};
+      System.out.println("Unsorted: " + Arrays.toString(list));
 
-    int key, value;
-    AVLTree tree = new AVLTree();
-    System.out.println("Commands: (d)elete; (i)nsert; (p)rint; (q)uit; (s)earch"); 
-    
-   BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-   System.out.print("Command: ");
+      mergeSort(list);
+      System.out.println("Sorted  :  " + Arrays.toString(list));
+   }
 
-   String command = in.readLine();
-   char c = command.charAt(0);  
+   public static void mergeSort(int[] arr) {
+      if (arr.length > 1) {
+         int[] left = leftHalf(arr);
+         int[] right = rightHalf(arr);
 
-   /**
-    * The AVL commands are executed based on the user's choice.
-    * If a key or value is needed, the user is prompted to enter
-    * the additional information.
-    * We use try and catch to handle exceptions. 
-    **/
+         mergeSort(left);
+         mergeSort(right);
 
-   while (! command.equals("q")){
-      switch(c){
-
-      //Prints the AVL tree
-      case 'p':
-      case 'P':
-               System.out.println();
-        tree.print();
-               break;
-
-      //Inserts a new node into the AVL tree        
-      case 'i': 
-      case 'I':
-        System.out.print("Key to insert: ");
-        try {
-      key = Integer.parseInt(in.readLine());
-                    System.out.print("Value to insert: ");
-      value = Integer.parseInt(in.readLine());
-      tree.insert(key,value);
-                }
- 	 catch(NumberFormatException f) {
-                   System.out.println("Invalid number.");
-                }
-                break;
-
-      //Searches for a node in the AVL tree, and outputs the node 
-      case 's':
-      case 'S':
-  System.out.print("Key to find: ");
-  try {
-             key = Integer.parseInt(in.readLine());
-          System.out.println();
-              tree.search(key);
-  }
-  catch(NoSuchElementException e) {
-             System.out.println("Node not found");
-          }
-  catch(NumberFormatException f) {
-     System.out.println("Invalid number.");
-                }
-          break;
-   
-      //Deletes a node from the AVL tree 
-      case 'd':
-      case 'D':
-  System.out.print("Key to delete: ");
-  try {
-                    key = Integer.parseInt(in.readLine());
-            tree.deleteKey(key);
+         mergeArrays(arr, left, right);
       }
-      catch(NoSuchElementException e) {
-         System.out.println("Node not found");
+   }
+
+   public static int[] leftHalf(int[] arr) {
+      int size = arr.length / 2;
+      int[] left = new int[size];
+      for (int i = 0; i < size; i++) {
+         left[i] = arr[i];
       }
-                catch(NumberFormatException f) {
-                    System.out.println("Invalid number.");
-                }
-      break;
-      } //switch
+      return left;
+   }
 
-      System.out.print("Command: ");
-      command = in.readLine();
-      c=command.charAt(0);
-    } //while
-  } // main(String[])
+   public static int[] rightHalf(int[] arr) {
+      int size1 = arr.length / 2;
+      int size2 = arr.length - size1;
+      int[] right = new int[size2];
+      for (int i = 0; i < size2; i++) {
+         right[i] = arr[i + size1];
+      }
+      return right;
+   }
 
-} // AVL 
+   public static void mergeArrays(int[] arr, int[] left, int[] right) {
+      int i1 = 0;
+      int i2 = 0;
+
+      for (int i = 0; i < arr.length; i++) {
+         if (i2 >= right.length || (i1 < left.length && left[i1] <= right[i2])) {
+            arr[i] = left[i1];
+            i1++;
+         } else {
+            arr[i] = right[i2];
+            i2++;
+         }
+      }
+   }
+}
+
 

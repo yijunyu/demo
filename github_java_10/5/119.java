@@ -1,76 +1,32 @@
-/*************************************************************************
- *  Compilation:  javac DepthFirstSearch.java
- *  Execution:    java DepthFirstSearch filename.txt s
- *  Dependencies: Graph.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/41undirected/tinyG.txt
- *
- *  Run depth first search on an undirected graph.
- *  Runs in O(E + V) time.
- *
- *  % java DepthFirstSearch tinyG.txt 0
- *  0 1 2 3 4 5 6 
- *  NOT connected
- *
- *  % java DepthFirstSearch tinyG.txt 9
- *  9 10 11 12 
- *  NOT connected
- *
- *************************************************************************/
+import java.util.Arrays;
 
-package edu.princeton.cs.algorithms;
+public class Example {
 
-import edu.princeton.cs.algorithms.stdlib.In;
-import edu.princeton.cs.algorithms.stdlib.StdOut;
+   public static void main(String[] args) {
+      int[] arr = {9,7,5,3,1,0,2,4,6,8};
+      System.out.println("Unsorted: " + Arrays.toString(arr));
+      bubbleSort(arr);
+      System.out.println("Sorted  : " + Arrays.toString(arr));
+   }
 
-public class DepthFirstSearch {
-    private final boolean[] marked; // marked[v] = is there an s-v path?
-    private int count; // number of vertices connected to s
-
-    // single source
-    public DepthFirstSearch(Graph G, int s) {
-        marked = new boolean[G.V()];
-        dfs(G, s);
-    }
-
-    // depth first search from v
-    private void dfs(Graph G, int v) {
-        count++;
-        marked[v] = true;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                dfs(G, w);
+   public static void bubbleSort(int arr[]) {
+      int len = arr.length;
+      for (int i = len; i >= 0; i--) {
+         for (int j = 0; j < len - 1; j++) {
+            int k = j + 1;
+            if (arr[j] > arr[k]) {
+               swapNumbers(j, k, arr);
             }
-        }
-    }
+         }
+      }
+   }
 
-    // is there an s-v path?
-    public boolean marked(int v) {
-        return marked[v];
-    }
-
-    // number of vertices connected to s
-    public int count() {
-        return count;
-    }
-
-    // test client
-    public static void main(String[] args) {
-        In in = new In(args[0]);
-        Graph G = new Graph(in);
-        int s = Integer.parseInt(args[1]);
-        DepthFirstSearch search = new DepthFirstSearch(G, s);
-        for (int v = 0; v < G.V(); v++) {
-            if (search.marked(v)) {
-                StdOut.print(v + " ");
-            }
-        }
-
-        StdOut.println();
-        if (search.count() != G.V()) {
-            StdOut.println("NOT connected");
-        } else {
-            StdOut.println("connected");
-        }
-    }
-
+   private static void swapNumbers(int i, int j, int[] arr) {
+      int temp;
+      temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+   }
 }
+
+

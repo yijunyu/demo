@@ -1,32 +1,54 @@
-import java.util.Arrays;
-
-public class Example {
-
-   public static void main(String[] args) {
-      int[] arr = {9,7,5,3,1,0,2,4,6,8};
-      System.out.println("Unsorted: " + Arrays.toString(arr));
-      bubbleSort(arr);
-      System.out.println("Sorted  : " + Arrays.toString(arr));
-   }
-
-   public static void bubbleSort(int arr[]) {
-      int len = arr.length;
-      for (int i = len; i >= 0; i--) {
-         for (int j = 0; j < len - 1; j++) {
-            int k = j + 1;
-            if (arr[j] > arr[k]) {
-               swapNumbers(j, k, arr);
-            }
-         }
-      }
-   }
-
-   private static void swapNumbers(int i, int j, int[] arr) {
-      int temp;
-      temp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = temp;
-   }
+import java.util.Random;
+ 
+public class bucketsort
+{
+    static int[] sort(int[] sequence, int maxValue) 
+    {
+        
+        int[] Bucket = new int[maxValue + 1];
+        int[] sorted_sequence = new int[sequence.length];
+ 
+        for (int i = 0; i < sequence.length; i++)
+            Bucket[sequence[i]]++;
+ 
+        int outPos = 0;
+        for (int i = 0; i < Bucket.length; i++)
+            for (int j = 0; j < Bucket[i]; j++)
+                sorted_sequence[outPos++] = i;
+ 
+        return sorted_sequence;
+    }
+ 
+    static void printSequence(int[] sorted_sequence) 
+    {
+        for (int i = 0; i < sorted_sequence.length; i++)
+            System.out.print(sorted_sequence[i] + " ");
+    }
+ 
+    static int maxValue(int[] sequence) 
+    {
+        int maxValue = 0;
+        for (int i = 0; i < sequence.length; i++)
+            if (sequence[i] > maxValue)
+                maxValue = sequence[i];
+        return maxValue;
+    }
+ 
+    public static void main(String args[]) 
+    {
+        Random random = new Random(); 
+        int N = 20;
+        int[] sequence = new int[N];
+ 
+        for (int i = 0; i < N; i++)
+            sequence[i] = Math.abs(random.nextInt(100));
+ 
+        int maxValue = maxValue(sequence);
+ 
+        System.out.println("\nSequenza originale: ");
+        printSequence(sequence);
+ 
+        System.out.println("\nSequenza ordinata: ");
+        printSequence(sort(sequence, maxValue));
+    }
 }
-
-

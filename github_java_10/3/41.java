@@ -1,106 +1,122 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
+package hw4;
 
-import Model.HanoiTower;
-import Model.IllegalStateException;
+import java.util.ArrayList;
 
-public class gameHanoiTower {
+public class TopologicalSort {
+	
+	Frame instance;
+	ArrayList<Pair> pairs;
+	ArrayList<Frame> precedenceList;
+	ArrayList<Frame> frames;
 
-	public static void main(String[] args) throws IllegalStateException {
-		
-		int size = 0;
-		int depart = 0;
-		int arrival = 0;
-		
-		Scanner scanner = new Scanner(System.in);
-		
-		System.out.println("Welcome to Tower of Hanoi (by Debesson & Isautier).");
-		System.out.println("First, give me the size of your towers. It must be a positive integer striclty greater than 2.");
-		try {
-			size = scanner.nextInt();
-		}
-		catch(InputMismatchException ex)
-		{
-			scanner.next();
-		}
-		
-		while(size < 3)
-		{
-			System.out.println("Well, your input does not match the criterias. Try again.");
-			try {
-				size = scanner.nextInt();
-			}
-			catch (InputMismatchException ex){
-				scanner.next();
-			}
-		}
-		
-		System.out.println("Thank you.");
-		HanoiTower hanoi = new HanoiTower(size);
-		
-		//AutoSolve mode
-		hanoi.print();
-		System.out.println();
-		hanoi.autoMove(size, 0, 2, 1);
-		
-		//Play mode
-		/*System.out.println("Let's start! Your goal is to move all disks, one by one from Tower n�1 to Tower n�3. One disk cannot be placed on a smaller one.");
-		while(!hanoi.checkVictory())
-		{
-			depart = 0;
-			arrival = 0;
-			
-			hanoi.print();
-			System.out.println("Where do you want to pick a disk? (1, 2, 3)");
-			try {
-				depart = scanner.nextInt();
-			}
-			catch (InputMismatchException ex){
-				scanner.next();
-			}
-			
-			while(depart > 3 || depart < 1)
-			{
-				System.out.println("Well, your input does not match the criterias. Try again.");
-				try {
-					depart = scanner.nextInt();
-				}
-				catch (InputMismatchException ex){
-					scanner.next();
-				}
-			}
-			
-			System.out.println("Great! Where do you want to place it? (1, 2, 3) It must be a different than the one you just picked.");
-			
-			try {
-				arrival = scanner.nextInt();
-			}
-			catch (InputMismatchException ex){
-				scanner.next();
-			}
-			
-			while(arrival > 3 || arrival < 1 || depart == arrival)
-			{
-				System.out.println("Well, your input does not match the criterias. Try again.");
-				try {
-					arrival = scanner.nextInt();
-				}
-				catch (InputMismatchException ex){
-					scanner.next();
-				}
-			}
-			try
-			{
-				hanoi.move(depart-1, arrival-1);
-				System.out.println("Great! Keep doing this!");
-			}
-			catch(IllegalStateException ise)
-			{
-				System.out.println(ise.getMessage());
-			}
-		}
-		hanoi.print();
-		System.out.println("You beat the game! Congrats!");*/
+	public TopologicalSort(Frame instance){
+		this.instance = instance;
+		pairs = new ArrayList<Pair>();
+		precedenceList = new ArrayList<Frame>();
+		frames = new ArrayList<Frame>();
+		createPairs(instance);
+
+		sort();
+
+		System.out.println("Done");
 	}
 
+	private void createPairs(Frame target)
+	{
+		frames.add(target);
+		Frame current = target;
+
+
+		if(current.getLeftSuperclass() != null && current.getRightSuperclass() != null)
+		{
+			pairs.add(new Pair(current, current.getLeftSuperclass()));
+			pairs.add(new Pair(current.getLeftSuperclass(), current.getRightSuperclass()));
+			createPairs(current.getLeftSuperclass());
+			createPairs(current.getRightSuperclass());
+		}
+		else
+			if(current.getLeftSuperclass() != null && current.getRightSuperclass() == null)
+			{
+				pairs.add(new Pair(current, current.getLeftSuperclass()));
+				createPairs(current.getLeftSuperclass());
+			}
+			else
+				if(target.getLeftSuperclass() == null && target.getRightSuperclass() == null)
+					pairs.add(new Pair(current));
+	}
+
+	private void sort()
+	{
+		while(!pairs.isEmpty())
+		{
+			ArrayList<String> exposed = getExposedClasses();
+
+			if(exposed.size() == 1)
+			{
+				precedenceList.add(find(exposed.get(0)));
+				removeFromPairs(exposed.get(0));
+			}
+			else
+				if(exposed.size() == 2)
+				{
+					int i = 1;
+					boolean cont = true;
+					String current = precedenceList.get(precedenceList.size() - i).getName();
+					while( cont)
+					{
+						if(precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(0)) && !precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(1)) )
+						{
+							precedenceList.add(find(exposed.get(0)));
+							removeFromPairs(exposed.get(0));
+							cont = false;
+						}
+						else
+							if(!precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(0)) && precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(1)) )
+							{
+								precedenceList.add(find(exposed.get(1)));
+								removeFromPairs(exposed.get(1));
+								cont = false;
+							}
+							else
+								i++;
+					}
+				}
+		}
+
+
+	}
+
+	private Frame find(String name)
+	{
+		for(Frame F : frames)
+			if(F.getName().compareTo(name) == 0)
+				return F;
+		return null;
+	}
+
+	private void removeFromPairs(String name)
+	{
+		for( int i = 0; i < pairs.size(); i++)
+		{
+			if(pairs.get(i).getFirst().compareTo(name) == 0)
+				pairs.remove(i--);
+		}
+	}
+
+	private ArrayList<String> getExposedClasses()
+	{
+		ArrayList<String> exposed = new ArrayList<String>();
+		for (Pair P1 : pairs)
+		{
+			boolean add = true;
+			for( Pair P2 : pairs)
+			{
+				if(P2.getSecond() != null && P1.getFirst().compareTo(P2.getSecond()) == 0)
+					add = false;
+			}
+			if(add && !exposed.contains(P1.getFirst()))
+				exposed.add(P1.getFirst());
+		}
+		return exposed;
+	}
 }

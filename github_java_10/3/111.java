@@ -1,54 +1,53 @@
-package com.puzzle;
+package codejam.utils.datastructures;
 
-/**
- * Created by mbiswas on 6/7/18.
- */
+import codejam.utils.datastructures.graph.DepthFirstOrder;
+import codejam.utils.datastructures.graph.Digraph;
+import codejam.utils.datastructures.graph.DirectedCycle;
+import codejam.utils.datastructures.graph.EdgeWeightedDigraph;
+import codejam.utils.datastructures.graph.EdgeWeightedDirectedCycle;
 
-//Problem: https://www.geeksforgeeks.org/c-program-for-tower-of-hanoi/
-public class TowerOfHanoi {
 
 
-    public static void towerofhanoi(int n, char from_road, char to_rod , char help_rod){
-        if(n == 1){
-            System.out.println("Move Disc 1 from " +from_road +" to " +to_rod);
-            return;
+public class Topological {
+    private Iterable<Integer> order;    
+
+    
+    public Topological(Digraph G) {
+        DirectedCycle finder = new DirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
         }
-
-        towerofhanoi(n-1 , from_road, help_rod , to_rod);
-        System.out.println("Move Disc " +n +" from " +from_road +" to " +to_rod);
-        towerofhanoi(n-1, help_rod, to_rod, from_road);
     }
 
-    //best : https://www.youtube.com/watch?v=5_6nsViVM00
-
-    public static void towerofhanoi2(int n, char start, char middle , char end){
-        if(n == 1){
-            System.out.println(start +"->" +end);
-            return;
+    
+    public Topological(EdgeWeightedDigraph G) {
+        EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
         }
-
-        towerofhanoi2(n-1,start,end,middle);
-        towerofhanoi2(1, start,middle,end);
-        towerofhanoi2(n-1, middle,start,end);
     }
 
-
-    public static void towerofhanoi3(int n, char start, char middle , char end){
-        if(n == 1){
-            System.out.println("Moving ring 1 "+start +"->" +end);
-            return;
-        }
-
-        towerofhanoi3(n-1,start,end,middle);
-        System.out.println("Moving ring " +n +" "+start +"->" +end);
-        towerofhanoi3(n-1, middle,start,end);
+    
+    public Iterable<Integer> order() {
+        return order;
     }
+
+    
+    public boolean hasOrder() {
+        return order != null;
+    }
+
 
     public static void main(String[] args) {
-
-        towerofhanoi(3, 'A', 'C', 'B');
-        towerofhanoi2(3, 'A', 'B', 'C');
-        towerofhanoi3(3, 'A', 'B', 'C');
-
+        String filename  = args[0];
+        String delimiter = args[1];
+        SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
+        Topological topological = new Topological(sg.G());
+        for (int v : topological.order()) {
+            StdOut.println(sg.name(v));
+        }
     }
+
 }

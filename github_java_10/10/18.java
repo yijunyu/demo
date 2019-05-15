@@ -1,34 +1,23 @@
-package Sorting;
 
-public class BubbleSort_JAVA {
-    public static void main(String[] args) {
-        int[] test = {7, 4, 5, 1, 3};
-        
-        System.out.println("소팅 전");
-        for (int data : test) {
-            System.out.print(data + ", "); 
+
+
+
+
+
+
+
+    public static void sort(int[] a, int maxVal){
+        int [] bucket=new int[maxVal+1];
+        for (int i=0; i<bucket.length; i++){
+            bucket[i]=0;
         }
-        
-        bubbleSort(test, test.length);
-        
-        System.out.println("\n소팅 후");
-        for (int data : test) {
-            System.out.print(data + ", "); 
+        for (int i=0; i<a.length; i++){
+            bucket[a[i]]++;
         }
-    }
-    
-    public static void bubbleSort(int[] list, int n) {
-        int i, j, tmp;
-        
-        for (i = n - 1; i > 0; i--) {
-            System.out.print("gg");
-            for (j = 0; j < i; j++) {
-                if (list[j] > list[j + 1]) {
-                    tmp = list[j];
-                    list[j] = list[j + 1];
-                    list[j + 1] = tmp;
-                }
+        int outPos=0;
+        for (int i=0; i<bucket.length; i++){
+            for (int j=0; j<bucket[i]; j++){
+                a[outPos++]=i;
             }
         }
     }
-}

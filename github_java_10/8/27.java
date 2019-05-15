@@ -1,40 +1,59 @@
-import java.util.Map;
-import java.util.HashMap;
+package Sorting;
 
-public class Levenshtein {
 
-public static void main(String[] args) {
+public class Quicksort  {
+    private int[] numbers;
+    private int number;
 
-	System.out.println("La distancia de edicion entre "+args[0]+" y "+args[1]+" es: "+ editDistance(args[0], args[1]));
-
-} 
-
-private static Map<Pair<String,String>,Integer> cache = new HashMap<Pair<String,String>,Integer>();
-
-public static int editDistance(String str1, String str2) {
-    if (str1==null || str2==null) throw new IllegalArgumentException("Cant compute edit distance on ull strings");
-    if (str1.length()==0) return str2.length();
-    if (str2.length()==0) return str1.length();
-    int res1 = memoEditDistance(str1.substring(1,str1.length()),str2.substring(1,str2.length()));     
-    int res2 = memoEditDistance(str1,str2.substring(1,str2.length()));     
-    int res3 = memoEditDistance(str1.substring(1,str1.length()),str2);     
-    return minimum(res1+(str1.charAt(0)==str2.charAt(0)?0:1), res2+1, res3+1);
-}
-
-public static int memoEditDistance(String str1, String str2) {
-    if (!cache.containsKey(new Pair<String,String>(str1,str2))) {
-        cache.put(new Pair<String,String>(str1,str2), new Integer(editDistance(str1, str2)));
-        System.out.print("Miss ");
+    public void sort(int[] values) {
+        
+        if (values ==null || values.length==0){
+            return;
+        }
+        this.numbers = values;
+        number = values.length;
+        quicksort(0, number - 1);
     }
-    return cache.get(new Pair<String,String>(str1,str2)).intValue();
-}
 
-private static int minimum(int a, int b, int c){
-		if (a<=b && a<=c)
-			return a;
-		if (b<=a && b<=c)
-			return b;
-		return c;
-}
+    private void quicksort(int low, int high) {
+        int i = low, j = high;
+        
+        int pivot = numbers[low + (high-low)/2];
 
+        
+        while (i <= j) {
+            
+            
+            while (numbers[i] < pivot) {
+                i++;
+            }
+            
+            
+            while (numbers[j] > pivot) {
+                j--;
+            }
+
+            
+            
+            
+            
+            
+            if (i <= j) {
+                exchange(i, j);
+                i++;
+                j--;
+            }
+        }
+        
+        if (low < j)
+            quicksort(low, j);
+        if (i < high)
+            quicksort(i, high);
+    }
+
+    private void exchange(int i, int j) {
+        int temp = numbers[i];
+        numbers[i] = numbers[j];
+        numbers[j] = temp;
+    }
 }

@@ -1,85 +1,37 @@
-package graphs;
-//A Java program to print topological sorting of a DAG
-import java.io.*;
-import java.util.*;
+import java.lang.Comparable;
 
-public class TopologicalSort 
-	{
-	    private int V;   // No. of vertices
-	    private LinkedList<Integer> adj[]; // Adjacency List
-	 
-	    //Constructor
-	    TopologicalSort(int v)
-	    {
-	        V = v;
-	        adj = new LinkedList[v];
-	        for (int i=0; i<v; ++i)
-	            adj[i] = new LinkedList();
-	    }
-	 
-	    // Function to add an edge into the graph
-	    void addEdge(int v,int w) { adj[v].add(w); }
-	 
-	    // A recursive function used by topologicalSort
-	    void topologicalSortUtil(int v, boolean visited[],
-	                             Stack stack)
-	    {
-	        // Mark the current node as visited.
-	        visited[v] = true;
-	        Integer i;
-	 
-	        // Recur for all the vertices adjacent to this
-	        // vertex
-	        Iterator<Integer> it = adj[v].iterator();
-	        while (it.hasNext())
-	        {
-	            i = it.next();
-	            if (!visited[i])
-	                topologicalSortUtil(i, visited, stack);
-	        }
-	 
-	        // Push current vertex to stack which stores result
-	        stack.push(new Integer(v));
-	    }
-	 
-	    // The function to do Topological Sort. It uses
-	    // recursive topologicalSortUtil()
-	    void topologicalSort()
-	    {
-	        Stack stack = new Stack();
-	 
-	        // Mark all the vertices as not visited
-	        boolean visited[] = new boolean[V];
-	        for (int i = 0; i < V; i++)
-	            visited[i] = false;
-	 
-	        // Call the recursive helper function to store
-	        // Topological Sort starting from all vertices
-	        // one by one
-	        for (int i = 0; i < V; i++)
-	            if (visited[i] == false)
-	                topologicalSortUtil(i, visited, stack);
-	 
-	        // Print contents of stack
-	        while (stack.empty()==false)
-	            System.out.print(stack.pop() + " ");
-	    }
-	 
-	    // Driver method
-	    public static void main(String args[])
-	    {
-	        // Create a graph given in the above diagram
-	    	TopologicalSort g = new TopologicalSort(6);
-	        g.addEdge(5, 2);
-	        g.addEdge(5, 0);
-	        g.addEdge(4, 0);
-	        g.addEdge(4, 1);
-	        g.addEdge(2, 3);
-	        g.addEdge(3, 1);
-	 
-	        System.out.println("Following is a Topological " +
-	                           "sort of the given graph");
-	        g.topologicalSort();
-	    }
-	}
-	// This code is contributed by Aakash Hasija
+
+public class Shell {
+    
+    public static void sort(Comparable[] a) {
+        int N = a.length;
+        
+        int h = 1;
+        while (h < N/3) {
+            h = 3*h + 1;
+        }
+        
+        while (h >= 1) {
+            for (int i = h; i < N; i++) {
+                for (int j = i; j >= h; j-= h) {
+                    if (less(a[j], a[j-h])) {
+                        exch(a, j, j-h);
+                    }
+                }
+            }
+            h = h / 3;
+        }
+    }
+    
+    
+    private static boolean less(Comparable p, Comparable q) {
+        return p.compareTo(q) < 0;
+    }
+    
+    
+    private static void exch(Comparable[] a, int i, int j) {
+        Comparable swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+}

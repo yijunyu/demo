@@ -1,97 +1,35 @@
-/* package whatever; // don't place package name! */
-
+/*
+The selection sort algorithm sorts an array by repeatedly finding the minimum element (considering ascending order) 
+from unsorted part and putting it at the beginning.Refer http://geeksquiz.com/selection-sort
+Time Complexity: O(n*n) as there are two nested loops.
+Auxiliary Space: O(1)
+The good thing about selection sort is it never makes more than O(n) swaps and can be useful when memory write is a costly operation.
+*/
 import java.util.*;
-import java.lang.*;
-import java.io.*;
 
-/* Name of the class has to be "Main" only if the class is public. */
-class Ideone
-{
-	void min_heapify(int []arr,int i,int n)
-	{
-		//System.out.println("for i= "+i);
-		while(2*i+1 <n)
-		{
-			int left=2*i+1;
-			int right=2*i+2;
-			int min;
+public class SelectionSort{
+	public static void main(String[] args) {
+		int[] arr = {64,25,12,22,11,45,32};
+		System.out.println("Before sorting array is: "+ Arrays.toString(arr));
+		selectionSort(arr,arr.length);
+		System.out.println("After sorting array is: "+ Arrays.toString(arr));
+	}
+
+	public static void selectionSort(int[] a,int n){
+		// One by one move boundary of unsorted subarray
+		for (int i=0;i<n-1;i++) {
 			
-					//System.out.println("left= "+left+" right= "+right);
-			//find max of both the child if exists
-			if(right<n && arr[right]<arr[left])
-			     min=right;
-			else //default if no right exists only left is max
-			    min=left;
-			    
-			if(arr[i]>arr[min]) 
-			   {
-			   	int temp=arr[i];
-			   	arr[i]=arr[min];
-			   	arr[min]=temp;
-			   	
-			   	i=min;
-			   }
-			 else
-			    break;
-			
-			
+			// Find the minimum element in unsorted array
+			int min = i;
+			for (int j=i+1;j<n;j++) {
+				if(a[j]<a[min])
+					min = j;
+			}
+
+			//swap the found minimum element with the element at current position
+			int temp = a[min];
+			a[min] = a[i];
+			a[i] = temp;
 		}
-		
-	}
-	void build_min_heap(int []arr,int n)
-	{
-		
-		for(int i=n/2-1;i>=0;i--)
-		   min_heapify(arr,i,n);
-		
-	}
-	void heap_sort(int []arr,int n)
-	{
-		build_min_heap(arr,n);
-		
-		System.out.println("after building heap");
-		for(int elem:arr)
-		System.out.print(elem+" ");
-		
-		   System.out.println();
-		   int temp_n=n-1;
-		for(int i=n-1;i>=0;i--)
-		{
-			//swap each time root to ith element and hence we get  max at root and last index will have that element
-			int temp=arr[0];
-			arr[0]=arr[i];
-			arr[i]=temp;
-		//	System.out.println("call for replace a[i]= "+arr[i]);
-			min_heapify(arr,0,temp_n);
-			temp_n--;
-			/*System.out.println("after swap of each");
-			for(int elem:arr)
-			System.out.print(elem+" ");
-			*/
-		}
-	}
-	public static void main (String[] args) throws java.lang.Exception
-	{
-	  Scanner sc=new Scanner(System.in);
-	  int n=sc.nextInt();
-	  int[]arr=new int[n];
-	  
-	  for(int i=0;i<n;i++)
-	     arr[i]=sc.nextInt();
-	   
-	   System.out.println("before sorting");
-	   for(int elem:arr)
-	      System.out.print(elem+" ");
-	      
-	      System.out.println();
-	      Ideone ob=new Ideone();
-	      
-	  ob.heap_sort(arr,n);   
-	  
-	   System.out.println("after sorting");
-	   for(int elem:arr)
-	      System.out.print(elem+" ");
-	      
-	      System.out.println();
 	}
 }

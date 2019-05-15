@@ -1,46 +1,64 @@
-package de.qaware.rat.common;
 
-/**
- * The {@class LevenshteinDistance} class computes the similiarty of two
- * strings.
- * 
- * @author Matthias
- *
- */
-public final class LevenshteinDistance {
-    private LevenshteinDistance() {
-    }
+public class Sort_QuickSort {
 
-    private static int minimum(int a, int b, int c) {
-        return Math.min(Math.min(a, b), c);
-    }
+    static int[] arr;
 
-    /**
-     * Compute the Levenshtein distance.
-     * 
-     * @param lhs
-     *            the left string to compare.
-     * @param rhs
-     *            the right string to compare.
-     * @return the Levenshtein distance value.
-     */
-    public static int computeLevenshteinDistance(CharSequence lhs, CharSequence rhs) {
-        int[][] distance = new int[lhs.length() + 1][rhs.length() + 1];
+    public static void main(String[] args){
 
-        for (int i = 0; i <= lhs.length(); i++) {
-            distance[i][0] = i;
-        }
-        for (int j = 1; j <= rhs.length(); j++) {
-            distance[0][j] = j;
+        arr = new int[50];
+        for(int i=0; i<50; i++){
+            arr[i] = (int)(Math.random()*100);
         }
 
-        for (int i = 1; i <= lhs.length(); i++) {
-            for (int j = 1; j <= rhs.length(); j++) {
-                distance[i][j] = minimum(distance[i - 1][j] + 1, distance[i][j - 1] + 1,
-                        distance[i - 1][j - 1] + ((lhs.charAt(i - 1) == rhs.charAt(j - 1)) ? 0 : 1));
+        for(int x: arr){
+            System.out.print(x+" ");
+        }
+        System.out.println();
+
+        quicksort(0, 49);
+
+        for(int x: arr){
+            System.out.print(x+" ");
+        }
+        System.out.println();
+    }
+
+    public static void quicksort(int left, int right){
+
+        if(right-left<=0){
+            return;
+        }else{
+            int partition = partition(left, right, arr[left]);
+            quicksort(left, partition-1);
+            quicksort(partition+1, right);
+        }
+
+    }
+
+    public static int partition(int left, int right, int pivot){
+
+        int leftMark = left;
+        int rightMark = right+1;
+
+        while(true){
+            while(leftMark<right && arr[++leftMark]<pivot){}
+            while(rightMark>left && arr[--rightMark]>pivot){}
+            if(leftMark>=rightMark){
+                break;
+            }else{
+                swap(leftMark, rightMark);
             }
         }
+        swap(rightMark,left);
+        return rightMark;
 
-        return distance[lhs.length()][rhs.length()];
     }
+
+    public static void swap(int a, int b){
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+
 }
+

@@ -1,62 +1,51 @@
-// Fun with sorting- Bubble Sort
-// Lab 10: CIS 1144
-// Author: Seth Miller
+package nl.hva.dmci.ict.se.datastructures.sortstudents.util;
 
-package sortingPackage;
+import nl.hva.dmci.ict.se.datastructures.sortstudents.KlasGenerator;
+import nl.hva.dmci.ict.se.datastructures.sortstudents.models.SortedLinkedList;
+import nl.hva.dmci.ict.se.datastructures.sortstudents.models.Student;
 
-// import random
-import java.util.Random;
+import java.util.Comparator;
+import java.util.List;
 
-public class FunWithSorting
-{
-	public static void print (int [] n)
-	// TASK: Displays an array
-	{
-		for ( int i = 0; i < n.length; i++ )
-			System.out.print( n[i] + " " );
-		System.out.println( );
-		
-	}// end of print method
-	
-	public static void sort( int [] numbers, int array_Size )
-	// TASK: Sort array numbers using bubble-sort algorithm
-	{
-		int i, j, temp;
-		int counter = 0;
-		
-		for ( i = (array_Size - 1); i >= 0; i-- )
-		{
-			for ( j = 1; j <= i; j++ )
-			{
-				if ( numbers[j-1] > numbers[j] )// Swap
-				{
-					temp = numbers[j-1];
-					numbers[j-1] = numbers[j];
-					numbers[j] = temp;
-					counter++;
-					
-				}// end of if statement
-				
-			}// end of for loop with "j"
-			
-		}// end of for loop with "i"
-		System.out.println(counter);
-	}// end of sort method (bubble-sort)
-	
-	public static void main( String [] args )
-	{
-		int [] numArray = new int [ 100 ];
-		Random rand = new Random( );
-		
-		for ( int i = 0; i < numArray.length; i++ )
-		{
-			numArray[i] = rand.nextInt( 1000 ) + 1;
-		}
-		
-		print (numArray);
-		sort(numArray, numArray.length);
-		print (numArray);
-		
-	}// end of main
-	
-}// end of FunWithSorting
+
+public class Bucketsort {
+
+    public static <T> SortedLinkedList<SortedLinkedList<Student>> sort(List<T> lijst, Comparator<SortedLinkedList<T>> bucketsComparator, Comparator<T> bucketComparator){
+        
+        String[] klasNamen = KlasGenerator.maakKlassen(lijst.size());
+        int klassenIndex = 0;
+
+        
+        for (T object : lijst) {
+            if (klassenIndex == klasNamen.length) {
+                klassenIndex = 0;
+            }
+            if (object instanceof Student){
+                Student student = (Student) object;
+                student.setKlas(klasNamen[klassenIndex]);
+            }
+            klassenIndex++;
+        }
+
+        
+        SortedLinkedList<SortedLinkedList<Student>> buckets = new SortedLinkedList(bucketsComparator);
+
+        
+        for (int i = 0; i < klasNamen.length; i++) {
+            SortedLinkedList<Student> bucket = new SortedLinkedList(bucketComparator);
+            for (T object : lijst) {
+                if (object instanceof Student){
+                    Student student = (Student) object;
+                    if (student.getKlas().equals(klasNamen[i])){
+                        bucket.add(student);
+                    }
+                }
+
+            }
+            buckets.add(bucket);
+        }
+
+        return buckets;
+    }
+    
+}

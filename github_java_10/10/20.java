@@ -1,42 +1,25 @@
-class Bubblesort {
-
-	int arr[];
-	int elem;
-	
-	Bubblesort(int e)
+import java.util.PriorityQueue;
+import java.util.ArrayList;
+class BucketSort
+{
+	public void bucketSort(double[] num)
 	{
-		int i = 0;
-		arr = new int[e];
-		elem = e;
-		for(i = 0; i < e; i++) {
-			arr[i] = int.random;
+		ArrayList<PriorityQueue<Double>> bucket = new ArrayList<PriorityQueue<Double>>(num.length);
+		for(int i=0;i<num.length;i++)
+		{
+			bucket.add(new PriorityQueue<Double>());
+		}
+		for(int i=0;i<num.length;i++)
+		{
+			int index = (int)(num[i]*num.length)%num.length;
+			bucket.get(index).add(num[i]);
 		}
 	}
-	
-	sort() :Void
+
+	public static void main(String args[])
 	{
-  		int top = elem - 1;
-  		while(top > 0) {
-    		int i = 0;
-			while(i < top) {
-	  			if(arr[i] > arr[i + 1]) {
-					int t = arr[i];
-	      			arr[i] = arr[i + 1];
-		  			arr[i + 1] = t;
-				}
-	  			i = i + 1;
-			}
-			top = top - 1;
-  		}
+		double [] arr = {0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434};
+		BucketSort b = new BucketSort();
+		b.bucketSort(arr);
 	}
-
-  public static void main(String argv[])
-  {
-    int i, loops = (new Integer(argv[0])).intValue();
-
-    for(; loops > 0; loops--) {
-      Bubblesort bs = new Bubblesort(1000);
-	  bs.sort();
-    }
-  }
 }

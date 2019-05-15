@@ -1,112 +1,53 @@
-package com.rajan.crackingcoding.ch3;
+package com.algorithmhelper.graphs.pathfinding;
 
-class Node{
-	int data;
-	int min;
-	Node next;
-	
-	public Node(){
-		this(0);
-	}
+import com.algorithmhelper.datastructures.lists.Queue;
+import com.algorithmhelper.datastructures.lists.Stack;
+import com.algorithmhelper.datastructures.lists.QueueDynamicArray;
+import com.algorithmhelper.datastructures.lists.StackDynamicArray;
+import com.algorithmhelper.graphs.graphs.DirectedGraph;
 
-	public Node(int data){
-		this.data = data;
-		this.min = 0;	
-		next = null;
-	}
-}
+public class KahnsTopologicalSortAlgorithmStack<T extends Comparable<T>> {
 
-class StackHanoi{
+    private Queue<T> topologicalOrdering;
 
-	Node top;
+    
+    public KahnsTopologicalSortAlgorithmStack(DirectedGraph<T> G) {
+        if (G == null)
+            throw new IllegalArgumentException("constructor with null graph G");
 
-	public StackHanoi(){
-		top = null;	
-	}
+        topologicalOrdering = new QueueDynamicArray<>();
 
-	public boolean push(int data){
-		Node newNode = new Node(data);
-		newNode.next = top;
-		if(top!=null && top.min <= data){
-			newNode.min = top.min;		
-		}else{
-			newNode.min = data;
-		}
-		top = newNode;
-		return true;
-	}
+        if (G.V() == 0)
+            return;
 
-	public int pop(){
-		int val = peek();
-		if(val==-1){
-			return -1;		
-		}
-		top = top.next;
-		return val;
-	}
+        kahnsTopologicalSort(G);
+    }
 
-	public int peek(){
-		if(top==null){
-			return -1;		
-		}
-		return top.data;	
-	}
-	
-	public void moveTop(StackHanoi src, StackHanoi dest){
-		int val = src.pop();
-		dest.push(val);
-/*		System.out.println(moves + " : Pushing disk from " + 
-					(src.top!=null? src.top.data : null) + " to " + 
-					(dest.top!=null? dest.top.data : null));
-*/		
-		return;	
-	}
+    
+    private void kahnsTopologicalSort(DirectedGraph<T> G) {
+        DirectedGraph<T> reverseGraph = G.getReverseGraph();
+        Stack<T> stack = new StackDynamicArray<>();
 
-	public static int moves = 0;
-	public void moveDisks(int n, StackHanoi source, StackHanoi buffer, StackHanoi destination){
-		if(n==0){
-			return;		
-		}
-		moves++;
-		printTowers(source, buffer, destination);
-		moveDisks(n-1, source, destination, buffer);
-		moveTop(source, destination);
-		moveDisks(n-1, buffer, source, destination);
-	}
+        for (T u : reverseGraph.getVertices()) {
+            if (reverseGraph.getDegree(u) == 0)
+                stack.push(u);
+        }
 
-	public void printStack(){
-		Node temp = top;		
-		while(temp!=null){
-			System.out.print(temp.data + " ");
-			temp = temp.next;		
-		}
-		System.out.println();
-	}
+        while (!stack.isEmpty()) {
+            T current = stack.pop();
+            topologicalOrdering.enqueue(current);
 
-	public void printTowers(StackHanoi A, StackHanoi B, StackHanoi C){
-		System.out.print("A : "); A.printStack();
-		System.out.println();
-		System.out.print("B : "); B.printStack();
-		System.out.println();
-		System.out.print("C : "); C.printStack();	
-		System.out.println();
-	}
-}
+            for (T v : G.getAdjacent(current)) {
+                reverseGraph.deleteEdge(v, current);
 
-public class TowerOfHanoi{
-	public static void main(String[] args){
-		
-		/* Tower of Hanoi */
-		StackHanoi A_towerOfHanoi = new StackHanoi();
-		int arr1[] = {1, 2, 3, 4};
-		for(int val: arr1){	
-			A_towerOfHanoi.push(val);
-		}
-		StackHanoi B_towerOfHanoi = new StackHanoi();
-		StackHanoi C_towerOfHanoi = new StackHanoi();
-		System.out.println("Moving Disks from A to C");
-		A_towerOfHanoi.moveDisks(4, A_towerOfHanoi, B_towerOfHanoi, C_towerOfHanoi);
-		A_towerOfHanoi.printTowers(A_towerOfHanoi, B_towerOfHanoi, C_towerOfHanoi);
-		System.out.println("Total Moves taken : " + StackHanoi.moves);
-	}
+                if (reverseGraph.getDegree(v) == 0)
+                    stack.push(v);
+            }
+        }
+    }
+
+    
+    public Iterable<T> getTopologicalOrder() {
+        return topologicalOrdering;
+    }
 }

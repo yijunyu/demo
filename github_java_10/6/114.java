@@ -1,71 +1,87 @@
-package exercize0232_merge_wo_sentinel;
+package com.xdc.basic.algorithm.basic.sort;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
-import utility.Utility;
-import utility.sort.MultithreadedSort;
-import utility.sort.Sort;
 
-public class App
+public class RadixSort
 {
+    public static void sort(int[] n)
+    {
+        
+        ArrayList<ArrayList<Integer>> ll = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < 10; i++)
+        {
+            ll.add(new ArrayList<Integer>());
+        }
 
-	public static void main(String[] args)
-	{
-		int cores = Runtime.getRuntime().availableProcessors();
-		System.out.println("The number of cores is: " + cores);
+        
+        int maxPower = getMaxPower(n);
 
-		System.out.println(System.getenv("PROCESSOR_IDENTIFIER"));
-		System.out.println(System.getenv("PROCESSOR_ARCHITECTURE"));
-		System.out.println(System.getenv("PROCESSOR_ARCHITEW6432"));
-		System.out.println(System.getenv("NUMBER_OF_PROCESSORS"));
+        
+        for (int power = 0; power <= maxPower; power++)
+        {
+            
+            distribute(n, ll, power);
 
-		System.out.println("Free memory (bytes): "
-				+ Runtime.getRuntime().freeMemory());
+            
+            collect(n, ll);
+        }
+    }
 
-		System.out.println("Total memory (bytes): "
-				+ Runtime.getRuntime().totalMemory());
-		// App app = new App();
-		
-		List<Integer> sortArrayMerge = new ArrayList<>();
+    
+    private static void collect(int[] n, ArrayList<ArrayList<Integer>> ll)
+    {
+        int k = 0;
+        for (ArrayList<Integer> l : ll)
+        {
+            for (Integer i : l)
+            {
+                n[k] = i;
+                k++;
+            }
+            l.clear();
+        }
+    }
 
-		Utility.populateArray(sortArrayMerge);
-		List<Integer> sortArrayMergeParallel = Utility.copyArray(sortArrayMerge);
-		List<Integer> sortArrayMergeParallelWO = Utility.copyArray(sortArrayMerge);
-		List<Integer> sortArrayMergeParallelOptimized = Utility.copyArray(sortArrayMerge);
-		// Utility.printArray(sortArray);
-		// Utility.printArray(sortArrayCopy);
+    
+    private static void distribute(int[] n, ArrayList<ArrayList<Integer>> ll, int power)
+    {
+        for (int i = 0; i < n.length; i++)
+        {
+            int digit = (n[i] / ((int) (Math.pow(10, power)))) % 10;
+            ll.get(digit).add(n[i]);
+        }
+    }
 
-		long startParallelMergeWO = System.currentTimeMillis();
-		MultithreadedSort.runParallelMerge(sortArrayMergeParallelWO, cores, MultithreadedSort.MERGE_SORT_WO_SENTINEL );
-		long endParrallelMergeWO = System.currentTimeMillis();
-		
-		long startParallelMerge = System.currentTimeMillis();
-		//MultithreadedSort.runParallelMerge(sortArrayMergeParallel, cores, MultithreadedSort.MERGE_SORT);
-		long endParrallelMerge = System.currentTimeMillis();
-		
-		long startParallelMergeOptimized = System.currentTimeMillis();
-		//MultithreadedSort.runParallelMerge(sortArrayMergeParallelOptimized, cores, MultithreadedSort.MERGE_SORT_OPTIMIZED);
-		long endParallelMergeOptimized = System.currentTimeMillis();
+    
+    private static int getMaxPower(int[] n)
+    {
+        
+        int max = n[0];
+        for (int i = 1; i < n.length; i++)
+        {
+            if (n[i] > max)
+            {
+                max = n[i];
+            }
+        }
 
-		
-		
-		long startMerge = System.currentTimeMillis();
-		//Sort.mergeSort(sortArrayMerge, 0, sortArrayMerge.size() - 1);
-		long endMerge = System.currentTimeMillis();
+        
+        int digitalCount = 0;
+        while (max != 0)
+        {
+            digitalCount++;
+            max /= 10;
+        }
 
-		// The search without sentinels seems to perform slightly faster with
-		// the ratio of times
-		// approaching to 1 as the size of array grows
-		System.out.println("Merge time paralle optimized is: " + (endParallelMergeOptimized - startParallelMergeOptimized)
-				+ "\nMerge time is: " + (endMerge - startMerge)
-				+ "\nParralel merge time WO is: " + (endParrallelMergeWO - startParallelMergeWO)
-				+ "\nParralel merge time is: " + (endParrallelMerge - startParallelMerge));
-//		 Utility.printArray(sortArrayMerge);
-//		 Utility.printArray(sortArrayMergeWO);
-//		 Utility.printArray(sortArrayMergeParallelWO);
-//		 Utility.printArray(sortArrayMergeParallel);
-//		 
-//		//
-	}
+        return digitalCount;
+    }
+
+    public static void main(String[] args)
+    {
+        int[] n = new int[] { 44, 22, 46, 47, 82, 76, 96, 82, 79, 35, 8, 75, 85, 84, 78, 98, 59, 72, 81, 44 };
+        RadixSort.sort(n);
+        System.out.println(Arrays.toString(n));
+    }
 }

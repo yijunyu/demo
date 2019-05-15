@@ -1,63 +1,93 @@
-package com.twb.graph;
+import java.util.Scanner;
 
-import java.util.List;
-import java.util.Stack;
-
-// Equivalent to preorder tree traversal
-public class DepthFirstSearch { // TODO add a visitor consumer to verify the order...
-    public static void recursive(Graph g, int i) {
-        boolean[] visited = new boolean[g.numVertices()];
-        recursive(g, i, visited);
+class list
+{
+    static int[] array;
+    static int index;
+    static int size;
+    list(int s)
+    {
+        array=new int[s];
+        size=s; index=-1;
     }
 
-    public static void recursive(Graph g, int i, boolean[] visited) {
-        visited[i] = true;
-        System.out.println(i);
-        List<Integer> edges = g.getEdges(i);
-        if (edges != null) {
-            for (int e : edges) {
-                if (!visited[e]) {
-                    recursive(g, e, visited);
-                }
-            }
+    public static boolean empty()
+    {
+        if(index==-1)
+        return true;
+        return false;
+    }
+
+    public static boolean full()
+    {
+        if(index==size-1)
+        return true;
+        return false;
+    }
+
+    public static void append(int value)
+    {array[++index]=value;}
+
+    public static void bubblesort()
+    {
+        int temp;
+        for(int i=0;i<=index-1;i++)
+        for(int j=0;j<=index-1-i;j++)
+        if(array[j]>array[j+1])
+        {
+            temp=array[j];
+            array[j]=array[j+1];
+            array[j+1]=temp;
         }
     }
 
-    public static void iterative(Graph g, int i) {
-        boolean[] visited = new boolean[g.numVertices()];
-        Stack<Integer> stack = new Stack<Integer>();
-        stack.add(i);
-
-        while (!stack.isEmpty()) {
-            int v = stack.pop();
-            if (!visited[v]) {
-                visited[v] = true;
-                System.out.println(v);
-                List<Integer> edges = g.getEdges(v);
-                if (edges != null) { // Look at left edges first
-                    for (int j = edges.size() - 1; j >= 0; j--) {
-                        stack.add(edges.get(j));
-                    }
-                }
-            }
-        }
+    public static void display()
+    {
+        for(int i=0;i<=index;i++)
+        System.out.print(array[i]+", ");
     }
 
-    public static void main(String[] args) {
-        Graph g = new AdjacencyMatrix(7);
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(0, 4);
-        g.addEdge(1, 3);
-        g.addEdge(1, 5);
-        g.addEdge(2, 6);
-        g.addEdge(5, 4);
+    static Scanner read=new Scanner(System.in);
+    public static void main(String[] args)
+    {
+        int ch,value;
+        list lst=new list(5);
+        do
+        {
+            System.out.print("\n 1. Append ");
+            System.out.print("\n 2. Bubble Sort ");
+            System.out.print("\n 3. Display ");
+            System.out.print("\n 4. End Program ");
+            System.out.print("\n\n Enter>>");
+            ch=read.nextInt(); switch(ch)
+            {
+                case 1 :
+                if(lst.full()==false)
+                {
+                    System.out.print("\n Enter a value : ");
+                    value=read.nextInt(); lst.append(value);
+                }
+                else
+                System.out.print("\n Array is full\n");
+                break;
 
-        System.out.println("recursive");
-        recursive(g, 0);
-        System.out.println("iterative");
-        iterative(g, 0);
+                case 2 :
+                System.out.print("\n List is : ");
+                if(empty()!=true)
+                {
+                    lst.bubblesort();
+                    lst.display();
+                }
+                else System.out.print("empty!");
+                break;
 
-        // Expected values: 0 1 3 5 4 2 6
+                case 3 :
+                System.out.print("\n List is : ");
+                if(empty()!=true) lst.display();
+                else System.out.print("empty!");
+                break;
+            }
+            System.out.println();
+        }while(ch!=4);
     }
 }

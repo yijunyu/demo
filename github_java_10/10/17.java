@@ -1,34 +1,103 @@
-/**
- * Created by hongboing on 5/7/16.
- */
+package sort.impl;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
 
-public class testApp extends Application {
+import sort.Sorter;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class BucketSort implements Sorter{
 
-    @Override
-    public void start(Stage primaryStage) {
-        System.out.println("Hello world");
-        int[] myList = {2, 5, 9, 3, 12, 6};
+	@Override
+	public void sort(List<Integer> arrayList) {
+		
+		
+		bucketSort(arrayList,8);
+		
+		
+	}
+	
+	void bucketSort(List<Integer> arrayList,int k){
+		
+		
+		boolean finish = false;
+		
+		
+		List<Integer> bits = new ArrayList<Integer>();
+		
+		
+		for(int i=0;i<arrayList.size();i++){
+			bits.add(arrayList.get(i)%k);
+		}
+		
+		System.out.println("bits is:"+bits);
+		
+		
+		int pow = k;
+		int pow_count = 1;
+		
+		
+		while(!finish){
+			
+			
+			for(int i=0;i<bits.size();i++){
+				for(int j=i;j<bits.size();j++){
+					if(bits.get(i)>bits.get(j)){
+						
+						
+						int tempBit;
+						tempBit = bits.get(i);
+						bits.set(i, bits.get(j));
+						bits.set(j, tempBit);
+						
+						
+						int tempSort;
+						tempSort = arrayList.get(i);
+						arrayList.set(i, arrayList.get(j));
+						arrayList.set(j, tempSort);
+					}
+				}
+			}
+			System.out.println("bits is:"+bits);
+			System.out.println("arrayList is:"+arrayList);
+			
+			
+			pow = (int) Math.pow(k, pow_count);
+			
+			
+			for(int i=0;i<bits.size();i++){
+				bits.set(i, (int)(arrayList.get(i)/pow));
+			}
+			System.out.println("bits is:"+bits);
+		
+			for(int i=0;i<bits.size();i++){
+				bits.set(i, bits.get(i)%k);
+			}
+			System.out.println("bits is:"+bits);
+			
+			
+			pow_count++;
+			
+			
+			
+			int count = 0;
+			
+			for(int i=0;i<bits.size();i++){
+				if(bits.get(i) == 0){
+					count++;
+				}
+			}
+			
+			if(count == bits.size()){
+				finish = true;
+			}
+			
+			System.out.println("finish is:"+finish);
+			
+		}
+		
+	}
+	
+	
+	
 
-        // Print all the array elements
-        for (int i = 0; i < myList.length-1; i ++) {
-            for (int j = 0; j < myList.length-1-i; j++){
-                if(myList[j] > myList[j+1]){
-                    int temp = myList[j+1];
-                    myList[j+1] = myList[j];
-                    myList[j] = temp;
-                }
-            }
-        }
-        for(int x = 0; x < myList.length; x++){
-            System.out.println(myList[x]);
-        }
-
-    }
 }

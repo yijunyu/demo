@@ -1,67 +1,71 @@
-package companies.apple.experience;
 
-import java.util.*;
 
-/**
- * @author: zhang
- * @date: Mar 24, 2015 12:02:40 AM
- */
-public class TopologicalSort {
-    /*
-    Given file dependencies like A->{B, C}, B->{D}, C->{D, E}, print below
-    A->B->D
-    A->C->D
-    A->C->E
+import java.util.Comparator;
 
-     */
-    public static List<List<String>> topSort(Map<String, List<String>> dependencies) {
-        Map<String, Integer> inCount = new HashMap<String, Integer>();
-        List<List<String>> ret = new ArrayList<List<String>>();
-        Set<String> roots = new HashSet<String>();
-
-        for (String n : dependencies.keySet()) {
-            if (!inCount.containsKey(n)) {
-                roots.add(n);
+public class Shell
+{   
+    public static void sort(Comparable[] a)
+    {
+        int N = a.length;
+        
+        int h = 1;
+        
+        
+        while (h < N/3)
+        {
+            h = 3*h + 1;
+        }
+        
+        while (h >= 1)
+        {
+            
+            System.out.println(h);
+            for (int i = h; i < N; i++)
+            {
+                for (int j = i; j >= h && less(a[j], a[j-h]); j -= h)
+                {
+                    exch(a, j, j-h);
+                    print(a);
+                }                   
             }
 
-            for (String s : dependencies.get(n)) {
-                if (inCount.containsKey(s)) {
-                    inCount.put(s, inCount.get(s) + 1);
-                } else {
-                    inCount.put(s, 1);
-                }
-
-                if (roots.contains(s)) {
-                    roots.remove(s);
-                }
-            }
+            h = h/3;
         }
 
-        ret.add(new ArrayList<String>(roots));
-        topSort(inCount, dependencies, ret);
-
-        return ret;
     }
-
-    private static void topSort(Map<String, Integer> inCount, Map<String, List<String>> dependencies, List<List<String>> ret) {
-        while (!inCount.isEmpty()) {
-            List<String> newNodes = new ArrayList<String>();
-
-            for (String node : ret.get(ret.size() - 1)) {
-                if (dependencies.containsKey(node)) {
-                    List<String> dependency = dependencies.get(node);
-                    for (String n : dependency) {
-                        int count = inCount.get(n);
-                        inCount.put(n, count - 1);
-                        if (count == 1) {
-                            newNodes.add(n);
-                            inCount.remove(n);
-                        }
-                    }
-                }
-            }
-
-            ret.add(newNodes);
+    
+    private static boolean less(Comparable v, Comparable w)
+    {
+        return v.compareTo(w) < 0;
+    }
+    
+    private static void exch(Comparable[] a, int i, int j)
+    {
+        Comparable swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+    
+    public static void print(Comparable[] a)
+    {
+        StringBuilder temp = new StringBuilder();
+        temp.append("");
+        
+        for (int i = 0; i < a.length; i++)
+        {
+            temp.append(a[i]);
+            temp.append(" ");
         }
+        String strI = temp.toString();
+        System.out.println(strI);
+    }
+    
+    public static void main(String[] args) 
+    { 
+        Integer[] intArray = {53,26,94,25,99,14,54,75,17,20};
+ 
+        print(intArray);
+        
+        sort(intArray);
     }
 }

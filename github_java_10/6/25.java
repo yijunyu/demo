@@ -1,81 +1,78 @@
-import java.util.*;
+package org.gsu.cs.client;
 
-/* Java program for Merge Sort */
-public class MergeSort {
-    // Merges two sub-Arrays A[l..m] and A[m+1..r].
-    // l->left most index, r->right most index, m->middle index
-    void merge(int A[], int l, int m, int r) {
-        // Find sizes of two subArrays to be merged
-        int nL = m - l + 1; //for left sub-array
-        int nR = r - m; //for right sub-array
+import org.gsu.cs.sort.RadixSort;
+import org.gsu.cs.util.SortUtil;
 
-        /* create temp Arrays left[] and right[]
-        and copy data from main Array */
-        int left[] = new int [nL];
-        int right[] = new int [nR];
 
-        for (int i = 0; i < nL; ++i)
-            left[i] = A[l + i];
-        for (int j = 0; j < nR; ++j)
-            right[j] = A[m + 1 + j];
+public class BestBaseRadixSort {
 
-        /* Merge the temp Arrays back into A[l..r]*/
+	public BestBaseRadixSort() {
+		super();
+	}
 
-        // Initial indexes of first and second sub-Arrays
-        int i = 0, j = 0;
-        int k = l;  // Initial index of merged sub-array
+	
+	public static void main(String[] args) {
 
-        /* Comparing left[] and right[], sub-Array with
-        smaller element get copy to main Array A[]*/
-        while (i < nL && j < nR) {
-            if (left[i] <= right[j]) {
-                A[k] = left[i];
-                i++;
-            } else {
-                A[k] = right[j];
-                j++;
-            }
-            k++;
-        }
-        /* Copy remaining elements of left[] if any */
-        while (i < nL) {
-            A[k] = left[i];
-            i++;
-            k++;
-        }
-        /* Copy remaining elements of right[] if any */
-        while (j < nR) {
-            A[k] = right[j];
-            j++;
-            k++;
-        }
-    }
+		int power = 14;
+		int size = 0;
+		int maxPower = 15;
+		int noOfLoops = 20;
 
-    // Main function that sorts A[l..r] using merge()
-    /* l is for left index and r is right index of the
-    sub-Array of A to be sorted */
-    void merge_sort(int A[], int l, int r) {
-        if (l < r) {
-            int mid = (l + r) / 2; // Find the middle index
+		
+		while (power < maxPower) {
 
-            merge_sort(A, l, mid); //Firstly left half is recursively call
-            merge_sort(A , mid + 1, r); // Then right half is recursively call
-            merge(A, l, mid, r); // Merge the sorted halves
-        }
-    }
-    // Driver method
-    public static void main(String args[]) {
-        int Arr[] = {38, 27, 43, 3, 9, 82, 10};
+			System.gc();
+			size = (int) Math.pow(2.0, power);
 
-        System.out.println("Unsorted Array:");
-        //print unsorted array using Arrays.toString()
-        System.out.println(Arrays.toString(Arr));
+			
 
-        //object of class MergeSort
-        MergeSort ob = new MergeSort();
-        ob.merge_sort(Arr, 0, Arr.length - 1); //merge sort function call
+			for (int base = 2; base <= 200; base++) {
 
-        System.out.println("\nSorted Array:");
-        System.out.println(Arrays.toString(Arr)); //print sorted array
-    }
+				long averageRadixSortTime = 0;
+				int numberOfPasses = SortUtil.calculateNumberOfPasses(20000,
+						base);
+
+				for (int i = 0; i < noOfLoops; i++) {
+
+					
+					
+					int[] inputArray = SortUtil.generateRandomArray(size);
+					
+
+					averageRadixSortTime += performRadixSortTrialRuns(size,
+							inputArray, base, numberOfPasses);
+					System.gc();
+
+				}
+
+				System.out.println(base + "\t" + averageRadixSortTime
+						/ noOfLoops);
+			}
+			power++;
+		}
+
+	}
+
+	
+	private static long performRadixSortTrialRuns(int size, int[] inputArray,
+			int base, int numberOfPasses) {
+		long totalTimeForRadixSort = 0;
+		long startTime = 0;
+		long endTime = 0;
+
+		RadixSort rs = new RadixSort();
+		System.gc();
+
+		int[] quotientArray = SortUtil.copyArray(inputArray, size);
+
+		startTime = System.nanoTime();
+		rs.performRadixSort(inputArray, base, numberOfPasses, quotientArray,
+				size);
+		endTime = System.nanoTime();
+
+		totalTimeForRadixSort += endTime - startTime;
+
+		return totalTimeForRadixSort;
+	}
+
 }

@@ -1,87 +1,131 @@
 
-package avltree;
 
-public class AvlTree {
+
+public class Merge {
+
     
-    public long data;
-    public AvlTree left;
-    public AvlTree right;
-    int height = 0;
+    private Merge() { }
+
     
-    int height(AvlTree p){
-        if ( p == null){
-            return -1;
+    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+
+        
+        assert isSorted(a, lo, mid);
+        assert isSorted(a, mid+1, hi);
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k]; 
         }
-        else{
-            return p.height;
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)              a[k] = aux[j++];   
+            else if (j > hi)               a[k] = aux[i++];
+            else if (less(aux[j], aux[i])) a[k] = aux[j++];
+            else                           a[k] = aux[i++];
         }
+
+        
+        assert isSorted(a, lo, hi);
     }
+
     
-    public AvlTree insert(AvlTree p, int x){
-        if ( p == null ){
-            p = new AvlTree();
-            p.data = x;
-        }
-        else{
-            if(x < p.data ){
-                p.left = insert(p.left, x);
-                if( height(p.left) - height(p.right) == 2)
-                    if( x < p.left.data)
-                        p = singlerotateright(p);
-                else
-                        p = doublerotateright(p);
-            }
-            else if ( x > p.data){
-                p.right = insert(p.right, x);
-                if( height(p.left) - height(p.right) == -2)
-                    if (x > p.right.data)
-                        p = singlerotateleft(p);
-                else
-                        p = doublerotateleft(p);
-            }
-            p.height = max(height(p.left), height(p.right)) +1; 
-        }
-        return p;
+    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, aux, lo, mid);
+        sort(a, aux, mid + 1, hi);
+        merge(a, aux, lo, mid, hi);
     }
-         int max ( int a, int b){
-        if( a > b){
-            return a;
-        }
-        else {
-            return b;
-        }
+
+    
+    public static void sort(Comparable[] a) {
+        Comparable[] aux = new Comparable[a.length];
+        sort(a, aux, 0, a.length-1);
+        assert isSorted(a);
     }
-         
-      AvlTree singlerotateleft(AvlTree p){
-        AvlTree lc = p.left;
-        lc.right = p;
-        p.height = max(height(p.left), height(p.right)) +1;
-        lc.height = max(height(lc.left), lc.height) +1;
-        return lc;
-    }
-      
-      AvlTree doublerotateright(AvlTree p){
-        p.left = singlerotateleft(p.left);
-        return singlerotateright(p);
-    }
-      
-      AvlTree singlerotateright(AvlTree p){
-        AvlTree rc = p.right;
-        p.right = rc.left;
-        rc.left = p;
-        p.height = max(height(p.left), height(p.right))+1;
-        rc.height = max (height(rc.right), rc.height) +1;
-        return rc;
-    }
-      
-      AvlTree doublerotateleft(AvlTree p){
-        p.right = singlerotateright(p.right);
-        return singlerotateleft(p);
-    }
+
+
    
-
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
     
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
+    }
+
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+   
+    
+    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = index[k]; 
+        }
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)                    index[k] = aux[j++];
+            else if (j > hi)                     index[k] = aux[i++];
+            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
+            else                                 index[k] = aux[i++];
+        }
+    }
+
+    
+    public static int[] indexSort(Comparable[] a) {
+        int N = a.length;
+        int[] index = new int[N];
+        for (int i = 0; i < N; i++)
+            index[i] = i;
+
+        int[] aux = new int[N];
+        sort(a, index, aux, 0, N-1);
+        return index;
+    }
+
+    
+    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, index, aux, lo, mid);
+        sort(a, index, aux, mid + 1, hi);
+        merge(a, index, aux, lo, mid, hi);
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readAllStrings();
+        Merge.sort(a);
+        show(a);
+    }
 }

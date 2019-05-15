@@ -1,77 +1,66 @@
-import java.lang.*;
-import java.io.*;
-import java.util.*;
-public class Mergesort{
-  private static int sz;
-  private static int arr[];
-  public static void main(String args[])
-  {
-    read();
-    printarr();
-    mergesort(0,sz-1);
-    printarr();
-  }
-  
-  private static void mergesort(int l,int r)
-  {
-    if(l<r)
-    {
-      int mid=l+(r-l)/2;
-      mergesort(l,mid);
-      mergesort(mid+1,r);
-      merge(l,mid,mid+1,r,l,r);
+package sort;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+public class Radixsort {
+
+    public static void main(String[] args) {
+        int[] a={49,38,65,97,176,213,227,49,78,34,12,164,11,18,1};
+        System.out.println("排序之前：");
+        for (int anA1 : a) {
+            System.out.print(anA1 + " ");
+        }
+        
+        sort(a);
+        System.out.println();
+        System.out.println("排序之后：");
+        for (int anA : a) {
+            System.out.print(anA + " ");
+        }
     }
-  }
-  
-  private static void merge(int l1,int r1,int l2,int r2,int l,int r)
-  {
-    int sz1=r1-l1+1,sz2=r2-l2+1;
-    int a[]=new int[sz1];
-    int b[]=new int[sz2];
-    for(int i=l1,j=0;i<=r1;)
-      a[j++]=arr[i++];
-    for(int i=l2,j=0;i<=r2;)
-      b[j++]=arr[i++];
-    int i=0,j=0,k=l;
-    while(i<sz1 && j<sz2)
-    {
-      if(a[i]<b[j])
-        arr[k++]=a[i++];
-      else if(b[j]<a[i])
-        arr[k++]=b[j++];
-      else
-      {
-        arr[k++]=b[j++];
-        i++;
-      }
+
+    private static void sort(int[] array) {
+        
+        int max = 0;
+        for (int anArray1 : array) {
+            if (max < anArray1) {
+                max = anArray1;
+            }
+        }
+        
+        int times = 0;
+        while(max>0){
+            max = max/10;
+            times++;
+        }
+        
+        List<ArrayList> queue = new ArrayList<ArrayList>();
+        for (int i = 0; i < 10; i++) {
+            ArrayList queue1 = new ArrayList();
+            queue.add(queue1);
+        }
+        
+        for (int i = 0; i < times; i++) {
+            
+            for (int anArray : array) {
+                int x = anArray % (int) Math.pow(10, i + 1) / (int) Math.pow(10, i);
+                ArrayList queue2 = queue.get(x);
+                queue2.add(anArray);
+                queue.set(x, queue2);
+            }
+            
+            int count = 0;
+            for (int j = 0; j < 10; j++) {
+                while(queue.get(j).size()>0){
+                    ArrayList<Integer> queue3 = queue.get(j);
+                    array[count] = queue3.get(0);
+                    queue3.remove(0);
+                    count++;
+                }
+            }
+        }
     }
-    if(i==sz1)
-      for(;j<sz2;)
-          arr[k++]=b[j++];
-    else
-      for(;i<sz1;)
-          arr[k++]=a[i++];
-  }
-  
-  private static void read()
-  {
-    println("Enter the size of the array needed to be sorted:-");
-    Scanner cin=new Scanner(System.in);
-    sz=cin.nextInt();
-    println("Enter "+sz+" elements needed to be sorted:-");
-    arr=new int[sz];
-    for(int i=0;i<sz;i++)
-      arr[i]=cin.nextInt();
-  }
-  
-  private static void printarr(){
-    for(int i:arr)
-      System.out.print(i+" ");
-    System.out.println();
-  }
-  
-  private static void println(Object line)
-  {
-    System.out.println(line);
-  }
 }

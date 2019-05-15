@@ -1,55 +1,26 @@
-// ----------------------------------------------------------
-/**
- * Breadth-First-Search using a Directed Graph
- *
- * ----------------------------------------------------------
+package code.Kiran.algo;
 
- */
+public class Insertionsort {
+	public static void main(String[] args) {
+		int[] Array = { 10, 34, 2, 56, 7, 67, 88, 42 };
+		insertsort(Array);
+		for (int i : Array) {
+			System.out.print(i);
+		}
+	}
 
- public class DirectedBFS{
+	public static int[] insertsort(int[] Array) {
 
-   //True if path from s to marked[v]
-   private boolean[] marked;
-   private int[] distTo;
-   private int[] edgeTo;
-
-   //Constructor marks vertices reachable from source
-   public DirectedBFS(Digraph G, int s){
-     marked = new boolean[G.V()];
-     distTo = new int[G.V()];
-     edgeTo = new int[G.V()];
-     bfs(G, s);
-   }
-
-   //Recursively performs dfs
-   private void bfs(Digraph G, int V){
-     Queue<Integer> q = new Queue<Integer>();
-
-     //Initialise all distances to infinity
-     for(int v = 0; v < G.V(); v++)
-      distTo[v] = INFINITY;
-
-     //Process source(s) first
-     distTo[s] = 0;
-     marked[s] = true;
-     q.enqueue(s);
-
-     while(!q.isEmpty()){
-       int v = q.dequeue();
-
-       //Process vertices adjacent to v
-       for(int w : G.adj(v)){
-         if(!marked[w]){
-           edgeTo[w] = v;
-           distTo[w] = distTo[v] + 1;
-           marked[w] = true;
-           q.enqueue(w);
-         }
-       }
-     }
-   }
-
-   public boolean visited(int v){
-     return marked[v];
-   }
- }
+		int temp;
+		for (int i = 1; i < Array.length; i++) {
+			for (int j = i; j > 0; j--) {
+				if (Array[j] < Array[j - 1]) {
+					temp = Array[j];
+					Array[j] = Array[j - 1];
+					Array[j - 1] = temp;
+				}
+			}
+		}
+		return Array;
+	}
+}

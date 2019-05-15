@@ -1,48 +1,64 @@
-package javaTowerOfHanoi;
+package com.pranav.hackerearth;
 
-/* Tower of Hanoi example in Java
- * 
- *       |      |      |
- *      _|_     |      |
- *     __|__    |      |
- *    ___|___   |      |
- *   ====|======|======|=====
- *       A      B      C
- */
-
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Scanner;
 
-public class TowerOfHanoi {
-	
-	public static void Hanoi(int m, char a, char b, char c) {
-		
-		if(m > 0) {
-			Hanoi(m-1,a,c,b);
-			System.out.println("Move disc from " + a + " to " + c);
-			Hanoi(m-1,b,a,c);
+
+public class LonelyIsland {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int numberOfIslands = s.nextInt();
+		int numberOfBridges = s.nextInt();
+		int startingIsland = s.nextInt();
+		startingIsland--;
+		int[] indegree = new int[numberOfIslands];
+		int[] outdegree = new int[numberOfIslands];
+		Map<Integer, LinkedList<Integer>> adjList = new HashMap<>();
+		for (int i = 0; i < numberOfIslands; i++) {
+			adjList.put(i, new LinkedList<>());
+		}
+		int start;
+		int end;
+		for (int i = 0; i < numberOfBridges; i++) {
+			start = s.nextInt() - 1;
+			end = s.nextInt() - 1;
+			indegree[end]++;
+			outdegree[start]++;
+			adjList.get(start).add(end);
+		}
+		s.close();
+		Queue<Integer> islandWithZeroIndegree = new LinkedList<>();
+		for (int i = 0; i < numberOfIslands; i++) {
+			if (indegree[i] == 0) {
+				islandWithZeroIndegree.add(i);
+			}
+		}
+		double[] probabilty = new double[numberOfIslands];
+		probabilty[startingIsland] = 1;
+		while (!islandWithZeroIndegree.isEmpty()) {
+			int current = islandWithZeroIndegree.remove();
+			for (Integer i : adjList.get(current)) {
+				probabilty[i] += (probabilty[current] * ((double)1 / (double)outdegree[current]));
+				indegree[i]--;
+				if (indegree[i] == 0) {
+					islandWithZeroIndegree.add(i);
+				}
+			}
+
+		}
+		double max = 0;
+		for (int i = 0; i < numberOfIslands; i++) {
+			if (outdegree[i] == 0 && (probabilty[i] > max)) {
+				max = probabilty[i];
+			}
+		}
+		for(int i=0;i<numberOfIslands;i++) {
+			if(outdegree[i]==0  && Math.abs(probabilty[i]-max) < 1e-9) {
+				System.out.print(i+1+" ");
+			}
 		}
 	}
-	
-	public static void main(String[] args){
-		
-		Scanner h = new Scanner(System.in);
-		int n;
-		System.out.print("How many discs : ");
-		n = h.nextInt();
-		Hanoi(n, 'A', 'B', 'C');
-		
-		
-	}
-
 }
-
-/* Output
- How many discs : 3
-Move disc from A to C
-Move disc from A to B
-Move disc from C to B
-Move disc from A to C
-Move disc from B to A
-Move disc from B to C
-Move disc from A to C
- */

@@ -1,44 +1,44 @@
-package com.basicsort;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
-import java.util.Arrays;
 
-/**
- * 
- * @author beta
- *插入排序
- */
-public class Insertionsort {
-	
-	public static void sort(int[] arr) {
-		for(int i=1;i<arr.length;i++) {
-			for(int j=i;j>0;j--) {
-				if(arr[j]<arr[j-1]) {
-					int temp = arr[j];
-					arr[j] = arr[j-1];
-					arr[j-1] = temp;
-				}else {
-					break;
-				}
-			}
-		}
-	}
-	
-	//插入排序优化
-	public static void sort2(int[] arr) {
-		for(int i=0;i<arr.length;i++) {
-			int j = i;
-			int temp = arr[i];
-			for(;j>0&&arr[j-1]>temp;j--) {
-				arr[j] = arr[j-1];
-			}
-			arr[j] = temp;
-		}
-	}
-	
-	public static void main(String[] args) {
-		int[] arr = SortTestHelp.generateRandomArray(10, 1, 100);
-		System.out.println(Arrays.toString(arr));
-		sort2(arr);
-		System.out.println(Arrays.toString(arr));
-	}
+public class Sort_HeapSort {
+    
+
+    public class IntegerDescendingComparator implements Comparator<Integer>{
+        @Override
+        public int compare(Integer x, Integer y){
+            if(x > y) return -1;
+            if(x < y) return 1;
+            return 0;
+        }
+
+    }
+
+
+    public int[] heapSort(int[] num){
+        Comparator<Integer> comparator = new IntegerDescendingComparator();
+
+        if(num.length == 0 || num.length == 1) return num;
+        int[] res = new int[num.length];
+        PriorityQueue pq = new PriorityQueue(comparator);
+        for(int i = 0; i < num.length; i++){
+            pq.add(num[i]);
+        }
+        for(int i = 0; i < num.length;i++){
+            int tmp = (Integer)pq.remove();
+            res[i] = tmp;
+            System.out.print(res[i]+ ",");
+        }
+
+        return res;
+
+    }
+
+    public static void main(String[] args){
+        int[] arr = new int[]{2,3,1,3,8,4};
+        Sort_HeapSort t = new Sort_HeapSort();
+        t.heapSort(arr);
+    }
+
 }

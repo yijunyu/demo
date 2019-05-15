@@ -1,25 +1,52 @@
-import java.io.*;
 import java.util.*;
-class tower
-{
-    static void HanoiLogic(int n,char a,char b,char c)
-    {
-        if(n==1)
-        {
-            System.out.println("MOVING THE DISK 1 FROM "+a+" TO "+b);
-            return;
-        }
-        HanoiLogic(n-1,a,c,b);
-        System.out.println("MOVING THE DISK "+n+" FROM "+a+" TO "+b);
-        HanoiLogic(n-1,c,b,a);
+class Graph{
+  int V;
+  LinkedList<Integer>[] adj;
+  Graph(int V){
+    this.V=V;
+    adj = new LinkedList[V];
+    for(int i=0; i<V; i++)
+      adj[i] = new LinkedList<Integer>();
+  }
+  void addEdge(int v, int w){
+    adj[v].add(w);
+  }
+  void topologicalSort(){
+    Stack<Integer> stack = new Stack<Integer>();
+    boolean[] visited = new boolean[V];
+    for(int i=0; i<V; i++)
+      if(!visited[i])
+        topologicalSortUtil(i,visited,stack);
+
+    while(!stack.empty()){
+      int n = stack.pop();
+      System.out.print(n+" ");
     }
-    public static void main(String[] args)
-    {
-        int num;
-        char A='A',B='B',C='C';
-        System.out.println("ENTER THE NUM OF DISK:");
-        Scanner s=new Scanner(System.in);
-        num=s.nextInt();
-        HanoiLogic(num,A,B,C);
+  }
+
+  void topologicalSortUtil(int v,boolean[] visited, Stack stack){
+    
+    visited[v]=true;
+    Iterator<Integer> iterator = adj[v].iterator();
+    while(iterator.hasNext()){
+      int n = iterator.next();
+      if(!visited[n]){
+        topologicalSortUtil(n,visited,stack);
+      }
     }
+    stack.push(new Integer(v));
+  }
+}
+
+class topologicalsort{
+  public static void main(String[] args) {
+    Graph g = new Graph(6);
+       g.addEdge(5, 2);
+       g.addEdge(5, 0);
+       g.addEdge(4, 0);
+       g.addEdge(4, 1);
+       g.addEdge(2, 3);
+       g.addEdge(3, 1);
+    g.topologicalSort();
+  }
 }

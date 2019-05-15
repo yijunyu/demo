@@ -1,32 +1,41 @@
-/**
- * Created with IntelliJ IDEA.
- * User: lianyun
- * Date: 14-2-8
- * Time: 上午11:55
- * To change this template use File | Settings | File Templates.
- */
-public class DepthFirstSearch implements Search {
-    private boolean[] marked;
-    private int count;
+package BubleSort;
 
-    public DepthFirstSearch(Graph G, int s){
-        marked = new boolean[G.V()];
-        dfs(G, s);
-    }
-    private void dfs(Graph G, int v){
-        marked[v] = true;
-        count++;
-        for (int w : G.adj(v)){
-            if (!marked[w]) dfs(G, w);
-        }
-    }
-    @Override
-    public boolean marked(int v) {
-        return marked[v];
-    }
+public class Principal { 
 
-    @Override
-    public int count() {
-        return count;
-    }
+public static void main(String[] args){
+
+int[] vet = {5,10,2,6,3,2};
+int aux;
+int x;
+int y;
+int cont = 0;
+System.out.println("Numeros Desordenados");
+
+	for (x = 0; x < vet.length; x++) { 
+	
+		System.out.print (" "+vet[x]); 
+
+}  
+ 
+	for ( x = 0; x < vet.length; x++) { 
+
+		for (y = 0; y < vet.length - 1; y++,cont++) { 
+			if (vet[y] > vet[y + 1]) { 
+				aux = vet[y]; 
+				vet[y] = vet[y + 1]; 
+				vet[y + 1] = aux;
+				
+			} 
+	
+		}
+	
+	}
+	System.out.println(""); 
+	System.out.println("Vetor organizado:"); 
+		for(x = 0; x<vet.length; x++){
+			System.out.print(" "+vet[x]);
+		}
+	System.out.println(""); 
+	System.out.println("Numero de trocas: \n"+cont); 
+	}
 }

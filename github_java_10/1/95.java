@@ -1,80 +1,46 @@
-package search;
+import java.util.Scanner;
+import java.util.Arrays;
 
-import agent.State;
-import agent.VacuumCleaner;
-import environment.Environment;
 
-import java.util.*;
+class TestClass {
+  static int[] sort (int[] arr, int length) {
+    int key, j;
 
-import static auxiliary.AuxiliaryFunctions.findColumnOnGraph;
-import static auxiliary.AuxiliaryFunctions.findRowOnGraph;
+    for (int pos = 1; pos < length; ++pos) {
+      key = arr[pos];
+      j = pos - 1;
 
-public class BreadthFirstSearch {
+      while (j >= 0 && arr[j] > key) {
+        arr[j+1] = arr[j];
+        j--;
+      }
 
-    private List<State> expanded;
-    private Queue<State> edge;
-
-    public BreadthFirstSearch(State initial) {
-        this.expanded = new ArrayList<>();
-        this.edge = new ArrayDeque<>();
-
-        this.edge.add(initial);
+      arr[j+1] = key;
     }
 
-    private List<State> getExpanded() {
+    return arr;
+  }
 
-        return expanded;
+
+  public static void main (String[] args) {
+    Scanner sc = new Scanner(System.in);
+
+    int length = sc.nextInt();
+
+    int[] arr = new int[length];
+
+    for (int pos=0; pos < length; ++pos)
+      arr[pos] = sc.nextInt();
+
+    int[] sorted = sorted(Arrays.copyOf(arr, length), length);
+
+    for (int pos=0; pos < length; ++pos) {
+      int key = arr[pos];
+
+      for (int j=0; j < length; ++j) {
+        if (sorted[j] == key)
+          System.out.println(j+1 + " ");
+      }
     }
-
-    private Queue<State> getEdge() {
-
-        return edge;
-    }
-
-    public VacuumCleaner BFS(VacuumCleaner agent, Environment environment) {
-
-        if (getEdge().peek() != null) {
-            State actualState = getEdge().remove();
-
-            if (!actualState.isObjective()) {
-                int column;
-                int row;
-
-                if ((actualState.equals(environment.getInitialState()))) {
-                    row = findRowOnGraph(actualState, environment);
-                    expanded.add(actualState);
-                    generateStates(actualState, row, environment);
-                } else {
-                    column = findColumnOnGraph(actualState, environment);
-                    expanded.add(actualState);
-                    generateStates(actualState, column, environment);
-                }
-
-                agent.setState(actualState);
-                this.BFS(agent, environment);
-
-            } else {
-                agent.setState(actualState);
-                return agent;
-            }
-        } else {
-            System.out.println("Borda vazia, objetivo não encontrado!");
-        }
-
-        return agent;
-    }
-
-    private void generateStates(State actual, int i, Environment environment) {
-
-        for (State state: environment.getGraph()[i]) {
-            if (state != null) {
-                if (!getExpanded().contains(state) &&
-                        !getEdge().contains(state)) {
-
-                    state.setFather(actual);
-                    edge.add(state);
-                }
-            }
-        }
-    }
+  }
 }

@@ -1,28 +1,70 @@
-package com.personal.sorting;
+package Sort;
 
-public class InsertionSort {
+import org.omg.Messaging.SyncScopeHelper;
 
-    // https://www.programiz.com/dsa/insertion-sort
-    // https://www.geeksforgeeks.org/insertion-sort/
-    // traverse towards right and keep on sorting element to put it in appropriate position.
-    // Complexity, O(n^2),
-    // Minimum time if array is already sorted
-    public static void main(String[] args) {
-        int[] arr = {64, 25, 12, 96, 11};
 
-        for (int i = 1; i < arr.length; i++) {
-            int key = arr[i];
-            int j = i - 1;
-            while (j >= 0 && arr[j] > key) {
-                arr[j + 1] = arr[j];
-                j = j - 1;
-            }
-            arr[j + 1] = key;
+public class Sort_heapSort {
 
+    public static <AnyType extends Comparable<? super AnyType>>
+    void heapSort(AnyType[] a){
+
+        
+        for(int i = a.length/2-1; i>=0; i--){
+            percDown(a,i,a.length);
         }
+        
+        
+        for(int i = a.length-1; i>0; i--){
+            swapReferencec(a,0,i);
+            
+            
+            percDown(a,0,i);
+        }
+    }
 
-        for (int i : arr) {
-            System.out.println(i);
+    
+    private static <AnyType extends Comparable<? super AnyType>>
+    void percDown(AnyType[] a, int i, int n) {
+
+        int child;
+        AnyType tmp;
+
+        for(tmp = a[i]; leftChild(i)<n; i=child){
+            child = leftChild(i);
+            
+            
+            if(child != n-1 && a[child].compareTo(a[child+1])<0){
+                child++;
+            }
+            if(tmp.compareTo(a[child])<0){
+                a[i] = a[child];
+                
+                
+            }else
+                break;
+        }
+        a[i]=tmp;
+
+    }
+
+    
+    private static int leftChild(int i) {
+        return 2*i+1;
+    }
+
+    private static <AnyType extends Comparable<? super AnyType>>
+    void swapReferencec(AnyType[] a, int i, int j) {
+        AnyType tmp;
+        tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp ;
+    }
+
+    public static void main(String[] args) {
+        Integer[] a = {34,4,213,6,23,55,77,223};
+        heapSort(a);
+        for(int i = 0; i<a.length; i++){
+            System.out.print(a[i]+" ");
         }
     }
 }

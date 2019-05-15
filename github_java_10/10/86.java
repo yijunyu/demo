@@ -1,74 +1,45 @@
-public class BubbleSortOptimized{
-  private void printArray(int[] array){
-    for(int i = 0 ; i < array.length; i++){
-      System.out.print(array[i]+"  ");
-    }
-    System.out.println();
-  }
+package ch.hsr.prog2.exercises;
 
-  private void swapArrayElements(int[] array, int indexa, int indexb){
-    int tmp = array[indexa];
-    array[indexa] = array[indexb];
-    array[indexb] = tmp;
-  }
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-  public void bubbleSort(int[] arrayToSort){
-    boolean swapped = true;
-    for(int i = 0; i < arrayToSort.length && swapped; i++){
-      swapped = false;
-      for(int j = 0; j< arrayToSort.length - i; j++){
-        if(arrayToSort[i] > arrayToSort[j]){
-          swapArrayElements(arrayToSort,i,j);
-          swapped = true;
+
+public class Bucketsort {
+
+    
+    private static void bucketsort(List S, int N) {
+        List[] B = new LinkedList[N];
+        for (int i = 0; i < N; i++) {
+            B[i] = new LinkedList();
         }
-      }
-      System.out.println("Sorting : Pass "+i);
-      printArray(arrayToSort);
+
+        
+        while (!S.isEmpty()) {
+            int k = (Integer) S.remove(0);
+            B[k].add(k);
+        }
+        System.out.println(Arrays.toString(B));
+
+        
+        for (int i = 0; i < N; i++) {
+            while (!B[i].isEmpty()) {
+                S.add(B[i].remove(0));
+            }
+        }
+
     }
-  }
 
-  public static void main(String[] args){
-    BubbleSortOptimized bubbleSort = new BubbleSortOptimized();
+    
+    public static void main(String[] args) {
+        LinkedList<Integer> list = new LinkedList<>();
+        int[] iarr = { 7, 1, 3, 7, 3, 7 };
+        for (int i : iarr) {
+            list.add(i);
+        }
 
-    int[] array = new int[]{};
-    System.out.println("Array before sorting");
-    bubbleSort.printArray(array);
-    bubbleSort.bubbleSort(array);
-    System.out.println("Array after sorting");
-    bubbleSort.printArray(array);
-    System.out.println("----------------------\n\n\n");
+        bucketsort(list, 8);
 
-    array = new int[]{1,2,3,4,5};
-    System.out.println("Array before sorting");
-    bubbleSort.printArray(array);
-    bubbleSort.bubbleSort(array);
-    System.out.println("Array after sorting");
-    bubbleSort.printArray(array);
-    System.out.println("----------------------\n\n\n");
-
-    array = new int[]{5,4,3,2,1};
-    System.out.println("Array before sorting");
-    bubbleSort.printArray(array);
-    bubbleSort.bubbleSort(array);
-    System.out.println("Array after sorting");
-    bubbleSort.printArray(array);
-    System.out.println("----------------------\n\n\n");
-
-    array = new int[]{0,0,0,0,0,0};
-    System.out.println("Array before sorting");
-    bubbleSort.printArray(array);
-    bubbleSort.bubbleSort(array);
-    System.out.println("Array after sorting");
-    bubbleSort.printArray(array);
-    System.out.println("----------------------\n\n\n");
-
-    array = new int[]{3,2,4,5,1,6,8,7};
-    System.out.println("Array before sorting");
-    bubbleSort.printArray(array);
-    bubbleSort.bubbleSort(array);
-    System.out.println("Array after sorting");
-    bubbleSort.printArray(array);
-    System.out.println("----------------------\n\n\n");
-  }
+    }
 
 }

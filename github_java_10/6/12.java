@@ -1,179 +1,115 @@
-/*************************************************************************
- *  Compilation:  javac Merge.java
- *  Execution:    java Merge < input.txt
- *  Dependencies: StdOut.java StdIn.java
- *  Data files:   http://algs4.cs.princeton.edu/22mergesort/tiny.txt
- *                http://algs4.cs.princeton.edu/22mergesort/words3.txt
- *   
- *  Sorts a sequence of strings from standard input using mergesort.
- *   
- *  % more tiny.txt
- *  S O R T E X A M P L E
- *
- *  % java Merge < tiny.txt
- *  A E E L M O P R S T X                 [ one string per line ]
- *    
- *  % more words3.txt
- *  bed bug dad yes zoo ... all bad yet
- *  
- *  % java Merge < words3.txt
- *  all bad bed bug dad ... yes yet zoo    [ one string per line ]
- *  
- *************************************************************************/
 
-/**
- *  The <tt>Merge</tt> class provides static methods for sorting an
- *  array using mergesort.
- *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/22mergesort">Section 2.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *  For an optimized version, see {@link MergeX}.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Merge {
-
-    // This class should not be instantiated.
-    private Merge() { }
-
-    // stably merge a[lo .. mid] with a[mid+1 ..hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
-
-        // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
-        assert isSorted(a, lo, mid);
-        assert isSorted(a, mid+1, hi);
-
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = a[k]; 
-        }
-
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)              a[k] = aux[j++];   // this copying is unnecessary
-            else if (j > hi)               a[k] = aux[i++];
-            else if (less(aux[j], aux[i])) a[k] = aux[j++];
-            else                           a[k] = aux[i++];
-        }
-
-        // postcondition: a[lo .. hi] is sorted
-        assert isSorted(a, lo, hi);
-    }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, aux, lo, mid);
-        sort(a, aux, mid + 1, hi);
-        merge(a, aux, lo, mid, hi);
-    }
-
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static void sort(Comparable[] a) {
-        Comparable[] aux = new Comparable[a.length];
-        sort(a, aux, 0, a.length-1);
-        assert isSorted(a);
-    }
+package sorting;
 
 
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
+import java.io.*;
+import java.util.*;
+ 
+class Radix {
+ 
     
-    // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
+    static int getMax(int arr[], int n)
+    {
+        int mx = arr[0];
+        for (int i = 1; i < n; i++)
+            if (arr[i] > mx)
+                mx = arr[i];
+        return mx;
     }
+ 
+    
+    
+    static void countSort(int arr[], int n, int exp)
+    {
         
-    // exchange a[i] and a[j]
-    private static void exch(Object[] a, int i, int j) {
-        Object swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
+        int output[] = new int[n]; 
+        int i;
+        int count[] = new int[10];
 
 
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        return isSorted(a, 0, a.length - 1);
-    }
-
-    private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo + 1; i <= hi; i++)
-            if (less(a[i], a[i-1])) return false;
-        return true;
-    }
 
 
-   /***********************************************************************
-    *  Index mergesort
-    ***********************************************************************/
-    // stably merge a[lo .. mid] with a[mid+1 .. hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
 
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = index[k]; 
+
+        
+        for (i = 0; i < n; i++)
+        {
+
+            count[ (arr[i]/exp)%10 ]++;
         }
-
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)                    index[k] = aux[j++];
-            else if (j > hi)                     index[k] = aux[i++];
-            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
-            else                                 index[k] = aux[i++];
+ 
+        
+        
+        for (i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+ 
+        
+      
+        for (i = 0; i <n; i++)
+        {
+            output[--count[ (arr[i]/exp)%10 ]] = arr[i];
         }
+ 
+        
+        
+        for (i = 0; i < n; i++)
+            arr[i] = output[i];
     }
-
-    /**
-     * Returns a permutation that gives the elements in the array in ascending order.
-     * @param a the array
-     * @return a permutation <tt>p[]</tt> such that <tt>a[p[0]]</tt>, <tt>a[p[1]]</tt>,
-     *    ..., <tt>a[p[N-1]]</tt> are in ascending order
-     */
-    public static int[] indexSort(Comparable[] a) {
-        int N = a.length;
-        int[] index = new int[N];
-        for (int i = 0; i < N; i++)
-            index[i] = i;
-
-        int[] aux = new int[N];
-        sort(a, index, aux, 0, N-1);
-        return index;
+ 
+    
+    
+    static void radixsort(int arr[], int n)
+    {
+        
+        print(arr, n);
+        reduceBy1(arr, n);
+        int m = getMax(arr, n);
+        
+        
+        
+        
+        for (int exp = 1; m/exp > 0; exp *= 10)
+        {
+            System.out.println("exp :: " + exp);
+            countSort(arr, n, exp);
+              print(arr, n);
+              System.out.println("--");
+        }
+         increaseBy1(arr, n);
     }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, index, aux, lo, mid);
-        sort(a, index, aux, mid + 1, hi);
-        merge(a, index, aux, lo, mid, hi);
-    }
-
-    // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
+ 
+    
+    static void print(int arr[], int n)
+    {
+        for (int i=0; i<n; i++)
+        {
+            System.out.print(arr[i]+" ");
         }
     }
-
-    /**
-     * Reads in a sequence of strings from standard input; mergesorts them; 
-     * and prints them to standard output in ascending order. 
-     */
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        Merge.sort(a);
-        show(a);
+    
+     static void reduceBy1(int arr[], int n)
+    {
+        for (int i=0; i<n; i++)
+        {
+            arr[i]--;
+        }
+    }
+     
+     static void increaseBy1(int arr[], int n)
+    {
+        for (int i=0; i<n; i++)
+        {
+            arr[i]++;
+        }
+    }
+ 
+ 
+    
+    public static void main (String[] args)
+    {
+        int arr[] = {40, 12, 45, 32, 33, 1, 22, 99, 98,100 };
+        int n = arr.length;
+        radixsort(arr, n);
+        print(arr, n);
     }
 }

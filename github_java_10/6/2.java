@@ -1,43 +1,42 @@
-package src;
+package util;
 
-public class Mergesort implements Sortable {
-	
+import java.util.ArrayList;
 
-	@Override
-	public void sort(int[] array) {
-		int[] tmp = new int[array.length];
-		mergeSort(array, tmp,  0,  array.length - 1);
-	}
-	
-	private static void mergeSort(int[] array, int[] tmp, int left, int right) {
-		if(left < right) {
-			int center = (left + right) / 2;
-			mergeSort(array, tmp, left, center);
-			mergeSort(array, tmp, center + 1, right);
-			merge(array, tmp, left, center + 1, right);
+public class Radixsort {
+	public static void  radixsort(int[] nums) {
+		int len = nums.length;
+		if (len <= 1) {
+			return ;
+		}
+		int maxValue = Integer.MIN_VALUE;
+		for (int i  : nums) {
+			maxValue = Math.max(maxValue, i);
+		}
+		ArrayList<Integer>[] radixs = new ArrayList[10];
+		for (int i = 0; i < 10; ++i) {
+			radixs[i] = new ArrayList<Integer>();
 		}
 		
-	}
-	
-	private static void merge(int[] array, int[] tmp, int left, int right, int rightEnd) {
-		int leftEnd = right - 1;
-		int k = left;
-		int num = rightEnd - left + 1;
-		
-		while(left <= leftEnd && right <= rightEnd)
-			if(array[left] <= (array[right]))
-				tmp[k++] = array[left++];
-			else
-				tmp[k++] = array[right++];
-		
-		while(left <= leftEnd)
-			tmp[k++] = array[left++];
-		
-		while(right <= rightEnd)
-			tmp[k++] = array[right++];
+		int D = Integer.toString(maxValue).length();
+		for (int i = 0; i < D; ++i) {
+			for (int value : nums) {
+				int index = getDigit(value, i);
+				radixs[index].add(value);
+			}
+			int index = 0;
+			for (ArrayList<Integer> list : radixs) {
+				for (int listValue : list) {
+					nums[index++] = listValue;
+				}
+				list.clear();
+			}	
 			
-		for(int i = 0; i < num; i++, rightEnd--)
-			array[rightEnd] = tmp[rightEnd];
+		}
+	}
+	private static int getDigit(int value, int pos) {
+		for (int i = 0; i < pos; ++i) {
+			value = value / 10;
+		}
+		return value % 10;
 	}
 }
-

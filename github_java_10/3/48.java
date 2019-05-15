@@ -1,33 +1,45 @@
-package Oppgave2;
 
-import java.util.Scanner;
+package org.hibernate.envers.tools.graph;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-public class TowerOfHanoi {
 
-	static Scanner in;
-	static int counts = 0;
+public class TopologicalSort<R> {
+    private List<R> sorted;
+    private int time;
 
-	public static void main(String[] args) {
+    private void process(Vertex<R> v) {
+        if (v.getStartTime() != 0) {
+            
+            return;
+        }
 
-		in = new Scanner(System.in);
-		System.out.print("Write amount of discs: ");
-		int n = in.nextInt();
+        v.setStartTime(time++);
 
-		System.out.println("Moves are: ");
-		moveDiscs(n, 'A', 'B', 'C');
+        for (Vertex<R> n : v.getNeighbours()) {
+            process(n);
+        }
 
-		System.out.println("Amount of Moves: " + counts);
-	}
+        v.setEndTime(time++);
 
-	private static void moveDiscs(int n, char from, char to, char aux) {
-		counts++;
-		if (n == 1) {
-			System.out.println("Move Disc " + n + " from " + from + " to " + to);
-		} else {
-			moveDiscs(n - 1, from, aux, to);
-			System.out.println("Move Disc " + n + " from " + from + " to " + to);
-			moveDiscs(n - 1, aux, to, from);
-		}
-	}
+        sorted.add(v.getRepresentation());
+    }
 
+    public List<R> sort(Collection<Vertex<R>> vertices) {
+        sorted = new ArrayList<R>(vertices.size());
+        
+        time = 1;
+
+        for (Vertex<R> v : vertices) {
+            if (v.getEndTime() == 0) {
+                process(v);
+            }
+        }
+
+        Collections.reverse(sorted);
+
+        return sorted;
+    }
 }

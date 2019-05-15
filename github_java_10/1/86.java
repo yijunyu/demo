@@ -1,30 +1,19 @@
-package BFS;
+package HW2;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
-public class BreadthFirstSearch {
-	
-	public void bfa(Vertex root) {
-		Queue<Vertex> queue = new LinkedList<>();
-		root.setVisited(true);
-		queue.add(root);
-		
-		while(!queue.isEmpty())
-		{
-			Vertex actualVertex = queue.remove();
-			System.out.print(actualVertex);
-			
-			for(Vertex v: actualVertex.getNeighbourList())
-			{
-				if(!v.isVisited()) 
-				{
-					v.setVisited(true);
-					queue.add(v);
-				}
-			}
-		}
-                         System.out.println();
-
-	}
+public class InsertionSort implements SortBehavior{
+    @Override
+    public int[] mathSort(int[] array) {
+        System.out.println("Insertion Sort");
+        for(int i = 0; i <array.length; i++){
+            int currVal = array[i];
+            int indexBefore = i-1;
+            while(indexBefore >= 0 && currVal < array[indexBefore]){
+                array[indexBefore+1] = array[indexBefore];
+                indexBefore--;
+            }
+            array[indexBefore+1] = currVal;
+        }
+        return  array;
+    }
 }
+

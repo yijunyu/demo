@@ -1,41 +1,36 @@
-package dfs;
 
-import graphReader.GraphReader;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Scanner;
 
-public class DepthFirstSearch {
+public class E7_18 {
+  public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+    System.out.print("Enter ten numbers: ");
+    double[] nums = new double[10];
+    for (int i = 0; i < nums.length; i++) {
+      nums[i] = input.nextDouble();
+    }
 
-    private static boolean[] visited;
-    private static List<List<Integer>> graph;
+    bubblesort(nums);
 
-    public static void main(String[] args) throws IOException {
+    for (double num: nums) {
+      System.out.print(num + " ");
+    }
+    System.out.println();
+  }
 
-        graph = GraphReader.readGraph();
-        visited = new boolean[graph.size()];
-
-        for (int i = 0; i < graph.size(); i++) {
-            if (!visited[i]) {
-                dfs(i);
-                System.out.println();
-            }
+  public static void bubblesort(double[] arr) {
+    boolean didSwap;
+    do {
+      didSwap = false;
+      for (int i = 0; i < arr.length - 1; i++) {
+        if (arr[i] > arr[i + 1]) {
+          double temp = arr[i + 1];
+          arr[i + 1] = arr[i];
+          arr[i] = temp;
+          didSwap = true;
         }
-    }
-
-    private static void dfs(int vertex) {
-
-        if (!visited[vertex]) {
-            visited[vertex] = true;
-            List<Integer> children = graph.get(vertex);
-            for (int i = 0; i < children.size(); i++) {
-                dfs(children.get(i));
-            }
-            printVertex(vertex);
-        }
-    }
-
-    private static void printVertex(int vertex) {
-        System.out.print(vertex + " ");
-    }
+      }
+    } while (didSwap);
+  }
 }

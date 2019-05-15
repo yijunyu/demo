@@ -1,35 +1,61 @@
-package com.hieblmi.graphs;
+package com.level4;
 
-import com.hieblmi.graphs.Node;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
+public class Insertionsort {
 
-class BFS<T> {
+    public ListNode insertionSortList(ListNode a) {
 
-    private Node<T> start;
+        if(a==null || a.next==null){
+            return a;
+        }
+        ListNode head=a,tmp=a.next;
 
-    BFS(Node<T> start) {
-        this.start = start;
-    }
+        while(tmp!=null) {
+            ListNode localtmp = a, prev = null;
+            ListNode nxt  = tmp.next;
+            ListNode hold=null;
+            int isIMd = 0;
+            while (localtmp != tmp) {
 
-    public boolean find(Node<T> n) {
-
-        List<Node<T>> queue = new LinkedList<>();
-        queue.add(start);
-
-        while(!queue.isEmpty()) {
-            Node<T> c = queue.remove(0);
-            System.out.println("Inspect " + c.getData());
-            if(c.equals(n)) {
-                return true;
+                if (localtmp.val > tmp.val) {
+                    if (localtmp.next == tmp) {
+                        isIMd = 1;
+                    }else{
+                        isIMd=2;
+                    }
+                    hold = tmp.next;
+                    tmp.next = localtmp;
+                    if (prev != null) {
+                        prev.next = tmp;
+                    }else {
+                        a=tmp;
+                    }
+                    break;
+                }
+                prev = localtmp;
+                localtmp = localtmp.next;
             }
+            if (isIMd==1) {
+                localtmp.next = hold;
+            } else if(isIMd==2) {
+                while (localtmp != null && localtmp.next != tmp) {
+                    localtmp = localtmp.next;
+                }
+                if (localtmp != null) {
+                    localtmp.next = hold;
+                }
+            }
+            tmp=nxt;
+        }
+        return a;
 
-            queue.addAll(c.neighbors());
         }
 
-        return false;
+
+
+    public static void main(String[] args) {
+        ListNode in = ListNode.CreateListNode(new int[]{1});
+        Insertionsort is= new Insertionsort();
+        ListNode.print(is.insertionSortList(in));
     }
 }

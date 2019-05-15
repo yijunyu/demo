@@ -1,30 +1,37 @@
-package com.facebook.common.collect;
+package sort;
 
-import com.google.common.collect.Lists;
-import java.util.List;
 
-public class TopologicalSort$Node<T>
-{
-  public final T a;
-  final List<TopologicalSort.Edge<T>> b;
-  final List<TopologicalSort.Edge<T>> c;
+public class Shellsort {
 
-  public TopologicalSort$Node(T paramT)
-  {
-    this.a = paramT;
-    this.b = Lists.a();
-    this.c = Lists.a();
-  }
+    public static void main(String[] args) {
+        int[] a={49,38,65,97,76,13,27,49,78,34,12,64,1};
+        System.out.println("排序之前：");
+        for (int anA1 : a) {
+            System.out.print(anA1 + " ");
+        }
+        
+        int d = a.length;
+        while(true){
+            d = d / 2;
+            for(int x=0;x<d;x++){
+                for(int i=x+d;i<a.length;i=i+d){
+                    int temp = a[i];
+                    int j;
+                    for(j=i-d;j>=0&&a[j]>temp;j=j-d){
+                        a[j+d] = a[j];
+                    }
+                    a[j+d] = temp;
+                }
+            }
+            if(d == 1){
+                break;
+            }
+        }
+        System.out.println();
+        System.out.println("排序之后：");
+        for (int anA : a) {
+            System.out.print(anA + " ");
+        }
+    }
 
-  public void a(Node<T> paramNode)
-  {
-    TopologicalSort.Edge localEdge = new TopologicalSort.Edge(this, paramNode);
-    this.c.add(localEdge);
-    paramNode.b.add(localEdge);
-  }
 }
-
-/* Location:           /data1/software/jd-gui/com.facebook.katana_2.0_liqucn.com-dex2jar.jar
- * Qualified Name:     com.facebook.common.collect.TopologicalSort.Node
- * JD-Core Version:    0.6.0
- */

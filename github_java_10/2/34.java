@@ -1,250 +1,131 @@
-public class AvlTree {
-
-AvlNode position;
-
-AvlNode avlTree;
-
-public AvlNode makeEmpty(AvlNode t) {
-
-if(t != null) {
-
-makeEmpty(t.getLeft());
-
-makeEmpty(t.getRight());
-
-t = null;
-
-}
-
-return null;
-
-}
-
-public AvlNode find(int value, AvlNode t) {
-
-if (t == null) {
-
-return null;
-
-}
-
-if (value < t.getValue()) {
-
-return find(value, t.getLeft());
-
-}
-
-else	 if(value > t.getValue()) {
-
-return find(value, t.getRight());
-
-}
-
-else
-
-return t;
-
-}
-
-public AvlNode findMin(AvlNode t) {
-
-if (t == null) {
-
-return null;
-
-}
-
-else 	 if(t.getLeft() == null)
-
-return t;
-
-else
-
-return findMin(t.getLeft());
-
-}
-
-public AvlNode findMax(AvlNode t) {
-
-if(t != null)
-
-while(t.getRight() != null)
-
-t = t.getRight();
-
-return t;
-
-}
-
-public static int getHeight (AvlNode position) {
-
-if (position == null)
-
-return -1;
-
-else
-
-return position.getHeight();
-
-}
-
-public static int max (int lhs, int rhs) {
-
-return lhs > rhs ? lhs : rhs;
-
-}
-
-public static AvlNode singleRotateWithLeft (AvlNode k2) {
-
-AvlNode k1;
-
-k1 = k2.getLeft();
-
-k2.setLeft(k1.getRight());
-
-k1.setRight(k2);
-
-k2.setHeight(max(getHeight(k2.getLeft()),	 getHeight(k2.getRight()))+1);
-
-k1.setHeight(max(getHeight(k1.getLeft()),k2.getHeight())+1);
-
-return k1;
-
-}
-
-public static AvlNode singleRotateWithRight (AvlNode k1) {
-
-AvlNode k2;
-
-k2 = k1.getRight();
-
-k1.setRight(k2.getLeft());
-
-k2.setLeft(k1);
-
-k1.setHeight(max(getHeight(k1.getLeft()),	 getHeight(k1.getRight()))+1);
-
-k2.setHeight(max(getHeight(k2.getRight()),k1.getHeight())+1);
-
-return k2;
-
-}
-
-public static AvlNode doubleRotateWithLeft (AvlNode k3) {
-
-k3.setLeft(singleRotateWithRight(k3.getLeft()));
-
-return singleRotateWithLeft(k3);
-
-}
-
-public static AvlNode doubleRotateWithRight (AvlNode k1) {
-
-k1.setRight(singleRotateWithLeft(k1.getRight()));
-
-return singleRotateWithRight(k1);
-
-}
-
-public AvlNode insert (int value, AvlNode t) {
-
-if(t == null) {
-
-t = new AvlNode(value);
-
-}
-
-else	 if(value < t.getValue()) {
-
-t.setLeft(insert(value,t.getLeft()));
-
-if(getHeight(t.getLeft())-getHeight(t.getRight()) == 2)
-
-if(value < t.getLeft().getValue())
-
-t = singleRotateWithLeft(t);
-
-else
-
-t = doubleRotateWithLeft(t);
-
-}
-
-else 	 if(value > t.getValue()) {
-
-t.setRight(insert(value,t.getRight()));
-
-if(getHeight(t.getRight())-getHeight(t.getLeft()) == 2)
-
-if(value > t.getRight().getValue())
-
-t = singleRotateWithRight(t);
-
-else
-
-t = doubleRotateWithRight(t);
-
-}
-
-t.setHeight(max(getHeight(t.getLeft()),	 getHeight(t.getRight()))+1);
-
-return t;
-
-}
-
-public int retrieve (AvlNode t) {
-
-return t.getValue();
-
-}
-
-public void preOrder(AvlNode t) {
-
-System.out.println(t.getValue());
-
-if(t.getLeft() != null) {
-
-preOrder(t.getLeft());
-
-}
-
-if(t.getRight() != null) {
-
-preOrder(t.getRight());
-
-}
-
-}
-
-public static void main(String[] args) {
-
-AvlTree at = new AvlTree();
-
-AvlNode t;
-
-AvlNode position;
-
-int i;
-
-int j = 0;
-
-t = at.makeEmpty(null);
-
-for(i=0; i<50; i++, j = (j+7)%50){
-
-t = at.insert(j,t);
-}
-
-	for(i=0; i<50; i++){
-	
-		if((position = at.find(i,t)) == null ||	 at.retrieve(position) != i){
-		
-		System.out.println(�Error at �+i);
-		}
-		System.out.println(�Min is �+at.retrieve(at.findMin(t))+	 � Max is �+at.retrieve(at.findMax(t)));	 at.preOrder(t);
-		
-	}
-
-}
-
+package algs4;
+
+
+
+public class Merge {
+
+    
+    private Merge() { }
+
+    
+    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+        
+        assert isSorted(a, lo, mid);
+        assert isSorted(a, mid+1, hi);
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k]; 
+        }
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)              a[k] = aux[j++];   
+            else if (j > hi)               a[k] = aux[i++];
+            else if (less(aux[j], aux[i])) a[k] = aux[j++];
+            else                           a[k] = aux[i++];
+        }
+
+        
+        assert isSorted(a, lo, hi);
+    }
+
+    
+    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, aux, lo, mid);
+        sort(a, aux, mid + 1, hi);
+        merge(a, aux, lo, mid, hi);
+    }
+
+    
+    public static void sort(Comparable[] a) {
+        Comparable[] aux = new Comparable[a.length];
+        sort(a, aux, 0, a.length-1);
+        assert isSorted(a);
+    }
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
+    }
+
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+   
+    
+    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = index[k]; 
+        }
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)                    index[k] = aux[j++];
+            else if (j > hi)                     index[k] = aux[i++];
+            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
+            else                                 index[k] = aux[i++];
+        }
+    }
+
+    
+    public static int[] indexSort(Comparable[] a) {
+        int N = a.length;
+        int[] index = new int[N];
+        for (int i = 0; i < N; i++)
+            index[i] = i;
+
+        int[] aux = new int[N];
+        sort(a, index, aux, 0, N-1);
+        return index;
+    }
+
+    
+    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, index, aux, lo, mid);
+        sort(a, index, aux, mid + 1, hi);
+        merge(a, index, aux, lo, mid, hi);
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readAllStrings();
+        Merge.sort(a);
+        show(a);
+    }
 }

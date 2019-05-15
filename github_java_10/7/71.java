@@ -1,91 +1,33 @@
-package GeekCoder;
+package pl.piotrkrzyminski;
 
-import java.util.*;
 
-public class TopologicalSort {
 
-    private Map<Node, Set<Node>> adjList = new HashMap<>();
+public class Shellsort {
 
-    private Stack<Node> topoSorted = new Stack<>();
+    public static void sort(long[] valuesArray, int[] gapsArray) throws SortException {
 
-    public TopologicalSort() {}
+        if(gapsArray.length == 0) throw new EmptyArrayException("Gaps array can not by empty");
 
-    void addNeighbor(Node from, Node to) {
-        adjList.computeIfAbsent(from, s -> new HashSet<>()).add(to);
-    }
+        int endGap = gapsArray[gapsArray.length-1];
+        if(endGap != 1) throw new InvalidGapSequenceException("Gaps sequence must end with 1");
 
-    void topologicalSort() throws Exception {
 
-        for (Node n: adjList.keySet()) {
-            if (n.visited == 0) {
-                dfs(n);
-            }
-        }
-    }
+        int valuesArraySize = valuesArray.length;
 
-    void dfs(Node node) throws Exception {
+        for (int gap : gapsArray) {
 
-        if (node.visited == 1) {
-            throw new Exception("graph cyclic");
-        }
+            for (int i = gap; i < valuesArraySize; i++) {
 
-        if (node.visited == 0) {
-            node.visited = 1;
-            if (adjList.containsKey(node)) {
-                for (Node m : adjList.get(node)) {
-                    dfs(m);
+                long value = valuesArray[i];
+                int j = i;
+
+                while (j >= gap && valuesArray[j - gap] > value) {
+                    valuesArray[j] = valuesArray[j - gap];
+                    j -= gap;
                 }
+
+                valuesArray[j] = value;
             }
-
-            node.visited = 2;
-            topoSorted.push(node);
-        }
-    }
-
-
-    public class Node {
-        String value;
-        int visited = 0;
-
-        Node (String value) {
-            this.value = value;
-        }
-    }
-
-    public static void main(String[] args) {
-        TopologicalSort g = new TopologicalSort();
-        g.instantiateGraph();
-    }
-
-    void instantiateGraph() {
-        Node seven = new Node("7");
-        Node five = new Node("5");
-        Node three = new Node("3");
-        Node eleven = new Node("11");
-        Node eight = new Node("8");
-        Node two = new Node("2");
-        Node nine = new Node("9");
-        Node ten = new Node("10");
-
-        addNeighbor(seven, eleven);
-        addNeighbor(seven, eight);
-        addNeighbor(five, eleven);
-        addNeighbor(three, eight);
-        addNeighbor(three, ten);
-        addNeighbor(eleven, two);
-        addNeighbor(eleven, nine);
-        addNeighbor(eleven, ten);
-        addNeighbor(eight, nine);
-
-        try {
-            topologicalSort();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        for (Node node: topoSorted) {
-            System.out.print(node.value + " ");
         }
     }
 }

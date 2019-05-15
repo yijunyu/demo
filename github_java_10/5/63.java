@@ -1,85 +1,124 @@
-package datastructure.graph;
+package lecture8;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.ArrayList;
 
-public class GraphQuestions {
-	
-	//Given a directed graph, design an algorithm to find out whether there is a route between two nodes.
-	
-	//implement a depth-first-search non-recursively
-	public static boolean dfs(MyDirectedGraphNode<Integer> node, int value){
+public class bubblesort {
+
+	public static void main(String[] args) {
 		
-		//time cost= O(N)
-		//time cost= O(0)
+		int[] array = { 5, 2, 3, 4, 1 };
+		int[] array2={5,2,3};
 		
-		if(node == null)
-			return false;
-	
-		Stack<MyDirectedGraphNode<Integer>> stack = new Stack<MyDirectedGraphNode<Integer>>();
-			
-		stack.push(node);
-		
-		while(!stack.isEmpty()){
-			MyDirectedGraphNode<Integer> currentNode = stack.pop();
-			
-			if(currentNode.getValue() == value)
-				return true;
-			
-			for (MyDirectedGraphNode<Integer> adjacentNode : currentNode.adjacentNodes) {
-				if(!adjacentNode.isVisited())
-					stack.push(adjacentNode);
+		isort(array);
+		lecture6.arrays.display(array);
+		System.out.println(binarysearch(array,5));
+		ArrayList<Integer> n=new ArrayList<Integer>();
+		n=intersection(array,array2);
+		 
+		System.out.println(n);
+	}
+
+	public static void bsort(int[] array)
+	{
+		int counter=1;
+		while(counter<=array.length)
+		{
+			for(int i=0;i<array.length-counter;i++)
+			{
+				if(array[i+1]<array[i])
+				{
+					int temp=array[i+1];
+					array[i+1]=array[i];
+					array[i]=temp;
+				}
+					
 			}
-				
+			counter++;
 		}
-		return false;
 	}
-	//implement a depth-first-search recursively
-	public static boolean dfsRecursive(MyDirectedGraphNode<Integer> node, int value){
-		
-		//time cost= O(N)
-		//time cost= O(0)
-		
-		if(node == null || node.isVisited())
-			return false;
-	
-		if(node.getValue() == value){
-			return true;
-		}else{
-			for (MyDirectedGraphNode<Integer> adjacentNode : node.adjacentNodes) {
-				if(dfsRecursive(adjacentNode, value))
-					return true;
+	public static void ssort(int[] array)
+	{
+		int counter=1;
+		while(counter<=array.length)
+		{
+			for(int i=counter;i<=array.length-1;i++)
+			{
+				if(array[i]<array[counter-1])
+				{
+					int temp=array[i];
+					array[i]=array[counter-1];
+					array[counter-1]=temp;
+				}
+					
+			}
+			counter++;
+		}
+	}
+	public static void isort(int[] array)
+	{
+		int counter=1;
+		while(counter<=array.length-1)
+		{
+			for(int i=counter;i>0;i--)
+			{
+				if(array[i]<array[i-1])
+				{
+					int temp=array[i];
+					array[i]=array[i-1];
+					array[i-1]=temp;
+				}
+				else
+					break;
+					
+			}
+			counter++;
+		}
+	}
+	public static int binarysearch(int[] array,int key)
+	{
+		int start=0,end=array.length-1,mid=(start+end)/2;
+		while(start<=end)
+		{
+			if(array[mid]==key)
+				return mid;
+			if(array[mid]<key)
+			{
+				start=mid+1;
+				mid=(start+end)/2;
+			}
+			if(array[mid]>key)
+			{
+				end=mid-1;
+				mid=(start+end)/2;
 			}
 		}
-		return false;
+		return -1;
 	}
-	
-	//implement a depth-first-search non-recursively
-	public static boolean bfs(MyDirectedGraphNode<Integer> node, int value){
-		
-		//time cost= O(N)
-		//time cost= O(0)
-		
-		if(node == null)
-			return false;
-	
-		Queue<MyDirectedGraphNode<Integer>> queue = new LinkedList<MyDirectedGraphNode<Integer>>();
+	public static ArrayList<Integer> intersection(int[] array1,int[] array2)
+	{
+		ArrayList<Integer> nlist=new ArrayList<Integer>();
+		isort(array1);
+		isort(array2);
+		for(int i=0,j=0;i<array1.length-1||j<array2.length-1;)
+		{
 			
-		queue.add(node);
-		
-		while(!queue.isEmpty()){
-			
-			MyDirectedGraphNode<Integer> currentNode = queue.poll();
-			
-			if(currentNode.getValue() == value)
-				return true;
-			
-			for (MyDirectedGraphNode<Integer> adjacentNode : currentNode.adjacentNodes) {
-				if(!adjacentNode.isVisited())
-					queue.add(adjacentNode);
-			}	
+			if(array1[i]==array2[j])
+			{
+						nlist.add(array1[i]);
+						i++;j++;
+			}
+			if(array1[i]>array2[j])
+			{
+						j++;
+			}
+			if(array1[i]<array2[j])
+			{
+						i++;
+			}
 		}
-		return false;
+		return nlist;
+		
 	}
+	
+
 }

@@ -1,83 +1,82 @@
-package algorithm_java;
+package net.brian.coding.algorithm.crazyjavaimpl;
 
-//reference: http://www.geeksforgeeks.org/topological-sorting/
-//DFS
 
-//A Java program to print topological sorting of a DAG
-import java.io.*;
-import java.util.*;
 
-//This class represents a directed graph using adjacency
-//list representation
-class TopologicalSort {
-	private int V; // No. of vertices
-	private LinkedList<Integer> adj[]; // Adjacency List
-
-	// Constructor
-	// the original one is graph
-	TopologicalSort(int v) {
-		V = v;
-		adj = new LinkedList[v];
-		for (int i = 0; i < v; ++i)
-			adj[i] = new LinkedList();
+class ShellSortDataWrap implements Comparable<ShellSortDataWrap>
+{
+	int data;
+	String flag;
+	public ShellSortDataWrap(int data, String flag)
+	{
+		this.data = data;
+		this.flag = flag;
 	}
-
-	// Function to add an edge into the graph
-	void addEdge(int v, int w) {
-		adj[v].add(w);
+	public String toString()
+	{
+		return data + flag;
 	}
-
-	// A recursive function used by topologicalSort
-	void topologicalSortUtil(int v, boolean visited[], Stack stack) {
-		// Mark the current node as visited.
-		visited[v] = true;
-		Integer i;
-
-		// Recur for all the vertices adjacent to this
-		// vertex
-		Iterator<Integer> it = adj[v].iterator();
-		while (it.hasNext()) {
-			i = it.next();
-			if (!visited[i])
-				topologicalSortUtil(i, visited, stack);
+	
+	public int compareTo(ShellSortDataWrap dw)
+	{
+		return this.data > dw.data ? 1 
+			: (this.data == dw.data ? 0 : -1);
+	}
+}
+public class ShellSort
+{
+	public static void shellSort(ShellSortDataWrap[] data) 
+	{
+		System.out.println("��ʼ����");
+		int arrayLength = data.length;
+		
+		int h = 1;
+		
+		while(h <= arrayLength / 3)
+		{
+			h = h * 3 + 1;
 		}
-
-		// Push current vertex to stack which stores result
-		stack.push(new Integer(v));
+		while(h > 0)
+		{
+			System.out.println("===h��ֵ:" + h + "===");
+			for (int i = h ; i < arrayLength ; i++ )
+			{
+				
+				ShellSortDataWrap tmp = data[i];
+				
+				
+				if (data[i].compareTo(data[i - h]) < 0)
+				{
+					int j = i - h;
+					
+					for ( ; j >= 0 && data[j].compareTo(tmp) > 0 ; j-=h)
+					{
+						data[j + h] = data[j];
+					}
+					
+					data[j + h] = tmp;
+				}
+				System.out.println(java.util.Arrays.toString(data));
+			}
+			h = (h - 1) / 3;
+		}
 	}
-
-	// The function to do Topological Sort. It uses
-	// recursive topologicalSortUtil()
-	void topologicalSort() {
-		Stack stack = new Stack();
-
-		// Mark all the vertices as not visited
-		boolean visited[] = new boolean[V];
-
-		// Call the recursive helper function to store
-		// Topological Sort starting from all vertices
-		// one by one
-		for (int i = 0; i < V; i++)
-			if (visited[i] == false)
-				topologicalSortUtil(i, visited, stack);
-
-		// Print contents of stack
-		while (stack.empty() == false)
-			System.out.print(stack.pop() + " ");
-	}
-
-	// Driver method
-	public static void main(String args[]) {
-		// Create a graph given in the above diagram
-		TopologicalSort g = new TopologicalSort(6);
-		g.addEdge(5, 2);
-		g.addEdge(5, 0);
-		g.addEdge(4, 0);
-		g.addEdge(4, 1);
-		g.addEdge(2, 3);
-		g.addEdge(3, 1);
-
-		System.out.println("Following is a Topological " + "sort of the given graph");
-		g.topologicalSort();
+	public static void main(String[] args)
+	{
+		ShellSortDataWrap[] data = {
+			new ShellSortDataWrap(9 , ""),
+			new ShellSortDataWrap(-16 , ""),
+			new ShellSortDataWrap(21 , "*"),
+			new ShellSortDataWrap(23 , ""),
+			new ShellSortDataWrap(-30 , ""),
+			new ShellSortDataWrap(-49 , ""),
+			new ShellSortDataWrap(21 , ""),
+			new ShellSortDataWrap(30 , "*"),
+			new ShellSortDataWrap(30 , ""),
+		};
+		System.out.println("����֮ǰ��\n"
+			+ java.util.Arrays.toString(data));
+		shellSort(data);
+		System.out.println("����֮��\n" 
+			+ java.util.Arrays.toString(data));
 	}
 }

@@ -1,89 +1,106 @@
-package io.ninja.park.service.demo.algorithms.sort;
+package sort.bucket;
 
-/******************************************************************************
- *  Compilation:  javac Bubble.java
- *  Execution:    java  Bubble N
- *  Dependencies: StdOut.java 
- *
- *  Read strings from standard input and bubblesort them.
- *
- ******************************************************************************/
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
-/**
- *  The {@code Bubble} class provides static methods for sorting an
- *  array using bubble sort.
- *  <p>
- *  This implementation makes ~ 1/2 n^2 compares and exchanges in
- *  the worst case, so it is not suitable for sorting large arbitrary arrays.
- *  Bubble sort is seldom useful because it is substantially slower than
- *  insertion sort on most inputs. The one class of inputs where bubble sort
- *  might be faster than insertion sort is arrays for which only
- *  a few passes of bubble sort are needed. This includes sorted arrays,
- *  but it does not include most partially-sorted arrays; for example,
- *  bubble sort takes quadratic time to sort arrays of the form
- *  [n, 1, 2, 3, 4, ..., n-1], whereas insertion sort takes linear time on
- *  such inputs.
- *  <p>
- *  The sorting algorithm is stable and uses O(1) extra memory.
- *  <p>
- *  For additional documentation,
- *  see <a href="https://algs4.cs.princeton.edu/21elementary">Section 2.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Bubble {
 
-   // This class should not be instantiated.
-    private Bubble() { }
+public class BucketSort {
+	
+	private int[] sortArray = null;
+	
+	private LeafBucket[] buckets = null;
+	
+	private void initBuckets(){
+		buckets = new LeafBucket[8];
+		for(int i = 0; i < buckets.length; i++){
+			buckets[i] = new LeafBucket(4);
+		}
+	}
+	
+	public BucketSort(int[] sortArray){
+		this.sortArray = sortArray;
+		initBuckets();
+	}
+	
+	private int getSubBucketIndex(int num){
+		int bitOff = 3;
+		while(bitOff >= 0){
+			int offNum = num >> bitOff;
+			offNum &= 0x1;
+			if(offNum != 0){
+				return bitOff;
+			}
+			bitOff--;
+		}
+		throw new RuntimeException("subBucketIndex is not found!");
+	}
+	
+	public void sort(){
+		for(int sortItem : sortArray){
+			int bitOff = 28;
+			while(bitOff >= 0){
+				int offSortItem = sortItem >> bitOff;
+				offSortItem &= 0xF;
+				if(offSortItem != 0){
+				    LeafBucket leafBucket = buckets[bitOff / 4];
+				    int subBucketIndex = getSubBucketIndex(offSortItem);
+				    leafBucket.add(subBucketIndex, sortItem);
+				    break;
+				}
+				bitOff -= 4;
+			}
+		}
+		
+		for(LeafBucket leafBucket : buckets){
+			System.out.println(leafBucket);
+		}
+	}
+	
+	private class LeafBucket{
+		private Queue<Integer>[] buckets = null;
+		
+		public LeafBucket(int capacity){
+			buckets = new LinkedList[capacity];
+			for(int i = 0; i < buckets.length; i++){
+				buckets[i] = new LinkedList<Integer>();
+			}
+		}
+		
+		public void add(int bucketIndex, int element){
+			LinkedList<Integer> queue = (LinkedList<Integer>)buckets[bucketIndex];
+			int insertIndex = 0;
+			Iterator<Integer> ite = queue.iterator();
+			while(ite.hasNext()){
+			    int qe = ite.next();
+			    if(qe > element){
+			    	break;
+			    }
+			    insertIndex ++;
+			}
+			queue.add(insertIndex, element);
+		}
+		
+		public String toString(){
+			StringBuffer sb = new StringBuffer();
+			for(Queue<Integer> queue : buckets){
+				if(queue.size() > 0){
+					sb.append(queue.toString());
+				}
+				else{
+					sb.append("[]");
+				}
+			}
+			return sb.toString();
+		}
+	}
 
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static <Key extends Comparable<Key>> void sort(Key[] a) {
-        int n = a.length;
-        for (int i = 0; i < n; i++) {
-            int exchanges = 0;
-            for (int j = n-1; j > i; j--) {
-                if (less(a[j], a[j-1])) {
-                    exch(a, j, j-1);
-                    exchanges++;
-                }
-            }
-            if (exchanges == 0) break;
-        }
-    }
+	
+	public static void main(String[] args) {
+		int[] a = {3424,3432423, 1212312312, 34, 55, 55, 77, 22, 1, 20, 30,66, 67, 68, 88, 10, 100, 9};
+		BucketSort bs = new BucketSort(a);
+		bs.sort();
 
-    // is v < w ?
-    private static <Key extends Comparable<Key>> boolean less(Key v, Key w) {
-        return v.compareTo(w) < 0;
-    }
+	}
 
-    // exchange a[i] and a[j]
-    private static <Key extends Comparable<Key>> void exch(Key[] a, int i, int j) {
-        Key swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
-
-   // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-          //  StdOut.println(a[i]);
-        }
-    }
-
-    /**
-     * Reads in a sequence of strings from standard input; bubble sorts them;
-     * and prints them to standard output in ascending order.
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-       //  String[] a = StdIn.readAllStrings();
-       // Bubble.sort(a);
-       // show(a);
-    }
 }

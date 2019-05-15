@@ -1,70 +1,56 @@
-package com.diwayou.algs.book;
+/**
+ * Project Name: algorithms_java
+ * File Name: BubbleSort.java
+ * Package Name: com.fanglei.resource.chapter_2.chapter_2_problems_bubble_sort
+ * Date: Apr 15, 2017 9:58:59 PM
+ * Copyright (c) 2017, fanglei@pku.edu.cn All Rights Reserved.
+ * 
+ */
 
-import com.diwayou.algs.util.In;
-import com.diwayou.algs.util.StdOut;
 
-/*************************************************************************
- *  Compilation:  javac DepthFirstSearch.java
- *  Execution:    java DepthFirstSearch filename.txt s
- *  Dependencies: Graph.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/41undirected/tinyG.txt
- *
- *  Run depth first search on an undirected graph.
- *  Runs in O(E + V) time.
- *
- *  % java DepthFirstSearch tinyG.txt 0
- *  0 1 2 3 4 5 6 
- *  NOT connected
- *
- *  % java DepthFirstSearch tinyG.txt 9
- *  9 10 11 12 
- *  NOT connected
- *
- *************************************************************************/
+package com.fanglei.resource.chapter_2.chapter_2_problems_bubble_sort;
 
-public class DepthFirstSearch {
-    private boolean[] marked;    // marked[v] = is there an s-v path?
-    private int count;           // number of vertices connected to s
 
-    public DepthFirstSearch(Graph G, int s) {
-        marked = new boolean[G.V()];
-        dfs(G, s);
-    }
-
-    // depth first search from v
-    private void dfs(Graph G, int v) {
-        marked[v] = true;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                dfs(G, w);
-            }
-        }
-    }
-
-    // is there an s-v path?
-    public boolean marked(int v) {
-        return marked[v];
-    }
-
-    // number of vertices connected to s
-    public int count() {
-        return count;
-    }
-
-    // test client
-    public static void main(String[] args) {
-        In in = new In(args[0]);
-        Graph G = new Graph(in);
-        int s = Integer.parseInt(args[1]);
-        DepthFirstSearch search = new DepthFirstSearch(G, s);
-        for (int v = 0; v < G.V(); v++) {
-            if (search.marked(v))
-                StdOut.print(v + " ");
-        }
-
-        StdOut.println();
-        if (search.count() != G.V()) StdOut.println("NOT connected");
-        else                         StdOut.println("connected");
-    }
+/**
+ * ClassName: BubbleSort
+ * Description: bubble-sort algorithm
+ * 
+ * @author Lei Fang
+ * @email fanglei@pku.edu.cn
+ * @version
+ * @date: Apr 15, 2017 9:58:59 PM
+ */
+public class BubbleSort
+{
+	/**
+	 * Method Name: bubbleSort
+	 * Description: bubble-sort algorithm
+	 * 
+	 * @param A the array to be sorted
+	 * 
+	 * ALGORITHM-BUBBLE-SORT(A)
+	 * for i = 1 to A.length - 1
+	 * 		for j = A.length downto i + 1
+	 * 			if A[j] < A[j-1]
+	 * 				exchange A[j] with A[j-1]
+	 *
+	 * @author Lei Fang
+	 */
+	public static void bubbleSort(int[] A)
+	{
+		for(int i = 0; i < (A.length - 1); i++)
+		{
+			for (int j = A.length - 1; j >= (i + 1); j--)
+			{
+				if (A[j] < A[j - 1])
+				{
+					// Switch with a temp variable
+					int temp = A[j];
+					A[j] = A[j - 1];
+					A[j - 1] = temp;
+				}
+			}
+		}
+	}
 
 }

@@ -1,70 +1,75 @@
-package org.odk.voice.digits2string;
+import java.util.Random;
 
-/**
- * See http://en.wikipedia.org/wiki/Levenshtein_distance
- * @author alerer
- *
- */
-public class LevenshteinDistanceCalculator {
-  
-  int[][] calcArray;
-  
-  public LevenshteinDistanceCalculator(int maxSize){
-    calcArray = new int[maxSize + 1][maxSize + 1];
-  }
-  
-  public int getDistance(String a, String b){
-      for (int i = 0; i <= a.length(); i++) {
-        calcArray[i][0] = i;
-      }
-      for (int j = 0; j <= b.length(); j++) {
-        calcArray[0][j] = j;
-      }
-      for (int j = 0; j < b.length(); j++) {
-        for (int i = 0; i < a.length(); i++) {
-          if (a.charAt(i) == b.charAt(j)){
-            calcArray[i+1][j+1] = calcArray[i][j];
-          } else {
-            calcArray[i+1][j+1] = min3(calcArray[i][j+1],
-                                       calcArray[i+1][j],
-                                       calcArray[i][j])
-                                       + 1;
-          }
-        }
-      }
-      return calcArray[a.length()][b.length()];
-      
-//      int LevenshteinDistance(char s[1..m], char t[1..n])
-//      {
-//        // d is a table with m+1 rows and n+1 columns
-//        declare int d[0..m, 0..n]
-//      for i from 0 to m
-//        d[i, 0] := i // deletion
-//      for j from 0 to n
-//        d[0, j] := j // insertion
-//     
-//      for j from 1 to n
-//      {
-//        for i from 1 to m
-//        {
-//          if s[i] = t[j] then 
-//            d[i, j] := d[i-1, j-1]
-//          else
-//            d[i, j] := minimum
-//                       (
-//                         d[i-1, j] + 1,  // deletion
-//                         d[i, j-1] + 1,  // insertion
-//                         d[i-1, j-1] + 1 // substitution
-//                       )
-//        }
-//      }
-//     
-//      return d[m, n]
-//    }
+public class Quicksort {
 
-  }
-  
-  public int min3(int a, int b, int c) {
-    return Math.min(a, Math.min(b, c));
-  }
+	public static int[] quicksort( int[] intArray ) {
+		return quicksort(intArray, 0, intArray.length - 1 );
+	}
+	public static int[] quicksort( int[] arr, int low, int high ) {
+		if ( low == high ) {
+			return arr;
+		}
+
+		int pivotIndex = high;
+		int pivot = arr[ high ];
+		int highIndex = high - 1;
+		int lowIndex = low;
+		
+		boolean pivotChange = false;
+		while ( pivotChange == false ) {
+			int lVal = arr[ lowIndex ];
+			int hVal = arr[ highIndex ];
+			if ( lVal > pivot ) {
+				if ( hVal < pivot ) {
+					arr = swap(arr, lowIndex, highIndex );
+					lowIndex += 1;
+					highIndex -= 1;
+
+				} else {
+					for ( int x = highIndex; x >= lowIndex; x-- ) {
+						if ( x == lowIndex ) {
+							swap(arr, x, pivotIndex);
+							pivotChange = true;
+
+							quicksort(arr, low, x - 1);
+							quicksort(arr, x + 1, pivotIndex);
+							break;
+						}
+						if ( arr[ x ] < pivot ) {
+							swap(arr, x, lowIndex);
+							break;
+						}
+					}
+				}
+			} else {
+				for ( int x = lowIndex; x <= highIndex; x++ ) {
+					if ( x == highIndex ) {
+						swap(arr, x, pivotIndex);
+						pivotChange = true;
+
+						break;
+					}
+					if ( arr[ x ] > pivot ) {
+						lowIndex = x;
+						lVal = arr[ x ];
+						break;
+					}
+					
+				}
+			}
+		}
+		return arr;
+		
+	}
+	
+	public static void print( int num ) {
+		System.out.println( num );
+	}
+	public static int[] swap( int[] array, int posX, int posY) {
+
+		int temp = array[ posX ];
+		array[ posX ] = array[ posY ];
+		array[ posY ] = temp;
+		return array;
+	}
 }

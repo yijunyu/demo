@@ -1,179 +1,79 @@
-/**
- * This is a sap class.
- */
-public class SAP {
-    /**
-     * { digraph variable }.
-     */
-    private Digraph digraph;
-    /**
-     * { breadth first directed paths variable }.
-     */
-    private BreadthFirstDirectedPaths[] bfs;
+package org.ict.algorithm.sort;
+import java.util.Comparator;
+import java.util.Arrays;
+import org.ict.algorithm.util.StdIn;
+import org.ict.algorithm.util.StdOut;
 
-    /**
-     * Constructs the object.
-     *
-     * @param      dg    { parameter_description }
-     */
-    public SAP(final Digraph dg) {
-        this.digraph = new Digraph(dg);
-        bfs = new BreadthFirstDirectedPaths[this.digraph.vertices()];
-    }
 
-    /**
-     * length of shortest ancestral path between v and w.
-     * -1 if no such path
-     *
-     * @param      v     { int v }
-     * @param      w     { int w }
-     *
-     * @return     { length is returned }.
-     */
-    public int length(final int v, final int w) {
-        if (v < 0 || v > digraph.vertices() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
 
-        if (w < 0 || w > digraph.vertices() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        if (bfs[v] == null) {
-            bfs[v] = new BreadthFirstDirectedPaths(digraph, v);
-        }
-
-        if (bfs[w] == null) {
-            bfs[w] = new BreadthFirstDirectedPaths(digraph, w);
-        }
-
-        int length = Integer.MAX_VALUE;
-
-        for (int i = 0; i < digraph.vertices(); i++) {
-            if (bfs[v].hasPathTo(i) && bfs[w].hasPathTo(i)) {
-                int l = bfs[v].distTo(i) + bfs[w].distTo(i);
-                if (l < length) {
-                    length = l;
-                }
+public class Insertion extends AbstractSortHelper {
+    
+    
+    private Insertion(){}
+    
+    
+	public static void sort(Comparable[] a) {
+		int N = a.length;
+		for (int i = 1; i < N; i++) {
+			for (int j = i; j > 0 && less(a[j], a[j-1]); j--) {
+			    exch(a, j, j-1);
+			}
+			assert isSorted(a, 0, i);
+		}
+		assert isSorted(a);
+	}
+	
+	
+	public static void sort(Comparable[] a, int lo, int hi) {
+	    for (int i = lo; i < hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1]); j--) {
+                StdOut.println("exchange a[" + j + "]:" + a[j]+ " and a[" + (j-1) +"]:" + a[j-1]);
+                exch(a, j, j-1);
             }
         }
-        bfs[v] = null;
-        bfs[w] = null;
-
-        if (length != Integer.MAX_VALUE) {
-            return length;
-        } else {
-            return -1;
+        assert isSorted(a, lo, hi);
+	}
+    
+    
+    public static void sort(Object[] a, Comparator comparator) {
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j > 0 && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
+            }
+            assert isSorted(a, 0, i, comparator);
         }
+        assert isSorted(a, comparator);
     }
 
-    /**
-     * a common ancestor of v and w that participates in a shortest ancestral.
-     * path; -1 if no such path
-     *
-     * @param      v     { int v }
-     * @param      w     { int w }
-     *
-     * @return     { int value is returned }.
-     */
-    public int ancestor(final int v, final int w) {
-        if (v < 0 || v > digraph.vertices() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        if (w < 0 || w > digraph.vertices() - 1) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        if (bfs[v] == null) {
-            bfs[v] = new BreadthFirstDirectedPaths(digraph, v);
-        }
-
-        if (bfs[w] == null) {
-            bfs[w] = new BreadthFirstDirectedPaths(digraph, w);
-        }
-
-        int length = Integer.MAX_VALUE;
-        int ancestor = -1;
-        for (int i = 0; i < digraph.vertices(); i++) {
-            if (bfs[v].hasPathTo(i) && bfs[w].hasPathTo(i)) {
-                int l = bfs[v].distTo(i) + bfs[w].distTo(i);
-                if (l < length) {
-                    length = l;
-                    ancestor = i;
-                }
+    
+    public static void sort(Object[] a, int lo, int hi, Comparator comparator) {
+        for (int i = lo; i < hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
             }
         }
-        bfs[v] = null;
-        bfs[w] = null;
-        return ancestor;
+        assert isSorted(a, lo, hi, comparator);
     }
 
-    /**
-     * length of shortest ancestral path between any vertex in v and any.
-     * vertex in w; -1 if no such path
-     *
-     * @param      v     { int v }
-     * @param      w     { int w }
-     *
-     * @return     { length is returned }.
-     */
-    public int length(final Iterable<Integer> v, final Iterable<Integer> w) {
-        if (v == null || w == null) {
-            throw new NullPointerException();
+    
+    public static int[] indexSort(Comparable[] a) {
+        int n = a.length;
+        int[] index = new int[n];
+        for (int i = 0; i < n; i++) {
+            index[i] = i;
         }
-        int length = Integer.MAX_VALUE;
-        for (int i : v) {
-            for (int j : w) {
-                int l = length(i, j);
-                if (l != -1 && l < length) {
-                    length = l;
-                }
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j > 0 && less(a[index[j]], a[index[j-1]]); j--) {
+                exch(index, j, j-1);
             }
         }
-        //assert length != -1;
-        if (length != Integer.MAX_VALUE) {
-            return length;
-        } else {
-            return -1;
-        }
+        return index;
     }
-    /**
-     * a common ancestor that participates in shortest ancestral path.
-     * -1 if no such path
-     *
-     * @param      v     { int v }
-     * @param      w     { int w }
-     *
-     * @return     { int value is returned }.
-     */
-    public int ancestor(final Iterable<Integer> v, final
-                        Iterable<Integer> w) {
-        if (v == null || w == null) {
-            throw new NullPointerException();
-        }
-
-        int length = Integer.MAX_VALUE;
-        int ancestor = -1;
-
-        for (int i : v) {
-            for (int j : w) {
-                int l = length(i, j);
-                if (l != -1 && l < length) {
-                    length = l;
-                    ancestor = ancestor(i, j);
-                }
-            }
-        }
-        assert length != -1;
-        return ancestor;
-    }
-}
-
-
-
-
-
-
-
-
+	
+	public static void main(String[] args) {
+	    String[] a = StdIn.readAllStrings();
+        Insertion.sort(a);
+        StdOut.println(Arrays.toString(a));
+	}	
+}	

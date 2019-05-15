@@ -1,54 +1,60 @@
-package de.reffle.jfsdict.levenshtein;
 
-import org.junit.Test;
+package temp;
 
-import static org.junit.Assert.assertEquals;
+public class Quicksort {
+	
+	public static void sort(int a[]){
+		sort(a,0,a.length-1);
+	}
+	
+	private static void sort(int a[], int low , int high){
+		if ( low >= high){return;}
+		int j = partition(a,low,high) ;
+		sort(a,low,j-1);
+		sort(a,j+1,high);
+	}
+	
+	private static int partition(int a[],int low,int high){
+		
+		int N=low;
+		int i=low;
+		int j=high+1;
+		
+	while (true){
+		
+		
+		while (a[N] > a[++i] ) { 
+			if ( i == high ) { break;}
+			}
+		while (a[N] < a[--j]){			
+		}
+		
+		if ( i >= j) { break;}
+		
+		int swap = a[j];
+		a[j]=a[i];
+		a[i]=swap;
+		
+	}
+	
+	int swap = a[j];
+	a[j]=a[N];
+	a[N]=swap;
+	
+	return j;
+	
+	}		
+		
 
-public class LevenshteinDistance {
-  private static int minimum(int... aInts) {
-    int min = Integer.MAX_VALUE;
-    for(int x : aInts) {
-      min = Math.min(min, x);
-    }
-    return min;
-  }
+	public static void main(String[] args) {
+		
 
-  public static int computeLevenshteinDistance(CharSequence lhs, CharSequence rhs) {
-    int[][] distance = new int[lhs.length() + 1][rhs.length() + 1];
+		int[] a = {5,4,6,3,7,8,2,10,1,0,20,40,15,2,3};
+		Quicksort.sort(a);
+		
+		for ( int i=0; i< a.length;i++){ System.out.println(a[i]);
+		}
+	}
 
-    for (int i = 0; i <= lhs.length(); i++)
-      distance[i][0] = i;
-    for (int j = 1; j <= rhs.length(); j++)
-      distance[0][j] = j;
-
-    for (int i = 1; i <= lhs.length(); i++) {
-      for (int j = 1; j <= rhs.length(); j++) {
-        int transpositionDistance = Integer.MAX_VALUE;
-        if(i>=2 && j >=2 && lhs.charAt(i-1)==rhs.charAt(j-2) && lhs.charAt(i-2)==rhs.charAt(j-1)) {
-          transpositionDistance = distance[i-2][j-2] + 1;
-        }
-        distance[i][j] = minimum(
-            distance[i - 1][j] + 1,
-            distance[i][j - 1] + 1,
-            distance[i - 1][j - 1] + ((lhs.charAt(i - 1) == rhs.charAt(j - 1)) ? 0 : 1),
-            transpositionDistance
-            );
-      }
-    }
-    return distance[lhs.length()][rhs.length()];
-  }
-
-  @Test
-  public void test() throws Exception {
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "axc"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "xbc"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "abx"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "bc"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "ab"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "ac"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "acb"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "abxc"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "abcx"));
-    assertEquals(1, LevenshteinDistance.computeLevenshteinDistance("abc", "xabc"));
 }
-}
+

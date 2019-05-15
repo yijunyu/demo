@@ -1,80 +1,57 @@
-package purdue.bowlingapp;
+package hw5;
 
-import android.widget.CheckBox;
+import java.util.Arrays;
 
-/**
- * Created by Aaron on 11/19/2017.
- * code adapted from https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/DepthFirstPaths.java.html
- */
+import java.util.Arrays;
 
-public class DepthFirstSearch {
-    private boolean[] marked;
-    private int[] edgeTo;
-    private int count;
 
-    public DepthFirstSearch(Graph g,Boolean[] pins) {
-        edgeTo = new int[g.V()];
-        marked = new boolean[g.V()];
-        dfs(g,pins);
-    }
-
-    public DepthFirstSearch(Graph g,CheckBox[] pins) {
-        edgeTo = new int[g.V()];
-        marked = new boolean[g.V()];
-        dfs(g,pins);
-    }
-
-    private void dfs(Graph g, Boolean[] pins) {
-        for (int i = 0; i < pins.length; i++) {
-            if (pins[i]) {
-                marked[i] = true;
-                for (int w : g.getAdj(i)) {
-                    if (!marked[w] && pins[w]) {
-                        edgeTo[w] = i;
-                        dfs(g, w, pins);
-                    }
-                }
-                return;
-            }
-        }
-    }
-
-    private void dfs(Graph g, int s, Boolean[] pins) {
-        marked[s] = true;
-        for(int w : g.getAdj(s)) {
-            if(!marked[w] && pins[w]) {
-                edgeTo[w]=s;
-                dfs(g,w,pins);
-            }
-        }
-    }
-
-    private void dfs(Graph g, CheckBox[] pins) {
-        for (int i = 0; i < pins.length; i++) {
-            if (pins[i].isChecked()) {
-                marked[i] = true;
-                for (int w : g.getAdj(i)) {
-                    if (!marked[w] && pins[w].isChecked()) {
-                        edgeTo[w] = i;
-                        dfs(g, w, pins);
-                    }
-                }
-                return;
-            }
-        }
-    }
-
-    private void dfs(Graph g, int s, CheckBox[] pins) {
-        marked[s] = true;
-        for(int w : g.getAdj(s)) {
-            if(!marked[w] && pins[w].isChecked()) {
-                edgeTo[w]=s;
-                dfs(g,w,pins);
-            }
-        }
-    }
-
-    public boolean hasPathTo(int v) {
-        return marked[v];
-    }
+ 
+public class bubble {
+ 
+	public static void main(String[] args) {
+		int crunchifyArry[] = { 4,6,2,5,3,12,13 };
+		log("Let's get started on Bubble Sort implementation in Java \n");
+		log("============ Ascending Order result:" + Arrays.toString(CrunchifyBubbleSortAsceMethod(crunchifyArry)) + "\n");
+		log("============ Descending Order result:" + Arrays.toString(CrunchifyBubbleSortDescMethod(crunchifyArry)) + "\n");
+	}
+ 
+	
+	public static int[] CrunchifyBubbleSortAsceMethod(int[] crunchifyArr) {
+		int temp;
+		for (int i = 0; i < crunchifyArr.length - 1; i++) {
+ 
+			for (int j = 1; j < crunchifyArr.length - i; j++) {
+				if (crunchifyArr[j - 1] > crunchifyArr[j]) {
+					temp = crunchifyArr[j - 1];
+					crunchifyArr[j - 1] = crunchifyArr[j];
+					crunchifyArr[j] = temp;
+				}
+			}
+			log("Iteration " + (i + 1) + ": " + Arrays.toString(crunchifyArr));
+		}
+		return crunchifyArr;
+	}
+ 
+	
+	public static int[] CrunchifyBubbleSortDescMethod(int[] crunchifyArr) {
+		int temp;
+		for (int i = 0; i < crunchifyArr.length - 1; i++) {
+ 
+			for (int j = 1; j < crunchifyArr.length - i; j++) {
+				if (crunchifyArr[j - 1] < crunchifyArr[j]) {
+					temp = crunchifyArr[j - 1];
+					crunchifyArr[j - 1] = crunchifyArr[j];
+					crunchifyArr[j] = temp;
+				}
+			}
+			log("Iteration " + (i + 1) + ": " + Arrays.toString(crunchifyArr));
+		}
+		return crunchifyArr;
+	}
+ 
+	
+	private static void log(String result) {
+		System.out.println(result);
+ 
+	}
 }

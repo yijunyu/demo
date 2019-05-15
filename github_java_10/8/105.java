@@ -1,95 +1,85 @@
-package nlp1;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package practise.programs;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Scanner;
 
-/**
- *
- * @author Administrator
- */
-public class LevenshteinDistance {
-    public int getMin(int a, int b, int c){
-        ArrayList<Integer> arrNumber = new ArrayList<>();
-        arrNumber.add(a);
-        arrNumber.add(b);
-        arrNumber.add(c);
-        return Collections.min(arrNumber);
-    }
-    public int getMax(int a, int b, int c){
-        ArrayList<Integer> arrNumber = new ArrayList<>();
-        arrNumber.add(a);
-        arrNumber.add(b);
-        arrNumber.add(c);
-        arrNumber.add(0);
-        return Collections.max(arrNumber);
-    }
-    //thuat toan leven co xua:))
-    public double levenshteinDistance(ArrayList<String> m, ArrayList<String> n){
-        int mSize = m.size(); //size cua mang String m
-        int nSize = n.size();// size cua mang String n
-        int[][] d = new int[m.size() + 1][n.size() + 1];// tao mang d để tạo ma trận từ mảng kích thước m+1 x n+1
-        //khoi tạo ma trận
-        for(int i = 0; i <= mSize; i++){
-            d[i][0] = i;
-        }
-        for(int j = 0; j <= nSize; j++){
-            d[0][j] = j;
-        }
-        
-        for(int i = 1; i <= mSize; i++){
-            for(int j = 1; j <= nSize; j++){
-                int cost = 0;
-                if(m.get(i-1).toLowerCase().equals(n.get(j-1).toLowerCase()) == true){
-                    cost = 0;
-                }else{
-                    cost = 1;
-                }
-                d[i][j] = getMin(d[i - 1][j] + 1, 
-                        d[i][j - 1] + 1, 
-                        d[i - 1][j - 1] + cost);
-            }
-        }
-        
-        return (double)d[mSize][nSize]/Math.max(mSize, nSize);
-    }
-    
-    //cai thien thuat toan leven, tieu chuan k mình sẽ không cho vào vì trong code nó chả sd đến
-    public double levenshteinDistanceImprovement(ArrayList<String> m, ArrayList<String> n){
-        int mSize = m.size(); //size cua mang String m
-        int nSize = n.size();// size cua mang String n
-        int[][] d = new int[m.size() + 1][n.size() + 1];// tao mang d để tạo ma trận từ mảng kích thước m+1 x n+1
-        //khoi tạo ma trận
-        for(int i = 0; i <= mSize; i++){
-            d[i][0] = i;
-        }
-        for(int j = 0; j <= nSize; j++){
-            d[0][j] = j;
-        }
-        
-        for(int i = 1; i <= mSize; i++){
-            for(int j = 1; j <= nSize; j++){
-                if( i == j){
-                    d[i][j] = 0;
-                }
-                if(m.get(i-1).toLowerCase().equals(n.get(j-1).toLowerCase()) == true){
-                    d[i][j] = d[i - 1][j - 1] + 1;
-                }
-                else
-                {
-                    d[i][j] = getMax(d[i - 1][j] - 1,
-                            d[i][j - 1] - 1, 
-                            d[i - 1][j - 1] -1);
-                }
-            }
-        }
-        return (double) d[mSize][nSize]/Math.max(mSize, nSize);
-    }
-    
-    
-    
+public class Quicksort 
+{
+	
+	static void display(int arr[],int low,int up)
+	{
+	int i;
+	for(i=low;i<=up;i++)
+	System.out.print(arr[i]+"  ");
+	}
+	static void quick(int arr[],int low,int up)
+	{
+	int piv,temp,left,right;
+	 boolean pivot_placed=false;
+	
+	System.out.println("low : "+low+" up :  "+up);
+	left=low;
+	right=up;
+	piv=low; 
+	if (low>=up)
+	return;
+	System.out.println("sub list : ");
+	display(arr,low,up);
+	
+	while(pivot_placed==false)
+	{
+	
+	while( arr[piv]<=arr[right] && piv!=right )
+	right=right-1;
+	if ( piv==right )
+	      pivot_placed=true;
+	if ( arr[piv] > arr[right] )
+	{
+	temp=arr[piv];
+	arr[piv]=arr[right];
+	arr[right]=temp;
+	piv=right;
+	}
+	
+	while( arr[piv]>=arr[left] && left!=piv )
+	left=left+1;
+	if (piv==left)
+	pivot_placed=true;
+	if ( arr[piv] < arr[left] )
+	{
+	temp=arr[piv];
+	arr[piv]=arr[left];
+	arr[left]=temp;
+	piv=left;
+	}
+	}
+	System.out.println();
+	System.out.println("pivot placed is  "+arr[piv]);
+	display(arr,low,up);
+	System.out.println();
+	quick(arr,low,piv-1);
+	quick(arr,piv+1,up);
+	}
+
+	public static void main(String[] args) 
+	{
+		int array[]=new int[30];
+		int n,i;
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of elements : ");
+		n=sc.nextInt();
+		for (i=0;i<n;i++)
+		{
+		System.out.println("Enter element : "+(i+1));
+		array[i]=sc.nextInt();
+		}
+		System.out.println("Unsorted list is");
+		System.out.println();
+		display(array,0,n-1);
+		System.out.println();
+		quick (array,0,n-1);
+		System.out.println("sorted list is");
+		System.out.println();
+		display(array,0,n-1);
+	}
+
 }

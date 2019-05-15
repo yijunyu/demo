@@ -1,21 +1,57 @@
-public class Solution {
-    public int minDistance(String word1, String word2) {
-        int[][] dis = new int[word1.length() + 1][word2.length() + 1];
-        for (int i = 1; i <= word2.length(); i++)
-            dis[0][i] = i;
-        for (int i = 1; i <= word1.length(); i++)
-            dis[i][0] = i;
-        for (int i = 1; i <= word1.length(); i++) {
-            for (int j = 1; j <= word2.length(); j++) {
-                // Insertion & deletion.
-                dis[i][j] = Math.min(dis[i][j - 1], dis[i - 1][j]) + 1;
-                // Do-nothing & replacement.
-                if (word1.charAt(i - 1) == word2.charAt(j - 1))
-                    dis[i][j] = Math.min(dis[i][j], dis[i - 1][j - 1]);
-                else
-                    dis[i][j] = Math.min(dis[i][j], dis[i - 1][j - 1] + 1);
-            }
-        }
-        return dis[word1.length()][word2.length()];
-    }
+import java.util.*;
+import java.util.stream.*;
+
+class Main {
+
+	public static void quickSort(int A[]) {
+		quickSort(A, 0, A.length - 1);
+	}
+
+	public static void quickSort(int A[], int l, int r) {
+		if(l < r) {
+			int pivot = partition(A, l, r);
+
+			quickSort(A, l, pivot - 1);
+			quickSort(A, pivot + 1, r);
+		}
+	}
+
+	public static int partition(int A[], int l, int r) {
+		int pivot = A[r], i = l;
+
+		for(int j = l; j < r; j++) {
+			if(A[j] <= pivot) {
+				int t = A[j];
+				A[j] = A[i];
+				A[i] = t;
+				i++;
+			}
+		}
+
+		A[r] = A[i];
+		A[i] = pivot;
+
+		return i;
+	}
+
+
+
+	public static void main(String args[]) {
+		int A[] = {1, 7, 5, 18, 13, 9};
+		quickSort(A);
+		System.out.println(Arrays.stream(A).boxed().collect(Collectors.toList()));
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

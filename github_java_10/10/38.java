@@ -1,38 +1,64 @@
-package com.gerrard.sort.compare.cocktail;
+package cn.haiwen.arrays.sort;
 
-import com.gerrard.sort.Sort;
-import com.gerrard.util.ArrayHelper;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 
-/**
- * Cocktail-Sort is a slight variation of Bubble-Sort, also with complexity O(n^2).
- * Different from Bubble-Sort(which repeatedly passing through the list from bottom to top),
- * Cocktail-Sort passes alternately from bottom to top and then from top to bottom.
- * <p>
- * Bubble-Sort gives a tendency for larger elements to the bottom,
- * however Cocktail-Sort gives both tendency for larger elements to the bottom and smaller elements to the top.
- * So the whole array can be more efficient to be ordered.
- * <p>
- * A typical array for Cocktail-Sort is like [2,3,4,5,1].
- */
-public class CocktailSort implements Sort {
+public class Bucket {
 
-    @Override
-    public void sort(int[] array) {
-        int left = 0;
-        int right = array.length - 1;
-        while (left < right) {
-            for (int i = left; i < right; ++i) {
-                if (array[i] > array[i + 1]) {
-                    ArrayHelper.swap(array, i, i + 1);
-                }
-            }
-            right--;
-            for (int i = right; i > left; --i) {
-                if (array[i] < array[i - 1]) {
-                    ArrayHelper.swap(array, i, i - 1);
-                }
-            }
-            left++;
-        }
-    }
+	public static double[] bucketSort(double[] array){
+		
+		double max = array[0];
+		double min = array[0];
+		for(int i=0;i<array.length;i++){
+			if(array[i]>max){
+				max = array[i];
+			}
+			if(array[i]<min){
+				min = array[i];
+			}
+		}
+		double d = max - min;
+		
+		
+		int bucketNum = array.length;
+		ArrayList<LinkedList<Double>> bucketList = new ArrayList<LinkedList<Double>>();
+		for(int i=0;i<bucketNum;i++){
+			bucketList.add(new LinkedList<Double>());
+		}
+		
+		
+		for(int i=0;i<array.length;i++){
+			int num = (int)( (array[i]-min) * (bucketNum-1) / d);
+			bucketList.get(num).add(array[i]);
+		}
+
+		
+		for(int i=0;i<bucketList.size();i++){
+			
+			Collections.sort(bucketList.get(i));
+		}
+			
+		
+		double[] sortedArray = new double[array.length];
+		int index = 0;
+		for (LinkedList<Double> list : bucketList) {
+			for (Double e : list) {
+				sortedArray[index] = e;
+				index++;
+			}
+		}
+		
+		return sortedArray;
+	}
+	
+	public static void main(String[] args) {
+		double[] array = new double[]{4.12,6.421,0.0023,3.0,2.123,8.122,4.12,10.09};
+		double[] sortedArray = bucketSort(array);
+		System.out.println(Arrays.toString(sortedArray));
+	}
+	
+	
+	
 }

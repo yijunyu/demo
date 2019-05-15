@@ -1,45 +1,60 @@
-package sorting;
+package InterviewBit;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-public class Bubble {
-
-	public static void bubbleSort(float [] unsorted) {
-		System.out.print("\n");
+public class ArraysFirstMissingPositiveNumber {
+	public static void main(String[] args) {
+		int[] arr = {3,4,-1,1};
 		
-		for (int iter = 1; iter < unsorted.length; iter++) {
-			for (int inner = 0; inner < (unsorted.length - iter); inner++) {
-				if ((((Comparable) (unsorted[inner])).compareTo(unsorted[inner + 1])) > 0) {
-					/**Compare in order to sort
-					 * 
-					 */
-					float tmp = unsorted[inner];
-					unsorted[inner] = unsorted[inner + 1];
-					unsorted[inner + 1] = tmp;
-				}
+		System.out.println(firstMissingPositiveInt(arr));
+	}
+	
+	 public static int firstMissingPositive(int[] A) {  
+		   
+		   int i = 0;  
+		   while (i < A.length) {  
+		     if (A[i] > 0 && A[i] <= A.length && A[i] != i+1 && A[i] != A[A[i]-1]) {
+		       int temp = A[A[i]-1];  
+		       A[A[i]-1] = A[i];  
+		       A[i] = temp;  
+		     } else {  
+		       ++i;  
+		     }  
+		   }  
+		   for(Integer k : A){
+			   System.out.print(k+ " ");
+		   }
+		   
+		   i = 0;  
+		   while (i < A.length && A[i] == i+1) 
+			   ++i;  
+		   return i+1;  
+		 }
+	 
+
+	 public static int firstMissingPositiveInt(int[] A) {
+		 for(Integer k : A){
+			   System.out.print(k+ " ");
+		   }
+	        int n = A.length;
+	 
+		for (int i = 0; i < n; i++) {
+			while (A[i] != i + 1) {
+				if (A[i] <= 0 || A[i] >= n)
+					break;
+
+				if (A[i] == A[A[i] - 1])
+					break;
+
+				int temp = A[i];
+				A[i] = A[temp - 1];
+				A[temp - 1] = temp;
 			}
 		}
-	}
-
-	public static void bubble(float [] unsorted) {
-		for (int iter = 1; iter < unsorted.length; iter++) {
-			for (int inner = 0; inner < (unsorted.length - iter); inner++) {
-				if ((((Comparable) (unsorted[inner])).compareTo(unsorted[inner + 1])) > 0) {
-					/**Compare in order to sort
-					 * 
-					 */
-					float tmp = unsorted[inner];
-					unsorted[inner] = unsorted[inner + 1];
-					unsorted[inner + 1] = tmp;
-				}
+	 
+		for (int i = 0; i < n; i++) {
+			if (A[i] != i + 1) {
+				return i + 1;
 			}
-		}
-
+		}		 
+	    	return n + 1;
 	}
-				
-
 }

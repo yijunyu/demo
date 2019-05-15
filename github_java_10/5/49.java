@@ -1,118 +1,38 @@
-package com.samsung.android.multidisplay.common.datastructure;
+package Chapter07;
 
-import android.util.Log;
-import com.samsung.android.multidisplay.common.ContextRelationManager;
-import com.samsung.android.multidisplay.common.datastructure.graph.Edge;
-import com.samsung.android.multidisplay.common.datastructure.graph.Graph;
-import com.samsung.android.multidisplay.common.datastructure.graph.Vertex;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Scanner;
 
-public class DepthFirstSearch<E> {
-    private static final boolean DEBUG = ContextRelationManager.DEBUG;
-    private static final String TAG = "DepthFirstSearch";
-    private final Graph<E> mGraph;
 
-    public DepthFirstSearch(Graph<E> graph) {
-        if (graph == null) {
-            throw new NullPointerException("graph is null");
+
+public class Ex07_18 {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        double[] userInput = new double[5];
+
+        System.out.println("Enter 10 double values:");
+        for(int i = 0; i < userInput.length; i++) {
+            System.out.print(i + " - ");
+            userInput[i] = input.nextDouble();
         }
-        this.mGraph = graph;
+
+        bubbleSort(userInput);
+
+        for(double f: userInput) {
+            System.out.println(" " + f);
+        }
+        System.out.println("Numbers sorted using bubble-sort: " + Arrays.toString(userInput));
     }
 
-    public boolean marked(Vertex<E> v) {
-        return v.marked;
-    }
-
-    public ArrayList<Vertex<E>> doDfsForAllVertices() {
-        if (DEBUG) {
-            Log.d(TAG, "doDfsForAllVertices");
-        }
-        ArrayList<Vertex<E>> traversedVertices = new ArrayList();
-        if (this.mGraph.vertices().size() > 0) {
-            Iterator i$ = getRootVertices().iterator();
-            while (i$.hasNext()) {
-                Vertex<E> v = (Vertex) i$.next();
-                if (!v.marked) {
-                    doDfs(v, traversedVertices);
-                }
-            }
-            reinitializeVertices();
-        }
-        return traversedVertices;
-    }
-
-    private void reinitializeVertices() {
-        Iterator i$ = this.mGraph.vertices().iterator();
-        while (i$.hasNext()) {
-            ((Vertex) i$.next()).marked = false;
-        }
-    }
-
-    public ArrayList<Vertex<E>> getRootVertices() {
-        ArrayList<Vertex<E>> rootVertices = new ArrayList();
-        for (int i = 0; i < this.mGraph.vertices().size(); i++) {
-            Vertex<E> vertex = (Vertex) this.mGraph.vertices().get(i);
-            if (this.mGraph.parentVertex(vertex) == null) {
-                rootVertices.add(vertex);
-            }
-        }
-        return rootVertices;
-    }
-
-    private ArrayList<Vertex<E>> doDfs(Vertex<E> v, ArrayList<Vertex<E>> outTraversedVertices) {
-        if (!v.marked) {
-            outTraversedVertices.add(v);
-            v.marked = true;
-        }
-        for (int i = 0; i < v.incidenceList.size(); i++) {
-            Vertex<E> vertex = this.mGraph.destination((Edge) v.incidenceList.get(i));
-            if (!vertex.marked) {
-                doDfs(vertex, outTraversedVertices);
-            }
-        }
-        return outTraversedVertices;
-    }
-
-    public void getDescendantsOf(Vertex<E> v, ArrayList<Vertex<E>> outDescendantList) {
-        if (DEBUG) {
-            Log.d(TAG, "getDescendantsOf " + v);
-        }
-        addDescendants(v, outDescendantList);
-        outDescendantList.remove(0);
-        reinitializeVertices();
-    }
-
-    private void addDescendants(Vertex<E> v, ArrayList<Vertex<E>> outDescendantList) {
-        if (!v.marked) {
-            if (DEBUG) {
-                Log.d(TAG, "Adding descendant " + v);
-            }
-            v.marked = true;
-            outDescendantList.add(v);
-        }
-        for (int i = 0; i < this.mGraph.childVertices(v).size(); i++) {
-            addDescendants((Vertex) this.mGraph.childVertices(v).get(i), outDescendantList);
-        }
-    }
-
-    public Vertex<E> getLeaf(Vertex<E> v) {
-        Vertex<E> leaf = null;
-        Log.d(TAG, "Finding leaf of subgraph " + v);
-        if (!v.marked && this.mGraph.childVertices(v).size() == 0) {
-            return v;
-        }
-        v.marked = true;
-        for (int i = 0; i < this.mGraph.childVertices(v).size(); i++) {
-            Vertex<E> childVertex = (Vertex) this.mGraph.childVertices(v).get(i);
-            if (!childVertex.marked) {
-                leaf = getLeaf(childVertex);
-                if (leaf != null) {
-                    break;
+    public static void bubbleSort(double[] list) {
+        for(int i = 0; i < list.length; i++){
+            for(int j = 1; j < list.length - 1; j++){
+                if(list[j-1] > list[j]){
+                    double temp = list[j-1];
+                    list[j-1] = list[j];
+                    list[j] = temp;
                 }
             }
         }
-        reinitializeVertices();
-        return leaf;
     }
 }

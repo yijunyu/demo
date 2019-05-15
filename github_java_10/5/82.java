@@ -1,49 +1,46 @@
-package rmugattarov.crack;
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
 
-import lombok.Data;
+public class Solution {
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-
-public class DepthFirstSearch {
     public static void main(String[] args) {
-        DepthFirstSearch.Node root = new DepthFirstSearch.Node("root");
-        DepthFirstSearch.Node l1_1 = new DepthFirstSearch.Node("l1_1");
-        DepthFirstSearch.Node l1_2 = new DepthFirstSearch.Node("l1_2");
-        DepthFirstSearch.Node l2_1 = new DepthFirstSearch.Node("l2_1");
-        DepthFirstSearch.Node l2_2 = new DepthFirstSearch.Node("l2_2");
-        root.children.add(l1_1);
-        root.children.add(l1_2);
-        l1_1.children.add(l2_1);
-        l1_1.children.add(l2_2);
-
-        ArrayDeque<DepthFirstSearch.Node> queue = new ArrayDeque<>();
-        queue.add(root);
-        System.out.println(contains(root, l2_2));
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int a[] = new int[n];
+        for(int a_i=0; a_i < n; a_i++){
+            a[a_i] = in.nextInt();
+        }
+        
+        int temp,total=0,swap=0;
+        for(int i=0;i<n;i++){
+        	for(int j=0;j<n-1;j++){
+        		if(a[j]>a[j+1]){
+        			temp=a[j];
+        			a[j]=a[j+1];
+        			a[j+1]=temp;
+        			
+        			total++;
+        			swap=1;
+        		}
+        		
+        	}
+        	
+        	if(swap==0)break;
+        }
+        
+        
+        
+        System.out.println("Array is sorted in "+(total)+" swaps.");
+    	System.out.println("First Element: "+a[0]+"\nLast Element: "+a[n-1]);
     }
 
-    @Data
-    private static class Node {
-        private String name;
-        private List<DepthFirstSearch.Node> children = new ArrayList<>();
-
-        public Node(String name) {
-            this.name = name;
-        }
-    }
-
-    private static boolean contains(DepthFirstSearch.Node root, DepthFirstSearch.Node target) {
-        System.out.println("Root : " + root);
-        if (root == target) {
-            return true;
-        }
-        for (Node n : root.children) {
-            if (contains(n, target)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+	private static void printarray(int[] a) {
+		
+		for(int i=0;i<a.length;i++)
+			System.out.print(a[i]+" ");
+		System.out.println();
+	}
 }

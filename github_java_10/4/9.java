@@ -1,51 +1,113 @@
-//Intsertion Sort algorithm for sorting strings in a file. 
-//Some code cited from Stack Over Flow at 
-//http://stackoverflow.com/questions/17432738/insertion-sort-using-string-compareto
+import java.util.Arrays;
 
-import java.lang.*;
-import java.io.*;
-import java.lang.Object;
-import java.io.Reader;
-import java.io.BufferedReader;
+public class HeapSortSelectHeap {
 
-public class insertionsort{
-	public static void main(String[] args){
-        int i;
-		int j;
-		 if(args.length!=1){
-			System.err.println("inputfile ");
-		 }
-		 long startTime = System.currentTimeMillis();
-		 String[] t1 = new String[50000];
-		 String tempStr;
-		try{
-			BufferedReader orig = new BufferedReader(new FileReader(args[0]));
-		
+    public enum Heap { MINHEAP, MAXHEAP };
 
-		
-			String s1 = new String(orig.readLine());
-			t1 = s1.split(" ");
-			orig.close();
-		} catch(Exception error){
-			System.err.println("Error: message");
-		}
+    private Heap heap;
 
-		
-		for (j = 1; j < t1.length; j++) { //the condition has changed
-			tempStr = t1[j];
-			i = j - 1;
-			while (i >= 0) {
-				if (tempStr.compareTo(t1[i]) > 0) {//here too
-				break;
-				}
-				t1[i + 1] = t1[i];
-				i--;
-			}
-		t1[i + 1] = tempStr;
-		}
+    public HeapSortSelectHeap(Heap heap) {
+        this.heap = heap;
+    }
 
-		long endTime = System.currentTimeMillis();
+    private void swap(int[] list, int i, int j) {
+        int temp = list[j];
+        list[j] = list[i];
+        list[i] = temp;
+    }
 
-		System.out.println(endTime - startTime);
-   }
+    private void siftDown(int[] list, int start, int end) {
+        switch(heap) {
+            case MINHEAP:
+                siftDownMin(list, start, end);
+                break;
+            case MAXHEAP:
+                siftDownMax(list, start, end);
+                break;
+        }
+    }
+
+    private void siftDownMin(int[] list, int start, int end) {
+        int root = start;
+
+        while(root * 2 + 1 <= end) {
+            int child = root * 2 + 1;
+            int swap = root;
+            if(list[swap] > list[child]) {
+                swap = child;
+            }
+
+            if(child + 1 <= end && list[swap] > list[child + 1]) {
+                swap = child + 1;
+            }
+
+            if(swap != root) {
+                swap(list, root, swap);
+                root = swap;
+            } else {
+                return;
+            }
+        }
+    }
+
+
+
+    private void siftDownMax(int[] list, int start, int end) {
+        int root = start;
+
+        while(root * 2 + 1 <= end) {
+            int child = root * 2 + 1;
+            int swap = root;
+            if(list[swap] < list[child]) {
+                swap = child;
+            }
+
+            if(child + 1 <= end && list[swap] < list[child + 1]) {
+                swap = child + 1;
+            }
+
+            if(swap != root) {
+                swap(list, root, swap);
+                root = swap;
+            } else {
+                return;
+            }
+        }
+    }
+
+    public void heapify(int[] list) {
+        int start = (list.length - 2) / 2;
+        while(start >= 0) {
+            siftDown(list, start, list.length - 1);
+            start -= 1;
+        }
+    }
+
+    public void sort(int[] list) {
+        heapify(list);
+        int end = list.length - 1;
+        while(end > 0) {
+            swap(list, end, 0);
+            end -= 1;
+            siftDown(list, 0, end);
+        }
+    }
+
+    public static void runList(int[] list, Heap heap) {
+        System.out.println("before: " + Arrays.toString(list));
+        HeapSortSelectHeap s = new HeapSortSelectHeap(heap);
+        s.heapify(list);
+        System.out.println("heap: " + Arrays.toString(list));
+        s.sort(list);
+        System.out.println("after: " + Arrays.toString(list));
+    }
+
+    public static void main(String... args) {
+        int[] list = {5, 6, 4, 9, 1, 2, 0, 8, 7, 3};
+        System.out.println("MINHEAP");
+        runList(list, HeapSortSelectHeap.Heap.MINHEAP);
+        list = new int[] {7, 9, 2, 6, 4, 1, 0, 3, 5, 8};
+        System.out.println("MAXHEAP");
+        runList(list, HeapSortSelectHeap.Heap.MAXHEAP);
+    }
 }

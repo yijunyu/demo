@@ -1,113 +1,42 @@
-package AI;
-
-import Graph.BreadthFirst;
-
-import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
-/**
- * Created by h3dg3wytch on 1/24/17.
- */
-public class BreadthFirstSearch {
-
-    BreadthFirstSearchNode startNode;
-    BreadthFirstSearchNode goalNode;
-
-    public BreadthFirstSearch(BreadthFirstSearchNode startNode, BreadthFirstSearchNode goalNode) {
-        this.startNode = startNode;
-        this.goalNode = goalNode;
-    }
-
-
-    public boolean compute(){
-
-        if(startNode.data == goalNode.data) {
-            System.out.println("Found!");
-            return  true;
-        }
-
-        Queue<BreadthFirstSearchNode> queue = new LinkedList<>();
-        ArrayList<BreadthFirstSearchNode> explored = new ArrayList<>();
-
-        queue.add(this.startNode);
-        explored.add(startNode);
-
-        while(!queue.isEmpty()) {
-            BreadthFirstSearchNode current = queue.remove();
-            if (current.data == goalNode.data) {
-                System.out.println(explored);
-                return true;
-            } else {
-                if (current.getChildren().isEmpty())
-                    return false;
-                else
-                    queue.addAll(current.getChildren());
-            }
-
-            explored.add(current);
-        }
-        return false;
-    }
-
-
-    public class BreadthFirstSearchNode{
-
-        private int data;
-
-        private BreadthFirstSearchNode rightChild;
-        private BreadthFirstSearchNode leftChild;
-
-
-        public BreadthFirstSearchNode(int data, BreadthFirstSearchNode rightChild, BreadthFirstSearchNode leftChild) {
-            this.data = data;
-            this.rightChild = rightChild;
-            this.leftChild = leftChild;
-        }
-
-
-        public BreadthFirstSearchNode(BreadthFirstSearchNode rightChild, BreadthFirstSearchNode leftChild) {
-            this.rightChild = rightChild;
-            this.leftChild = leftChild;
-        }
-
-        public int getData() {
-            return data;
-        }
-
-        public void setData(int data) {
-            this.data = data;
-        }
-
-        public BreadthFirstSearchNode getRightChild() {
-            return rightChild;
-        }
-
-        public void setRightChild(BreadthFirstSearchNode rightChild) {
-            this.rightChild = rightChild;
-        }
-
-        public BreadthFirstSearchNode getLeftChild() {
-            return leftChild;
-        }
-
-        public void setLeftChild(BreadthFirstSearchNode leftChild) {
-            this.leftChild = leftChild;
-        }
-
-        public ArrayList<BreadthFirstSearchNode> getChildren(){
-            ArrayList<BreadthFirstSearchNode> result = new ArrayList<>();
-            if(this.leftChild != null)
+import java.util.Arrays;
+import java.util.Random;
+public class insertionsort
+{
+    
+    
+    public static void InsertionSort(int[] A)
+    {
+        int temp,j;
+        for (int i = 0; i < A.length; i++)
+        {
+            j = i;
+            while (j > 0 && A[j-1] > A[j])
             {
-                result.add(leftChild);
-            }
-            if(this.rightChild != null) {
-                result.add(rightChild);
-            }
-            return result;
+                temp = A[j];
+                A[j] = A[j-1];
+                A[j-1] = temp;
+                j = j-1;
+            }           
         }
+        System.out.println(Arrays.toString(A));
     }
 
+      
+    public static int[] crearArreglo(int n) {
+        int max = 10000;
+        int[] array = new int[n];
+        Random generator = new Random();
+        for (int i =0; i<n; i++)
+            array[i] = generator.nextInt(max);
+        return array;
+    } 
+
+     
+    public static long tomarTimepo(int n){
+        int [] arreglo = crearArreglo(n);
+        long startTime = System.currentTimeMillis();
+        InsertionSort(arreglo);
+        long estimatedTime = System.currentTimeMillis() - startTime;
+        return estimatedTime;
+    }
 }

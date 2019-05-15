@@ -1,22 +1,26 @@
-import java.io.*;
-class Tower
-{
+package com.facebook.common.collect;
 
-void towerOfHanoi(int n, char fromrod, char torod, char auxrod)
-{
-    if (n == 1)
-    {
-        System.out.println("\n Move disk 1 from rod %c to rod %c", fromrod, torod);
-        return;
-    }
-    towerOfHanoi(n-1, fromrod, auxrod, torod);
-    Syatem.out.println("Move disk %d from rod %c to rod %c", n, fromrod, torod);
-    towerOfHanoi(n-1, auxrod, torod, fromrod);
-}}
+import com.google.common.collect.Lists;
+import java.util.List;
 
-class Hanoy{
-public static void main(String args[])
+public class TopologicalSort$Node<T>
 {
-Hanoy h=new Hanoy();
-h.towerOfHanoi(5, 'A', 'C', 'B'); 
-}}
+  public final T a;
+  final List<TopologicalSort.Edge<T>> b;
+  final List<TopologicalSort.Edge<T>> c;
+
+  public TopologicalSort$Node(T paramT)
+  {
+    this.a = paramT;
+    this.b = Lists.a();
+    this.c = Lists.a();
+  }
+
+  public void a(Node<T> paramNode)
+  {
+    TopologicalSort.Edge localEdge = new TopologicalSort.Edge(this, paramNode);
+    this.c.add(localEdge);
+    paramNode.b.add(localEdge);
+  }
+}
+

@@ -1,66 +1,75 @@
-import java.util.Stack;
-
-/**
- * Simple Implementation of Towers of Hanoi 
- * with a Recursive Solution
- * 
- * @author thomas
- *
- */
-public class Tower {
-
-	public static void main(String[] args) {
-		
-		// number of discs 
-		int n = 4;
-		
-		Stack<Integer> beg = new Stack<>();
-		Stack<Integer> aux = new Stack<>();
-		Stack<Integer> end = new Stack<>();
-		
-		beg.push(4);
-		beg.push(3);
-		beg.push(2);
-		beg.push(1);
-		
-		System.out.println("Welcome to the Towers of Hanoi");
-		
-		//before
-		System.out.println("Begin \n" + beg);
-		System.out.println("Aux \n"+ aux);
-		System.out.println("End \n" + end);
-		hanoi(n, beg, aux, end);
-		// after
-		System.out.println("Begin \n" + beg);
-		System.out.println("Aux \n"+ aux);
-		System.out.println("End \n" + end);
-	
-
-	}
-
-	private static void hanoi(int n, Stack<Integer> beg, Stack<Integer> aux, Stack<Integer> end) {
-		
-		if(n > 1) {
-			// case 1
-			hanoi(n-1, beg, end, aux);			
-			// case2
-			hanoi(1, beg, aux, end);
-			// case3
-			hanoi(n-1, aux, beg, end);
-			
-		}
-		else {
-			// move
-			move(beg, end);
-			
-		}
-
-	}
-
-	private static void move(Stack<Integer> beg, Stack<Integer> end) {
-		end.push(beg.pop());
-		
-	}
+import java.util.*;
 
 
+
+public class TopologicalSort {
+  private List<Node> res;
+  private Queue<Node> zeroInDegree;
+  private Graph graph;
+  
+  public boolean TopologicalSortBFS(Graph di) {
+    this.graph = di;
+    res = new ArrayList<>();
+    zeroInDegree = new LinkedList<>();
+    
+    for (Node curr : graph.nodes) {
+      if (curr.pathIn == 0) {
+        zeroInDegree.offer(curr);
+      }
+    }
+    while (!zeroInDegree.isEmpty()) {
+      Node curr = zeroInDegree.poll();
+      
+      res.add(curr);
+      for (Node to : graph.adj.get(curr)) {
+        
+        to.pathIn--;
+        
+        if (to.pathIn == 0) {
+          zeroInDegree.offer(to);
+        }
+      }
+      
+      graph.nodes.remove(curr);
+      graph.adj.remove(curr);
+    }
+    
+    if (!graph.nodes.isEmpty()) {
+      return false;
+    }
+    return true;
+  }
+  
+  public boolean TopologicalSortDFS(Graph di) {
+    Stack<Node> stack = new Stack<>();
+    Set<Node> isLoop = new HashSet<>();
+    Set<Node> visited = new HashSet<>();
+    res = new ArrayList<>();
+    for (Node curr : di.nodes) {
+      if (!dfs(di, curr, isLoop, visited, stack)) return false;
+    }
+    while (!stack.isEmpty()) {
+      res.add(stack.pop());
+    }
+  
+    return true;
+  }
+  
+  
+  private boolean dfs(Graph di, Node curr, Set<Node> isLoop,
+                      Set<Node> visited, Stack<Node> stack) {
+    if (visited.contains(curr)) return true;
+    if (isLoop.contains(curr)) return false;
+    isLoop.add(curr);  
+    for (Node neibor : di.adj.get(curr)) {
+      if (!dfs(di, neibor, isLoop, visited, stack)) return false;
+    }
+    visited.add(curr); 
+    stack.push(curr);  
+    return true;
+  }
+  
+  public Iterable<Node> getRes() {
+    return res;
+  }
 }

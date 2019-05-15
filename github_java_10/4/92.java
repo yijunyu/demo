@@ -1,87 +1,79 @@
-package leetcode.leetcodes;
+package com.learn.algorithms.sort;
 
-import org.junit.Test;
+import java.util.Arrays;
 
-/*
- * Sort a linked list using insertion sort.
- */
-public class SortListInsertionSort {
-
-	public ListNode insertionSortList(ListNode head) {		
+public class HeapSortMaxHeap {
 	
-		if (head == null)
-			return null;
-		if (head.next == null) {
-			return head;
-		}
-		ListNode first = head;
-		ListNode testNode = head;
+	
+	
+	
+	private static int getLeftChildIndex(int parentIndex){return 2*parentIndex+1;}
+	private static int getRightChildIndex(int parentIndex){return 2*parentIndex+2;}
 
-		while (testNode.next != null) {
-			ListNode insertNode = testNode.next;
-			
-			if (testNode.val <= insertNode.val) {
-				testNode = testNode.next;
-				continue;
-			}
-			
-			if (insertNode.val <= first.val) {
-				testNode.next = insertNode.next;
-				insertNode.next = first;
-				first = insertNode;
-				continue;
-			}
+    
+   
+   
 
-			for (ListNode pointer = first; pointer != testNode; pointer = pointer.next) {
-				if (pointer.val <= insertNode.val
-						&& insertNode.val <= pointer.next.val) {
-					testNode.next = insertNode.next;
-					insertNode.next = pointer.next;
-					pointer.next = insertNode;
-					break;
-				}
-			}
-		}
-
-		return first;
-	}
-
-	@Test
-	public void test() {
-		int[] testList = new int[] {4,19,14,5,-3,1,8,5,11,15};
-		ListNode[] nodeList = new ListNode[testList.length];
-
-		for (int i = 0; i < nodeList.length; i++) {
-			nodeList[i] = new ListNode(testList[i]);
-		}
-
-		for (int i = 0; i < nodeList.length - 1; i++) {
-			nodeList[i].next = nodeList[i + 1];
-		}
-
-		showList(nodeList[0]);
-		showList(insertionSortList(nodeList[0]));
+    
+    private static boolean hasLeft(int index,int size){ return getLeftChildIndex(index) < size;}
+    private static boolean hasRight(int index,int size){ return getRightChildIndex(index) < size;}
+    
+    
+	
+	private static void swap(Comparable[] input,int IndexOne,int IndexTwo){
+		Comparable tmp = input[IndexOne];
+		input[IndexOne] = input[IndexTwo];
+		input[IndexTwo] = tmp;
 	}
 	
-	public void showList(ListNode head) {
-		while (head != null) {
-			System.out.print(" " + head.val);
-			head = head.next;
-		}
-		System.out.println();
+	private static void heapsort(Comparable[] input){
+		int size=input.length;
+		
+		for(int i=size/2-1;i>=0;i--)
+		    heapify(input,i,size);
+		
+		System.out.println("After heapifying\n");
+		System.out.println(Arrays.toString(input));
+		
+	   
+	   
+	   
+	   for(int i = size-1;i>=0;i--){
+		   Comparable tmp = input[0];
+		   input[0]=input[i];
+		   input[i]=tmp;
+		   
+		   heapify(input,0,i);
+	   }
+				
 	}
 	
-	public int length(ListNode head) {
-		int count = 0;
-		while (head != null) {
-			head = head.next;
-			count++;
-			if (count > 10) {
-				break;
-			}
-		}
+	
+	
+	private static void heapify(Comparable[]input,int index,int size){
+	   int largestIndex = index;
+	   
+	   if(hasLeft(index,size) && input[largestIndex].compareTo(input[getLeftChildIndex(index)])<0)
+		   largestIndex = getLeftChildIndex(index);
+	   
+	   if(hasRight(index,size) && input[largestIndex].compareTo(input[getRightChildIndex(index)]) < 0)
+		   largestIndex = getRightChildIndex(index);
+		   
+	   if(largestIndex != index) 
+	   {
+		   swap(input,index,largestIndex);
+		   heapify(input, largestIndex,size);
+	   }
+		    
+	}
+	public static void main(String[] args) {
+		Integer arr[] = new Integer[]{ 8,7,9,10,3,4,1,12,6,5};
+		System.out.println("\nInput array");
+		System.out.println(Arrays.toString(arr));
+		heapsort(arr);
+		System.out.println("\n After sorting \n");
+		System.out.println(Arrays.toString(arr));
 
-		return count;
 	}
 
 }

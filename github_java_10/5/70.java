@@ -1,77 +1,38 @@
-package map;
+package sorting;
 
-import java.util.Stack;
+public class bubblesort {
+	 static void bubbleSort(int[] arr) {  
+	        int n = arr.length;  
+	        int temp = 0;  
+	         for(int i=0; i < n; i++){  
+	                 for(int j=1; j < (n-i); j++){  
+	                          if(arr[j-1] > arr[j]){    
+	                                 temp = arr[j-1];  
+	                                 arr[j-1] = arr[j];  
+	                                 arr[j] = temp;  
+	                         }  
+	                          
+	                 }  
+	         }  
+	  
+	    }  
+	    public static void main(String[] args) {  
+	                int arr[] ={3,60,35,2,45,320,5};  
+	                 
+	                System.out.println("Array Before Bubble Sort");  
+	                for(int i=0; i < arr.length; i++){  
+	                        System.out.print(arr[i] + " ");  
+	                }  
+	                System.out.println();  
+	                  
+	                bubbleSort(arr);
+	                System.out.println("Array After Bubble Sort");  
+	                for(int i=0; i < arr.length; i++){  
+	                        System.out.print(arr[i] + " ");  
+	                }  
+	   
+	        }  
+	}  
+	
 
-@SuppressWarnings("unused")
-public class DepthFirstSearch {
-    private boolean[] marked;
-    private int[] edgeTo;
-    private final int s;
-    private int count;
 
-    /**
-     * 深度优先搜索
-     *
-     * @param G Graph
-     * @param s int
-     */
-    public DepthFirstSearch(Graph G, int s) {
-        marked = new boolean[G.V()];
-        edgeTo = new int[G.V()];
-        this.s = s;
-        dfs(G, s);
-    }
-
-    /**
-     * 递归调用深度优先搜索
-     *
-     * @param G Graph
-     * @param v int
-     */
-    private void dfs(Graph G, int v) {
-        marked[v] = true;
-        count++;
-        for (int w : G.adj(v))
-            if ((!marked[w])) {
-                edgeTo[w] = v;
-                dfs(G, w);
-            }
-    }
-
-    private boolean hasPathTo(int v) {
-        return marked[v];
-    }
-
-    /**
-     * 遍历整棵树
-     *
-     * @param v int
-     * @return Integer
-     */
-    @SuppressWarnings("Duplicates")
-    private Iterable<Integer> pathTo(int v) {
-        if (!hasPathTo(v)) return null;
-        Stack<Integer> path = new Stack<>();
-        for (int x = v; x != s; x = edgeTo[x])
-            path.push(x);
-        path.push(s);
-        return path;
-    }
-
-    /**
-     * 标记该点是否调用dfs()
-     *
-     * @param w int
-     * @return {@code true}   {@link #dfs(Graph, int)}
-     */
-    public boolean marked(int w) {
-        return marked[w];
-    }
-
-    /**
-     * @return int
-     */
-    public int count() {
-        return count;
-    }
-}

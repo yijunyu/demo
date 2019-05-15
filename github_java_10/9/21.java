@@ -1,47 +1,47 @@
-package com.practice.after2017.algorithm.sorting;
+public class Selectionsort {
 
-public class HeapSort {
+  public static void main(String[]args) {
 
-    public void sortII(int[] arr) {
-    	for(int i = arr.length / 2 - 1; i>=0; i--) {
-    		heapifyII(arr, arr.length, i);
-    	}
-    	for(int i = arr.length -1; i>=0; i--) {
-    		swap(arr, 0, i);
-    		heapifyII(arr, i, 0);
-    	}
+    int[] numbers = { 10,9,8,7,6,5,4,3,2,1 };
+    int size = numbers.length;
+
+    int[] sorted = selectionSort(numbers,size);
+
+    for(int i=0; i < sorted.length; i++) {
+      System.out.print(sorted[i]);
     }
+
+
+
+  }
+
+  public static int[] selectionSort(int[] unsorted, int n) {
+
     
-    private void heapifyII(int[] arr, int size, int i) {
-    	int l = 2*i + 1;
-    	int r = 2*i + 2;
-    	int largest = i;
-    	
-    	if(l < size && arr[l] > arr[largest]) {
-    		largest = l;
-    	} 
-    	if(r < size && arr[r] > arr[largest]) {
-    		largest = r;
-    	}
-    	if(largest != i) {
-    		swap(arr, largest, i);
-    		heapifyII(arr, size, largest);
-    	}
-    }
-
-    private void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-
-    public static void main (String[]  args) {
-        HeapSort hs = new HeapSort();
-        int[] arr = new int[]{1,77, 0, 89,5,60};
-        hs.sortII(arr);
-        System.out.println();
-        for(Integer each : arr) {
-            System.out.print(each+" - ");
+    
+    for(int i=0; i < unsorted.length; i++) {
+      int max = unsorted[i]; 
+      for(int j=i+1; j < unsorted.length; j++) {
+        System.out.println("max: " + max);
+        System.out.println("compared: " + unsorted[j]);
+        if( max > unsorted[j] ) {
+          unsorted = swap(unsorted,i,j);
         }
+      }
     }
+
+    return unsorted;
+
+  }
+
+  public static int[] swap(int[] list, int indexA, int indexB) {
+
+    int temp = list[indexB];
+    list[indexB] = list[indexA];
+    list[indexA] = temp;
+
+    return list;
+
+  }
+
 }

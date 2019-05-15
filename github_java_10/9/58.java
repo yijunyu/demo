@@ -1,68 +1,32 @@
-package algorithm_introduce;
+package ASSIGNMENT4;
 
 
-import java.util.Comparator;
+public class selectionsort {
 
-/**
- * 优先队列
- */
-public class MinPriorityQueue<T> {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int a[]={23,12,40,2,37};
+	   selsort(a);
+	}
 
-    private Object[] heap=new Object[100];;
-    private HeapSort<Object> heapSort=new HeapSort<>();
-
-    public MinPriorityQueue(Comparator< Object > comparator){
-        heapSort.setComparator(comparator);
-    }
-
-    public void initial(T[] arrays){
-        if (arrays.length>heap.length){
-            incrementSize();
-        }
-
-        heapSort.heapSize=arrays.length;
-        for (int i = 0; i < arrays.length; i++) {
-            heap[i]=arrays[i];
-        }
-
-
-        heapSort.buidMinHeap(heap,heapSort.heapSize);
-    }
-
-    /**
-     * 增加内存
-     */
-    private void incrementSize(){
-        Object[] oldheap= heap;
-        int newSize = (int)(heap.length*1.5);
-        heap =new Object[newSize];
-        for (int i = 0; i < heapSort.heapSize; i++) {
-            heap[i]=oldheap[i];
-        }
-    }
-
-    public T getMin(){
-        if (heapSort.heapSize<=0) return null;
-
-        T min = (T)heap[0];
-
-        heap[0] =heap[heapSort.heapSize-1];
-        heapSort.heapSize--;
-        heapSort.minHeapify(heap,1);
-        return min;
-    }
-
-    public void insert(T value){
-        if (heapSort.heapSize==heap.length){
-            incrementSize();
-        }
-        heap[heapSort.heapSize++]=value;
-
-        for (int i=heapSort.heapSize/2;i>=1;i--){
-            heapSort.minHeapify(heap,i);
-        }
-    }
-
-
+	public static void selsort(int a[]){
+		int n=a.length;
+		int temp;
+		int pos=0;
+		for(int i=0;i<n;i++){
+			for(int j=i+1;j<n;j++){
+				if(a[i]>a[j])
+					pos=j;
+			}
+		   temp=a[i];
+		   a[i]=a[pos];
+		   a[pos]=temp;
+		}
+      
+		 System.out.println("the sorted array is ");
+		 for(int i=0;i<n;i++){
+			 System.out.print(a[i]+ " ");
+		 }
+	}
 
 }

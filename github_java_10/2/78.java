@@ -1,103 +1,104 @@
-package src.MyTree;
 
-public class AVLTree {
-    //AVL树的节点
-    class AVLTreeNode {
-        private int data;
-        private int high;
-        public AVLTreeNode left;
-        public AVLTreeNode right;
 
-        public AVLTreeNode(int data) {
-            this.data = data;
-        }
+import net.datastructures.Queue;
+import net.datastructures.LinkedQueue;
+import java.util.Arrays;
+import java.util.Comparator;
 
-        public int getData() {
-            return data;
-        }
+class MergeSort {
 
-        public void setData(int data) {
-            this.data = data;
-        }
-
-        public int getHigh() {
-            return high;
-        }
-
-        public void setHigh(int high) {
-            this.high = high;
-        }
+  
+  
+  public static <K> void merge(K[] S1, K[] S2, K[] S, Comparator<K> comp) {
+    int i = 0, j = 0;
+    while (i + j < S.length) {
+      if (j == S2.length || (i < S1.length && comp.compare(S1[i], S2[j]) < 0))
+        S[i+j] = S1[i++];                     
+      else
+        S[i+j] = S2[j++];                     
     }
+  }
 
-    private AVLTreeNode root;
+  
+  public static <K> void mergeSort(K[] S, Comparator<K> comp) {
+    int n = S.length;
+    if (n < 2) return;                        
+    
+    int mid = n/2;
+    K[] S1 = Arrays.copyOfRange(S, 0, mid);   
+    K[] S2 = Arrays.copyOfRange(S, mid, n);   
+    
+    mergeSort(S1, comp);                      
+    mergeSort(S2, comp);                      
+    
+    merge(S1, S2, S, comp);               
+  }
 
-    //返回给定节点的高度
-    private int height(AVLTreeNode t) {
-        return t.high;
+  
+  
+  public static <K> void merge(Queue<K> S1, Queue<K> S2, Queue<K> S,
+                                                        Comparator<K> comp) {
+    while (!S1.isEmpty() && !S2.isEmpty()) {
+      if (comp.compare(S1.first(), S2.first()) < 0)
+        S.enqueue(S1.dequeue());           
+      else
+        S.enqueue(S2.dequeue());           
     }
+    while (!S1.isEmpty())
+      S.enqueue(S1.dequeue());             
+    while (!S2.isEmpty())
+      S.enqueue(S2.dequeue());             
+  }
 
-    //左单旋转
-    private AVLTreeNode rotateWithLeftChild(AVLTreeNode k2) {
-        AVLTreeNode k1 = k2.left;
-        k2.left = k1.right;
-        k1.right = k2;
-        k2.setHigh(Math.max(height(k2.left), height(k2.right)));
-        k1.setHigh(Math.max(height(k1.left), height(k1.right)));
-        return k1;
-    }
+  
+  public static <K> void mergeSort(Queue<K> S, Comparator<K> comp) {
+    int n = S.size();
+    if (n < 2) return;                     
+    
+    Queue<K> S1 = new LinkedQueue<>();     
+    Queue<K> S2 = new LinkedQueue<>();
+    while (S1.size() < n/2)
+      S1.enqueue(S.dequeue());             
+    while (!S.isEmpty())
+      S2.enqueue(S.dequeue());             
+    
+    mergeSort(S1, comp);                   
+    mergeSort(S2, comp);                   
+    
+    merge(S1, S2, S, comp);                
+  }
 
-    //右单旋转
-    private AVLTreeNode rotateWithRightChild(AVLTreeNode k1) {
-        AVLTreeNode k2 = k1.right;
-        k1.right = k2.left;
-        k2.left = k1;
-        k1.setHigh(Math.max(height(k1.left), height(k2.right)));
-        k2.setHigh(Math.max(height(k2.left), height(k2.right)));
-        return k2;
-    }
+  
+  
+  public static <K> void merge(K[] in, K[] out, Comparator<K> comp,
+                                                       int start, int inc) {
+    int end1 = Math.min(start + inc, in.length);      
+    int end2 = Math.min(start + 2 * inc, in.length);  
+    int x=start;                                      
+    int y=start+inc;                                  
+    int z=start;                                      
+    while (x < end1 && y < end2)
+      if (comp.compare(in[x], in[y]) < 0)
+        out[z++] = in[x++];                           
+      else
+        out[z++] = in[y++];                           
+    if (x < end1) System.arraycopy(in, x, out, z, end1 - x);       
+    else if (y < end2) System.arraycopy(in, y, out, z, end2 - y);  
+  }
 
-    //左双旋转
-    private AVLTreeNode doubleWithLeftChild(AVLTreeNode k3){
-        k3.left = rotateWithRightChild(k3.left);
-        return rotateWithLeftChild(k3);
+  @SuppressWarnings({"unchecked"})
+  
+  public static <K> void mergeSortBottomUp(K[] orig, Comparator<K> comp) {
+    int n = orig.length;
+    K[] src = orig;                                   
+    K[] dest = (K[]) new Object[n];                   
+    K[] temp;                                         
+    for (int i=1; i < n; i *= 2) {                    
+      for (int j=0; j < n; j += 2*i)                  
+        merge(src, dest, comp, j, i);
+      temp = src; src = dest; dest = temp;      
     }
-
-    //右双旋转
-    private AVLTreeNode doubleWithRightChild(AVLTreeNode k3){
-        k3.right = rotateWithLeftChild(k3.right);
-        return  rotateWithRightChild(k3);
-    }
-
-    public AVLTreeNode insert(int data) {
-        return insert(data,root);
-    }
-
-    private AVLTreeNode insert(int data, AVLTreeNode t) {
-        if(t==null){
-            return new AVLTreeNode(data);
-        }
-        if(data>t.getData()){
-            t.right=insert(data,t.right);
-            if(height(t.right)-height(t.left)==2){
-                if(data>t.right.getData()){
-                    rotateWithRightChild(t);
-                }
-                else{
-                    doubleWithRightChild(t);
-                }
-            }
-        }
-        else if(data<t.getData()){
-            t.left = insert(data,t.left);
-            if(data<t.left.getData()){
-                rotateWithLeftChild(t);
-            }
-            else{
-                doubleWithLeftChild(t);
-            }
-        }
-        t.setHigh(Math.max(t.left.getHigh(),t.right.getHigh()));
-        return t;
-    }
+    if (orig != src)
+      System.arraycopy(src, 0, orig, 0, n);           
+  }
 }
-

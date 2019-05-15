@@ -1,93 +1,61 @@
-package org.interviewelements.graph;
+package clas_pes;
 
-import org.interviewelements.graph.Graph.AdjList;
-import org.interviewelements.graph.Graph.Edge;
+import java.util.Random;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+public class shellsort {
 
-public class Topological {
+	
+	public static void insertionSort(int[] numeros, int tam) {
+		int i, j, eleito;
+		for (i = 1; i < tam; i++) {
+			eleito = numeros[i];
+			j = i - 1;
+			while ((j >= 0) && (eleito < numeros[j])) {
+				numeros[j + 1] = numeros[j];
+				j--;
+			}
+			numeros[j + 1] = eleito;
+		}
+	}
 
-    private static enum VertextType {
-        WHITE, GRAY, BLACK
-    };
+	
+	public static void shellSort(int[] vet, int size) {
+		int i, j, value;
+		int gap = 1;
+		while (gap < size) {
+			gap = 3 * gap + 1;
+		}
+		while (gap > 1) {
+			gap /= 3;
+			for (i = gap; i < size; i++) {
+				value = vet[i];
+				j = i - gap;
+				while (j >= 0 && value < vet[j]) {
+					vet[j + gap] = vet[j];
+					j -= gap;
+				}
+				vet[j + gap] = value;
+			}
+		}
+	}
 
-    private List<VertextType> colors = new ArrayList<>();
-    private Deque<Integer> stack = new LinkedList<>();
+	public static void main(String[] args) {
+		Random gerador = new Random();
+		int tv = 100; 
+		int vet[] = new int[tv];
+		int i;
+		System.out.println("Vetor desordenado");
+		for (i = 0; i < tv; i++) {
+			vet[i] = gerador.nextInt(tv);
+			System.out.println(" " + vet[i]);
+		}
+		
+		insertionSort (vet, tv);
+		shellSort (vet, tv);
 
-    private final Graph graph;
-
-    public Topological(Graph graph) {
-        this.graph = graph;
-
-        for (int i = 0; i < graph.getVCount(); i++)
-            colors.add(VertextType.WHITE);
-    }
-
-    /**
-     * Sort graph.
-     * 
-     * @return <code>true</code> if no cycles are detected.
-     */
-    public boolean sort() {
-        for (int i = 0; i < colors.size(); i++) {
-            if (colors.get(i) == VertextType.WHITE) {
-                boolean hasCycle = dfs(i);
-
-                if (hasCycle)
-                    return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Depth first search.
-     * 
-     * @param vertex
-     *            Current vertex number.
-     * @return <code>true</code> if graph has cycles.
-     */
-    private boolean dfs(int vertex) {
-
-        if (colors.get(vertex) == VertextType.GRAY)
-            return true;
-        if (colors.get(vertex) == VertextType.BLACK)
-            return false;
-
-        colors.set(vertex, VertextType.GRAY);
-
-        AdjList adjacencies = graph.getAdjacencies(vertex);
-
-        for (Edge edge : adjacencies) {
-            if (dfs(edge.to())) {
-                return true;
-            }
-        }
-
-        stack.push(vertex);
-        colors.set(vertex, VertextType.BLACK);
-
-        return false;
-    }
-
-    public static void main(String[] args) {
-        Graph graph = new Graph(true, 4);
-        graph.add(new Edge(0, 1));
-        graph.add(new Edge(0, 2));
-        graph.add(new Edge(1, 3));
-        graph.add(new Edge(2, 3));
-
-        Topological topological = new Topological(graph);
-        topological.sort();
-
-        Deque<Integer> s = topological.stack;
-
-        while (!s.isEmpty()) {
-            System.out.println(s.pop());
-        }
-    }
+		System.out.println("Vetor ordenado");
+		for (i = 0; i < tv; i++) {
+			System.out.println(" " + vet[i]);
+		}
+	}
 }

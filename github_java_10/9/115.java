@@ -1,340 +1,339 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
+package sort;
 
-class Heap {
-	protected int arr_to_sort[];
-	protected int heapSize;	
-	public void setArrToSort(int arr_to_sort[]) {
-		this.arr_to_sort = arr_to_sort;
-	}	
-	protected void printMergedArray(int sortedArray[],int heapSize) {
-		for ( int i = 0 ; i < heapSize;  i++) 
-			System.out.print(sortedArray[i] + " ");
-		System.out.println();
-	}
-	protected int findParentIndex(int idx) {
-		if ( idx % 2 == 1) // odd , it must be left child 
-			return (int)Math.floor((idx -1)/2);
-		else	 // even, right child
-			return (int)Math.floor((idx -2)/2);
-	}
-	protected int findLeftIndex(int idx) {
-		return 2*idx +1;
-	}
-	protected int findRightIndex(int idx) {
-		return 2*idx +2;
-	}
-	protected void print() {
-		printMergedArray(arr_to_sort,heapSize);
-	}
-	protected int size() {
-		return heapSize;
-	}
-	
-	
-}
-class MinHeap extends Heap{
-	public int minimum() {
-		return arr_to_sort[0];
-	}
-	public void min_heapify(int[] arr,int start,int end) {
-		int root = start;
-		int smallest,swap;
-		int left = findLeftIndex(root);
-		int right= findRightIndex(root);
-		while(left <= end) {
-			smallest = root;
-			if(arr[left] < arr[root]) {
-				smallest = left;
-			}
-			if (right <=end) {
-				if(arr[right] < arr[smallest]) {
-					smallest = right;
-				}
-			}
-			if(smallest != root) {
-				swap = arr[root];
-				arr[root]= arr[smallest];
-				arr[smallest]= swap;
-				root = smallest;
-				left = findLeftIndex(root);
-				right= findRightIndex(root);
-			} else {
-				break;
-			}
-		}
+import static v.ArrayUtils.*;
+import static java.lang.reflect.Array.*;
+import static java.lang.System.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.util.Arrays;
+import java.util.Comparator;
 
-	}
-	public void createMinHeap() {
-		for(int i= (findParentIndex(arr_to_sort.length)-1); i>=0 ; i--) {
-			min_heapify(arr_to_sort,i,arr_to_sort.length-1);
-		}
-		heapSize = arr_to_sort.length;
-		print();
-	}
-	// i : index k : value
-	public boolean decreaseKey(int nIndex,int k) {
-		if (nIndex == -1)
-			return false;
-		if ( arr_to_sort[nIndex] < k) // setting arr[nIndex] to a larger value might violate min-heap property
-			return false;
-		arr_to_sort[nIndex] = k;
-		int nParentIdx = findParentIndex(nIndex),swap;
-		while (nParentIdx >= 0) {
-			if ( arr_to_sort[nParentIdx] > arr_to_sort[nIndex] ) {
-				swap = arr_to_sort[nIndex];
-				arr_to_sort[nIndex ] 	= arr_to_sort[nParentIdx];
-				arr_to_sort[nParentIdx] = swap;
-				nIndex = nParentIdx;
-				nParentIdx = findParentIndex(nParentIdx);
-			}
-			else { 
-				break;
-			}
-		}
-		return true;
-	}
-	public boolean insert(int x) {
-		if (heapSize == arr_to_sort.length)
-			return false;
-		
-		heapSize++;
-		arr_to_sort[heapSize-1] = x;
-		decreaseKey(heapSize-1,x);
-		return true;
-	} 
-	public int extractMin() {
-		if ( heapSize == -1)
-			return heapSize;
-		int max = arr_to_sort[0];
-		arr_to_sort[0] = arr_to_sort[heapSize-1];
-		heapSize--;
-		min_heapify(arr_to_sort,0,heapSize-1);
-		return max;
-	}
-}
+import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdIn;
 
-class MaxHeap extends Heap{
-	private void max_heapify(int arr[],int start,int end) {
-		int root = start;
-		int largest,swap;
-		int left = findLeftIndex(root);
-		int right= findRightIndex(root);
-		while(left <= end) {
-			largest = root;
-			if(arr[left] > arr[root]) {
-				largest = left;
-			}
-			if (right <=end) {
-				if(arr[right] > arr[largest]) {
-					largest = right;
-				}
-			}
-			if(largest != root) {
-				swap = arr[root];
-				arr[root]= arr[largest];
-				arr[largest]= swap;
-				root = largest;
-				left = findLeftIndex(root);
-				right= findRightIndex(root);
-			} else {
-				break;
-			}
-		}
-	}
-	public void createMaxHeap() {
-		for(int i= (findParentIndex(arr_to_sort.length)-1); i>=0 ; i--) {
-			max_heapify(arr_to_sort,i,arr_to_sort.length-1);
-		}
-		heapSize = arr_to_sort.length;
-		printMergedArray(arr_to_sort,heapSize);
-	}
-	
-	public int maximum() {
-		return arr_to_sort[0];
-	}
-	/**
-	* NOTE : if index is already known, then the searchKey is omitted and operation is 
-	* done in O(log n) time
-	*/
-	public boolean increaseKey(int nIndex,int k) {
-		//increase x to k ie. set x=k
-		if (nIndex == -1) //element not present in heap
-			return false;
-		//int x = arr_to_sort[nIndex];
-		if ( k < arr_to_sort[nIndex]) // setting x to a smaller value will be violation of max-heap property
-			return false;
-		arr_to_sort[nIndex] = k;
-		int swap,i;
-		while ( nIndex >= 0) { // preserve max-heap property
-			i = findParentIndex(nIndex);
-			if ( i < 0) // this is root element, hence parent index cannot be found
-				break;
-			if ( arr_to_sort[i] < arr_to_sort[nIndex] ) {
-				swap = arr_to_sort[nIndex];
-				arr_to_sort[nIndex] = arr_to_sort[i];
-				arr_to_sort[i] = swap;
-				nIndex = i;
-			} else {
-				break;
-			}
-		}
-		return true;
-	}
-	/**
-	* To remove max from heap, and still maintain heap property, we need to 
-	* call max_heapify from 1 to n-1 once arr_to_sort[0] is removed
-	*/
-	public int extractMax() {
-		int max = arr_to_sort[0];
-		arr_to_sort[0] = arr_to_sort[arr_to_sort.length-1];
-		heapSize--;
-		max_heapify(arr_to_sort,0,heapSize-1);
-		return max;
-	}
-	public boolean insert(int x) {
-		if (heapSize == arr_to_sort.length)
-			return false;
-		heapSize++;
-		arr_to_sort[heapSize-1] = -32767;
-		return increaseKey(heapSize-1,x);	
-		
-	}
-	/*Searching in heap cannot be done better than O(n) 
-	* Imagine a case where the element x is smaller than both left[root] and right[root]
-	* Or , if the element x is not present in heap, and  it is smaller than all elements in heap,
-	* in such a case, a sequential search is the only way
-	*/
-	private int searchKey(int x) {
-		int nResult =-1;
-		for(int i=0;i<heapSize-1;i++)
-		{
-			if(arr_to_sort[i] == x)
-			{
-				nResult = x;
-				break;
-			}
-		}
-		return nResult;
-	}
-}
 
-class PriorityQueue {
-	public static int getNumber(BufferedReader br, boolean bDimension) throws IOException{
-		int nResult = 0;
-		String inputNumber;
-		String regex = ( bDimension == true) ? "[0-9]+" : "^-?[0-9]+$"; 
-		while ( true ) { 
-			inputNumber	= br.readLine();	
-			if ( inputNumber.matches(regex) ) {
-				nResult = Integer.parseInt(inputNumber);
-				if (bDimension) {
-					if (nResult >= 0)
-						break;
-				}
-				else 
-					break;	
-				System.out.println("\nPlease enter a valid number ! Try again...");	
-			}	
-			else {
-				System.out.println("\nPlease enter a valid number ! Try again...");
-			}
-				
-		}
-		return nResult;
-	}	
-	 
-	public static void main(String[] args) throws IOException{
-		System.out.println("Enter the maximum range required :");
-		int dimension;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			dimension = getNumber(br,true);
-			//dimension = 1;;
-			if ( dimension == 0) {
-				System.out.println("Array size is 0 ! Exiting...");
-				return;
-			}
-			if ( dimension > 200) {
-				System.out.println("Array size exceeds limit ( 200) ! Exiting...");
-				return;
-			}		
-			int nCtr   = 0;
-			int[] inputArray =  new int[dimension];
-			System.out.println("Enter the " + dimension + " elements :");
-			while ( nCtr < dimension ) { 	
-				inputArray[nCtr] = getNumber(br,false);
-				nCtr++;
-			}
-			System.out.println("Use max-heap or min-heap ( 1 / 2 ) ?");
-			int choice = getNumber(br,false);
-			if ((choice != 1) && (choice != 2)) {
-				System.out.println("Choice was wrong... Will use max-heap as default !");
-				choice = 1;
-			}
-			switch(choice) {
-				case 1:
-					MaxHeap max = new MaxHeap();
-					max.setArrToSort(inputArray);
-					max.createMaxHeap();
-					System.out.println("Maximum value is " + max.maximum());
-					System.out.println("Extracting maximum value :" + max.extractMax());
-					
-					System.out.println("Heap is now :");
-					max.print();
-					
-					System.out.println(Boolean.valueOf(max.insert(5)));
-					System.out.println("Inserted 5 into heap ....");
-					System.out.println("Heap is now :");
-					  max.print();
-					
-					System.out.println("Increase last element to 20...");
-					max.increaseKey(max.size()-1,20);
-					System.out.println("Heap is now :");
-					max.print();
 
-				break;	
-				case 2:
-					MinHeap min = new MinHeap();
-					min.setArrToSort(inputArray);
-					min.createMinHeap();
-					System.out.println("Minimum value is " + min.minimum());
-					System.out.println("Heap is now :");
-					min.print();
-					
-					System.out.println("Extracting maximum value :" + min.extractMin());
-					
-					System.out.println("Heap is now :");
-					min.print();
-					
-					System.out.println(Boolean.valueOf(min.insert(5)));
-					System.out.println("Inserted 5 into heap ....");
-					System.out.println("Heap is now :");
-					min.print();
-					
-					System.out.println("Decreasing last element to -20...");
-					min.decreaseKey(min.size()-1,-20);
-					System.out.println("Heap is now :");
-					min.print();
-					
-				break;
-			}
-		}
-		catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		finally 
-		{
-			try {	
-				br.close();
-			}
-			catch(Exception ex2) {
-			}		
-		}
-		
-	}
-	
-	
-	
+@SuppressWarnings("unused")
+public class Selection {
+
+  public static int writes = 0;
+  public static double exchanges = 0;
+  public static int compares = 0;
+
+  
+  public static final Color FIREBRICK = new Color(178, 34, 34);
+
+
+  public static <T extends Comparable<? super T>> int sort(T[] a) { 
+    
+    writes = 0;
+    int N = a.length; 
+    for (int i = 0; i < N; i++) { 
+      
+      int min = i; 
+      for (int j = i+1; j < N; j++)
+        if (less(a[j], a[min])) min = j;
+      exch(a, i, min);
+    }
+    return writes;
+  }
+
+  public static int sort(Object[] a, Comparator<Object> c) { 
+    
+    writes = 0;
+    int N = a.length; 
+    for (int i = 0; i < N; i++) { 
+      
+      int min = i; 
+      for (int j = i+1; j < N; j++)
+        if (less(a[j], a[min], c)) min = j;
+      exch(a, i, min);
+    }
+    return writes;
+  }
+
+  
+  public static <T extends Comparable<? super T>> double[] selectionTestHypo2128(T[] a) { 
+    
+    compares = 0; exchanges = 0;
+    int N = a.length; 
+    
+    
+    for (int i = 0; i < N; i++) { 
+      
+      
+      int min = i; 
+      for (int j = i+1; j < N; j++)
+        if (less(a[j], a[min])) {
+          min = j;
+        }
+      exch(a, i, min);
+      
+      
+      
+    }
+    
+    
+    
+    return new double[]{exchanges,compares};
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  public static <T extends Comparable<? super T>> int visualSort(T[] a) { 
+    
+    if (Number.class.isAssignableFrom(a.getClass().getComponentType()))
+      return numberSort((Number[]) a);
+    writes = 0;
+    int N = a.length; 
+    for (int i = 0; i < N; i++) { 
+      
+      int min = i; 
+      for (int j = i+1; j < N; j++)
+        if (less(a[j], a[min])) min = j;
+      exch(a, i, min);
+    }
+    return writes;
+  }
+
+  
+  public static int numberSort(Number[] a) { 
+    
+    writes = 0;
+    int N = a.length; 
+    double[] z = new double[a.length];
+    for (int i = 1; i < N; i++) z[i] = a[i].doubleValue();
+    for (int i = 0; i < N; i++) { 
+      
+      int min = i; 
+      for (int j = i+1; j < N; j++)
+        if (z[j] < z[min]) min = j;
+      exch(z, i, min);
+      visualShow(z);
+    }
+    return writes;
+  }
+
+  
+  public static <T extends Comparable<? super T>> int visualSort2(T[] a) { 
+    
+    if (Number.class.isAssignableFrom(a.getClass().getComponentType()))
+      return numberSort2((Number[]) a);
+    writes = 0;
+    int N = a.length; 
+    for (int i = 0; i < N; i++) { 
+      
+      int min = i; 
+      for (int j = i+1; j < N; j++)
+        if (less(a[j], a[min])) min = j;
+      exch(a, i, min);
+    }
+    return writes;
+  }
+
+  
+  public static int numberSort2(Number[] a) { 
+    
+    writes = 0;
+    int N = a.length; 
+    double[] z = new double[a.length];
+    initializeVisual2(z);
+    for (int i = 1; i < N; i++) z[i] = a[i].doubleValue();
+    for (int i = 0; i < N; i++) { 
+      
+      int min = i; 
+      for (int j = i+1; j < N; j++)
+        if (z[j] < z[min]) min = j;
+      exch(z, i, min);
+      visualShow2(z,i,min);
+    }
+    return writes;
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  private static <T extends Comparable<? super T>> boolean less(T v, T w) { 
+    compares++;
+    return v.compareTo(w) < 0; 
+  }
+
+  private static boolean less(Object v, Object w, Comparator<Object> c) { 
+    compares++;
+    return c.compare(v, w) < 0; 
+  }
+
+  private static <T extends Comparable<? super T>> void exch(T[] a, int i, int j) {
+    T t = a[i]; a[i] = a[j]; a[j] = t;
+    writes++; exchanges++;
+  }
+
+  private static void exch(Object[] a, int i, int j) {
+    Object t = a[i]; a[i] = a[j]; a[j] = t;
+    writes++; exchanges++;
+  }
+
+  private static void exch(double[] a, int i, int j) { 
+    double t = a[i]; a[i] = a[j]; a[j] = t;
+    writes++; exchanges++;
+  }
+
+  public static <T extends Comparable<? super T>> boolean isSorted(T[] a) { 
+    
+    for (int i = 1; i < a.length; i++)
+      if (less(a[i], a[i-1])) return false;
+    return true;
+  }
+
+  public static boolean isSorted(Object[] a, Comparator<Object> c) { 
+    
+    for (int i = 1; i < a.length; i++)
+      if (c.compare(a[i], a[i-1]) < 0) return false;
+    return true;
+  }
+
+  public static <T extends Comparable<? super T>> void show(T[] a) { 
+    
+    for (int i = 0; i < a.length; i++)
+      System.out.print(a[i] + " ");
+    System.out.println();
+  }
+
+  public static void showObjectArray(Object[] a) { 
+    
+    for (int i = 0; i < a.length; i++) {
+      if (a[i].getClass().isArray()) {
+        if (getLength(a[i]) > 1) {
+          System.out.print(arrayToString(a[i],10000,1,1)
+              .replaceAll(",.*,", ",...,")+" ");
+        } else {
+          System.out.print(arrayToString(a[i],10000,1,1)+" ");
+        }
+      } else System.out.print(a[i] + " ");
+    }
+    System.out.println();
+  }
+
+  
+  private static void visualShow(double[] a) {
+    
+    int max = (int) Math.ceil(max(a));
+    int n = a.length;
+    StdDraw.setXscale(0, n);
+    StdDraw.setYscale(0, max);
+    StdDraw.setPenColor(StdDraw.BLACK);
+    StdDraw.setPenRadius(.002);
+    Font font = new Font("Arial", Font.BOLD, 16);
+    StdDraw.setFont(font);
+    StdDraw.clear();
+    for (int k = 0; k < a.length; k++) {
+      StdDraw.line(k, 0, k, a[k]);
+    }
+    StdDraw.textLeft(1.*n/10, 1.*max*7/9, "Selection Sort");
+
+    StdDraw.show();
+    StdDraw.show(10);
+  }
+
+  
+  
+  private static void initializeVisual2(double[] a) {
+    int n = a.length;
+    StdDraw.setCanvasSize(200, 900);
+    StdDraw.setXscale(-1, n+1);
+    Font font = new Font("SansSerif", Font.PLAIN, 20);
+    StdDraw.setFont(font);
+    StdDraw.setPenRadius(0.006);
+  }
+
+  
+  
+  private static void visualShow2(double[] a, int i, int min) {
+    StdDraw.setYscale(-a.length + i + 1, i+1.5);
+    StdDraw.setPenColor(StdDraw.BLACK);
+    StdDraw.textLeft(1.5*a.length/10, i+1, "Selection Sort");
+    StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
+    for (int k = 0; k < i; k++) StdDraw.line(k, 0, k, a[k]*0.5);
+    StdDraw.setPenColor(StdDraw.BLACK);
+    for (int k = i; k < a.length; k++) StdDraw.line(k, 0, k, a[k]*0.5);
+    StdDraw.setPenColor(FIREBRICK);
+    StdDraw.line(min, 0, min, a[min]*0.5);
+  }
+
+
+
+
+  public static void main(String[] args) {
+
+
+    
+    
+    
+    
+    
+    
+    
+
+  }
+
 }

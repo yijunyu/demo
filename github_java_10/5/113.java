@@ -1,50 +1,35 @@
-package pathfinder.algorithm;
+package com.algo.sorting;
 
-import java.util.LinkedList;
-import java.util.Stack;
+public class BubbleSortJava {
 
-import pathfinder.representations.graph.IGraph;
-import pathfinder.representations.graph.Path;
-
-//Straight-forward iterative DFS implementation using a stack
-public class DepthFirstSearch<E> extends AbstractPathFinder<E> {
-	final private Stack<E> _s;
-	
-	public DepthFirstSearch() {
-		super();
-		
-		_s = new Stack<E>();
+	public static void print(int numbers[]) {
+		for (int i = 0; i < numbers.length - 1; i++) {
+			System.out.print(numbers[i] + " ");
+		}
 	}
-	@Override
-	public Path<E> run(IGraph<E> graph, E origin, E destination) {
-		initialize(graph, origin, destination);
-		_s.push(_origin);
-		markVertexAsVisited(_origin);
-		
-		while(!_s.isEmpty()) {
-			E current = _s.pop();
-			
-			if (current.equals(destination)) {
-				_foundDestination = true;
-				break;
-			}
-			
-			// iterate over current neighbors
-			for (E neigh : _graph.adj(current)) {
-				if (!vertexIsVisited(neigh)) {
-					markVertexParent(neigh, current);
-					markVertexAsVisited(neigh);
-					_s.push(neigh);
+
+	public static int[] swap(int numbers[], int i, int j) {
+		int temp = numbers[i];
+		numbers[i] = numbers[j];
+		numbers[j] = temp;
+		return numbers;
+	}
+
+	public static int[] sort(int numbers[]) {
+		for (int i = 0; i < numbers.length; i++) {
+			for (int j = 0; j < numbers.length - 1; j++) {
+				if (numbers[j + 1] < numbers[j]) {
+					numbers = swap(numbers, j, j + 1);
 				}
 			}
 		}
-		
-		//if the destination has been found, generate the path
-		if (_foundDestination) {
-			generatePath();
-		}
-
-		// TODO throw some exception here
-		return _path;
+		return numbers;
 	}
+
+	public static void main(String[] args) {
+		int numbers[] = new int[] { 24, 67, 89, 24, 5, 7, 456, 789, 34, 98, -1 };
+		int num[] = sort(numbers);
+		print(num);
+	}
+
 }

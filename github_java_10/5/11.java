@@ -1,53 +1,51 @@
-package graph;
+package com.csrk.excercises;
 
-import java.util.LinkedList;
 
-public class DepthFirstSearch {
 
-	private int length = 0;
+public class Bubblesort {
 
-	private LinkedList<Integer> list[];
-	boolean visited[];
+public static void main(String[] args) {
+       
+        
+        int intArray[] = new int[]{5,90,35,45,150,3};
+       
+        
+        System.out.println("Array Before Bubble Sort");
+        for(int i=0; i < intArray.length; i++){
+                System.out.print(intArray[i] + " ");
+        }
+       
+        
+        bubbleSort(intArray);
+       
+        System.out.println("");
+       
+        
+        System.out.println("Array After Bubble Sort");
+        for(int i=0; i < intArray.length; i++){
+                System.out.print(intArray[i] + " ");
+        }
 
-	DepthFirstSearch(int length) {
+}
 
-		this.length = length;
-		list = new LinkedList[length];
-		visited = new boolean[length];
-		for (int i = 0; i < length; i++) {
-			list[i] = new LinkedList<Integer>();
-		}
-	}
+private static void bubbleSort(int[] intArray) {
+       
+        
+       
+        int n = intArray.length;
+        int temp = 0;
+       
+        for(int i=0; i < n; i++){
+                for(int j=1; j < (n-i); j++){
+                        if(intArray[j-1] > intArray[j]){
+                                
+                                temp = intArray[j-1];
+                                intArray[j-1] = intArray[j];
+                                intArray[j] = temp;
+                        }
+                       
+                }
+        }
 
-	public void addEdge(int u, int v) {
-
-		list[u].add(v);
-	}
-
-	public void depthFirstSearch(int v) {
-
-		visited[v] = true;
-		System.out.println(v);
-		LinkedList<Integer> l = this.list[v];
-		l.stream().forEach(node -> {
-			if (!visited[node])
-				depthFirstSearch(node);
-		});
-
-	}
-
-	public static void main(String args[]) {
-		DepthFirstSearch g = new DepthFirstSearch(4);
-
-		g.addEdge(0, 1);
-		g.addEdge(0, 2);
-		g.addEdge(1, 2);
-		g.addEdge(2, 0);
-		g.addEdge(2, 3);
-		g.addEdge(3, 3);
-
-		g.visited[2] = true;
-		g.depthFirstSearch(2);
-	}
-
+}
 }

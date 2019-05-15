@@ -1,25 +1,83 @@
-// Java recursive program to solve tower of hanoi puzzle 
+package org.interviewelements.graph;
 
-class GFG 
-{ 
-	// Java recursive function to solve tower of hanoi puzzle 
-	static void towerOfHanoi(int n, char from_rod, char to_rod, char aux_rod) 
-	{ 
-		if (n == 1) 
-		{ 
-			System.out.println("Move disk 1 from rod " + from_rod + " to rod " + to_rod); 
-			return; 
-		} 
-		towerOfHanoi(n-1, from_rod, aux_rod, to_rod); 
-		System.out.println("Move disk " + n + " from rod " + from_rod + " to rod " + to_rod); 
-		towerOfHanoi(n-1, aux_rod, to_rod, from_rod); 
-	} 
-	
-	// Driver method 
-	public static void main(String args[]) 
-	{ 
-		int n = 4; // Number of disks 
-		towerOfHanoi(n, 'A', 'C', 'B'); // A, B and C are names of rods 
-	} 
-} 
+import org.interviewelements.graph.Graph.AdjList;
+import org.interviewelements.graph.Graph.Edge;
 
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Topological {
+
+    private static enum VertextType {
+        WHITE, GRAY, BLACK
+    };
+
+    private List<VertextType> colors = new ArrayList<>();
+    private Deque<Integer> stack = new LinkedList<>();
+
+    private final Graph graph;
+
+    public Topological(Graph graph) {
+        this.graph = graph;
+
+        for (int i = 0; i < graph.getVCount(); i++)
+            colors.add(VertextType.WHITE);
+    }
+
+    
+    public boolean sort() {
+        for (int i = 0; i < colors.size(); i++) {
+            if (colors.get(i) == VertextType.WHITE) {
+                boolean hasCycle = dfs(i);
+
+                if (hasCycle)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    
+    private boolean dfs(int vertex) {
+
+        if (colors.get(vertex) == VertextType.GRAY)
+            return true;
+        if (colors.get(vertex) == VertextType.BLACK)
+            return false;
+
+        colors.set(vertex, VertextType.GRAY);
+
+        AdjList adjacencies = graph.getAdjacencies(vertex);
+
+        for (Edge edge : adjacencies) {
+            if (dfs(edge.to())) {
+                return true;
+            }
+        }
+
+        stack.push(vertex);
+        colors.set(vertex, VertextType.BLACK);
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Graph graph = new Graph(true, 4);
+        graph.add(new Edge(0, 1));
+        graph.add(new Edge(0, 2));
+        graph.add(new Edge(1, 3));
+        graph.add(new Edge(2, 3));
+
+        Topological topological = new Topological(graph);
+        topological.sort();
+
+        Deque<Integer> s = topological.stack;
+
+        while (!s.isEmpty()) {
+            System.out.println(s.pop());
+        }
+    }
+}

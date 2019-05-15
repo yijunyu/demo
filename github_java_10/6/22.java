@@ -1,113 +1,65 @@
-package Sorting;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.Scanner;
+package radixsort;
 
-/**
- * Created by parker on 4/15/18.
- */
-public class Merge extends Sort {
 
-    public void sort(Object[] arr, Comparator comparator)
-    {
-        int low = 0;
-        int high = arr.length - 1;
+import java.lang.*;
+import java.io.*;
 
-        Object[] aux = new Object[arr.length];
+public class Radixsort {
 
-        sort(comparator, arr, aux, low, high);
-    }
-
-    private void sort(Comparator c, Object[] arr, Object[] aux, int low, int high)
-    {
-        if (high <= low)
-        {
+    public static void radixSort(int[] arr) {
+        if (arr.length == 0) {
             return;
         }
-
-        int mid = low + (high - low) / 2;
-        sort(c, arr, aux, low, mid);
-        sort(c, arr, aux, mid + 1, high);
-
-        if (!less(c, arr[mid + 1], arr[mid]))
-        {
-            return;
+        int[][] np = new int[arr.length][2];
+        int[] q = new int[0x100];
+        int i, j, k, l, f = 0;
+        for (k = 0; k < 4; k++) {
+            for (i = 0; i < (np.length - 1); i++) {
+                np[i][1] = i + 1;
+            }
+            np[i][1] = -1;
+            for (i = 0; i < q.length; i++) {
+                q[i] = -1;
+            }
+            for (f = i = 0; i < arr.length; i++) {
+                j = ((0xFF << (k << 3)) & arr[i]) >> (k << 3);
+                if (q[j] == -1) {
+                    l = q[j] = f;
+                } else {
+                    l = q[j];
+                    while (np[l][1] != -1) {
+                        l = np[l][1];
+                    }
+                    np[l][1] = f;
+                    l = np[l][1];
+                }
+                f = np[f][1];
+                np[l][0] = arr[i];
+                np[l][1] = -1;
+            }
+            for (l = q[i = j = 0]; i < 0x100; i++) {
+                for (l = q[i]; l != -1; l = np[l][1]) {
+                    arr[j++] = np[l][0];
+                }
+            }
         }
-
-        merge(c, arr, aux, low, mid, high);
     }
 
-    private void merge(Comparator c, Object[] arr, Object[] aux, int low, int mid, int high)
-    {
-        assert isSorted(c, arr, low, mid);
-        assert isSorted(c, arr, mid + 1, high);
-
-        for (int k = low; k <= high; k++)
-        {
-            aux[k] = arr[k];
+    public static void main(String[] args) {
+        int i;
+        int[] arr = new int[15];
+        System.out.print("original: ");
+        for (i = 0; i < arr.length; i++) {
+            arr[i] = (int) (Math.random() * 1024);
+            System.out.print(arr[i] + " ");
         }
-
-        int i = low;
-        int j = mid + 1;
-
-        for (int k = low; k <= high; k++)
-        {
-            if (i > mid)
-            {
-                arr[k] = aux[j++];
-            }
-            else if (j > high)
-            {
-                arr[k] = aux[i++];
-            }
-            else if (less(c, aux[j], aux[i]))
-            {
-                arr[k] = aux[j++];
-            }
-            else
-            {
-                arr[k] = aux[i++];
-            }
+        radixSort(arr);
+        System.out.print("\nsorted: ");
+        for (i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
         }
-
-        assert isSorted(c, arr, low, high);
-    }
-
-    private Boolean isSorted(Comparator c, Object[] arr, int low, int high)
-    {
-        for (int i = low + 1; i <= high; i++)
-        {
-            if (less(c, arr[i], arr[i - 1]))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException
-    {
-        Scanner scanner = new Scanner(new File(args[0]));
-        int size = scanner.nextInt();
-        Merge merge = new Merge();
-
-        System.out.println("Total Ints: " + size);
-
-        Integer[] unsorted = new Integer[size];
-        for (int i = 0; i < size && scanner.hasNextInt(); i++)
-        {
-            unsorted[i] = scanner.nextInt();
-        }
-
-        BigDecimal start = new BigDecimal(System.currentTimeMillis());
-        merge.sort(unsorted);
-        BigDecimal end = new BigDecimal(System.currentTimeMillis());
-
-        BigDecimal time = (end.subtract(start).divide(new BigDecimal(1000)));
-        System.out.println("Sort Time: " + time);
+        System.out.println("\nDone ;-)");
     }
 }
+

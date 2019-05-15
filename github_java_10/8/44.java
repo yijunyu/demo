@@ -1,75 +1,85 @@
-/*******************************************************************************
- * Copyright (c) 2010 Torsten Zesch.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl.html
- * 
- * Contributors:
- *     Torsten Zesch - initial API and implementation
- ******************************************************************************/
-package de.tudarmstadt.ukp.wikipedia.util.distance;
+package coursera.algorithms.course1.week3;
 
-public class LevenshteinStringDistance implements StringDistance {
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    public double distance(String s, String t) {
-        int d[][]; // matrix
-        int n; // length of s
-        int m; // length of t
-        int i; // iterates through s
-        int j; // iterates through t
-        char s_i; // ith character of s
-        char t_j; // jth character of t
-        int cost; // cost
 
-        // Step 1
-        n = s.length();
-        m = t.length();
-        if (n == 0) {
-            return m;
-        }
-        if (m == 0) {
-            return n;
-        }
-        d = new int[n + 1][m + 1];
+public class QuickSortJava {
 
-        // Step 2
-        for (i = 0; i <= n; i++) {
-            d[i][0] = i;
+    static int counter;
+
+    public static void main(String... args) throws IOException {
+
+
+
+
+        File f = new File("src/main/resources/algorithms/quicksort.txt");
+
+        System.out.println(f.getAbsolutePath() + " : " + f.exists());
+
+        int[] a = loadInputArray(f);
+        System.out.println(a.length);
+        quickSort(a);
+        System.out.println(Arrays.toString(a));
+        System.out.println(counter);
+    }
+
+    private static int[] loadInputArray(File file) throws IOException {
+        List<Integer> list = Files.lines(file.toPath())
+                .map(String::trim)
+                .filter(s -> !"".equals(s))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        int[] res = new int[list.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = list.get(i);
         }
-        for (j = 0; j <= m; j++) {
-            d[0][j] = j;
-        }
-        // Step 3
-        for (i = 1; i <= n; i++) {
-            s_i = s.charAt(i - 1);
-            // Step 4
-            for (j = 1; j <= m; j++) {
-                t_j = t.charAt(j - 1);
-                // Step 5
-                if (s_i == t_j) {
-                    cost = 0;
-                } else {
-                    cost = 1;
-                }
-                // Step 6
-                d[i][j] = Minimum(d[i - 1][j] + 1, d[i][j - 1] + 1,
-                        d[i - 1][j - 1] + cost);
+        return res;
+    }
+
+
+    public static void quickSort(int[] a) {
+        counter = 0;
+        quickSort(a, 0, a.length - 1);
+    }
+
+    public static void quickSort(int[] a, int begin, int end) {
+
+        if (end - begin <= 1) return;
+
+        counter += (end - begin);
+        int pivotIndex = partition(a, begin, end);
+
+        quickSort(a, begin, pivotIndex - 1);
+        quickSort(a, pivotIndex + 1, end);
+    }
+
+
+    public static int partition(int[] a, int l, int r) {
+        int p = a[l];
+        int i = l + 1;
+        for (int j = l + 1; j <= r; j++) {
+            if (a[j] < p) {
+                swap(a, j, i);
+                i++;
             }
         }
-        // Step 7
-        return new Integer(d[n][m]).doubleValue();
+
+        int newPivotIndex = i - 1;
+        swap(a, l, newPivotIndex);
+        return newPivotIndex;
     }
 
-    private int Minimum(int a, int b, int c) {
-        int min;
-        min = a;
-        if (b < min) {
-            min = b;
-        }
-        if (c < min) {
-            min = c;
-        }
-        return min;
+    private static void swap(int[] a, int i, int j) {
+        int buf = a[i];
+        a[i] = a[j];
+        a[j] = buf;
     }
+
+
 }

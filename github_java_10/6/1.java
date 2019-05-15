@@ -1,65 +1,64 @@
-package dennis.learning.sort;
 
 import java.util.Arrays;
 
-public class MergeSort {
-	public static void main(String args[]) {
-		MergeSort mergeSort = new MergeSort();
-		Integer[] arrayToSort = { 0, 5, 1, 2, 4, 3, 9, 8, 6, 7, 2 };
-		mergeSort.mergeSort(arrayToSort, 0, arrayToSort.length);
-		System.out.println(Arrays.asList(arrayToSort));
-		arrayToSort = new Integer[] {0,1,2,3,4,6,7,8,9};
-		mergeSort.mergeSort(arrayToSort, 0, arrayToSort.length);
-		System.out.println(Arrays.asList(arrayToSort));
-		arrayToSort = new Integer[] {9,8,7,6,5,4,3,2,1,0};
-		mergeSort.mergeSort(arrayToSort, 0, arrayToSort.length);
-		System.out.println(Arrays.asList(arrayToSort));
-	}
+public class RadixSort {
 
-	public void mergeSort(Integer[] arrayToSort, int low, int high) {
-		if (high - low <= 1) {
-			return;
-		}
-		int mid = low + (high - low) / 2;
-		Integer[] part = new Integer[high - low];
-		mergeSort(arrayToSort, low, mid);
-		mergeSort(arrayToSort, mid, high);
-		merge(arrayToSort, low, mid, high, part);
-		
-	}
-	public Integer[] merge(Integer[] arrayToSort, int low, int mid, int high, Integer[] part) {
-		int first = low;
-		int second = mid;
-		int mergeIndex = 0;
-		while (first < mid && second < high) {
-			if (arrayToSort[first] <= arrayToSort[second])
-			{
-				part[mergeIndex] = arrayToSort[first];
-				first++;
-			} else {
-				part[mergeIndex] = arrayToSort[second];
-				second++;
-			}
-			mergeIndex++;
-		}
-		//Add remaining elements
-		while (first < mid) {
-			part[mergeIndex] = arrayToSort[first];
-			first++;
-			mergeIndex++;
-		}
-		while (second < high) {
-			part[mergeIndex] = arrayToSort[second];
-			second++;
-			mergeIndex++;
-		}
-		//Replace elements in existing array
-		mergeIndex = 0;
-		for (int count = low; count < high; count++)
-		{
-			arrayToSort[count] = part[mergeIndex];
-			mergeIndex++;
-		}
-		return part;
-	}
+    private static int max(int[] nums) {
+
+        int mx = Integer.MIN_VALUE;
+
+        for (int n : nums) {
+            mx = Math.max(mx, n);
+        }
+
+        return mx;
+
+    }
+
+    private static void sortCount(int[] nums, int mask) {
+
+        int[] counts = new int[10];
+        int[] out = new int[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            counts[(nums[i] / mask) % 10]++;
+        }
+
+        for (int i = 1; i < 10; i++) {
+            counts[i] += counts[i - 1];
+        }
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            out[counts[(nums[i] / mask) % 10] - 1] = nums[i];
+            counts[(nums[i] / mask) % 10]--;
+        }
+
+        System.arraycopy(out, 0, nums, 0, nums.length);
+
+    }
+
+    public static void radixSort(int[] nums) {
+
+        int m = max(nums);
+
+        for (int mask = 1; m / mask > 0; mask *= 10) {
+
+            sortCount(nums, mask);
+
+        }
+
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = new int[]{1, 52, 2, 25, 6, 10, 25, 200, 15, 12, 8, 2};
+
+        System.out.println(Arrays.toString(nums));
+
+        radixSort(nums);
+
+        System.out.println(Arrays.toString(nums));
+
+    }
+
 }

@@ -1,143 +1,264 @@
-/**
- * $Id: SearchBreadthFirst.java 3658 2007-10-15 16:29:11Z schapira $
- *
- * Part of the open-source Proximity system
- *   (see LICENSE for copyright and license information).
- *
- */
+package com.algos.week3.main;
 
-package kdl.prox.nsi2.search;
+import java.util.Scanner;
 
-import kdl.prox.nsi2.graph.Graph;
-import kdl.prox.nsi2.graph.Node;
-import kdl.prox.nsi2.util.ConversionUtils;
-import org.apache.log4j.Logger;
+import com.algos.week3.elementarysorts.InsertionSort;
+import com.algos.week3.elementarysorts.SelectionSort;
+import com.algos.week3.elementarysorts.ShellSort;
+import com.algos.week3.shuffle.KnuthShuffle;
+import com.algos.week3.sorting.MergeSort;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+public class Program {
+	static Scanner scanner;
+	static Integer[] intArray;
+	static Character[] charArray;
+	static String[] stringArray;
+	static int response;
 
-/**
- * Performs a bidirectional breadth-first search.  The returned SearchResults instance does not contain
- * the found path, only the path length.
- */
+	public static void main(String[] args) {
+		
+		
+		 sortString(); 
+		
+	}
 
-public class SearchBreadthFirst implements Search {
-    private static Logger log = Logger.getLogger(SearchBreadthFirst.class);
-    private static final int BREADTH_FIRST_MAX = 1000;
-    private Graph graph;
+	private static void sortString() {
+		System.out.println("Enter the size of (String)array:");
+		scanner = new Scanner(System.in);
+		int N = scanner.nextInt();
+		stringArray = new String[N];
+		System.out.println("Enter the array Elements:");
+		for (int i = 0; i < N; i++) {
+			stringArray[i] = scanner.next();
+		}
+		System.out.println("Select the sorting method to be used");
+		System.out.println("1.SelectionSort\n2.InsertionSort\n3.ShellSort\n4.MergeSort");
+		response = scanner.nextInt();
+		callSortingFunction(response, 3);
+	}
 
-    public SearchBreadthFirst(Graph graph) {
-        this.graph = graph;
-    }
+	private static void sortCharacter() {
+		System.out.println("Enter the size of (char)array:");
+		scanner = new Scanner(System.in);
+		int N = scanner.nextInt();
+		charArray = new Character[N];
+		System.out.println("Enter the array Elements:");
+		for (int i = 0; i < N; i++) {
+			charArray[i] = scanner.next(".").charAt(0);
+		}
+		System.out.println("Select the sorting method to be used");
+		System.out.println("1.SelectionSort\n2.InsertionSort\n3.ShellSort\n4.MergeSort");
+		response = scanner.nextInt();
+		callSortingFunction(response, 2);
+	}
 
-    public PathlessSearchResults search(int source, int target) {
-        PathlessSearchResults psr = new PathlessSearchResults();
-        psr.startTimer();
+	private static void sortInteger() {
+		System.out.println("Enter the size of (int)array:");
+		scanner = new Scanner(System.in);
+		int N = scanner.nextInt();
+		intArray = new Integer[N];
+		System.out.println("Enter the array Elements:");
+		for (int i = 0; i < N; i++) {
+			intArray[i] = scanner.nextInt();
+		}
+		System.out.println("Select the sorting method to be used");
+		System.out.println("1.SelectionSort\n2.InsertionSort\n3.ShellSort\n4.MergeSort");
+		response = scanner.nextInt();
+		callSortingFunction(response, 1);
+	}
 
-        if (source == target) {
-            psr.setPathlength(0);
-            psr.addExplored(source);
-            psr.stopTimer();
-            return psr;
-        }
+	private static void callSortingFunction(int response, int arrayType) {
+		switch (response) {
+		case 1:
+			selectionSort(arrayType);
+			break;
+		case 2:
+			insertionSort(arrayType);
+			break;
+		case 3:
+			shellSort(arrayType);
+			break;
+		case 4:
+			mergeSort(arrayType);
+			break;
+		default:
+			System.out.println("Wrong option Bro!!");
+			break;
+		}
+	}
 
-        List<Integer> frontier1 = new ArrayList<Integer>();
-        List<Integer> frontier2 = new ArrayList<Integer>();
-        frontier1.add(source);
-        frontier2.add(target);
+	private static void mergeSort(int arrayType) {
+		System.out.println("Before Merge Sort");
+		switch (arrayType) {
+		case 1:
+			mergeSortIntArray();
+			break;
+		case 2:
+			mergeSortCharArray();
+			break;
+		case 3:
+			mergeSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
 
-        List<Integer> expanded = new ArrayList<Integer>();
+	private static void mergeSortIntArray() {
+		MergeSort<Integer> mergeSort = new MergeSort<>();
+		mergeSort.display(intArray);
+		mergeSort.sort(intArray);
+		System.out.println("After Merge Sort");
+		mergeSort.display(intArray);
+	}
 
-        int pathLength = 0;
+	private static void mergeSortCharArray() {
+		MergeSort<Character> mergeSort = new MergeSort<>();
+		mergeSort.display(charArray);
+		mergeSort.sort(charArray);
+		System.out.println("After Merge Sort");
+		mergeSort.display(charArray);
+	}
 
-        while (true) {
-            if (++pathLength > BREADTH_FIRST_MAX) {
-                log.debug("Bailing on bidir search for " + source + " - " + target);
-                pathLength = -1;
-                break;
-            }
+	private static void mergeSortStringArray() {
+		MergeSort<String> mergeSort = new MergeSort<>();
+		mergeSort.display(stringArray);
+		mergeSort.sort(stringArray);
+		System.out.println("After Merge Sort");
+		mergeSort.display(stringArray);
+	}
 
-            List<Integer> frontierNeighbors1 = new ArrayList<Integer>(ConversionUtils.nodesToIntegers(graph.getNeighbors(frontier1)));
-            expanded.addAll(frontier1);
+	private static void shellSort(int arrayType) {
+		System.out.println("Before Shell Sort");
+		switch (arrayType) {
+		case 1:
+			shellSortIntArray();
+			break;
+		case 2:
+			shellSortCharArray();
+			break;
+		case 3:
+			shellSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
 
-            frontier1 = frontierNeighbors1;
+	private static void shellSortIntArray() {
+		ShellSort<Integer> shellSort = new ShellSort<>();
+		shellSort.display(intArray);
+		shellSort.sort(intArray);
+		System.out.println("After Shell Sort");
+		shellSort.display(intArray);
+	}
 
-            if (frontier1.size() == 0) {
-                log.debug("unreachable search: source " + source + ",  target " + target + ", empty frontier1");
-                log.debug("frontier2: " + frontier2.size());
-                log.debug("pathLength: " + pathLength);
-                pathLength = -1;
-                break;
-            }
+	private static void shellSortCharArray() {
+		ShellSort<Character> shellSort = new ShellSort<>();
+		shellSort.display(charArray);
+		shellSort.sort(charArray);
+		System.out.println("After Shell Sort");
+		shellSort.display(charArray);
+	}
 
-            List<Integer> intersection = new ArrayList<Integer>(frontier1);
-            intersection.retainAll(frontier2);
-            if (intersection.size() > 0) {
-                break;
-            }
+	private static void shellSortStringArray() {
+		ShellSort<String> shellSort = new ShellSort<>();
+		shellSort.display(stringArray);
+		shellSort.sort(stringArray);
+		System.out.println("After Shell Sort");
+		shellSort.display(stringArray);
+	}
 
-            if (++pathLength > BREADTH_FIRST_MAX) {
-                log.debug("Bailing on bidir search for " + source + " - " + target);
-                pathLength = -1;
-                break;
-            }
+	private static void insertionSort(int arrayType) {
+		System.out.println("Before Insertion Sort");
+		switch (arrayType) {
+		case 1:
+			insertionSortIntArray();
+			break;
+		case 2:
+			insertionSortCharArray();
+			break;
+		case 3:
+			insertionSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
 
-            List<Integer> frontierNeighbors2 = new ArrayList<Integer>(ConversionUtils.nodesToIntegers(graph.getNeighbors(frontier2)));
-            expanded.addAll(frontier2);
+	private static void insertionSortStringArray() {
+		InsertionSort<String> insertionSort = new InsertionSort<>();
+		insertionSort.display(stringArray);
+		insertionSort.sort(stringArray);
+		System.out.println("After Insertion Sort");
+		insertionSort.display(stringArray);
+	}
 
-            frontier2 = frontierNeighbors2;
+	private static void insertionSortCharArray() {
+		InsertionSort<Character> insertionSort = new InsertionSort<>();
+		insertionSort.display(charArray);
+		insertionSort.sort(charArray);
+		System.out.println("After Insertion Sort");
+		insertionSort.display(charArray);
+	}
 
-            if (frontier2.size() == 0) {
-                log.debug("unreachable search: source " + source + ",  target " + target + ", empty frontier1");
-                log.debug("frontier1: " + frontier1.size());
-                log.debug("pathLength: " + pathLength);
-                pathLength = -1;
-                break;
-            }
+	private static void insertionSortIntArray() {
+		InsertionSort<Integer> insertionSort = new InsertionSort<>();
+		insertionSort.display(intArray);
+		insertionSort.sort(intArray);
+		System.out.println("After Insertion Sort");
+		insertionSort.display(intArray);
+	}
 
-            intersection = new ArrayList<Integer>(frontier1);
-            intersection.retainAll(frontier2);
-            if (intersection.size() > 0) {
-                break;
-            }
+	private static void selectionSort(int arrayType) {
+		System.out.println("Before Selection Sort");
+		switch (arrayType) {
+		case 1:
+			selectionSortIntArray();
+			break;
+		case 2:
+			selectionSortCharArray();
+			break;
+		case 3:
+			selectionSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
 
-            frontier1.removeAll(expanded);
-            frontier2.removeAll(expanded);
-        }
+	private static void selectionSortStringArray() {
+		SelectionSort<String> selectionSort = new SelectionSort<>();
+		selectionSort.display(stringArray);
+		selectionSort.sort(stringArray);
+		System.out.println("After Selection Sort");
+		selectionSort.display(stringArray);
+	}
 
-        psr.setPathlength(pathLength);
-        psr.addExplored(new HashSet<Integer>(expanded));
-        psr.stopTimer();
-        return psr;
+	private static void selectionSortCharArray() {
+		SelectionSort<Character> selectionSort = new SelectionSort<>();
+		selectionSort.display(charArray);
+		selectionSort.sort(charArray);
+		System.out.println("After Selection Sort");
+		selectionSort.display(charArray);
+	}
 
-    }
+	private static void selectionSortIntArray() {
+		SelectionSort<Integer> selectionSort = new SelectionSort<>();
+		selectionSort.display(intArray);
+		selectionSort.sort(intArray);
+		System.out.println("After Selection Sort");
+		selectionSort.display(intArray);
+	}
 
-    private class PathlessSearchResults extends SearchResults {
-        private int pathlength;
-
-        public PathlessSearchResults() {
-            super();
-            this.pathlength = -1;
-            this.path = null;
-        }
-
-        public double pathlength() {
-            return this.pathlength;
-        }
-
-        public void setPathlength(int pathlength) {
-            this.pathlength = pathlength;
-        }
-
-        public List<Node> pathList() {
-            log.warn("Cannot return path for breadth-first search!");
-            return null;
-        }
-    }
-
-    public void setGraph(Graph graph) {
-        this.graph = graph;
-    }
-
+	private static void shuffleArray() {
+		KnuthShuffle<Integer> knuthShuffle = new KnuthShuffle<>();
+		knuthShuffle.shuffle(intArray);
+		System.out.println("After Shuffling");
+		knuthShuffle.display(intArray);
+	}
 }

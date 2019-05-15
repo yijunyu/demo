@@ -1,46 +1,36 @@
-package com.algo.quiz;
+package com.sorting;
 
-import edu.princeton.cs.algs4.Graph;
-import edu.princeton.cs.algs4.Queue;
 
-public class BFS {
+public class Insertionsort {
+    private int[] numbers;
 
-  private static final int INFINITY = Integer.MAX_VALUE;
-  public boolean[] marked;
-  public int[] edgeTo;
-  public int[] distTo;
 
-  public BFS(Graph g, int s) {
-    marked = new boolean[g.V()];
-    distTo = new int[g.V()];
-    edgeTo = new int[g.V()];
-  }
-
-  public void bfs(Graph G, int s) {
-    Queue<Integer> q = new Queue<Integer>();
-    for (int v = 0; v < G.V(); v++) {
-      distTo[v] = INFINITY;
-    }
-    distTo[s] = 0;
-    marked[s] = true;
-    q.enqueue(s);
-    while (!q.isEmpty()) {
-      int v = q.dequeue();
-      for (int w : G.adj(v)) {
-        if (!marked[w]) {
-          edgeTo[w] = v;
-          distTo[w] = distTo[v] + 1;
-          marked[w] = true;
+    public void sort(int[] values) {
+        
+        if (values ==null || values.length==0){
+            return;
         }
-      }
+        this.numbers = values;
+        for(int i = 1; i < numbers.length; i++) {
+           int j = i;
+           int value = numbers[i];
+
+           while(j > 0 && (numbers[j-1] > value))     {
+               numbers[j] = numbers[j-1];
+               j--;
+           }
+
+           numbers[j] = value;
+        }
+        for(int n=0; n< numbers.length; n++) {
+            System.out.print(numbers[n] + ", ");
+        }
     }
-  }
 
-  public boolean hasPathTo(int v) {
-    return marked[v];
-  }
+    public static void main(String ... args)  {
+        Insertionsort is = new Insertionsort();
+        int a[] = {3,7,8,5,2,1,9,5,4};
+        is.sort(a);
+   }
 
-  public int distTo(int v) {
-    return distTo[v];
-  }
 }

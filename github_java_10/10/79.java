@@ -1,56 +1,40 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
-public class bubble {
-	public void bubbleSort(int[] unsorted) 
-	{
-		boolean swap = false;
-		int tempSwap;
-		do
-		{
-			swap = false;
-			
-			for(int i=0; i< unsorted.length-1; i++)
-			{
-				if(unsorted[i] > unsorted[i+1]) {
-					tempSwap = unsorted[i];
-					unsorted[i] = unsorted[i+1];
-					unsorted[i+1]=tempSwap;
-					swap = true;	
-				}
+
+public class Main {
+	
+	public static void main(String[] args){
+		double[] array = {0.0, 0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434};
+		System.out.println(Arrays.toString(array));
+		bucketSort(array);
+		System.out.println(Arrays.toString(array));
+	}
+	
+	public static void bucketSort(double[] array){
+		@SuppressWarnings("unchecked")
+		ArrayList<Double>[] buckets = new ArrayList[10];
+		
+		for(int i=0; i<10 ;i++){
+			buckets[i] = new ArrayList<Double>();
+		}
+		
+		for(int i=0; i<array.length; i++){
+			int index = (int)array[i]*10;
+			buckets[index].add(array[i]);
+		}
+		
+		for(int i=0; i<10; i++){
+			Collections.sort(buckets[i]);
+		}
+		
+		int index = 0;
+		for(int i=0; i<10; i++){
+			for(int j=0; j<buckets[i].size(); j++){
+				array[index++] = buckets[i].get(j);
 			}
 		}
-		while(swap);
-	}
-	public void printArray(int[] array) throws IOException
-	{
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		
-		for(int i = 0; i < array.length; i++)
-			bw.write(array[i] + " "); 
-		
-		bw.write(" ");
-		bw.flush();
-	}
-	public static void main(String[] args) throws IOException 
-	{
-		BufferedReader br = new BufferedReader (new InputStreamReader(System.in));
-		int[] a = {2,12,4,65,3,8,4};
-		String line = br.readLine();
-		String[] numbers = line.split(",");
-		int[] array = new int[numbers.length];
-		for(int i = 0; i < numbers.length; i++)
-			array[i] = Integer.parseInt(numbers[i]);
-		
-		
-		bubble sort = new bubble();
-		sort.printArray(array);
-		sort.bubbleSort(array);
-		sort.printArray(array);   
-
 	}
 }

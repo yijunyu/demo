@@ -1,28 +1,35 @@
-package com.nagarro.algorithms.graph;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-public final class BFSMain {
-
-    public static void main(final String[] args) {
-        final BFS bfs = new BFS(8);
-        bfs.addVertex('A');
-        bfs.addVertex('B');
-        bfs.addVertex('C');
-        bfs.addVertex('D');
-        bfs.addVertex('E');
-        bfs.addVertex('F');
-        bfs.addVertex('G');
-        bfs.addVertex('H');
-
-        bfs.addEdge(0, 1);
-        bfs.addEdge(1, 2);
-        bfs.addEdge(1, 7);
-        bfs.addEdge(2, 3);
-        bfs.addEdge(2, 4);
-        bfs.addEdge(4, 5);
-        bfs.addEdge(4, 6);
-        bfs.addEdge(4, 7);
-
-        bfs.bfs();
-    }
-
+class Ideone
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner sc = new Scanner(System.in);
+		int size = sc.nextInt();
+		int a[] = new int[size];
+		for(int i = 0; i < size; i++)
+			a[i] = sc.nextInt();
+		Ideone ideone = new Ideone();
+		ideone.insertionSort(a);
+		for(int i = 0 ;i < a.length; i++)
+		System.out.print(a[i] + " ");
+	}
+	
+	public void insertionSort(int a[]){
+		int i, key;
+		for(int j = 1; j < a.length;j++){
+			key = a[j];
+			i = j - 1;
+			while(i>=0 && a[i] > key) {
+				a[i+1] = a[i];
+				i = i - 1;
+			}
+			a[i + 1] = key;
+		}	
+	}
 }
+
+
+

@@ -1,66 +1,46 @@
-package com.algorithmhelper.graphs.pathfinding;
+package com.linbo.algs.sortings;
 
-import com.algorithmhelper.datastructures.lists.Queue;
-import com.algorithmhelper.datastructures.lists.QueueDynamicArray;
-import com.algorithmhelper.graphs.graphs.DirectedGraph;
 
-public class KahnsTopologicalSortAlgorithmQueue<T extends Comparable<T>> {
+public class Shell {
 
-    private Queue<T> topologicalOrdering;
+  private Shell() { }
 
-    /**
-     * Initialize a KahnsTopologicalSortAlgorithmQueue object with a graph G, and run
-     * kahnsTopologicalSort on G.
-     *
-     * @param G, the graph
-     */
-    public KahnsTopologicalSortAlgorithmQueue(DirectedGraph<T> G) {
-        if (G == null)
-            throw new IllegalArgumentException("constructor with null graph G");
+  public static void sort(Comparable[] a) {
+    int n = a.length;
 
-        topologicalOrdering = new QueueDynamicArray<>();
+    
+    int h = 1;
+    while (h < n/3) h = 3*h + 1;
 
-        if (G.V() == 0)
-            return;
-
-        kahnsTopologicalSort(G);
-    }
-
-    /**
-     * Run Kahn's topological sort algorithm, building up the topological ordering.
-     *
-     * @param G, the graph
-     */
-    private void kahnsTopologicalSort(DirectedGraph<T> G) {
-        DirectedGraph<T> reverseGraph = G.getReverseGraph();
-        Queue<T> queue = new QueueDynamicArray<>();
-
-        for (T u : reverseGraph.getVertices()) {
-            if (reverseGraph.getDegree(u) == 0)
-                queue.enqueue(u);
+    while (h >= 1) {
+      
+      for (int i = h; i < n; i++) {
+        for (int j = i; j >= h && less(a[j], a[j-h]); j -= h) {
+          exch(a, j, j-h);
         }
-
-        while (!queue.isEmpty()) {
-            T current = queue.dequeue();
-            topologicalOrdering.enqueue(current);
-
-            for (T v : G.getAdjacent(current)) {
-                reverseGraph.deleteEdge(v, current);
-
-                if (reverseGraph.getDegree(v) == 0)
-                    queue.enqueue(v);
-            }
-        }
+      }
+      h /= 3;
     }
+  }
 
-    /**
-     * Returns an Iterable to the topological ordering found by Kahn's topological sort algorithm
-     * using a stack.
-     *
-     * @return an Iterable to the topological ordering found by Kahn's topological sort algorithm
-     *         using a stack
-     */
-    public Iterable<T> getTopologicalOrder() {
-        return topologicalOrdering;
+  private static boolean less(Comparable v, Comparable w) {
+    return v.compareTo(w) < 0;
+  }
+
+  private static void exch(Object[] a, int i, int j) {
+    Object swap = a[i];
+    a[i] = a[j];
+    a[j] = swap;
+  }
+
+  public static void main(String args[]) {
+    Integer[] a = {6,2,1,4,23,11,9,43,97,111,3,5,12,36};
+
+    Shell.sort(a);
+
+    for (int i: a) {
+      System.out.print(i + " ");
     }
+  }
+
 }

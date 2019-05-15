@@ -1,35 +1,51 @@
-package net.perfsys.trainees.ascherbakov.task_0.lessonsfrombook;
-import java.util.Random;
+package net.tanpeng.arithmetic.arithmetic4.sort;
 
-public class Bubblesort {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+
+public class Bucket {
     public static void main(String[] args) {
-        Random r = new Random();
-        int[] num = {23, 32, 43, 54, 65, 98, 5654654, 34224324, 5345345} ;
-
-        bubbleSort(num);
-
-        for (int h = 0; h < num.length; h++)
-            System.out.print(num[h]+ " ");
-
-
+        int[] a = new int[]{5, 2, 4, 6, 7};
+        bucketSort(a);
+        for (int i : a) {
+            System.out.println(i);
+        }
     }
 
-    public static void bubbleSort(int[] numbers) {
+    public static void bucketSort(int[] a) {
+        int n = a.length;
+        
+        List<List<Integer>> bucket = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++) {
+            bucket.add(new ArrayList<>());
+        }
 
-        int temp = 0;
+        
+        for (int i = 0; i < n; i++) {
+            bucket.get(f(i)).add(a[i]);
+        }
 
-        for (int i = 0; i < numbers.length; i++) {
-            for (int j = 1; j < (numbers.length - i); j++) {
+        
+        for (int i = 0; i < bucket.size(); i++) {
+            if (!bucket.get(i).isEmpty())
+                Collections.sort(bucket.get(i)); 
+        }
 
-                if (numbers[j - 1] > numbers[j]) {
-                    //swap elements
-                    temp = numbers[j - 1];
-                    numbers[j - 1] = numbers[j];
-                    numbers[j] = temp;
-
-                }
+        
+        int k = 0;
+        for (int i = 0; i < bucket.size(); i++) {
+            for (int item : bucket.get(i)) {
+                a[k++] = item;
             }
         }
     }
+
+    private static int f(int x) {
+        return x / 10;
+    }
+
+
 }

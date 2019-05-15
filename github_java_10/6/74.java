@@ -1,80 +1,213 @@
-package week2;
+package apps;
 
-public class Mergesort {
+import java.io.IOException;
+import java.util.Scanner;
 
-	private static int swaps = 0;
-	private static int equations = 0;
-	private static int[] array;
+import structures.Node;
 
-	public static void sort(int[] array) {
-		Mergesort.array = array;
-		int[] tempArray = new int[array.length];
-		mergeSort(tempArray, 0, array.length - 1);
-	}
 
-	public static void mergeSort(int[] tempArray, int lowerIndex, int upperIndex) {
-		if (lowerIndex == upperIndex) {
-			return;
-		} else {
-			int mid = (lowerIndex + upperIndex) / 2;
-			mergeSort(tempArray, lowerIndex, mid);
-			mergeSort(tempArray, mid + 1, upperIndex);
-			merge(tempArray, lowerIndex, mid + 1, upperIndex);
-		}
-	}
+public class Radixsort {
 
-	public static void merge(int[] tempArray, int lowerIndexCursor,
-			int higerIndex, int upperIndex) {
-		int tempIndex = 0;
-		int lowerIndex = lowerIndexCursor;
-		int midIndex = higerIndex - 1;
-		int totalItems = upperIndex - lowerIndex + 1;
-		while (lowerIndex <= midIndex && higerIndex <= upperIndex) {
-			setEquations(getEquations()+1);
-			if (getArray()[lowerIndex] < getArray()[higerIndex]) {
-				setSwaps(getSwaps()+1);
-				tempArray[tempIndex++] = getArray()[lowerIndex++];
-			} else {
-				setSwaps(getSwaps()+1);
-				tempArray[tempIndex++] = getArray()[higerIndex++];
-			}
-		}
-
-		while (lowerIndex <= midIndex) {
-			setEquations(getEquations()+1);
-			setSwaps(getSwaps()+1);
-			tempArray[tempIndex++] = getArray()[lowerIndex++];
-		}
-
-		while (higerIndex <= upperIndex) {
-			setEquations(getEquations()+1);
-			setSwaps(getSwaps()+1);
-			tempArray[tempIndex++] = getArray()[higerIndex++];
-		}
-
-		for (int i = 0; i < totalItems; i++) {
-			setEquations(getEquations()+1);
-			setSwaps(getSwaps()+1);
-			getArray()[lowerIndexCursor + i] = tempArray[i];
-		}
+	
+	Node<String> masterListRear;
+	
+	
+	Node<String>[] buckets;
+	
+	
+	int radix=10;
+	
+	
+	public Radixsort() {
+		masterListRear = null;
+		buckets = null;
 	}
 	
-	public static int[] getArray(){
-		return Mergesort.array;
+	
+	public Node<String> sort(Scanner sc) 
+	throws IOException {
+		
+		if (!sc.hasNext()) { 
+			return null;
+		}
+		
+		
+		radix = sc.nextInt();
+		buckets = (Node<String>[])new Node[radix];
+		
+		
+		createMasterListFromInput(sc);
+		
+		
+		int maxDigits = getMaxDigits();
+		
+		for (int i=0; i < maxDigits; i++) {
+			scatter(i);
+			gather();
+		}
+		
+		return masterListRear;
 	}
-	public static int getSwaps() {
-		return swaps;
+	
+	
+	public void createMasterListFromInput(Scanner sc) 
+	throws IOException {
+		
+		masterListRear = new Node<String>(sc.next(),null);
+		masterListRear.next = masterListRear;
+		while(sc.hasNext()){
+			Node<String> tmp = new Node<String>(sc.next(), null);
+			tmp.next = masterListRear.next;
+			
+			masterListRear.next = tmp;
+			
+			masterListRear = tmp;
+			
+		}
+	
+		
+	}
+	
+	
+	public int getMaxDigits() {
+		int maxDigits = masterListRear.data.length();
+		Node<String> ptr = masterListRear.next;
+		while (ptr != masterListRear) {
+			int length = ptr.data.length();
+			if (length > maxDigits) {
+				maxDigits = length;
+			}
+			ptr = ptr.next;
+		}
+		return maxDigits;
+	}
+	
+	
+	public void scatter(int pass) {
+		
+		Node<String> prev;
+		Node<String> tmp;
+		Node<String> buckTmp = null; 
+		for(int i = 0; i < radix; i++){
+			prev = masterListRear;
+			tmp = masterListRear.next;
+			buckets[i] = null;
+			while(tmp!=masterListRear){
+			if(buckets[i]==null){
+				if(tmp.data.length()-1-pass<0){
+					prev.next = tmp.next;
+					buckets[i] = tmp;
+					tmp.next = tmp;
+					tmp = prev.next;
+					buckTmp = buckets[i];
+				}else if(Character.digit(tmp.data.charAt(tmp.data.length()-1-pass),radix)==i){
+					prev.next = tmp.next;
+					buckets[i] = tmp;
+					tmp.next = tmp;
+					tmp = prev.next;
+					buckTmp = buckets[i];
+				}else{
+					prev = prev.next;
+					tmp = tmp.next;
+				}
+			}else{
+				if(tmp.data.length()-1-pass<0){
+					prev.next = tmp.next;
+					buckets[i].next = tmp;
+					tmp.next = buckTmp;
+					buckets[i] = tmp;
+					tmp = prev.next;
+				}else if(Character.digit(tmp.data.charAt(tmp.data.length()-1-pass),radix)==i){
+					prev.next = tmp.next;
+					buckets[i].next = tmp;
+					tmp.next = buckTmp;
+					buckets[i] = tmp;
+					tmp = prev.next;
+					
+				}else{
+					prev = prev.next;
+					tmp = tmp.next;
+				}
+
+				
+			  }
+			
+			}
+			
+			if(buckets[i]==null){
+				if(tmp.data.length()-1-pass<0){
+					prev.next = tmp.next;
+					buckets[i] = tmp;
+					tmp.next = tmp;
+					tmp = prev.next;
+					masterListRear = prev;
+					buckTmp = buckets[i];
+				}else if(Character.digit(tmp.data.charAt(tmp.data.length()-1-pass),radix)==i){
+					prev.next = tmp.next;
+					buckets[i] = tmp;
+					tmp.next = tmp;
+					tmp = prev.next;
+					masterListRear = prev;
+				}
+			}else{
+				if(tmp.data.length()-1-pass<0){
+					prev.next = tmp.next;
+					buckets[i].next = tmp;
+					tmp.next = buckTmp;
+					buckets[i] = tmp;
+					tmp = prev.next;
+					masterListRear = prev;
+				}else if(Character.digit(tmp.data.charAt(tmp.data.length()-1-pass),radix)==i){
+					prev.next = tmp.next;
+					buckets[i].next = tmp;
+					tmp.next = buckTmp;
+					buckets[i] = tmp;
+					tmp = prev.next;
+					masterListRear = prev;
+				}
+				
+			  }
+		
+		}
+		
 	}
 
-	public static void setSwaps(int swaps) {
-		Mergesort.swaps = swaps;
-	}
-
-	public static int getEquations() {
-		return equations;
-	}
-
-	public static void setEquations(int equations) {
-		Mergesort.equations = equations;
-	}
+	
+	public void gather() {
+		
+		int count;
+		Node<String> tmp = null;
+		for(count = 0; count < radix; count++){
+			if(buckets[count] == null){
+				
+			}else{
+			masterListRear = buckets[count];
+				count++;
+				break;
+				}
+			
+		}
+				for(int i = count; i < radix; i++){
+					if(buckets[i]==null){
+					}else{
+						tmp = buckets[i].next;
+						buckets[i].next = masterListRear.next;
+						masterListRear.next = tmp;
+						masterListRear = buckets[i];
+				
+					}
+			
+			
+				}
+				
+		
+	} 
+	
+	
+	
 }
+
+
+
+
+

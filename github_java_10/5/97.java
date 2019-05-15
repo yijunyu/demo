@@ -1,60 +1,28 @@
-/* http://en.wikipedia.org/wiki/Depth-first_search
- */
-
-package de.hpi.bpmn.analysis;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import de.hpi.bpmn.Edge;
-import de.hpi.bpmn.Node;
-
-public class DepthFirstSearch {
-	protected List<Node> preOrder;
-	protected List<Node> postOrder;
-	protected List<Node> reversePostOrder;
-	protected Node startNode;
-	
-	public DepthFirstSearch(Node startNode){
-		this.startNode = startNode;		
-	}
-	
-	public void prepare(){
-		preOrder = new LinkedList<Node>();
-		postOrder = new LinkedList<Node>();
-		reversePostOrder = null;
-		
-		doDFS(startNode);
-	}
-	
-	protected void doDFS(Node node){
-		preOrder.add(node);
-		
-		List<Edge> list = node.getOutgoingEdges();
-		
-		for(Object rel : list){
-			if(!preOrder.contains(((Edge)rel).getTarget()))
-				doDFS((Node)((Edge)rel).getTarget());
-		}
-		
-		postOrder.add(node);
-	}
-	
-	public List<Node> getPreOrder() {
-		return preOrder;
-	}
-
-	public List<Node> getPostOrder() {
-		return postOrder;
-	}
-
-	public List<Node> getReversePostOrder() {
-		if(postOrder != null && reversePostOrder == null){
-			reversePostOrder = new LinkedList<Node>();
-			for(Node n : postOrder){
-				reversePostOrder.add(0, n);
-			}
-		}
-		return reversePostOrder;
-	}
-}
+  
+  public static void bubbleSort1(Sequence S) {
+    int n = S.size();
+    for (int i=0; i < n; i++)	
+      for (int j=1; j < n-i; j++) 
+	if ( valAtRank(S, j-1) > valAtRank(S, j) )
+	  S.swapElements(S.atRank(j-1), S.atRank(j));
+  }
+  
+  public static void bubbleSort2(Sequence S) {
+    Position prec, succ;
+    int n = S.size();
+    for (int i=0; i < n; i++) {	
+      prec = S.first();
+      for (int j=1; j < n-i; j++) {
+	succ = S.after(prec);
+	if ( valAtPos(prec) > valAtPos(succ) )
+	  S.swapElements(prec, succ);
+	prec = succ;
+      }
+    }
+  }
+  private static int valAtRank(Sequence S, int i) {
+    return ((Integer) S.elemAtRank(i)).intValue();
+  }
+  private static int valAtPos(Position p) {
+    return ((Integer) p.element()).intValue();
+  }

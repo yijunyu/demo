@@ -1,43 +1,43 @@
+package sort;
 
-public class heapsort {
-	int a[];
-	public heapsort (int[] a){
-		this.a = a;
-		heapsort();
-	}
 
-	private void heapsort(){
-		int start,end;
-
-		for(start = (a.length-2) /2; start >= 0; start--)
-			siftdown(start, a.length-1);
-
-		for(end = a.length -1; end >0; end--){
-			swap(0,end);
-			siftdown(0,end);
-		}
-	}
-
-	private void siftdown(int s, int e){
-		int root = s;
-
-		while(root*2+1 < e){
-			int child = root*2+1;
-
-			if(child+1 < e && a[child] < a[child+1])
-				child++;
-
-			if(a[root] < a[child]){
-				swap(root,child);
-				root = child;
-			}else
-				return;
-		}
+public class Selectionsort {
+private int[] arr;
+	
+	public Selectionsort(int[] a){
+		this.arr = a;
+		selectionsort(arr, arr.length);
+		printArray(arr);
 	}
 	
-	public void swap(int i, int j){
-		int t = a[i];
-		a[i] = a[j];
-		a[j] = t;
+	private void selectionsort(int[] a, int len) {
+		
+		for (int i = 0; i < len-1; i++) {
+			int min = i;	
+			
+			
+			for (int j = i+1; j < len; j++) {
+				
+				if (a[j] <= a[min]) {
+					min = j;
+				}
+			}
+			
+			
+			int temp = a[i];
+			a[i] = a[min];
+			a[min] = temp;
+		}
+	}
+
+	private void printArray(int[] a) {
+		for (int i = 0; i < a.length; i++) {
+			System.out.print(a[i] + " ");
+		}
+	}
+	public static void main(String[] args) {
+		int[]x = new int[]{7,2,1,6,9,8,5,3,4};
+
+		Selectionsort ss = new Selectionsort(x);
 	}
 }

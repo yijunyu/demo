@@ -1,39 +1,81 @@
-package com.candifood.sorting;
+package util.sort;
 
-/**
- * Tested: Yes
- * <p/>
- * The bubble-sort algorithm makes various passes over a one-dimensional array.
- * For each pass, that algorithm compares adjacent data items to determine which
- * is numerically larger or smaller. Either the larger data item (for ascending
- * order) or the smaller data item (for descending order) swaps with the
- * adjacent data item and moves toward the bottom of the one-dimensional array.
- * By the end of the pass, the largest/smallest data item has moved toward the
- * array's end. This "bubbling" effect is the origin of the bubble-sort
- * algorithm's name.
- */
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class BubbleSort {
+public class Bucket extends Sort {
 
     public static void main(String[] args) {
+        int[] a = {21, 13, 56, 11, 1, 42, 4, 3, 64, 13, 0, 35, 11, 7, 17, 26, 120, 112, 365, 956, 212, 213};
+        sort(a, 6700);
+        assert isSorted(a);
+        show(a);
+    }
 
-        int i, pass;
-        int[] x = {20, 15, 12, 30, -5, 72, 456};
+    public static void sort(int[] a, int step) {
+        int len = a.length;
 
-        for (pass = 0; pass <= x.length - 2; pass++) {
+        int min = a[0];
+        int max = a[0];
+        for (int i = 1; i < len; i++) {
+            max = max >= a[i] ? max : a[i];
+            min = min <= a[i] ? min : a[i];
+        }
 
-            for (i = 0; i <= x.length - pass - 2; i++) {
-                if (x[i] > x[i + 1]) {
-                    int temp = x[i];
-                    x[i] = x[i + 1];
-                    x[i + 1] = temp;
-                }
+        
+        ArrayList<ArrayList<Integer>> bucket = new ArrayList<>();
+        for( int i = min ; i <= max ; i = i + step ){
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            bucket.add(list);
+        }
+
+        
+        for(int i=0;i<len;i++) {
+            int index=(a[i]-min)/step;
+            bucket.get(index).add(a[i]);
+        }
+
+        
+        for(int i=0;i<bucket.size();i++) {
+           insert(bucket.get(i));
+        }
+
+        
+        int k = 0;
+        for(int i=0;i<bucket.size();i++) {
+            for(int j=0;j<bucket.get(i).size();j++) {
+                a[k++] = bucket.get(i).get(j);
             }
         }
-        for (i = 0; i < x.length; i++) {
-            System.out.println(x[i]);
+    }
+
+    private static void insert(ArrayList<Integer> list) {
+
+        for(int i=1;i<list.size();i++) {
+            int key = list.get(i);
+            for(int j=i;j>0&&less(list.get(j),list.get(j-1));j--) {
+                int tmp = list.get(j);
+                list.set(j, list.get(j-1));
+                list.set(j - 1, tmp);
+            }
         }
 
+    }
+
+    public static boolean isSorted(int[] a) {
+        for (int i = 1; i < a.length; i++) {
+            if (less(a[i], a[i - 1])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public static void show(int a[]) {
+        for (int i = 0; i < a.length; i++) {
+            System.out.print(a[i] + " ");
+        }
     }
 }

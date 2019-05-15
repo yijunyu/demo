@@ -1,45 +1,43 @@
-package com.bhanu.towerOfHanoi;
 
-import java.util.Stack;
-public class Tower {
- public static void main(String[] args) {
 
-	Tower tower = new Tower();
+package com.mhhe.clrs2e;
+
+
+
+public class TopoSort
+{
+    
+    private SentinelDLL list;
+
+    
+    private class TopoSortDFS extends DFS
+    {
 	
-	Stack<String> stackA = new Stack<String>();
-	Stack<String> temp =new Stack<String>();
-	Stack<String> dest = new Stack<String>();
+	protected void finish(AdjacencyListGraph g, Vertex u)
+	{
+	    list.insert(u);
+	}
+    }    
+
+    
+    public Vertex[] topologicalSort(AdjacencyListGraph g)
+    {
+	list = new SentinelDLL(); 
 	
-	stackA.push("A");
-	stackA.push("B");
-	stackA.push("C");
-	stackA.push("D");
-	stackA.push("E");
-	stackA.push("F");
-	stackA.push("G");
 	
-	System.out.println("before stackA :"+stackA);
-	System.out.println("destination : "+dest);
-	System.out.println("temp : "+temp);
 	
-	tower.towerOfHanoi(2, stackA, dest, temp);
+	(new TopoSortDFS()).search(g);
+
 	
-	System.out.println("after stackA :"+stackA);
-	System.out.println("destination : "+dest);
-	System.out.println("temp : "+temp);
+	Vertex[] result = new Vertex[g.getCardV()];
+	list.toArray(result);
+
+	return result;
+    }
 }
- public void move(Stack<String> stackA, Stack<String> stackB){
-	 String top;
-	 top = stackA.pop();
-	 stackB.push(top);
- }
- 
- public void towerOfHanoi(int number, Stack<String> source, Stack<String> destination,Stack<String> temp){
-	 if(number > 1){
-		 towerOfHanoi(number-1, source, temp, destination);
-		 move(source,destination);
-		 towerOfHanoi(number-1, temp, destination, source);
-	 }
- }
- 
-}
+
+
+
+
+
+

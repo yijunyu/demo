@@ -1,61 +1,73 @@
-/**
- * Levenshtein.java
- * 
- * Dynamic programming solution to the classic Change Making problem
- * More info: http://bitingcode.blogspot.com/2016/12/levenshtein-distance.html
- * 
- * @author manny egalli64@gmail.com
- */
-package fun;
 
-public class Levenshtein {
-    private int[][] matrix;
+package sortcomparision;
 
-    public Levenshtein(String from, String to) {
-        matrix = new int[from.length() + 1][to.length() + 1];
-        for (int i = 1; i < matrix[0].length; ++i) {
-            matrix[0][i] = i;
-        }
-        for (int j = 1; j < matrix.length; ++j) {
-            matrix[j][0] = j;
-        }
+import java.util.Comparator;
+import net.datastructures.Queue;
+import net.datastructures.LinkedQueue;
 
-        for (int i = 0; i < from.length(); i++) {
-            for (int j = 0; j < to.length(); j++) {
-                if (from.charAt(i) == to.charAt(j)) {
-                    matrix[i + 1][j + 1] = matrix[i][j];
-                } else {
-                    int insert = matrix[i][j + 1] + 1;
-                    int delete = matrix[i + 1][j] + 1;
-                    int substitute = matrix[i][j] + 1;
-                    matrix[i + 1][j + 1] = Math.min(Math.min(insert, delete), substitute);
-                }
-            }
-        }
+class QuickSort {
+
+  
+  
+  public static <K> void quickSort(Queue<K> S, Comparator<K> comp) {
+    int n = S.size();
+    if (n < 2) return;                       
+    
+    K pivot = S.first();                     
+    Queue<K> L = new LinkedQueue<>();
+    Queue<K> E = new LinkedQueue<>();
+    Queue<K> G = new LinkedQueue<>();
+    while (!S.isEmpty()) {                   
+      K element = S.dequeue();
+      int c = comp.compare(element, pivot);
+      if (c < 0)                             
+        L.enqueue(element);
+      else if (c == 0)                       
+        E.enqueue(element);
+      else                                   
+        G.enqueue(element);
     }
+    
+    quickSort(L, comp);                      
+    quickSort(G, comp);                      
+    
+    while (!L.isEmpty())
+      S.enqueue(L.dequeue());
+    while (!E.isEmpty())
+      S.enqueue(E.dequeue());
+    while (!G.isEmpty())
+      S.enqueue(G.dequeue());
+  }
 
-    public int getDistance() {
-        int i = matrix.length - 1;
-        int j = matrix[i].length - 1;
-        return matrix[i][j];
+  
+  
+  public static <K> void quickSortInPlace(K[] S, Comparator<K> comp) {
+    quickSortInPlace(S, comp, 0, S.length-1);
+  }
+
+  
+  private static <K> void quickSortInPlace(K[] S, Comparator<K> comp,
+                                                                   int a, int b) {
+    if (a >= b) return;                
+    int left = a;
+    int right = b-1;
+    K pivot = S[b];
+    K temp;                            
+    while (left <= right) {
+      
+      while (left <= right && comp.compare(S[left], pivot) < 0) left++;
+      
+      while (left <= right && comp.compare(S[right], pivot) > 0) right--;
+      if (left <= right) {             
+        
+        temp = S[left]; S[left] = S[right]; S[right] = temp;
+        left++; right--;
+      }
     }
-
-    public boolean equals(int[][] expected) {
-        if (expected == null || expected.length == 0)
-            return false;
-        if (matrix.length != expected.length)
-            return false;
-
-        for (int i = 0; i < matrix.length; ++i) {
-            if (matrix[i].length != expected[i].length)
-                return false;
-
-            for (int j = 0; j < matrix[i].length; ++j) {
-                if (matrix[i][j] != expected[i][j])
-                    return false;
-            }
-        }
-
-        return true;
-    }
+    
+    temp = S[left]; S[left] = S[b]; S[b] = temp;
+    
+    quickSortInPlace(S, comp, a, left - 1);
+    quickSortInPlace(S, comp, left + 1, b);
+  }
 }

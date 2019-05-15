@@ -1,72 +1,44 @@
-/**
- * Created by Barnabas_Ravindranath on 4/19/17.
- */
 
-import java.io.*;
-import java.util.Scanner;
-import java.lang.String;
+package algorithms.Sorting;
 
 
-public class AVL {
-
-
-    public static void main(String[] args) {
-
-        Create_Tree("AVLinput.txt"); //call to create AVL Tree
-
+public class Mergesort {
+    public static <T extends Comparable<T>> void mergesort(T[] ar){
+        mergesort (ar,0,ar.length-1);
     }
-
-
-
-    //Method to create AVL Tree from File Input
-    public static void Create_Tree(String file){
-
-        AVLTREE node = new AVLTREE();
-
-        Scanner scan = null;
-
-        try {
-            scan = new Scanner(new File(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public static <T extends Comparable<T>> void mergesort (T[] ar, int i, int f){
+        if(i<f){
+            int m = (i+f)/2;
+            mergesort(ar,i,m);
+            mergesort(ar,m+1,f);
+            merge(ar,i,f,m);
         }
-
-
-        //Will scan for two objects:
-        // First Object: a String, either "+" or "-". ("+" indicating we add something amd "-" we delete something)
-        // Second Object: a number String (Converted to an integer that represents the value of the node inserted or deleted)
-        while (scan.hasNext()) {
-
-            //first object
-            String line = scan.next().replaceAll(",", "");
-
-            //second object
-            int y = Integer.parseInt((scan.next().replaceAll(",", "")));
-
-                //if string == "+" then insert node
-                if(line.compareTo("+") == 0) node.insertnode(y);
-
-                //if string == "-" then delete node if the value is already in the tree
-                else { if (node.search(y)) node.delete(y); }
-
-        }
-
-        System.out.println("\n" + "In-Order AVL Tree Traversal\n\n");
-
-        node.inorder(); //prints out In-Order Traversal
-
-
-        System.out.println("\n\n" + "Pre-Order AVL Tree Traversal\n\n" );
-
-        node.preorder(); //prints out Pre-Order Traversal
-
-        
-        scan.close();
-
     }
-
-
-
-
-
+    public static <T extends Comparable<T>> void merge(T[] ar, int i, int f,int m){
+        T[] aux = (T[]) new Comparable[f-i+1];
+        int k=0,a=i,b=m+1;
+        while(a<=m && b <= f){
+            if(ar[a].compareTo(ar[b])<0){
+                aux[k] = ar[a];
+                k++;
+                a++;
+            }else{
+                aux[k]=ar[b];
+                k++;
+                b++;
+            }
+        }
+        while(a<=m){
+            aux[k]=ar[a];
+            k++;
+            a++;
+        }
+        while(b<=f){
+            aux[k]=ar[b];
+            k++;
+            b++;
+        }
+        for(a=i,k=0;a<=f;a++,k++) ar[a]=aux[k];
+    }
+    
 }

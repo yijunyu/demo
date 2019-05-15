@@ -1,42 +1,79 @@
-package com.bhanu.towerOfHanoi;
+package basic;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Stack;
 
-public class TowerOfHanoi {
-	private void move(Stack<String> source , Stack<String> destination ){
-		String temp;
-		temp = source.pop();
-		destination.push(temp);
-	}
+public class TopologicalSort {
 	
-	public void moverTower(Stack<String> source , Stack<String> destionation , Stack<String> temp , int n){
-		if(n>0){
-			System.out.println("---------N := "+n+" :---dfdsfsdf------");
-			System.out.println(" source "+source);
-			System.out.println(" temp "+temp);
-			System.out.println("destionation"+destionation);
-			
-			moverTower(source, temp, destionation, n-1);
-			move(source, destionation);
-			moverTower(temp, destionation, source, n-1);
+	LinkedList<Integer>[] adjList;
+	int edges, vertex1, vertex2, numberOfnodes;
+	TopologicalSort(int v)
+    {
+		numberOfnodes = v;
+		adjList = new LinkedList[v];
+        for (int i=0; i<v; ++i)
+        	adjList[i] = new LinkedList();
+    }
+	 void addEdge(int v,int w) 
+	 { 
+		 adjList[v].add(w); 
+	}
+		void printGraph()
+		{
+			for(int i=0;i<adjList.length;i++)
+			{
+				System.out.print((i)+"->");
+				Iterator<Integer> itr=adjList[i].iterator();
+				while(itr.hasNext())
+				{
+					System.out.print((itr.next())+"-");
+				}
+				System.out.println();
+			}
 		}
-	}
-	
-	public static void main(String[] args) {
-		
-		TowerOfHanoi towerOfHanoi = new TowerOfHanoi();
-		Stack<String> source = new Stack<String>();
-		Stack<String> temp = new Stack<String>();
-		Stack<String> destination = new Stack<String>();
-		
-		source.push("A");
-		source.push("B");
-		source.push("C");
-		source.push("D");
-		
-		towerOfHanoi.moverTower(source, destination, temp, 3);
-		System.out.println("Hello World this is tower of hanoi");
-		System.out.println(source);
-		System.out.println(destination);
-	}
+		void topologicalSort()
+		{
+			HashSet<Integer> visited=new HashSet<>();
+			Stack<Integer> stack=new Stack<>();
+			for(int i=0;i<numberOfnodes;i++)
+			{
+				if(!visited.contains(i))
+				{
+					topologicalSortUtil(i, visited, stack);
+				}
+			}
+			while(!stack.isEmpty())
+			{
+				System.out.print(stack.peek()+" ");
+				stack.pop();
+			}
+		}
+		void topologicalSortUtil(int vertex, HashSet<Integer> visited, Stack<Integer> stack)
+		{
+			visited.add(vertex);
+			Iterator<?> itr=adjList[vertex].iterator();
+			while(itr.hasNext())
+			{
+				Integer i=(Integer) itr.next();
+				if(!visited.contains(i))
+				{
+					topologicalSortUtil(i, visited, stack);
+				}
+			}
+			stack.push(new Integer(vertex));
+		}
+		public static void main(String[] args) {
+			TopologicalSort obj=new TopologicalSort(6);
+			obj.addEdge(5, 2);
+			obj.addEdge(5, 0);
+			obj.addEdge(4, 0);
+			obj.addEdge(4, 1);
+			obj.addEdge(2, 3);
+			obj.addEdge(3, 1);
+	 
+	        System.out.println("Following is a Topological sort of the given graph");
+	        obj.topologicalSort();
+		}
 }

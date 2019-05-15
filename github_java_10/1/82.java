@@ -1,69 +1,24 @@
-package graph;
-
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-
-public class BreadthFirstSearch {
-	private static final int INFINITY=Integer.MAX_VALUE;
-	private boolean[] marked;
-	private int[] edgeTo;
-	private int[] distTo;
-	
-	public BreadthFirstSearch(Graph g,int s){
-		marked=new boolean[g.countVertices()];
-		distTo=new int[g.countVertices()];
-		edgeTo=new int[g.countVertices()];
-		for(int v=0;v<g.countVertices();v++)
-			distTo[v]=INFINITY;
-		bfs(g,new Node(s));
-	}
-	
-	private void bfs(Graph g,Node n){
-		Queue<Integer> q= new LinkedList<Integer>();
-		marked[n.getId()]=true;
-		distTo[n.getId()]=0;
-		q.add(n.getId());
-		while(!q.isEmpty()){
-			int v=q.remove();
-			for (Edge e:g.getOutboundForVertex(v)){
-					int w=e.getEnd().getId();
-					if(!marked[w]){
-						edgeTo[w]=v;
-						distTo[w]=distTo[v]+1;
-						marked[w]=true;
-						q.add(w);
-					}
-		
-			}
-		}
-	} 
-	
-	
-	
-	
-	
-	
-
-	public boolean hasPathTo(int v){
-		return marked[v];
-	}
-	
-	public int distTo(int v){
-		return distTo[v];
-	}
-	
-	public LinkedList<Integer> pathTo(int v){
-		if(!hasPathTo(v)) return null;
-		LinkedList<Integer> path=new LinkedList<Integer>();
-		int x;
-		for(x=v;distTo[x]!=0;x=edgeTo[x])
-			path.add(x);
-		path.add(x);
-		return path;
-	}
-	
-	
-	
+public class insertionsort{
+    public static void main(String[] args){
+        int size=50;
+        int[] arr= new int[size];
+        for (int i=0;i<size;i++){
+            arr[i]=(int)(Math.random()*100);
+            
+        }
+        int temp;
+        for(int pass=0;pass<size;pass++){
+            for( int p=pass;p>0;p--){
+                if(arr[p]<arr[p-1]){
+                    temp=arr[p];
+                    arr[p]=arr[p-1];
+                    arr[p-1]=temp;
+                }
+            }
+        }
+        System.out.println("Sorted array:");
+        for(int i=0;i<size;i++){
+            System.out.println(arr[i]+" ");
+        }
+    }
 }
-

@@ -1,33 +1,31 @@
-package codility;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
-public class DFS {
+public class BubbleSortJava implements JClass {
+    private ArrayList<Comparable> array;
 
-	public static void main(String[] args) {
+    public BubbleSortJava(){
+        this.array = new ArrayList<>();
+    }
 
-		int a[]= {9,1,4,9,0,4,8,9,0,1};
-		//converting a 1D matrix to a 2d graph
-		int arr[][]= new int[a.length][a.length];
-		int city=0;
-		for(int i=0;i<a.length;++i) {
-			city=a[i];
-			for(int j=0;j<a.length;++j)
-			{
-				if(j==city ) {
-					arr[i][j]=1;
-					arr[j][i]=1;
-				}
+    public void setup(int size){
+        array.clear();
+        Random rand = new Random();
+        for(int i = 0; i<size; ++i){
+            array.add(i,rand.nextInt());
+        }
+    }
 
-			}
-		}
-
-		for(int i=0;i<a.length;++i) {
-			for(int j=0;j<a.length;++j)
-			{
-				System.out.print(arr[i][j]+",");
-			}
-			System.out.println();
-		}
-		
-	}
-
+    public void run(){
+        int len = array.size();
+        while(len > 1) {
+            for (int i = 0; i < len - 1; ++i) {
+                if (array.get(i).compareTo(array.get(i + 1)) > 0) {
+                    Collections.swap(array,i,i+1);
+                }
+            }
+            --len;
+        }
+    }
 }

@@ -1,44 +1,35 @@
-package SortingAlgorithms;
+package com.pranav.geeksforgeeks;
 
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 
-public class Tower {
+public class Topological {
+	public static int[] topoSort(ArrayList<Integer> graph[], int N) {
+		Stack<Integer> stack = new Stack<>();
+		Set<Integer> visited = new HashSet<>();
+		for (int i = 0; i < N; i++) {
+			if (!visited.contains(i)) {
+				topoSortUtil(i, graph, stack, visited);
+			}
+		}
+		int[] result = new int[N];
+		int k=0;
+		while(!stack.isEmpty()) {
+			result[k] = stack.pop();
+			k++;
+		}
+		return result;
+	}
 
-    public static void hanoi (int n,
-                              String init,
-                              String end,
-                              String temp) {
-        // stopping condition: move one disk
-        if (n == 1) {
-            System.out.println("move " + init + " to " + end);
-        }
-        else {
-            // move n-1 disks from init to temp using
-            // end for temporary storage (Stage 1 in the handout)
-            hanoi(n-1, init, temp, end);
-
-            // move largest disk to end
-            System.out.println("move " + init + " to " + end);
-
-            // move n-1 disks from temp to end using
-            // init for temporary storage (Stage 3 in the handout)
-            hanoi(n-1, temp, end, init);
-        }
-    }
-
-    public static void main(String[] args) {
-        // Run this program like this if the number of disks is 3:
-        //   java Tower 3
-        
-        String begin = "A",
-               middle = "B",
-               end = "C";
-        System.out.println("Enter the number of disks or rings in the tower");
-        Scanner scanner = new Scanner(System. in);
-        int n = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("The solution for n = " + n);
-        hanoi(n, begin, end, middle);
-    }
-
+	private static void topoSortUtil(int i, ArrayList<Integer>[] graph, Stack<Integer> stack, Set<Integer> visited) {
+		if (!visited.contains(i)) {
+			visited.add(i);
+			for(int adjElement : graph[i]) {
+				topoSortUtil(adjElement, graph, stack, visited);
+			}
+			stack.push(i);
+		}
+	}
 }

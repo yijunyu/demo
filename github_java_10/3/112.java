@@ -1,44 +1,80 @@
-package stacks_queues;
+import org.junit.Test;
 
-public class TowerOfHanoi {
-	Stack disks = new Stack();
-	public void add(int i) throws Exception{
-		if(disks.isEmpty()){
-			disks.push(i);
-			return;
-		}
-		if(disks.peek() <= i){
-			throw new Exception("Larger disk cannot be added!");
-		}
-		disks.push(i);
-	}
-	
-	public static void moveTop(TowerOfHanoi i, TowerOfHanoi j) throws Exception{
-		if(i.disks.isEmpty()) throw new Exception("Source is empty!");
-		j.add(i.disks.pop());
-	}
-	
-	public static void moveAllDisks(int n, TowerOfHanoi source, TowerOfHanoi destination, TowerOfHanoi buffer) throws Exception{
-		if(n <= 0) return;
-		moveAllDisks(n-1, source, buffer, destination);
-		moveTop(source, destination);
-		moveAllDisks(n-1, buffer, destination, source);		
-	}
-	
-	public static void main(String args[]) throws Exception{
-		TowerOfHanoi source = new TowerOfHanoi();
-		TowerOfHanoi destination = new TowerOfHanoi();
-		TowerOfHanoi buffer = new TowerOfHanoi();
-		
-		for(int i=10; i>0; i--){
-			source.add(i);
-			System.out.print(i+" | ");
-		}
-		
-		moveAllDisks(10, source, destination, buffer);
-		System.out.println();
-		for(int i=10; i>0; i--){
-			System.out.print(destination.disks.pop()+" | ");
-		}
-	}
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertEquals;
+
+
+public class _484 {
+
+    static _484 sol = new _484();
+
+    public int[] findPermutation(String s) {
+        List<Integer>[] g = new List[s.length() + 1];
+        int[] inDegree = new int[g.length];
+
+        for (int i = 0; i < g.length; i++) g[i] = new ArrayList<>();
+        for (int i = 0; i < s.length(); i++) {
+            int u, v;
+            if (s.charAt(i) == 'I') {
+                u = i;
+                v = i + 1;
+            } else {
+                u = i + 1;
+                v = i;
+            }
+
+            g[u].add(v);
+            inDegree[v]++;
+        }
+
+        int[] ans = new int[s.length() + 1];
+        int num = 1;
+        PriorityQueue<Integer> queue = new PriorityQueue<>(); 
+        for (int i = 0; i < inDegree.length; i++)
+            if (inDegree[i] == 0) queue.add(i);
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            ans[u] = num++;
+
+            for (int v : g[u]) {
+                inDegree[v]--;
+                if (inDegree[v] == 0) queue.add(v);
+            }
+        }
+
+        return ans;
+    }
+
+    @Test
+    public void test() {
+        List<Integer> expected;
+        List<Integer> actual;
+        String s;
+
+        s = "II";
+        expected = Arrays.asList(1, 2, 3);
+        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
+        assertEquals(expected, actual);
+
+        s = "DD";
+        expected = Arrays.asList(3, 2, 1);
+        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
+        assertEquals(expected, actual);
+
+        s = "DDDI";
+        expected = Arrays.asList(4, 3, 2, 1, 5);
+        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
+        assertEquals(expected, actual);
+
+        s = "";
+        expected = Arrays.asList(1);
+        actual = IntStream.of(sol.findPermutation(s)).boxed().collect(toList());
+        assertEquals(expected, actual);
+    }
 }

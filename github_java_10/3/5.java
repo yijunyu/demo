@@ -1,47 +1,96 @@
 
-package dynamicprogramming;
-import java.util.Stack;
 
-// complexity is 2 ^ n-1
-public class TowerOfHanoi {
-//     int noOfRings = 4;
-    Stack<Integer> s = new Stack<Integer>();
-      TowerOfHanoi buf;
-      TowerOfHanoi dest;
-    private TowerOfHanoi()
-    {
+
+
+public class AcyclicLP {
+
+    private double[] distTo;    
+    private DirectedEdge[] edgeTo;  
+
     
-    }
     
-    public TowerOfHanoi(int noOfRings)
-    {
-        for (int i = noOfRings; i > 0; i--)
-         s.push(i);
-	   
-	   
-	   buf = new TowerOfHanoi();
-	   dest = new TowerOfHanoi();
-	   recRingMovement(noOfRings, buf, dest);
-	 
-	  while(!dest.s.isEmpty())
-	       System.out.println("Ring " + dest.s.pop());
-    }
-    
-    private void moveRingToDest(TowerOfHanoi dest)
-    {
-        if (!this.s.empty())
-        {
-            dest.s.push(this.s.pop());
+    public AcyclicLP(EdgeWeightedDigraph G, int s) {
+        distTo = new double[G.V()];
+        edgeTo = new DirectedEdge[G.V()];
+
+        validateVertex(s);
+
+        for (int v = 0; v < G.V(); v++) {
+            distTo[v] = Double.NEGATIVE_INFINITY;
+        }
+        distTo[s] = 0.0;
+
+        
+        Topological topological = new Topological(G);
+        if (!topological.hasOrder()) {
+            throw new IllegalArgumentException("Digraph is not acyclic.");
+        }
+        for (int v : topological.order()) {
+            for (DirectedEdge e : G.adj(v)) {
+                relax(e);
+            }
         }
     }
+
     
-    private void recRingMovement(int i, TowerOfHanoi buf, TowerOfHanoi dest) {
-        
-        if (i < 0)
-            return;
-        
-        recRingMovement(i - 1, dest, buf);
-        moveRingToDest(dest);
-        buf.recRingMovement(i - 1, this, dest);
+    private void relax(DirectedEdge e) {
+        int v = e.from(), w = e.to();
+        if (distTo[w] < distTo[v] + e.weight()) {
+            distTo[w] = distTo[v] + e.weight();
+            edgeTo[w] = e;
+        }
+    }
+
+    
+    public double distTo(int v) {
+        validateVertex(v);
+        return distTo[v];
+    }
+
+    
+    public boolean hasPathTo(int v) {
+        validateVertex(v);
+        return distTo[v] > Double.NEGATIVE_INFINITY;
+    }
+
+    
+    public Iterable<DirectedEdge> pathTo(int v) {
+        validateVertex(v);
+        if (!hasPathTo(v)) {
+            return null;
+        }
+        Stack<DirectedEdge> path = new Stack<DirectedEdge>();
+        for (DirectedEdge e = edgeTo[v]; e != null; e = edgeTo[e.from()]) {
+            path.push(e);
+        }
+        return path;
+    }
+
+    
+    private void validateVertex(int v) {
+        int V = distTo.length;
+        if (v < 0 || v >= V) {
+            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        In in = new In(args[0]);
+        int s = Integer.parseInt(args[1]);
+        EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
+        AcyclicLP lp = new AcyclicLP(G, s);
+        for (int v = 0; v < G.V(); v++) {
+            if (lp.hasPathTo(v)) {
+                StdOut.printf("%d to %d (%.2f)  ", s, v, lp.distTo(v));
+                for (DirectedEdge e : lp.pathTo(v)) {
+                    StdOut.print(e + "   ");
+                }
+                StdOut.println();
+            }
+            else {
+                StdOut.printf("%d to %d         no path\n", s, v);
+            }
+        }
     }
 }

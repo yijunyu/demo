@@ -1,55 +1,160 @@
-package com.geofflittle.ngmap;
+package Sort; 
+
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+
+import java.util.Comparator;
 
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Queue;
-import java.util.Set;
-import java.util.function.Function;
+public class Insertion {
 
-public class BreadthFirstSearch<E> implements Iterator<E> {
-
-    private final Queue<E> queue;
-    // Seen contains both to-be-processed and already-processed darts (not just already-processed)
-    private final Set<E> seen;
-    private final Function<E, List<E>> neighborGenerator;
-
-    private BreadthFirstSearch(Queue<E> queue, Set<E> seen, Function<E, List<E>> neighborGenerator) {
-        this.queue = queue;
-        this.seen = seen;
-        this.neighborGenerator = neighborGenerator;
+    private Comparable[] comparableList;
+    private DrawGraph graph;
+    public Insertion(Comparable[] a) {
+        comparableList = a;
+        graph = new DrawGraph(comparableList);
     }
 
-    public static <E> BreadthFirstSearch<E> breadthFirstSearch(E source, Function<E, List<E>> neighborGenerator) {
-        Queue<E> queue = new LinkedList<>();
-        Set<E> seen = new HashSet<>();
-        queue.add(source);
-        seen.add(source);
-        return new BreadthFirstSearch<E>(queue, seen, neighborGenerator);
-    }
-
-    @Override
-    public boolean hasNext() {
-        return !queue.isEmpty();
-    }
-
-    @Override
-    public E next() {
-        if (!hasNext()) {
-            // Can't continue if there is no "next"
-            throw new NoSuchElementException();
+    public void sort() {
+        int n = comparableList.length;
+        for (int i = 1; i < n; i++) {
+            for (int j = i; j > 0 && less(comparableList[j], comparableList[j-1]); j--) {
+                exch( j, j-1);
+            }
+            assert isSorted(comparableList, 0, i);
         }
-        E current = queue.poll();
-        // Get the orbit of the current dart as defined by the given list of alphas
-        neighborGenerator.apply(current).stream()
-                .filter(neighbor -> !seen.contains(neighbor))
-                .forEach(neighbor -> {
-                    queue.offer(neighbor);
-                    seen.add(neighbor);
-                });
-        return current;
+        assert isSorted(comparableList);
+    }
+
+    
+    public static void sort(Comparable[] a) {
+        int n = a.length;
+        for (int i = 1; i < n; i++) {
+            for (int j = i; j > 0 && less(a[j], a[j-1]); j--) {
+                exch(a, j, j-1);
+            }
+            assert isSorted(a, 0, i);
+        }
+        assert isSorted(a);
+    }
+
+    
+    public static void sort(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i < hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1]); j--) {
+                exch(a, j, j-1);
+            }
+        }
+        assert isSorted(a, lo, hi);
+    }
+
+    
+    public static void sort(Object[] a, Comparator comparator) {
+        int n = a.length;
+        for (int i = 1; i < n; i++) {
+            for (int j = i; j > 0 && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
+            }
+            assert isSorted(a, 0, i, comparator);
+        }
+        assert isSorted(a, comparator);
+    }
+
+    
+    public static void sort(Object[] a, int lo, int hi, Comparator comparator) {
+        for (int i = lo + 1; i < hi; i++) {
+            for (int j = i; j > lo && less(a[j], a[j-1], comparator); j--) {
+                exch(a, j, j-1);
+            }
+        }
+        assert isSorted(a, lo, hi, comparator);
+    }
+
+
+    
+    
+    
+    public static int[] indexSort(Comparable[] a) {
+        int n = a.length;
+        int[] index = new int[n];
+        for (int i = 0; i < n; i++)
+            index[i] = i;
+
+        for (int i = 1; i < n; i++)
+            for (int j = i; j > 0 && less(a[index[j]], a[index[j-1]]); j--)
+                exch(index, j, j-1);
+
+        return index;
+    }
+
+    
+
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return v.compareTo(w) < 0;
+    }
+
+    
+    private static boolean less(Object v, Object w, Comparator comparator) {
+        return comparator.compare(v, w) < 0;
+    }
+
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+    private void exch(int i, int j) {
+        graph.exch(comparableList,i,j);
+        Comparable swap = comparableList[i];
+        comparableList[i] = comparableList[j];
+        comparableList[j] = swap;
+    }
+
+    
+    private static void exch(int[] a, int i, int j) {
+        int swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+    
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length);
+    }
+
+    
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i < hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+    private static boolean isSorted(Object[] a, Comparator comparator) {
+        return isSorted(a, 0, a.length, comparator);
+    }
+
+    
+    private static boolean isSorted(Object[] a, int lo, int hi, Comparator comparator) {
+        for (int i = lo + 1; i < hi; i++)
+            if (less(a[i], a[i-1], comparator)) return false;
+        return true;
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readAllStrings();
+        Insertion.sort(a);
+        show(a);
     }
 }
+
+

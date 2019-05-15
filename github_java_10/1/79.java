@@ -1,87 +1,34 @@
-package pacman;
+package Sorting;
 
-import graph.BFS;
-import graph.Graph;
-import graph.Node;
+public class Insertionsort {
+	public static void main(String[] args) {
 
-import java.util.HashMap;
+		int[] arr = { 100, 10, 20, 1, 63, 1, 5 };
+		printa(arr, arr.length);
+		insertion(arr, arr.length);
+	}
 
-public class NewAgent1 implements PacAgent, Constants {
+	public static void printa(int[] arr, int n) {
+		for (int i = 0; i < n; i++)
+			System.out.print(arr[i] + " ");
 
-    Node inicial;
-    Node destino = Graph.nodes[26];
-    BFS bfs;
-    HashMap<Integer,Integer> aux;
+		System.out.println();
+	}
 
+	public static void insertion(int[] arr, int n) {
+		System.out.println("insertion sort");
+		for (int j = 1; j < n; j++) {
+			int min = arr[j];
+			for (int i = j - 1; i >= 0; i--) {
+				if (arr[i] > min) {
+					arr[i + 1] = arr[i];
+					arr[i] = min;
 
+				}
+			}
 
+		}
+		printa(arr, n);
+	}
 
-
-    @Override
-    public int move(GameState gs) {
-        Graph.update();
-
-        inicial = Graph.nodes[Graph.id_pacman];
-
-        if (inicial!=null){
-            bfs=new BFS(inicial,Graph.nearest_ghost);
-//            System.out.println("Cercano " + bfs.destino);
-            
-            if(bfs.destino != null && bfs.initial != null){
-                if(bfs.bfs().size() > 5){
-                    if(Graph.pp[0]>=0) {
-                        //System.out.println("pp dif de 0");
-                        bfs = new BFS(inicial, Graph.nodes[Graph.pp[0]]);
-                        if (bfs.bfs().size() < 6) {
-                            //System.out.println("dis menor a 4");
-                            //System.out.println(Graph.nearest_ghost.getDistancia());
-                            if (Graph.nearest_ghost.getDistancia() < 5) {
-                                //System.out.println("dis al g");
-                                aux = bfs.bfs();
-                                if (aux != null)
-                                    return aux.get(Graph.id_pacman);
-                                else
-                                    return 0;
-                            }
-                            bfs = new BFS(inicial, Graph.nodes[573]);
-                            aux = bfs.bfs();
-                            if (aux != null)
-                                return aux.get(Graph.id_pacman);
-                            else
-                                return 0;
-                        }
-                    }
-                    bfs=new BFS(inicial,Graph.nearest_pill);
-                    aux = bfs.bfs();
-                    if (aux!=null)
-                        return aux.get(Graph.id_pacman);
-                    else
-                        return 0;
-                }
-                if(bfs.destino.getPos().x <= bfs.initial.getPos().x && bfs.initial.getRight()!= null)
-                    return RIGHT;
-                if(bfs.destino.getPos().y >= bfs.initial.getPos().y && bfs.initial.getTop()!= null)
-                    return UP;
-                if(bfs.destino.getPos().x >= bfs.initial.getPos().x && bfs.initial.getLeft()!= null)
-                    return LEFT;
-                if(bfs.destino.getPos().y <= bfs.initial.getPos().y && bfs.initial.getBottom() != null)
-                    return DOWN;
-            }
-        }
-        try {
-            if(Graph.nearest_edible.getDistancia()<11) {
-                bfs = new BFS(inicial, Graph.nearest_edible);
-                aux = bfs.bfs();
-                return aux.get(Graph.id_pacman);
-            }
-            else{
-                bfs = new BFS(inicial, Graph.nearest_pill);
-                aux = bfs.bfs();
-                return aux.get(Graph.id_pacman);
-            }
-
-        }catch (Exception e) {}
-
-        return 0;
-    }
 }

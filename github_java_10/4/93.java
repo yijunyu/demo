@@ -1,44 +1,64 @@
-/*
- ============================================================================
- Nome        : Sorting Algorithm - Insertion Sort(Ordenação por Inserção)
- Autor       : Renan Watanabe
- Data        : 24/05/2017
- Explicação  : Baralho em um jogo de cartas.
+import java.util.Arrays;
 
- Links       : https://pt.wikipedia.org/wiki/Insertion_sort
-               https://www.toptal.com/developers/sorting-algorithms/insertion-sort
-               http://www.geeksforgeeks.org/insertion-sort/
-               
-Gif         : https://pt.wikipedia.org/wiki/Insertion_sort#/media/File:Insertion-sort-example-300px.gif  
- ============================================================================
- */
+public class Heapsort {
+	static int[] a = {2, 8, 6,1,10,15,3,12,11};
+	
+	public static void main(String[] args) {
+		heapsort(a);
+		System.out.println("오름차순 출력:"+Arrays.toString(a));
+	}
+	public static void heapsort(int[] data){
+		System.out.println("배열->힙");
+		
+		buildMaxHeap(data);
+		
+		System.out.println("\n힙->배열");
+		
+		for(int i=data.length-1; i>0; i--){
+			swap(0,i);
+			
+			buildMaxHeap(Arrays.copyOfRange(data, 0, i));
+			System.out.println("종료\n");
+		}
+	}
+	public static void buildMaxHeap(int[] data){
+		if(data==null || data.length<1) return;
+		
+		int start = data.length/2;	
+		
+		for(int i=start; i>=0; i--){
+			heapify(data, i);
+		}
+		System.out.println("정렬상태:"+Arrays.toString(data));
+	}
+	public static void heapify(int[] data, int i){
 
-public class InsertionSort{
-
-    public static void main(String[] args){
-        int[] meuArray = {3, 8, 15, 10, 1, 2, 3};
-        exibirValores(meuArray);
-        ordenarInsertionSort(meuArray);
-        exibirValores(meuArray);
-    }
-
-    private static void ordenarInsertionSort(int meuArray[]){
-        for(int i = 1; i < meuArray.length; ++i){
-            int valor = meuArray[i];
-            int j = i - 1;
-
-            while(j >= 0 && meuArray[j] > valor){
-                meuArray[j+1] = meuArray[j];
-                j = j - 1;
-            }
-            meuArray[j+1] = valor;
-        }
-    }
-
-    private static void exibirValores(int meuArray[]){
-        for(int i = 0; i < meuArray.length; ++i){
-            System.out.print(meuArray[i] + " ");
-        }
-        System.out.println();
-    }
+		System.out.println("i는 "+i+"일 때 힙으로 만드는 중:"+Arrays.toString(a));
+		
+		int left = i*2+1;
+		int right = left+1;
+		int largest = 0;
+		
+		if(left<data.length && data[left]>data[i]){
+			largest = left;
+		}
+		else
+			largest = i;
+		if(right<data.length && data[right]>data[largest])
+			largest = right;
+		
+		if(largest != i){
+			swap(largest, i);
+			heapify(data, largest);
+		}
+		if(largest==i){
+			return;		}
+		
+	}
+	
+	static void swap(int x, int y){	
+		int temp = a[x];
+		a[x] = a[y];
+		a[y] = temp;
+	}
 }

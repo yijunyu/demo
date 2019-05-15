@@ -1,78 +1,73 @@
-package topologicalsort;
-import java.util.*;
-
-public class TopologicalSort {
-
-	public static void main(String[] args) {
-		String s = "std, ieee, des_system_lib, dw01, dw02, dw03, dw04, dw05,"
-				+ "dw06, dw07, dware, gtech, ramlib, std_cell_lib, synopsys";
-
-        Graph g = new Graph(s, new int[][]{
-            {2, 0}, {2, 14}, {2, 13}, {2, 4}, {2, 3}, {2, 12}, {2, 1},
-            {3, 1}, {3, 10}, {3, 11},
-            {4, 1}, {4, 10},
-            {5, 0}, {5, 14}, {5, 10}, {5, 4}, {5, 3}, {5, 1}, {5, 11},
-            {6, 1}, {6, 3}, {6, 10}, {6, 11},
-            {7, 1}, {7, 10},
-            {8, 1}, {8, 10},
-            {9, 1}, {9, 10},
-            {10, 1},
-            {11, 1},
-            {12, 0}, {12, 1},
-            {13, 1}
-        });
-
-		System.out.println("Topologically sorted order: ");
-		System.out.println(g.topoSort());
+package T5;
+//ϣ������
+public class ShellSort {
+	int a[];
+	public ShellSort() {
+		a = new int[]{8,19,2,3,100,99,1000,888,-1,0};
+		/*
+		 * ��һ����d=5��
+		 * ��8,99������19,1000������2,888������3��-1������100,0��
+		 * ����
+		 * ��8,99������19,1000������2,888������-1,3������0,100��
+		 * 8,19,2��-1,0,99,1000,888,3,100
+		 * �ڶ�����d=2��
+		 * (8,2,0,1000,3),(19,-1,99,888,100)
+		 * ����
+		 * (0,2,3,8,1000),(-1,19,99,100,888)
+		 * 0,-1,2,19,3,99,8,100,1000,888
+		 * ��3����d=1ʱ����ʵֻ��һ�飬����ֱ�Ӳ�������
+		 * 
+		 * 
+		 * */
 	}
-}
-
-class Graph {
-	String[] vertices;
-	int[][] adjacency;
-	int numVertices;
-
-	public Graph(String s, int[][] edges) {
-		vertices = s.split(",");
-		numVertices = vertices.length;
-		adjacency = new int[numVertices][numVertices];
-
-		for (int[] edge : edges)
-			adjacency[edge[0]][edge[1]] = 1;
+	public ShellSort(int a[]) {
+		this.a = a;
 	}
-
-	List<String> topoSort() {
-		List<String> result = new ArrayList<>();
-		List<Integer> todo = new LinkedList<>();
-
-		for (int i = 0; i < numVertices; i++)
-			todo.add(i);
-
-		try {
-			outer:
-			while (!todo.isEmpty()) {
-				for (Integer r : todo) {
-					if (!hasDependency(r, todo)) {
-						todo.remove(r);
-						result.add(vertices[r]);
-						 // no need to worry about concurrent modification
-						continue outer;
+	
+	public void shellSort(){
+		int n = a.length;
+		/*�������򣺷���Ĺ���
+		 * 1.d = ���鳤��/2;
+		 * 2.d = d/2;
+		 * 
+		 */
+		for(int d=n/2;d>0;d/=2){
+//			System.out.println("d="+d+"ʱ���������");
+			//��������
+			for(int i=0;i<d;i++){ //����Ϊ1ʱ�������
+				//������������
+//				System.out.print(i+"\t");
+				for(int j=i+d;j<n;j+=d){
+//					System.out.print(j+"\t");
+					//��ÿ��������в�������
+					int insertNode = a[j];
+					int k=j-d;
+					while(k>=i&& a[k]>insertNode){
+						a[k+d]=a[k];
+						k=k-d;
+//						print();
 					}
+					a[k+d]=insertNode;
+//					print();
 				}
-				throw new Exception("Graph has cycles");
+//				System.out.println("--------------------");
+				
 			}
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
+//			print();
 		}
-		return result;
+		print();
 	}
-
-	boolean hasDependency(Integer r, List<Integer> todo) {
-		for (Integer c : todo) {
-			if (adjacency[r][c] > 0)
-				return true;
+	public void print(){
+		for (int e : a) {
+			System.out.print(e+"\t");
 		}
-		return false;
+		System.out.println("");
+	}
+	public static void main(String[] args) {
+		ShellSort shellSort = new ShellSort();
+		System.out.println("����ǰ");
+		shellSort.print();
+		shellSort.shellSort();
+//		shellSort.print();
 	}
 }

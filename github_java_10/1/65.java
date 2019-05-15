@@ -1,31 +1,40 @@
-package com.algorithms;
+package testing;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BFS {
 
-    static int[] getDistsFromStart(LinkedList[] graph, Vertex start) {
-        LinkedList<Vertex> q = new LinkedList<>();
-        q.push(start);
-        int[] dists = new int[graph.length];
-        for (int j = 0; j < dists.length; j++) {
-            dists[j] = -1;
+public class insertionsort {
+    public static void main(String[] args) {
+        int[] x = new int[10];
+        int k = 1;
+        for (int i = 1; i <= 10; i++) {
+            x[i - 1] = (i * k);
+            k = k * -1;
         }
-        dists[start.num] = 0;
-        while (!q.isEmpty()) {
-            Vertex u = q.pop();
-            for (int j = 0; j < graph[u.num].size(); j++) {
-                Vertex v = (Vertex) graph[u.num].get(j);
-                if (v.pre == null || dists[v.num] > (u.dist + 1)) {
-                    v.color = 1;
-                    v.pre = u;
-                    q.push(v);
-                    v.dist = dists[v.num] != -1 ? Math.min(dists[v.num], u.dist + 1) : u.dist + 1;
-                    dists[v.num] = v.dist;
+        for (int i = 0; i < 10; i++) {
+            System.out.print('\t');
+            System.out.print(x[i]);
+        }
+        x = inserSort(x);
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            System.out.print('\t');
+            System.out.print(x[i]);
+        }
+    }
+
+    public static int[] inserSort(int[] x) {
+        for (int i = 1; i < x.length; i++) {
+            int k;
+            for (int j = i; j > 0; j--) {
+                if (x[j] < x[j - 1]) {
+                    k = x[j];
+                    x[j] = x[j - 1];
+                    x[j - 1] = k;
                 }
             }
-            u.color = 2;
         }
-        return dists;
+        return x;
     }
 }

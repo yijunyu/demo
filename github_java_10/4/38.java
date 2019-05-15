@@ -1,59 +1,183 @@
-package com.gerrard.sort.compare.shell;
+package com.common;
 
-import com.gerrard.sort.Sort;
 
-/**
- * Shell-Sort is based on Insertion-Sort, also with complexity O(n^2).
- * First, give a variable: gap, usually starts with array.length/2.
- * Consider every gap element as an array(means the array is separated into gap parts).
- * On every array, use Insertion-Sort.
- * Shrink variable gap, usually gap/2, do as previous until gap=1.
- * <p>
- * Although Shell-Sort doesn't decrease the complexity, its average-complexity is about O(n^1.3),
- * better than other O(n^2)-complexity sort method.
- * <p>
- * Its good average-complexity is based on a feature of Insertion-Sort:
- * Insertion-Sort plays a good performance on mainly-well-ordered array.
- */
-public class ShellSort implements Sort {
 
-    private int shrink = 2;
-
-    public int getShrink() {
-        return shrink;
-    }
-
-    public void setShrink(int shrink) {
-        this.shrink = shrink;
-    }
-
-    @Override
-    public void sort(int[] array) {
-        int gap = array.length / shrink;
-        while (gap > 0) {
-            for (int i = 0; i < gap; i++) {
-                insertionSortWithGap(array, gap, i);
-            }
-            gap /= shrink;
-        }
-    }
-
-    private void insertionSortWithGap(int[] array, int gap, int startIndex) {
-        for (int i = startIndex + gap; i < array.length; i += gap) {
-            int cur = array[i];
-            boolean flag = false;
-            for (int j = i - gap; j >= 0; j -= gap) {
-                if (cur < array[j]) {
-                    array[j + gap] = array[j];
-                } else {
-                    array[j + gap] = cur;
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                array[startIndex] = cur;
-            }
-        }
-    }
+public class HeapSort {
+	
+	private int heapSize;
+	
+	private int l;
+	
+	private   int r;
+	
+	private   int largest;
+	
+	private   double tmpDouble;
+	
+	private   float tmpFloat;
+	
+	private   int tmpInt;
+	
+	private   String tmpString;
+	
+	
+	
+	private   void buildMaxHeap(double[] A, int[] B) {
+		heapSize = A.length;
+		for (int i = (int) Math.floor(heapSize / 2.0D); i > 0; i--)
+			maxHeapify(A, B, i);
+	}
+	
+	
+	private   void buildMaxHeap(float[] A, int[] B) {
+		heapSize = A.length;
+		for (int i = (int) Math.floor(heapSize / 2.0D); i > 0; i--)
+			maxHeapify(A, B, i);
+	}
+	
+	
+	public   void heapSort(double[] A, int[] B) {
+		buildMaxHeap(A, B);
+		for (int i = A.length; i > 0; i--) {
+			tmpDouble = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpDouble;
+			tmpInt = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpInt;
+			heapSize--;
+			maxHeapify(A, B, 1);
+		}
+	}
+	
+	public   void heapSort(double[] A, int[] B, int topElements) {
+		buildMaxHeap(A, B);
+		final int end = A.length - topElements;
+		
+		for (int i = A.length; i > end; i--) {
+			tmpDouble = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpDouble;
+			tmpInt = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpInt;
+			heapSize--;
+			maxHeapify(A, B, 1);
+		}
+	}
+	
+	private   void maxHeapify(double[] A, int[] B, int i) {
+		l = 2 * i;
+		r = 2 * i + 1;
+		if (l <= heapSize && A[l - 1] > A[i - 1])
+			largest = l;
+		else
+			largest = i;
+		if (r <= heapSize && A[r - 1] > A[largest - 1])
+			largest = r;
+		if (largest != i) {
+			tmpDouble = A[largest - 1];
+			A[largest - 1] = A[i - 1];
+			A[i - 1] = tmpDouble;
+			tmpInt = B[largest - 1];
+			B[largest - 1] = B[i - 1];
+			B[i - 1] = tmpInt;
+			maxHeapify(A, B, largest);
+		}
+	}
+	
+	
+	
+	public   void heapSort(float[] A, int[] B) {
+		buildMaxHeap(A, B);
+		for (int i = A.length; i > 0; i--) {
+			tmpFloat = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpFloat;
+			tmpInt = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpInt;
+			heapSize--;
+			maxHeapify(A, B, 1);
+		}
+	}
+	
+	public   void heapSort(float[] A, int[] B, int topElements) {
+		buildMaxHeap(A, B);
+		final int end = A.length - topElements;
+		
+		for (int i = A.length; i > end; i--) {
+			tmpFloat = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpFloat;
+			tmpInt = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpInt;
+			heapSize--;
+			maxHeapify(A, B, 1);
+		}
+	}
+	
+	private   void maxHeapify(float[] A, int[] B, int i) {
+		l = 2 * i;
+		r = 2 * i + 1;
+		if (l <= heapSize && A[l - 1] > A[i - 1])
+			largest = l;
+		else
+			largest = i;
+		if (r <= heapSize && A[r - 1] > A[largest - 1])
+			largest = r;
+		if (largest != i) {
+			tmpFloat = A[largest - 1];
+			A[largest - 1] = A[i - 1];
+			A[i - 1] = tmpFloat;
+			tmpInt = B[largest - 1];
+			B[largest - 1] = B[i - 1];
+			B[i - 1] = tmpInt;
+			maxHeapify(A, B, largest);
+		}
+	}
+	
+	
+	public   void heapSort(double[] A, String[] B) {
+		buildMaxHeap(A, B);
+		for (int i = A.length; i > 0; i--) {
+			tmpDouble = A[i - 1];
+			A[i - 1] = A[0];
+			A[0] = tmpDouble;
+			tmpString = B[i - 1];
+			B[i - 1] = B[0];
+			B[0] = tmpString;
+			heapSize--;
+			maxHeapify(A, B, 1);
+		}
+	}
+	
+	
+	private   void buildMaxHeap(double[] A, String[] B) {
+		heapSize = A.length;
+		for (int i = (int) Math.floor(heapSize / 2.0D); i > 0; i--)
+			maxHeapify(A, B, i);
+	}
+	
+	
+	private   void maxHeapify(double[] A, String[] B, int i) {
+		l = 2 * i;
+		r = 2 * i + 1;
+		if (l <= heapSize && A[l - 1] > A[i - 1])
+			largest = l;
+		else
+			largest = i;
+		if (r <= heapSize && A[r - 1] > A[largest - 1])
+			largest = r;
+		if (largest != i) {
+			tmpDouble = A[largest - 1];
+			A[largest - 1] = A[i - 1];
+			A[i - 1] = tmpDouble;
+			tmpString = B[largest - 1];
+			B[largest - 1] = B[i - 1];
+			B[i - 1] = tmpString;
+			maxHeapify(A, B, largest);
+		}
+	}
 }

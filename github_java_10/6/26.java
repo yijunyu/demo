@@ -1,88 +1,122 @@
-class ms{
+package HW5_BurrowsWheeler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public int[] mergeSort(int array[])
-// pre: array is full, all elements are valid integers (not null)
-// post: array is sorted in ascending order (lowest to highest)
-{
-        // if the array has more than 1 element, we need to split it and merge the sorted halves
-        if(array.length > 1)
-        {
-                // number of elements in sub-array 1
-                // if odd, sub-array 1 has the smaller half of the elements
-                // e.g. if 7 elements total, sub-array 1 will have 3, and sub-array 2 will have 4
-                int elementsInA1 = array.length / 2;
-                // we initialize the length of sub-array 2 to
-                // equal the total length minus the length of sub-array 1
-                int elementsInA2 = array.length - elementsInA1;
-                // declare and initialize the two arrays once we've determined their sizes
-                int arr1[] = new int[elementsInA1];
-                int arr2[] = new int[elementsInA2];
-                // copy the first part of 'array' into 'arr1', causing arr1 to become full
-                for(int i = 0; i < elementsInA1; i++)
-                        arr1[i] = array[i];
-                // copy the remaining elements of 'array' into 'arr2', causing arr2 to become full
-                for(int i = elementsInA1; i < elementsInA1 + elementsInA2; i++)
-                        arr2[i - elementsInA1] = array[i];
-                // recursively call mergeSort on each of the two sub-arrays that we've just created
-                // note: when mergeSort returns, arr1 and arr2 will both be sorted!
-                // it's not magic, the merging is done below, that's how mergesort works :)
-                arr1 = mergeSort(arr1);
-                arr2 = mergeSort(arr2);
-                
-                // the three variables below are indexes that we'll need for merging
-                // [i] stores the index of the main array. it will be used to let us
-                // know where to place the smallest element from the two sub-arrays.
-                // [j] stores the index of which element from arr1 is currently being compared
-                // [k] stores the index of which element from arr2 is currently being compared
-                int i = 0, j = 0, k = 0;
-                // the below loop will run until one of the sub-arrays becomes empty
-                // in my implementation, it means until the index equals the length of the sub-array
-                while(arr1.length != j && arr2.length != k)
-                {
-                        // if the current element of arr1 is less than current element of arr2
-                        if(arr1[j] < arr2[k])
-                        {
-                                // copy the current element of arr1 into the final array
-                                array[i] = arr1[j];
-                                // increase the index of the final array to avoid replacing the element
-                                // which we've just added
-                                i++;
-                                // increase the index of arr1 to avoid comparing the element
-                                // which we've just added
-                                j++;
-                        }
-                        // if the current element of arr2 is less than current element of arr1
-                        else
-                        {
-                                // copy the current element of arr1 into the final array
-                                array[i] = arr2[k];
-                                // increase the index of the final array to avoid replacing the element
-                                // which we've just added
-                                i++;
-                                // increase the index of arr2 to avoid comparing the element
-                                // which we've just added
-                                k++;
-                        }
-                }
-                // at this point, one of the sub-arrays has been exhausted and there are no more
-                // elements in it to compare. this means that all the elements in the remaining
-                // array are the highest (and sorted), so it's safe to copy them all into the
-                // final array.
-                while(arr1.length != j)
-                {
-                        array[i] = arr1[j];
-                        i++;
-                        j++;
-                }
-                while(arr2.length != k)
-                {
-                        array[i] = arr2[k];
-                        i++;
-                        k++;
-                }
+import edu.princeton.cs.algs4.BinaryIn;
+import edu.princeton.cs.algs4.BinaryOut;
+
+public class BurrowsWheeler {
+    private static int R = 256; 
+    
+    
+    public static void encode(String inputfile, String outputfile) {
+        Logger logger = Logger.getLogger("BWT encode");
+        long time = System.nanoTime();
+        int count = 0;
+        BinaryIn in = new BinaryIn(inputfile);        
+        String input = in.readString();
+        System.out.println(input.length());
+        CircularSuffixArray array = new CircularSuffixArray(input);
+        int n = input.length();
+        char[] bwt = new char[input.length()];
+        int first = -1;
+        for (int i = 0; i < n; i++) {
+            
+            bwt[i] = input.charAt((n - 1 + array.index(i)) % n);
+            if (array.index(i) == 0) {
+                first = i;
+            }
         }
-        // return the sorted array to the caller of the function
-        return array;
-}
- 
+        BinaryOut out = new BinaryOut(outputfile);
+        out.write(first, 32);
+        out.write(new String(bwt));
+        out.close();
+        count += n;
+        time = System.nanoTime() - time;
+        logger.log(Level.INFO, "processed " + count + " ASCII chars in " + time + " nano seconds");
+    }
+
+    
+    
+    public static void decode(String inputfile, String outputfile) {
+        Logger logger = Logger.getLogger("BWT decode");
+        long time = System.nanoTime();
+        int count = 0;
+        BinaryIn in = new BinaryIn(inputfile);
+        int first = in.readInt(32);
+        String lastColumn = in.readString();
+        int n = lastColumn.length();
+        int[] next = new int[n];
+        char[] original = new char[n];
+        char[] firstColumn = lastColumn.toCharArray();
+
+        for (int i = 0; i < n; i++) {
+            next[i] = i;
+        }
+        
+        
+        sort(lastColumn.toCharArray(), next);
+        sort(firstColumn);
+        int i = 0;
+        while(i < n){
+            original[i++] = firstColumn[first];
+            first = next[first];
+        }
+        BinaryOut out = new BinaryOut(outputfile);
+        out.write(new String(original));        
+        out.close();
+        count += n;
+        time = System.nanoTime() - time;
+        logger.log(Level.INFO, "processed " + count + " ASCII chars in " + time + " nano seconds");
+    }
+    
+    private static int[] sort(char[] a) {
+        int n = a.length;
+        int[] order = new int[n];
+        int[] count = new int[R + 1]; 
+        char[] sorted = new char[n];
+        
+        for (int i = 0; i < n; i++) {
+            count[((int) a[i]) + 1]++;
+        }
+        
+        for (int i = 1; i <= R; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        
+        for (int i = 0; i < n; i++) {
+            order[count[(int) a[i]]] = i;
+            sorted[count[(int) a[i]]++] = a[i];            
+        }
+        
+        for (int i = 0; i < n; i++) {
+            a[i] = sorted[i];
+        }        
+        return order;
+    }
+    
+    private static void sort(char[] a, int[] b) {
+        assert(a.length == b.length);
+        int n = a.length;
+        int[] order = sort(a);
+        int[] tmp = new int[n];
+        for (int i = 0; i < n; i++) {
+            tmp[i] = b[order[i]];
+        }
+        for (int i = 0; i < n; i++) {
+            b[i] = tmp[i];
+        }        
+    }
+    
+    
+    public static void main(String[] args) {
+        if (args[0].equals("-")) {
+            encode(args[1], args[2]);
+        } else if (args[0].equals("+")) {
+            decode(args[1], args[2]);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
 }

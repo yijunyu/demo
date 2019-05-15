@@ -1,86 +1,105 @@
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.Stack;
-class BSort
-{
-	int a[];
+package com.thoughtworks.fjw.bucketsortfalternative;
 
-	BSort(int n)
-	{
-		a=new int[n];
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter the elements");
-		for(int i=0;i<n;i++)
-			a[i]=sc.nextInt();
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.RecursiveTask;
+
+public class BucketSortTask extends RecursiveTask<int[]> {
+
+	private static final long serialVersionUID = 1L;
+
+	private final int[] arrayToSort;
+	private final int nofBuckets;
+	private int bucketToExamine = -1;
+	private int[] bucket;
+
+	public BucketSortTask(final int[] arrayToSort, final int nofBuckets, final int bucketToExamine) {
+		this.arrayToSort = arrayToSort;
+		this.nofBuckets = nofBuckets;
+		this.bucketToExamine = bucketToExamine;
+	}
+
+	public BucketSortTask(final int[] arrayToSort, final int nofBuckets) {
+		this(arrayToSort, nofBuckets, -1);
 	}
 
 	
-	void bubbleSort()
-	{
-		for(int i=0;i<a.length;i++)
-		{
-			for(int j=0;j<a.length-1;j++)
-			{
-				if(a[j]>a[j+1])
-				{
-					int t = a[j];
-					a[j]=a[j+1];
-					a[j+1]=t;
+	@Override
+	protected int[] compute() {
+		if (bucketToExamine >= 0) {
+			
+			prepareAndFillBucket();
+			Arrays.sort(bucket);
+
+			return bucket;
+		}
+
+		
+		List<BucketSortTask> tasks = createBucketSortTasks();
+		for (BucketSortTask task : tasks) {
+			task.fork();
+		}
+
+		
+		int[] merged = new int[arrayToSort.length];
+		int bucketCount = 0;
+		for (BucketSortTask bucketSortTask : tasks) {
+			int[] bucket = bucketSortTask.join();
+			for (int element : bucket) {
+				if (element != -1) {
+					merged[bucketCount++] = element;
 				}
 			}
 		}
-		for(int i=0;i<a.length;i++)
-			System.out.print(a[i]+ "\t");
+
+		
+		return merged;
 	}
-  
-	void modifiedBubbleSort()
-	{
-		for(int i=0;i<a.length;i++)
-		{
-			boolean x=true;
-			for(int j=0;j<a.length-1;j++)
-			{
-				if(a[j]>a[j+1])
-				{
-					x=false;
-					int t = a[j];
-					a[j]=a[j+1];
-					a[j+1]=t;
-				}
-			}
-			if(x)
-				break;
+
+	List<BucketSortTask> createBucketSortTasks() {
+		List<BucketSortTask> tasks = new ArrayList<BucketSortTask>();
+		for (int bucket = 0; bucket < nofBuckets; bucket++) {
+			BucketSortTask bucketSortTask = new BucketSortTask(arrayToSort, nofBuckets, bucket);
+			tasks.add(bucketSortTask);
 		}
-		for(int i=0;i<a.length;i++)
-			System.out.print(a[i]+ "\t");
+
+		return tasks;
 	}
 
-}
-class bubble_sort
-{
-	public static void main(String[] args) 
-	{
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter the no of elements for modified bubble sort");
-		int n=sc.nextInt();
+	private void prepareAndFillBucket() {
+		int maxElementToSort = getMaxIntFromArray(arrayToSort);
 
-		BSort b = new BSort(n);
-		System.out.println();
+		bucket = new int[arrayToSort.length];
 
-		System.out.println("Modified Bubble Sort");
-		b.modifiedBubbleSort();
-		System.out.println();
-		System.out.println();
-		
-		System.out.println("Enter the no of elements for bubble sort");
-		int n1=sc.nextInt();
+		int bucketRangeStart = bucketToExamine * (int) Math.ceil((double) maxElementToSort / nofBuckets);
+		int bucketRangeEnd = (bucketToExamine + 1) * (int) Math.ceil((double) maxElementToSort / nofBuckets);
+		if (bucketToExamine + 1 == nofBuckets) {
+			bucketRangeEnd++;
+		}
 
-		BSort b1 = new BSort(n1);
-		
-		System.out.println("Bubble Sort");
-		b1.bubbleSort();
-		System.out.println();
-		
-		
+		int bucketElementCount = 0;
+
+		for (int elementToSort : arrayToSort) {
+			if (elementToSort >= bucketRangeStart && elementToSort < bucketRangeEnd) {
+				bucket[bucketElementCount] = elementToSort;
+			} else {
+				bucket[bucketElementCount] = -1;
+			}
+
+			bucketElementCount++;
+		}
 	}
+
+	int getMaxIntFromArray(final int[] array) {
+		int max = array[0];
+		for (int l : array) {
+			if (max < l) {
+				max = l;
+			}
+		}
+
+		return max;
+	}
+
 }

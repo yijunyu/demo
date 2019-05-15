@@ -1,52 +1,35 @@
-import java.util.*;
-class Graph{
-  int V;
-  LinkedList<Integer>[] adj;
-  Graph(int V){
-    this.V=V;
-    adj = new LinkedList[V];
-    for(int i=0; i<V; i++)
-      adj[i] = new LinkedList<Integer>();
-  }
-  void addEdge(int v, int w){
-    adj[v].add(w);
-  }
-  void topologicalSort(){
-    Stack<Integer> stack = new Stack<Integer>();
-    boolean[] visited = new boolean[V];
-    for(int i=0; i<V; i++)
-      if(!visited[i])
-        topologicalSortUtil(i,visited,stack);
+package com.nanyin.shellSort;
 
-    while(!stack.empty()){
-      int n = stack.pop();
-      System.out.print(n+" ");
+import java.util.Arrays;
+
+
+public class ShellSort {
+    public void shellSort(int[] array) {
+        int increment, i, j;
+        for (increment = array.length / 2; increment > 0; increment /= 2) {
+
+            System.out.println(increment);
+            for (i = increment; i < array.length; i++) {
+                int temp = array[i];
+
+                for (j = i - increment; j >= 0; j = j - increment) {
+                    if (array[j] > temp) {
+
+                        array[j + increment] = array[j];
+                    } else {
+                        break;
+                    }
+                }
+                
+                array[j + increment] = temp;
+            }
+        }
     }
-  }
 
-  void topologicalSortUtil(int v,boolean[] visited, Stack stack){
-    //System.out.print(v+" ");
-    visited[v]=true;
-    Iterator<Integer> iterator = adj[v].iterator();
-    while(iterator.hasNext()){
-      int n = iterator.next();
-      if(!visited[n]){
-        topologicalSortUtil(n,visited,stack);
-      }
+    public static void main(String[] args) {
+        int[] sortArray = new int[]{1, 3, 2, 5, 4, 9, 7, 6, 8};
+        ShellSort shellSort = new ShellSort();
+        shellSort.shellSort(sortArray);
+        System.out.println(Arrays.asList(shellSort).toString());
     }
-    stack.push(new Integer(v));
-  }
-}
-
-class topologicalsort{
-  public static void main(String[] args) {
-    Graph g = new Graph(6);
-       g.addEdge(5, 2);
-       g.addEdge(5, 0);
-       g.addEdge(4, 0);
-       g.addEdge(4, 1);
-       g.addEdge(2, 3);
-       g.addEdge(3, 1);
-    g.topologicalSort();
-  }
 }

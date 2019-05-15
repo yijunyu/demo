@@ -1,133 +1,134 @@
-package menon.cs6890.assignment4;
+package is.a.amoneysharinggui;
 
-public class LevenshteinEditDistanceTableElement {
-	
-	private LevenshteinEditDistanceTableElement minimumEditDistanceFromSameSource;
-	private LevenshteinEditDistanceTableElement minimumEditDistanceFromSameTarget;
-	private LevenshteinEditDistanceTableElement minimumEditDistanceFromDiagonal;
-	private int alignmentCost;
-	private int sourceStringOffset;
-	private int targetStringOffset;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param minimumEditDistanceFromSameSource
-	 * @param minimumEditDistanceFromSameTarget
-	 * @param minimumEditDistanceFromDiagonal
-	 * @param alignmentCost
-	 * @param sourceStringOffset
-	 * @param targetStringOffset
-	 */
-	public LevenshteinEditDistanceTableElement(LevenshteinEditDistanceTableElement minimumEditDistanceFromSameSource,
-			                                   LevenshteinEditDistanceTableElement minimumEditDistanceFromSameTarget,
-			                                   LevenshteinEditDistanceTableElement minimumEditDistanceFromDiagonal,
-			                                   int alignmentCost,
-			                                   int sourceStringOffset,
-			                                   int targetStringOffset) {
+public class Quicksort {
+	public static void sort(int n,Individual a[],Individual pos[],Individual neg[],Transaction tr[], int npos1[], int nneg1[], int numtr1[]){
 		
-		if (alignmentCost < 0 || sourceStringOffset < 0 || targetStringOffset < 0) {
-			throw new IllegalArgumentException("Negative values not allowed");
+		int beg,end;
+		System.out.printf("------- PERFORMING QUICK SORT ---\n\n");
+		beg=0;
+		end=n-1;
+		quick_srt(a,beg,end);                        	  
+
+		int npos=0,nneg=0;
+		for(int i=0;i<n;i++)
+		{
+			if(a[i].amt>0)
+			{
+				pos[npos] = new Individual();
+				pos[npos].nperson = a[i].nperson;
+				pos[npos++].amt = a[i].amt;
+			}
+			else if(a[i].amt<0)
+			{
+				neg[nneg] = new Individual();
+				neg[nneg].nperson = a[i].nperson;
+				neg[nneg++].amt = -a[i].amt;
+			}
+
 		}
-		
-		this.minimumEditDistanceFromSameSource = minimumEditDistanceFromSameSource;
-		this.minimumEditDistanceFromSameTarget = minimumEditDistanceFromSameTarget;
-		this.minimumEditDistanceFromDiagonal = minimumEditDistanceFromDiagonal;
-		this.alignmentCost = alignmentCost;
-		this.sourceStringOffset = sourceStringOffset;
-		this.targetStringOffset = targetStringOffset;
+
+		System.out.printf("\nAfter Sorting \nNumber of Individuals : %d\n", n);
+		for(int i=0;i<n;i++)
+		{
+			System.out.printf("%d  %f", a[i].nperson, a[i].amt);
+			System.out.println();
+		}
+		System.out.printf("\nNumber of Giving Individuals : %d\n", npos);
+		for(int i=0;i<npos;i++)
+		{
+			System.out.printf("%d  %f", pos[i].nperson, pos[i].amt);
+			System.out.println();
+		}
+		System.out.printf("\nNumber of Receiving Individuals : %d\n", nneg);
+		for(int i=0;i<nneg;i++)
+		{
+			System.out.printf("%d  %f", neg[i].nperson, neg[i].amt);
+			System.out.println();
+		}
+
+		int numtr = dotrans(pos,neg,tr,npos,nneg);
+		System.out.printf("\nNumber of Transactions : %d\n", numtr);
+		System.out.printf("GIVE TAKE AMOUNT\n");
+		for(int i=0;i<numtr;i++)
+		{
+			System.out.printf("%d     %d    %f", tr[i].pgiv, tr[i].ptke, tr[i].amt);
+			System.out.println();        
+		}
+		npos1[0] = npos;
+		nneg1[0] = nneg;
+		numtr1[0] = numtr;
+	}	
+
+	public static void quick_srt(Individual a[],int beg, int end){
+		if(beg<end)
+		{
+			int p=Partition(a,beg,end);                      
+			quick_srt(a,beg,p-1);                             
+			quick_srt(a,p+1,end);	              
+		}
+
+
 	}
-	
-	
-	/**
-	 * @return the back trace element - the element with the least cost
-	 */
-	public LevenshteinEditDistanceTableElement getBackTraceElement() {
-		
-		LevenshteinEditDistanceTableElement returnValue = null;
-		
-		LevenshteinEditDistanceTableElement backTraceElement1 = this.minimumEditDistanceFromSameSource != null ? this.minimumEditDistanceFromSameSource : null;
-		LevenshteinEditDistanceTableElement backTraceElement2 = this.minimumEditDistanceFromSameTarget != null ? this.minimumEditDistanceFromSameTarget : null;
-		LevenshteinEditDistanceTableElement backTraceElement3 = this.minimumEditDistanceFromDiagonal != null ? this.minimumEditDistanceFromDiagonal : null;
-		
-		if (backTraceElement1 != null) {
-			returnValue = backTraceElement1;
-		}
-		
-		if (backTraceElement2 != null) {
-			if (returnValue != null) {
-				if (backTraceElement2.getAlignmentCost() < returnValue.getAlignmentCost()) {
-					returnValue = backTraceElement2;
-				}
-			} else {
-				returnValue = backTraceElement2;
+
+	public static int Partition(Individual a[], int beg, int end){
+		int p=beg, loc;
+		Individual pivot=a[beg];
+		for(loc=beg+1;loc<=end;loc++)
+		{
+			if(pivot.amt > a[loc].amt)
+			{
+				a[p]=a[loc];
+				a[loc]=a[p+1];
+				a[p+1]=pivot;
+				p=p+1;
 			}
 		}
-		
-		if (backTraceElement3 != null) {
-			if (returnValue != null) {
-				if (backTraceElement3.getAlignmentCost() < returnValue.getAlignmentCost()) {
-					returnValue = backTraceElement3;
-				}
-			} else {
-				returnValue = backTraceElement3;
-			}
+		return p;	
+	}
+
+	public static int dotrans(Individual pos[], Individual neg[], Transaction tr[], int npos, int nneg)
+	{
+		if(neg[0] == null)
+		{
+			return 0;
 		}
-		
-		return returnValue;
-				
+		int posp = 0, negp = 0, ntran = 0;
+		float agiv=0,atke=0; 
+		atke= neg[negp].amt;
+		agiv = pos[posp].amt;
+		for(;posp<npos&&negp<nneg;)
+		{
+			if(agiv<=atke)
+			{
+				tr[ntran] = new Transaction(); 
+				tr[ntran].amt = agiv;
+				tr[ntran].pgiv = pos[posp].nperson;
+				tr[ntran++].ptke = neg[negp].nperson;
+				atke = atke - agiv;
+				posp = posp+1;
+				if(posp<npos)
+					agiv = pos[posp].amt;                 
+				if(atke == 0)
+				{
+					negp = negp +1;
+					if(negp<nneg)
+						atke= neg[negp].amt;
+				}
+			}
+			else
+			{
+				tr[ntran] = new Transaction();
+				tr[ntran].amt = atke;
+				tr[ntran].pgiv = pos[posp].nperson;
+				tr[ntran++].ptke = neg[negp].nperson;
+				agiv = agiv - atke;
+				negp = negp + 1;
+				if(negp<nneg)
+					atke= neg[negp].amt;    
+			}    
+		}
+		return ntran;    
 	}
-	
 
-	public LevenshteinEditDistanceTableElement getMinimumEditDistanceFromSameSource() {
-		return minimumEditDistanceFromSameSource;
-	}
 
-
-	public void setMinimumEditDistanceFromSameSource(
-			LevenshteinEditDistanceTableElement minimumEditDistanceFromSameSource) {
-		this.minimumEditDistanceFromSameSource = minimumEditDistanceFromSameSource;
-	}
-
-
-	public LevenshteinEditDistanceTableElement getMinimumEditDistanceFromSameTarget() {
-		return minimumEditDistanceFromSameTarget;
-	}
-
-
-	public void setMinimumEditDistanceFromSameTarget(
-			LevenshteinEditDistanceTableElement minimumEditDistanceFromSameTarget) {
-		this.minimumEditDistanceFromSameTarget = minimumEditDistanceFromSameTarget;
-	}
-
-
-	public LevenshteinEditDistanceTableElement getMinimumEditDistanceFromDiagonal() {
-		return minimumEditDistanceFromDiagonal;
-	}
-
-
-	public void setMinimumEditDistanceFromDiagonal(
-			LevenshteinEditDistanceTableElement minimumEditDistanceFromDiagonal) {
-		this.minimumEditDistanceFromDiagonal = minimumEditDistanceFromDiagonal;
-	}
-	
-	public int getAlignmentCost() {
-		return alignmentCost;
-	}
-	public void setAlignmentCost(int alignmentCost) {
-		this.alignmentCost = alignmentCost;
-	}
-	public int getSourceStringOffset() {
-		return sourceStringOffset;
-	}
-	public void setSourceStringOffset(int sourceStringOffset) {
-		this.sourceStringOffset = sourceStringOffset;
-	}
-	public int getTargetStringOffset() {
-		return targetStringOffset;
-	}
-	public void setTargetStringOffset(int targetStringOffset) {
-		this.targetStringOffset = targetStringOffset;
-	}
-	
 }

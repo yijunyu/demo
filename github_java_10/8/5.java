@@ -1,47 +1,79 @@
-package net.sprakle.homeAutomation.utilities.levenshtein;
+package sort;
 
+import edu.princeton.cs.algs4.StdRandom;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
 
-public class Levenshtein {
+public class Quick {
 
-	/*
-	 * Returns a hashmap with a distance integer for every string passed to it
-	 */
-	public static HashMap<Integer, String> getDistance(ArrayList<String> database, String target) {
-		HashMap<Integer, String> result = new HashMap<>();
+    public static void sort(Comparable[] a){
+        StdRandom.shuffle(a);
+        sort(a,0,a.length-1);
+    }
 
-		for (String s : database) {
-			int distance = getDistance(target, s);
-			result.put(distance, s);
-		}
+    private static void sort(Comparable[] a,int lo,int hi){
+        if(hi<=lo) return;
+        int j=partition(a,lo,hi);
+        sort(a,lo,j-1);
+        sort(a,j+1,hi);
+    }
 
-		return result;
-	}
+    private static int partition(Comparable[] a,int lo,int hi){
+        int i=lo,j=hi+1;
+        Comparable v=a[lo];
+        while(true){
+            while(less(a[++i],v)) if(i==hi) break;
+            while(less(v,a[--j])) if(j==lo) break;
+            if(i>=j) break;
+            exch(a,i,j);
+        }
+        exch(a,lo,j);
+        return j;
+    }
 
-	public static int getDistance(String s1, String s2) {
-		s1 = s1.toLowerCase();
-		s2 = s2.toLowerCase();
+    private static boolean less(Comparable v,Comparable w){
+        return v.compareTo(w)<0;
+    }
 
-		int[] costs = new int[s2.length() + 1];
-		for (int i = 0; i <= s1.length(); i++) {
-			int lastValue = i;
-			for (int j = 0; j <= s2.length(); j++) {
-				if (i == 0)
-					costs[j] = j;
-				else {
-					if (j > 0) {
-						int newValue = costs[j - 1];
-						if (s1.charAt(i - 1) != s2.charAt(j - 1))
-							newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-						costs[j - 1] = lastValue;
-						lastValue = newValue;
-					}
-				}
-			}
-			if (i > 0)
-				costs[s2.length()] = lastValue;
-		}
-		return costs[s2.length()];
-	}
+    private  static void exch(Comparable[] a,int i,int j){
+        Comparable t=a[i]; a[i]=a[j]; a[j]=t;
+    }
+
+    private static void show(Comparable[] a){
+        for(int i=0;i<a.length;i++){
+            System.out.print(a[i]+" ");
+        }
+        System.out.println();
+    }
+
+    public static boolean isSorted(Comparable[] a){
+        for(int i=1;i<a.length;i++){
+            if(less(a[i],a[i-1])){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        Scanner s=new Scanner(new File("F:\\algorithms4\\algs4-data\\algs4-data\\words3.txt"));
+        ArrayList<String> arrayList=new ArrayList<>();
+        while (s.hasNext()){
+            arrayList.add(s.next());
+        }
+        Iterator<String> iterator=arrayList.iterator();
+        String[] arr=new String[arrayList.size()];
+        int index=0;
+        while (iterator.hasNext()){
+            arr[index++]=iterator.next();
+        }
+
+        sort(arr);
+        assert isSorted(arr);
+        show(arr);
+    }
 }

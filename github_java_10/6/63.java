@@ -1,76 +1,52 @@
-package sortalgorithms.mergesort;
-
-import sortalgorithms.SortAlgorithm;
-
-public class Mergesort extends SortAlgorithm{
-
-	private int[] numbers;
-	private int[] helper;
-	
-	private int number;
-	
-	public int[] run(int[] values){
-		this.numbers = values;
-		number = numbers.length;
-		this.helper = new int[number];
-		mergesort(0, number - 1);
-		
-		//System.out.println("Estou no merge");
-		
-		return numbers;
+class RadixSort {
+	public static int getMax(int[] nums) {
+		int max = 0;
+		for (int num : nums) {
+			max = Math.max(max, num);
+		}
+		return max;
 	}
-	
-	/*public int[] sort(int[] values) {
-		this.numbers = values;
-		number = numbers.length;
-		this.helper = new int[number];
-		mergesort(0, number - 1);
-		
-		return numbers;
-	}*/
-	
-	private void mergesort(int low, int high) {
-		// check if low is smaller then high, if not then the array is sorted
-		if(low < high){
-			// Get the index of the element which is in the middle
-			int middle = low + (high - low) / 2;
-			// Sort the left side of the array
-			mergesort(low, middle);
-			// Sort the right side of the array
-			mergesort(middle+1, high);
-			//Combine them both
-			mergesort(low, middle, high);
+
+	public static void printArray(int[] nums) {
+		for (int num : nums) {
+			System.out.print(num + " ");
+		}
+		System.out.println();
+	}
+
+	public static void countSort(int[] nums, int exponent) {
+		int n = nums.length;
+		int[] output = new int[n];
+		int[] count = new int[10];
+
+		for (int i = 0; i < n; i++) {
+			count[(nums[i]/exponent) % 10]++;
+		}
+
+		for (int i = 1; i < 10; i++) {
+			count[i] += count[i-1];
+		}
+
+		for (int i = n - 1; i >= 0; i--) {
+			output[count[ (nums[i]/exponent) % 10] - 1] = nums[i];
+			count[(nums[i]/exponent) % 10]--;
+		}
+
+		for (int i = 0; i < n; i++) {
+			nums[i] = output[i];
 		}
 	}
-	
-	private void mergesort(int low, int middle, int high){
-		// Copy both parts into the helper array
-		for(int i = low; i <= high; i++) {
-			helper[i] = numbers[i];
-		}
-		
-		int i = low;
-		int j = middle + 1;
-		int k = low;
-		
-		// Copy the smallest values from either the left or the right side back
-	    // to the original array
-		while(i <= middle && j <= high) {
-			if(helper[i] <= helper[j]) {
-				numbers[k]=helper[i];
-				i++;
-			} else {
-				numbers[k] = helper[j];
-				j++;
-			}
-			k++;
-		}
-		// Copy the rest of the left side of the array into the target array
-		while(i <= middle) {
-			numbers[k] = helper[i];
-			k++;
-			i++;
+
+	public static void radixSort(int[] nums) {
+		int max = getMax(nums);
+		for (int exponent = 1; max / exponent > 0; exponent *= 10) {
+			countSort(nums, exponent);
 		}
 	}
-	
+
+	public static void main(String args[]) {
+		int[] nums = {170, 45, 75, 90, 802, 24, 2, 66};
+		radixSort(nums);
+		printArray(nums);
+	}
 }

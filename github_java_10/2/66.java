@@ -1,113 +1,135 @@
-package org.pang.learning.ds;
+package Sorting;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
-public class AVL {
-	public static void main(String[] args) {
-		Tree tree = newTree(2,1,2,5,6,8,9,2,3,12,7,9);
-		tree.print();
-	}
-	
-	public static Tree newTree(int ...datas){
-		if(datas==null||datas.length<1)
-			return null;
-		Node root=new Node(datas[0]);
-		Tree tree=new Tree(root);
-		
-		for(int i=1;i<datas.length;i++){
-			tree.add(datas[i]);
-		}
-		
-		return tree;
-	}
 
-	static class Tree{
-		Node root;
-		public Tree(Node root){
-			this.root=root;
-		}
-		
-		public void add(int data){
-			Node node=root;
-			do{
-				if(node.data==data)
-					break;
-				if(node.data>data){
-					if(node.left==null){
-						node.left=new Node(data);
-						node.left.parent=node;
-						break;
-					}else
-						node=node.left;
-				}else{
-					if(node.right==null){
-						node.right=new Node(data);
-						node.right.parent=node;
-						break;
-					}else
-						node=node.right;
-				}
-			}while(true);
-		}
-		
-		public int height(){
-			return height(root);
-		}
-		
-		private int height(Node node){
-			if(node==null)
-				return 0;
-			else{
-				return 1+Math.max(height(node.left), height(node.right));
-			}
-		}
-		
-		public void print(Node node){
-//			if(node)
-		}
-		
-		public void print(){
-			int height=height();
-//			System.out.println("height of tree: "+height);
-//			System.out.println();
-			if(height==0)
-				return;
-			int distance=2;
-			int offset=distance*height;
-			LinkedList<Node> nodeList=new LinkedList<Node>();
-			nodeList.addLast(root);
-			int hIdx=0;
-			while(!nodeList.isEmpty()){
-				int size=nodeList.size();
-				int innerOffset=offset;
-				for(Node node : nodeList){
-					System.out.printf("%"+innerOffset+"s",node.data);
-					innerOffset+=distance*hIdx;
-				}
-				System.out.println();
-				hIdx++;
-				offset=offset-distance;
-				for(int i=0;i<size;i++){
-					Node node = nodeList.poll();
-					if(node.left!=null)
-						nodeList.addLast(node.left);
-					if(node.right!=null)
-						nodeList.addLast(node.right);
-					
-				}
-			}
-		}
-	}
-	
-	static class Node{
-		int data;
-		Node left;
-		Node right;
-		Node parent;
-		public Node(int data){
-			this.data=data;
-		}
-	}
+
+public class Merge {
+
+    
+    private Merge() { }
+
+    
+    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+        
+        assert isSorted(a, lo, mid);
+        assert isSorted(a, mid+1, hi);
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k]; 
+        }
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)              a[k] = aux[j++];
+            else if (j > hi)               a[k] = aux[i++];
+            else if (less(aux[j], aux[i])) a[k] = aux[j++];
+            else                           a[k] = aux[i++];
+        }
+
+        
+        assert isSorted(a, lo, hi);
+    }
+
+    
+    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        System.out.println(lo +","+mid+","+hi);
+        sort(a, aux, lo, mid);
+        sort(a, aux, mid + 1, hi);
+        merge(a, aux, lo, mid, hi);
+    }
+
+    
+    public static void sort(Comparable[] a) {
+        Comparable[] aux = new Comparable[a.length];
+        sort(a, aux, 0, a.length-1);
+        assert isSorted(a);
+    }
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return v.compareTo(w) < 0;
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
+    }
+
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+   
+    
+    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = index[k]; 
+        }
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)                    index[k] = aux[j++];
+            else if (j > hi)                     index[k] = aux[i++];
+            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
+            else                                 index[k] = aux[i++];
+        }
+    }
+
+    
+    public static int[] indexSort(Comparable[] a) {
+        int N = a.length;
+        int[] index = new int[N];
+        for (int i = 0; i < N; i++)
+            index[i] = i;
+
+        int[] aux = new int[N];
+        sort(a, index, aux, 0, N-1);
+        return index;
+    }
+
+    
+    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, index, aux, lo, mid);
+        sort(a, index, aux, mid + 1, hi);
+        merge(a, index, aux, lo, mid, hi);
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        
+    	String[] a = {"A","E","Q","S","U","Y","E","I","N","O","S","T"};
+        Merge.sort(a);
+        show(a);
+        
+    }
 }

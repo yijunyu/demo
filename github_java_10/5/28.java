@@ -1,45 +1,92 @@
-/*
-Given a binary tree, find its maximum depth.
-The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
-*/
+package structure;
 
-//Recursive
-public int maxDepth(TreeNode root) {
-    if(root==null)
-        return 0;
- 
-    int leftDepth = maxDepth(root.left);
-    int rightDepth = maxDepth(root.right);
- 
-    int bigger = Math.max(leftDepth, rightDepth);
- 
-    return bigger+1;
-}
 
-/////////////////////////////////////////////////////////
-//Iterator
-public int maxDepth(TreeNode root) {
-    if(root == null) {
-        return 0;
+public class BubbleSort {
+
+    public static void main(String[] args) {
+        BubbleSort bubbleSort = new BubbleSort();
+        bubbleSort.insert(1);
+        bubbleSort.insert(3);
+        bubbleSort.insert(2);
+        bubbleSort.insert(8);
+        bubbleSort.insert(5);
+        bubbleSort.display();
+        bubbleSort.bubbleSort();
+        bubbleSort.display();
+        bubbleSort.delete(2);
+        bubbleSort.display();
     }
+
     
-    Stack<TreeNode> stack = new Stack<>();
-    Stack<Integer> value = new Stack<>();
-    stack.push(root);
-    value.push(1);
-    int max = 0;
-    while(!stack.isEmpty()) {
-        TreeNode node = stack.pop();
-        int temp = value.pop();
-        max = Math.max(temp, max);
-        if(node.left != null) {
-            stack.push(node.left);
-            value.push(temp+1);
-        }
-        if(node.right != null) {
-            stack.push(node.right);
-            value.push(temp+1);
+    private long[] arr;
+    
+    private int nElements;
+    
+    private int DEFAULT_SIZE = 10;
+
+    
+    public BubbleSort() {
+        arr = new long[DEFAULT_SIZE];
+        nElements = 0;
+    }
+
+    
+    public int size() {
+        return this.nElements;
+    }
+
+    
+    public void insert(long element) {
+        arr[nElements] = element;
+        nElements++;
+    }
+
+    
+    
+    public void delete(long element) {
+        int start = 0;
+        int end = nElements - 1;
+        int middle;
+        while (true) {
+            if (start > end) {
+                throw new RuntimeException("元素未找到");
+            }
+            middle = (start + end) / 2;
+            if (arr[middle] == element) {
+                for (int i = middle; i < nElements; i++) {
+                    arr[i] = arr[i + 1];
+                }
+                return;
+            } else if (arr[middle] > element) {
+                end = middle - 1;
+            } else if (arr[middle] < element) {
+                start = middle + 1;
+            }
         }
     }
-    return max;
+
+    
+    private void display() {
+        for (int i = 0; i < nElements; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+
+    
+    public void bubbleSort() {
+        for (int i = nElements - 1; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swap(j, j + 1);
+                }
+            }
+        }
+    }
+
+    public void swap(int one, int two) {
+        long temp = arr[one];
+        arr[one] = arr[two];
+        arr[two] = temp;
+    }
 }

@@ -1,36 +1,75 @@
-package com.algorithm.example.tree.search;
+package com.mijiang.algo.sort;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
-/**
- * @author Kiran Pariyar <kiranpariyar@lftechnology.com>
- */
-public class BreadthFirstSearch {
-    private Queue<Node> queue = new LinkedList<>();
-    private List<Integer> result = new ArrayList<>();
 
-    public void bfs(Node node){
-        if(node == null) return;
-        queue.add(node);
-        while (!queue.isEmpty()){
-            Node element = queue.remove();
-            result.add(element.getData());
-            if(element.getLeft() != null) queue.add(element.getLeft());
-            if(element.getRight() != null) queue.add(element.getRight());
-        }
-    }
+import java.util.Comparator;
 
-    public static void main(String[] args){
-        int[] numbers = {15, 200, 25, -5, 0, 100, 20, 12, 126, 1000, -150};
-        Node node= new Node(20);
-        for(int num : numbers){
-            node.addNode(num);
-        }
-        BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch();
-        breadthFirstSearch.bfs(node);
-        System.out.println("Result :" + breadthFirstSearch.result);
-    }
+import com.mijiang.algo.common.StdIn;
+import com.mijiang.algo.common.StdOut;
+import static com.mijiang.algo.sort.SortHelper.*;
+
+
+public class Insertion {
+
+	
+	private Insertion() {
+	}
+
+	
+	public static void sort(Comparable[] a) {
+		int N = a.length;
+		for (int i = 0; i < N; i++) {
+			for (int j = i; j > 0 && less(a[j], a[j - 1]); j--) {
+				exch(a, j, j - 1);
+			}
+			assert isSorted(a, 0, i);
+		}
+		assert isSorted(a);
+	}
+	
+	public static void sort(Comparable[] a, int lo, int hi){
+		for (int i = lo + 1; i <= hi; i++){
+			for (int j = i; j > lo && less(a[j], a[j - 1]); j--)
+				exch(a, j, j - 1);
+		}
+	}
+
+	
+	public static void sort(Object[] a, Comparator c) {
+		int N = a.length;
+		for (int i = 0; i < N; i++) {
+			for (int j = i; j > 0 && less(c, a[j], a[j - 1]); j--) {
+				exch(a, j, j - 1);
+			}
+			assert isSorted(a, c, 0, i);
+		}
+		assert isSorted(a, c);
+	}
+
+	
+	
+	
+	public static int[] indexSort(Comparable[] a) {
+		int N = a.length;
+		int[] index = new int[N];
+		for (int i = 0; i < N; i++)
+			index[i] = i;
+
+		for (int i = 0; i < N; i++)
+			for (int j = i; j > 0 && less(a[index[j]], a[index[j - 1]]); j--)
+				exch(index, j, j - 1);
+
+		return index;
+	}
+
+	
+
+	
+
+	
+	public static void main(String[] args) {
+		String[] a = StdIn.readAllStrings();
+		Insertion.sort(a);
+		show(a);
+	}
 }

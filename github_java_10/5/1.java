@@ -1,32 +1,103 @@
-package dfs.java.simple;
+package com.skelsey2.bubblesort;
 
-/**
- * Created by ClaasM on 7/9/2016.
- * Used to perform Depth-First-Search (dfs) using adjacency matrices.
- * For a faster implementation, see @see ../fast/dfs.java (using adjacency Lists)
- */
-public class DFS {
-    /**
-     * Recursive implementation of Depth-First-Search using adjacency matrix.
-     * This returns nothing (yet), it is meant to be a template for whatever you want to do with it,
-     * e.g. finding connected components in a graph.
-     * This has a runtime of O(|V|^2) (|V| = number of Nodes), for a faster implementation see @see ../fast/dfs.java (using adjacency Lists)
-     * @param graph an adjacency-matrix-representation of the graph where (x,y) is true if the the there is an edge between nodes x and y.
-     * @param current the node to start from.
-     * @param visited an array denoting whether a node has been visited or not.
-     */
-    public static void dfs(boolean[][] graph, int current, boolean[] visited){
-        //Label the current node as visited
-            visited[current] = true;
-        //For each node...
-        for (int i = 0; i < graph[current].length; i++) {
-            //...if there is an edge between the node and current node and the node has not yet been visited...
-            if(graph[current][i] && !visited[i]){
-                //...recursively call dfs with i being the next node.
-                dfs(graph,i,visited);
-            }
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
-        }
+public class JavaBubbleSort {
+	
+	
+	public static void main(String[] args) {
 
-    }
+		int ranNumber = (int) Math.floor(((Math.random()+1)*100)); 
+		int testArray[] = new int[ranNumber];
+		for(int i = 0; i < testArray.length -1; i++){
+			System.out.println("setting: " + testArray[i]);
+			testArray[i] =  (int) Math.floor(((Math.random()+1)*100));
+			System.out.println("i: " + testArray[i]);
+		}
+		System.out.println(Arrays.toString(testArray));
+		int expectedArray[] = new int[ranNumber];
+		expectedArray = Arrays.copyOf(testArray, testArray.length);
+		Arrays.sort(expectedArray);
+		System.out.println( Arrays.toString(expectedArray)+ " " + Arrays.toString(testArray));
+		
+
+
+
+
+
+
+
+
+	}
+
+	public static int[] bubbleSort1(int[] arr) {
+		boolean swap = true;
+		while (swap) {
+			swap = false;
+			for (int i = 0; i < arr.length - 1; i++) {
+
+				if (arr[i] > arr[i + 1]) {
+					swap = true;
+
+					int temp = arr[i];
+					arr[i] = arr[i + 1];
+					arr[i + 1] = temp;
+				}
+			}
+		}
+		return arr;
+	}
+
+	public static int[] bubbleSort2(int[] arr) {
+		int i = 0, n = arr.length;
+		boolean swap = true;
+		while (i < n - 1 && swap) {
+			swap = false;
+			for (int j = 1; j < n - i; j++) {
+				if (arr[j - 1] > arr[j]) {
+					swap = true;
+					int temp = arr[j - 1];
+					arr[j - 1] = arr[j];
+					arr[j] = temp;
+				}
+			}
+		}
+		return arr;
+	}
+
+	static int swapCount= 0;
+	static boolean swap = true;
+	public static int[] bubbleSort3(int[] arr) {
+		int n = arr.length;
+		
+		IntStream.range(0, n - 1)
+			.flatMap(i -> {
+
+				if(swap){
+					i = 0;
+				} else {
+
+					i = n-1;
+				}
+				swap =false;
+
+
+
+				return IntStream.range(i + 1, n - i);})
+				.forEach(j -> {
+								swapCount++;
+
+								if (arr[j - 1] > arr[j]) {
+									
+									swap = true;
+									int temp = arr[j];
+									arr[j] = arr[j - 1];
+									arr[j - 1] = temp;
+								}
+							  }
+						 );
+
+		return arr;
+	}
 }

@@ -1,82 +1,80 @@
-package book.ch4;
-
-import cse131.ArgsProcessor;
-import sedgewick.StdIn;
-import sedgewick.StdOut;
-
-/*************************************************************************
- *  Compilation:  javac Merge.java
- *  Execution:    java Merge N
- *
- *  A bare-bones N log N implementation of mergesort.
- *
- *  See MergeSortX.java for an optimized version that avoids
- *  memory allocation in the inner loop and cuts of to
- *  insertionsort for small N.
- *
- *************************************************************************/
-
-public class Merge {
-
-    public static void sort(Comparable[] a) {
-        sort(a, 0, a.length);
-    } 
-
-    // Sort a[lo, hi). 
-    public static void sort(Comparable[] a, int lo, int hi) {
-        int N = hi - lo;        // number of elements to sort
-
-        // 0- or 1-element file, so we're done
-        if (N <= 1) return; 
-
-        // recursively sort left and right halves
-        int mid = lo + N/2; 
-        sort(a, lo, mid); 
-        sort(a, mid, hi); 
-
-        // merge two sorted subarrays
-        Comparable[] aux = new Comparable[N];
-        int i = lo, j = mid;
-        for (int k = 0; k < N; k++) {
-            if      (i == mid)  aux[k] = a[j++];
-            else if (j == hi)   aux[k] = a[i++];
-            else if (a[j].compareTo(a[i]) < 0) aux[k] = a[j++];
-            else                               aux[k] = a[i++];
-        }
-
-        // copy back
-        for (int k = 0; k < N; k++) {
-            a[lo + k] = aux[k]; 
-        }
-    } 
 
 
 
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        for (int i = 1; i < a.length; i++)
-            if (a[i].compareTo(a[i-1]) < 0) return false;
-        return true;
+import java.io.*;
+import java.util.*;
+ 
+class Radix {
+ 
+    
+    static int getMax(int arr[], int n)
+    {
+        int mx = arr[0];
+        for (int i = 1; i < n; i++)
+            if (arr[i] > mx)
+                mx = arr[i];
+        return mx;
     }
-
-   /***********************************************************************
-    *  Show results
-    ***********************************************************************/
-    public static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++)
-            System.out.println(a[i]);
-    }
-
-
-    public static void main(String[] args) {
-    	ArgsProcessor.useStdInput("datafiles/textfiles");
-        String[] a = StdIn.readAll().split("\\s+");
-        Merge.sort(a);
-        for (int i = 0; i < a.length; i++) {
-            StdOut.print(a[i] + " ");
+ 
+    
+    
+    static void countSort(int arr[], int n, int exp)
+    {
+        int output[] = new int[n]; 
+        int i;
+        int count[] = new int[10];
+        Arrays.fill(count,0);
+ 
+        
+        for (i = 0; i < n; i++)
+            count[ (arr[i]/exp)%10 ]++;
+ 
+        
+        
+        for (i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+ 
+        
+        for (i = n - 1; i >= 0; i--)
+        {
+            output[count[ (arr[i]/exp)%10 ] - 1] = arr[i];
+            count[ (arr[i]/exp)%10 ]--;
         }
-        StdOut.println();
+ 
+        
+        
+        for (i = 0; i < n; i++)
+            arr[i] = output[i];
+    }
+ 
+    
+    
+    static void radixsort(int arr[], int n)
+    {
+        
+        int m = getMax(arr, n);
+ 
+        
+        
+        
+        for (int exp = 1; m/exp > 0; exp *= 10)
+            countSort(arr, n, exp);
+    }
+ 
+    
+    static void print(int arr[], int n)
+    {
+        for (int i=0; i<n; i++)
+            System.out.print(arr[i]+" ");
+    }
+ 
+ 
+    
+    public static void main (String[] args)
+    {
+        int arr[] = {170, 45, 75, 90, 802, 24, 2, 66};
+        int n = arr.length;
+        radixsort(arr, n);
+        print(arr, n);
     }
 }

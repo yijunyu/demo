@@ -1,29 +1,128 @@
-public class Solution {
-    public int minDistance(String word1, String word2) {
-        int len1 = word1.length();
-        int len2 = word2.length();
-        int[][] distance = new int[len1+1][len2+1];
-        
-        for (int i = 0; i <= len1; i++) {
-            distance[i][0] = i;
+package algo;
+
+import com.euler.utils.FileUtilsEuler;
+import com.euler.utils.sorting.QuickSort;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
+
+public class QuickSortNumber {
+
+    private int[] numbers;
+
+    @Test
+    public void doTestFinal() throws IOException {
+        init();
+        FileUtilsEuler.fileName = "d:/temp/algo2.txt";
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotFirst(0, QuickSort.result.length - 1);
+        System.out.println("First " + QuickSort.countFirst);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotLastTest(0, QuickSort.result.length - 1);
+        System.out.println("Last " + QuickSort.countLast);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotMediana(0, QuickSort.result.length - 1);
+        System.out.println("Mediana " + QuickSort.countMedium);
+    }
+
+    
+    public void doTest3() throws IOException {
+        init();
+        FileUtilsEuler.fileName = "d:/temp/Samples/array3.txt";
+        numbers = FileUtilsEuler.readFileList();
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotFirst(0, numbers.length - 1);
+
+
+        Assert.assertEquals(QuickSort.countFirst, 576);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotLastTest(0, numbers.length - 1);
+        Assert.assertEquals(QuickSort.countLast, 669);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotMediana(0, numbers.length - 1);
+        Assert.assertEquals(QuickSort.countMedium, 636);
+        for (int i = 1; i < QuickSort.result.length; i++) {
+            if (QuickSort.result[i - 1] > QuickSort.result[i]) {
+                System.out.println("ERROR");
+            }
         }
-        for (int i = 0; i <= len2; i++) {
-            distance[0][i] = i;
-        }
-        
-        for (int i = 0; i < len1; i++) {
-            for (int j = 0; j < len2; j++) {
-                if (word1.charAt(i) == word2.charAt(j) ){
-                    distance[i+1][j+1] = distance[i][j];
-                } else {
-                    int insert = distance[i][j+1] + 1;
-                    int delete = distance[i+1][j] + 1;
-                    int replace = distance[i][j] + 1;
-                    int min = Math.min(insert, delete);
-                    distance[i + 1][j + 1] = Math.min(min, replace);
-                }
-            } 
-        }
-        return distance[len1][len2];
+
+
+    }
+
+    
+    public void doTest0() throws IOException {
+        init();
+        FileUtilsEuler.fileName = "d:/temp/Samples/array0.txt";
+        numbers = FileUtilsEuler.readFileList();
+
+        QuickSort.result = numbers;
+        QuickSort.splitPivotFirst(0, numbers.length - 1);
+
+
+        Assert.assertEquals(QuickSort.countFirst, 64);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotLastTest(0, numbers.length - 1);
+        Assert.assertEquals(QuickSort.countLast, 60);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotMediana(0, numbers.length - 1);
+        Assert.assertEquals(QuickSort.countMedium, 55);
+
+
+    }
+
+    
+    public void doTest1() throws IOException {
+        init();
+        FileUtilsEuler.fileName = "d:/temp/Samples/array1.txt";
+        numbers = FileUtilsEuler.readFileList();
+
+        QuickSort.result = numbers;
+        QuickSort.splitPivotFirst(0, numbers.length - 1);
+
+
+        Assert.assertEquals(QuickSort.countFirst, 253);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotLastTest(0, numbers.length - 1);
+        Assert.assertEquals(QuickSort.countLast, 253);
+
+        QuickSort.result = FileUtilsEuler.readFileList();
+        QuickSort.splitPivotMediana(0, numbers.length - 1);
+        Assert.assertEquals(QuickSort.countMedium, 66);
+
+
+    }
+
+    
+    public void doTestMediana() {
+        int[] input = new int[20];
+        Assert.assertEquals(QuickSort.getMediana(0, input.length - 1), 9);
+        input = new int[5];
+        Assert.assertEquals(QuickSort.getMediana(0, input.length - 1), 2);
+
+        input = new int[2];
+        Assert.assertEquals(QuickSort.getMediana(0, input.length - 1), 0);
+
+        input = new int[3];
+        Assert.assertEquals(QuickSort.getMediana(0, input.length - 1), 1);
+
+        input = new int[9];
+        Assert.assertEquals(QuickSort.getMediana(0, input.length - 1), 4);
+    }
+
+    public void init() {
+        QuickSort.countFirst = 0;
+        QuickSort.countLast = 0;
+        QuickSort.countMedium = 0;
+        QuickSort.result = new int[]{};
     }
 }

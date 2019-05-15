@@ -1,34 +1,42 @@
-package ex4_1;
-
-/**
- * Created by zhou on 2017/3/12.
- */
-public class DepthFirstSearch extends Search{
-
-    private boolean[] marked;
-    private int count;
+package com.mpakhomov.algorithms.sort;
 
 
-    public DepthFirstSearch(Graph G, int s) {
-        marked = new boolean[G.V()];
+public class BubbleSort implements Sorting {
 
-    }
-
-    private void dfs(Graph G, int v) {
-        marked[v] = true;
-        count++;
-        for(int w : G.adj(v)) {
-            if(!marked(w)) dfs(G, w);
+    
+    static public void sortNaive(int[] a) {
+        final int N = a.length;
+        for (int i = 0; i < N; i++) {
+            for (int j = 1; j < N - i; j++) {
+                if (a[j - 1] > a[j]) {
+                    swap(a, j - 1, j);
+                }
+            }
         }
     }
 
-    @Override
-    public boolean marked(int v) {
-        return marked[v];
+    
+    static public void sort(int[] a) {
+        boolean swapped = true;
+        for (int length = a.length; swapped ; length--) {
+            swapped = false;
+            for (int j = 1; j < length; j++) {
+                if (a[j - 1] > a[j]) {
+                    swap(a, j - 1, j);
+                    swapped = true;
+                }
+            }
+        }
+    }
+
+    static private void swap(int[] a, int i, int j) {
+        int tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
     }
 
     @Override
-    public int count() {
-        return count;
+    public void instanceSort(int[] a) {
+        sort(a);
     }
 }

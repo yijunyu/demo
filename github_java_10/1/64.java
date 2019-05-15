@@ -1,23 +1,35 @@
-package BreadthFirstSearch;
+/*
+	Program : Implementation of Insertion Sort Algorithm in Java
+	Author : Sarthak Yadav
+	
+	Principles: 
+		- Insertion Sort is a sorting algorithm with a average case complexity of O(n^2)
+		- For more details about Insertion Sort visit
+				 https://www.topcoder.com/community/data-science/data-science-tutorials/sorting/
+				 https://www.khanacademy.org/computing/computer-science/algorithms/insertion-sort/a/insertion-sort
+		
+	Instructions:
+		- just compile from command line
+*/
 
-public class App {
+import java.util.Scanner;
 
-	public static void main(String[] args) {
-		
-		BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch();
-		
-		Vertex vertex1 = new Vertex(1);
-		Vertex vertex2 = new Vertex(2);
-		Vertex vertex3 = new Vertex(3);
-		Vertex vertex4 = new Vertex(4);
-		Vertex vertex5 = new Vertex(5);
-		
-		vertex1.addNeighbour(vertex2);
-		vertex1.addNeighbour(vertex4);
-		vertex4.addNeighbour(vertex5);
-		vertex2.addNeighbour(vertex3);
-		
-		breadthFirstSearch.bfs(vertex1);
+public class InsertionSortDemo {
 
+	public static void insertion_sort(int[] arr)
+	{
+		for(int j=1;j<=arr.length-1;j++)						//iterates from the 2nd element of the array (index no: 1)
+		{
+			int key=arr[j];										//sets key as the value on the current index
+			int i=j-1;	
+			while(i>=0 && arr[i]>key)							//keeps check if i is non negative and the other test condition
+			{
+				arr[i+1]=arr[i];
+				i-=1;
+			}
+			arr[i+1]=key;
+		}
 	}
+	
+
 }

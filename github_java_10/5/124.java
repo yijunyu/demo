@@ -1,61 +1,37 @@
-/*
- * Generic graph library
- * Copyright (C) 2000,2003,2004 University of Maryland
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+package algorithms.sort;
 
-package edu.umd.cs.findbugs.graph;
-
-import java.util.Iterator;
-
-/**
- * Perform a forward depth first search of a graph.
- * 
- * @author David Hovemeyer
- * @see Graph
- * @see AbstractDepthFirstSearch
- */
-public class DepthFirstSearch<GraphType extends Graph<EdgeType, VertexType>, EdgeType extends GraphEdge<EdgeType, VertexType>, VertexType extends GraphVertex<VertexType>>
-        extends AbstractDepthFirstSearch<GraphType, EdgeType, VertexType> {
-
-    /**
-     * Constructor.
-     * 
-     * @param graph
-     *            the graph to perform a depth first search of
-     */
-    public DepthFirstSearch(GraphType graph) {
-        super(graph);
-    }
-
-    @Override
-    protected Iterator<EdgeType> outgoingEdgeIterator(GraphType graph, VertexType vertex) {
-        return graph.outgoingEdgeIterator(vertex);
-    }
-
-    @Override
-    protected VertexType getTarget(EdgeType edge) {
-        return edge.getTarget();
-    }
-
-    @Override
-    protected VertexType getSource(EdgeType edge) {
-        return edge.getSource();
-    }
+public class SortBubbleSort {
+	
+	public static void main(String args[]){
+		
+		int arr[] = {30,6,2,3,4,6,7,8,10,20,11,5,5,30};
+		
+	    int n = arr.length;
+	    
+	    
+	    for(int i=0; i< n; i++){
+	    	
+	    	for(int j=1; j<(n-i); j++){    
+	    		
+	    		if( arr[j-1] > arr[j]){            
+	    			
+	    			int temp = arr[j-1];
+	    			
+	    			arr[j-1]= arr[j];
+	    			
+	    			arr[j]= temp;
+	    		}
+	    		   		
+	    	}
+	    }
+	    
+	  System.out.println(" Sorted Array: " );  
+	  
+	  for(int m=0; m <n; m++){
+		  
+		  System.out.print(" "+ arr[m]);
+	  }
+	  			
+	}
 
 }
-
-// vim:ts=4

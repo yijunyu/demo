@@ -1,25 +1,51 @@
-import java.io.*;
-import java.util.*;
-class CKPTowerOfHanoi
-{
-    static void HanoiLogic(int n,char a,char b,char c)
-    {
-        if(n==1)
-        {
-            System.out.println("MOVING THE DISK 1 FROM "+a+" TO "+b);
+package com.algorithmhelper.graphs.pathfinding;
+
+import com.algorithmhelper.datastructures.lists.Queue;
+import com.algorithmhelper.datastructures.lists.QueueDynamicArray;
+import com.algorithmhelper.graphs.graphs.DirectedGraph;
+
+public class KahnsTopologicalSortAlgorithmQueue<T extends Comparable<T>> {
+
+    private Queue<T> topologicalOrdering;
+
+    
+    public KahnsTopologicalSortAlgorithmQueue(DirectedGraph<T> G) {
+        if (G == null)
+            throw new IllegalArgumentException("constructor with null graph G");
+
+        topologicalOrdering = new QueueDynamicArray<>();
+
+        if (G.V() == 0)
             return;
-        }
-        HanoiLogic(n-1,a,c,b);
-        System.out.println("MOVING THE DISK "+n+" FROM "+a+" TO "+b);
-        HanoiLogic(n-1,c,b,a);
+
+        kahnsTopologicalSort(G);
     }
-    public static void main(String[] args)
-    {
-        int num;
-        char A='A',B='B',C='C';
-        System.out.println("ENTER THE NUM OF DISK:");
-        Scanner s=new Scanner(System.in);
-        num=s.nextInt();
-        HanoiLogic(num,A,B,C);
+
+    
+    private void kahnsTopologicalSort(DirectedGraph<T> G) {
+        DirectedGraph<T> reverseGraph = G.getReverseGraph();
+        Queue<T> queue = new QueueDynamicArray<>();
+
+        for (T u : reverseGraph.getVertices()) {
+            if (reverseGraph.getDegree(u) == 0)
+                queue.enqueue(u);
+        }
+
+        while (!queue.isEmpty()) {
+            T current = queue.dequeue();
+            topologicalOrdering.enqueue(current);
+
+            for (T v : G.getAdjacent(current)) {
+                reverseGraph.deleteEdge(v, current);
+
+                if (reverseGraph.getDegree(v) == 0)
+                    queue.enqueue(v);
+            }
+        }
+    }
+
+    
+    public Iterable<T> getTopologicalOrder() {
+        return topologicalOrdering;
     }
 }

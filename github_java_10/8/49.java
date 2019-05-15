@@ -1,82 +1,99 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.pr.corina.lab5pr.utils;
+package arrays;
 
-import com.pr.corina.lab5pr.utils.ChatConstants;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdRandom;
 
-/**
- *
- * @author corina
- */
-public class Levenshtein {
-    public static final int MAX_ADMISSIBLE_DISTANCE=3;
-    
-    public static List<String>commandsList;
-    static{
-        commandsList=new ArrayList<>();
-        commandsList.add(ChatConstants.CMD_HELLO);
-        commandsList.add(ChatConstants.CMD_HELP);
-        commandsList.add(ChatConstants.CMD_JOKE);
-        commandsList.add(ChatConstants.CMD_PASSWORD);
-        commandsList.add(ChatConstants.CMD_QUIT);
-        commandsList.add(ChatConstants.CMD_TIME);
+
+public class Quicksort {
+
+
+    private static void swap(int[] a, int l, int m){
+        int temp = a[l];
+        a[l] = a[m];
+        a[m] = temp;
     }
-    
-    
-    public static String getMinumumDistanceToComand(String receivedCommand){
-        int distance=10;
-        String minCommand=null;
-        for(String cmd:commandsList){
-            int localDist=calculate(receivedCommand, cmd);
-            if(localDist<distance){
-                distance=localDist;
-                minCommand=cmd;
+
+    public static int partition(int[] a, int lo, int hi){
+        int pivot = a[lo];
+        int j = lo;
+        for (int i = lo + 1 ; i <= hi; i++) {
+            if (a[i] < pivot){
+                swap(a, i, ++j);
             }
         }
-        if(distance<=MAX_ADMISSIBLE_DISTANCE)
-            return minCommand;
-        else
-            return null;
+        swap(a, j, lo);
+        return j;
     }
-    static int calculate(String x, String y) {
-        int[][] dp = new int[x.length() + 1][y.length() + 1];
 
-        for (int i = 0; i <= x.length(); i++) {
-            for (int j = 0; j <= y.length(); j++) {
-                if (i == 0) {
-                    dp[i][j] = j;
-                } else if (j == 0) {
-                    dp[i][j] = i;
-                } else {
-                    dp[i][j] = min(dp[i - 1][j - 1]
-                            + costOfSubstitution(x.charAt(i - 1), y.charAt(j - 1)),
-                            dp[i - 1][j] + 1,
-                            dp[i][j - 1] + 1);
-                }
+    public static void sort(int[] a){
+        
+        q_sort3way(a, 0, a.length - 1);
+    }
+
+
+    private static void q_sort3way(int[] a, int lo, int hi){
+        if (lo >= hi) return;
+        int i = lo + 1, l = lo, m = hi;
+        int pivot = a[lo];
+        int cmp;
+        while (i <= m){
+            cmp = Integer.compare(a[i], pivot);
+            if (cmp == 0){
+                i++;
+            }else if (cmp < 0){
+                Util.swap(a, i++, l++);
+            }else {
+                Util.swap(a, i, m--);
             }
         }
 
-        return dp[x.length()][y.length()];
+        q_sort3way(a, lo, l - 1);
+        q_sort3way(a, m + 1, hi);
     }
 
-    public static int costOfSubstitution(char a, char b) {
-        return a == b ? 0 : 1;
-    }
 
-    public static int min(int... numbers) {
-        return Arrays.stream(numbers)
-                .min().orElse(Integer.MAX_VALUE);
+    private static void sort(int[] a, int lo, int hi){
+        if (lo >= hi) return;
+
+        int p = partition(a, lo, hi);
+        sort(a, lo, p - 1);
+        sort(a, p + 1, hi);
     }
 
     public static void main(String[] args) {
-        int distance = calculate("hello", "ssfsgs");
-        System.out.println("Distance=" + distance);
+        int j = StdIn.readInt();
+        int N = StdRandom.uniform(j);
+        int[] a = new int[N];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = StdRandom.uniform(5*j);
+        }
+        System.out.println("Is sorted " + Util.isSorted(a));
+        System.out.println(Util.print(a));
+
+        sort(a);
+        System.out.println("Is sorted " + Util.isSorted(a));
+        System.out.println(Util.print(a));
     }
+
+
+    public int partitionGlobal(int[] a, int lo, int hi){
+        if (a == null ) return -1;
+        if (lo == hi) return lo;
+
+        int pivot = a[lo];
+
+        int i = lo;
+
+        for (int j = lo + 1; j <= hi ; j++) {
+            if (a[j] < pivot){
+                Util.swap(a, ++i, j);
+            }
+        }
+
+        swap(a, lo, i);
+
+        return i;
+    }
+
 
 }

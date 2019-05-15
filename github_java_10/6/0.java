@@ -1,89 +1,80 @@
-package com.jbwang.recursive;
+package sortingAlgorithms;
 
-/**
- * Created by jbwang0106 on 2017/5/15.
- */
-public class MergeSort {
 
-    public long [] theArray;
-    public int nElems;
+import java.io.*;
+import java.util.*;
 
-    public MergeSort(int maxSize) {
-        theArray = new long[maxSize];
-        nElems = 0;
+class Radix {
+
+    
+    static int getMax(int arr[], int n)
+    {
+        int mx = arr[0];
+        for (int i = 1; i < n; i++)
+            if (arr[i] > mx)
+                mx = arr[i];
+        return mx;
     }
 
-    public void insert(long value) {
-        theArray[nElems++] = value;
-    }
+    
+    
+    static void countSort(int arr[], int n, int exp)
+    {
+        int output[] = new int[n]; 
+        int i;
+        int count[] = new int[10];
+        Arrays.fill(count,0);
 
-    public void display() {
+        
+        for (i = 0; i < n; i++)
+            count[ (arr[i]/exp)%10 ]++;
 
-        for (int i = 0; i < nElems; i++) {
-            System.out.print(theArray[i] + " ");
-        }
-        System.out.println();
+        
+        
+        for (i = 1; i < 10; i++)
+            count[i] += count[i - 1];
 
-    }
-
-    public void mergeSort() {
-        long [] workArray = new long[nElems];
-        reMergeSort(workArray,0,nElems-1);
-    }
-
-    private void reMergeSort(long[] workArray, int lowerBound, int upperBound) {
-        if (lowerBound == upperBound)
-            return;
-        else {
-            int mid = (lowerBound + upperBound)/2;
-            reMergeSort(workArray, lowerBound, mid);
-            reMergeSort(workArray, mid+1, upperBound);
-            merge(workArray, lowerBound, mid+1, upperBound);
-        }
-    }
-
-    private void merge(long[] workArray, int lowerBound, int highPatr, int upperBound) {
-
-        int j = 0;
-        int mid = highPatr-1;
-        int low = lowerBound;
-        int n = upperBound - lowerBound + 1;
-
-        while (lowerBound <= mid && highPatr <= upperBound) {
-            if (theArray[lowerBound] < theArray[highPatr])
-                workArray[j++] = theArray[lowerBound++];
-            else
-                workArray[j++] = theArray[highPatr++];
+        
+        for (i = n - 1; i >= 0; i--)
+        {
+            output[count[ (arr[i]/exp)%10 ] - 1] = arr[i];
+            count[ (arr[i]/exp)%10 ]--;
         }
 
-        while (lowerBound <= mid)
-            workArray[j++] = theArray[lowerBound++];
-
-        while (highPatr <= upperBound)
-            workArray[j++] = theArray[highPatr++];
-
-        for (j = 0; j < n; j++) {
-            theArray[low+j] = workArray[j];
-        }
-
+        
+        
+        for (i = 0; i < n; i++)
+            arr[i] = output[i];
     }
 
-    public static void main(String [] args) {
-        MergeSort mergeSort = new MergeSort(100);
+    
+    
+    static void radixsort(int arr[], int n)
+    {
+        
+        int m = getMax(arr, n);
 
-        mergeSort.insert(27);
-        mergeSort.insert(76);
-        mergeSort.insert(45);
-        mergeSort.insert(86);
-        mergeSort.insert(34);
-        mergeSort.insert(17);
-        mergeSort.insert(87);
-        mergeSort.insert(65);
-        mergeSort.insert(59);
-        mergeSort.insert(97);
+        
+        
+        
+        for (int exp = 1; m/exp > 0; exp *= 10)
+            countSort(arr, n, exp);
+    }
 
-        mergeSort.mergeSort();
-        mergeSort.display();
+    
+    static void print(int arr[], int n)
+    {
+        for (int i=0; i<n; i++)
+            System.out.print(arr[i]+" ");
+    }
 
+
+    
+    public static void main (String[] args)
+    {
+        int arr[] = {170, 45, 75, 90, 802, 24, 2, 66};
+        int n = arr.length;
+        radixsort(arr, n);
+        print(arr, n);
     }
 }

@@ -1,63 +1,41 @@
-package com.level4;
+package clrs.sort;
 
-/**
- * Created by MyMac on 17/02/16.
- */
-public class Insertionsort {
+import java.util.Arrays;
 
-    public ListNode insertionSortList(ListNode a) {
+import clrs.heap.MaxHeap;
 
-        if(a==null || a.next==null){
-            return a;
+
+public class HeapSort {
+
+    
+    private MaxHeap maxHeap;
+
+    
+    public HeapSort(MaxHeap maxHeap) {
+        this.maxHeap = maxHeap;
+    }
+
+    
+    public void heapSort(int[] array) {
+        maxHeap.buildMaxHeap(array);
+
+        for (int i = array.length - 1; i > 0; i--) {
+            int temp = array[0];
+            array[0] = array[i];
+            array[i] = temp;
+            maxHeap.setHeapSize(maxHeap.getHeapSize() - 1);
+            maxHeap.maxHeapify(array, 0, maxHeap.getHeapSize());
         }
-        ListNode head=a,tmp=a.next;
-
-        while(tmp!=null) {
-            ListNode localtmp = a, prev = null;
-            ListNode nxt  = tmp.next;
-            ListNode hold=null;
-            int isIMd = 0;
-            while (localtmp != tmp) {
-
-                if (localtmp.val > tmp.val) {
-                    if (localtmp.next == tmp) {
-                        isIMd = 1;
-                    }else{
-                        isIMd=2;
-                    }
-                    hold = tmp.next;
-                    tmp.next = localtmp;
-                    if (prev != null) {
-                        prev.next = tmp;
-                    }else {
-                        a=tmp;
-                    }
-                    break;
-                }
-                prev = localtmp;
-                localtmp = localtmp.next;
-            }
-            if (isIMd==1) {
-                localtmp.next = hold;
-            } else if(isIMd==2) {
-                while (localtmp != null && localtmp.next != tmp) {
-                    localtmp = localtmp.next;
-                }
-                if (localtmp != null) {
-                    localtmp.next = hold;
-                }
-            }
-            tmp=nxt;
-        }
-        return a;
-
-        }
-
-
+    }
 
     public static void main(String[] args) {
-        ListNode in = ListNode.CreateListNode(new int[]{1});
-        Insertionsort is= new Insertionsort();
-        ListNode.print(is.insertionSortList(in));
+        int[] array = new int[] { 1, 16, 10, 8, 14, 9, 3, 2, 4, 7 };
+        int[] array1 = new int[] { 17, 27, 3, 16, 10, 13, 1, 5, 0, 12, 4, 8, 9, 7 };
+
+        HeapSort heapSort = new HeapSort(new MaxHeap());
+        heapSort.heapSort(array);
+        heapSort.heapSort(array1);
+        System.out.println(Arrays.toString(array));
+        System.out.println(Arrays.toString(array1));
     }
 }

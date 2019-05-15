@@ -1,50 +1,45 @@
-package com.minjoon.Sort.Bubble;
+package homework10;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Arrays;
 
-public class Bubble {
+public class BucketSort {
 
+	public static void sort(int[] arr) {
+		int maxVal = getMaxVal(arr);
+		int[] bucket = new int[maxVal + 1];
+
+		for (int i = 0; i < bucket.length; i++) {
+			bucket[i] = 0;
+		}
+
+		for (int i = 0; i < arr.length; i++) {
+			bucket[arr[i]]++;
+		}
+
+		int outPos = 0;
+		for (int i = 0; i < bucket.length; i++) {
+			for (int j = 0; j < bucket[i]; j++) {
+				arr[outPos++] = i;
+			}
+		}
+	}
+
+	private static int getMaxVal(int[] arr) {
+		int maxVal = arr[0];
+		for (int i = 1; i < arr.length; i++) {
+			if (arr[i] > maxVal) {
+				maxVal += arr[i];
+			}
+		}
+		return maxVal;
+	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		File file = new File("./Data.txt");
-		FileReader fr;
-		BufferedReader br;
+		int[] arr = { 10, 25, 31, 25, 44, 25, 26, 0, 10, 1, 25 };
 
-		String data = "";
-		String[] numberArr = {};
-		try {
-			fr = new FileReader(file);
-			br = new BufferedReader(fr);
-
-			data = br.readLine();
-			numberArr = data.split(" ");
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("before Bubble Sort");
-		for (String number : numberArr) {
-			System.out.print(number + " ");
-		}
-		System.out.println();
-
-		System.out.println("\nSorting....");
-		BubbleSort.sort(numberArr);
-		System.out.println("Done!.\n");
-
-		System.out.println("after Bubble Sort");
-		for (String number : numberArr) {
-			System.out.print(number + " ");
-		}
-		System.out.println();
+		System.out.println("Before: " + Arrays.toString(arr));
+		sort(arr);
+		System.out.println("After:  " + Arrays.toString(arr));
 	}
 
 }

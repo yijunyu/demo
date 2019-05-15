@@ -1,31 +1,101 @@
-import java.util.Arrays;
 
-public class Sort_InsertionSort {
-    public static void main(String[] args) {
+package heap;
 
-        // Относително ефективен при малки и почти сортирани списъци
-        // Взема всеки елемент един по-един от списъка и го вмъква на
-        // съответното си място в нов сортиран списък.
 
-        int[] array = {13, 4, 1, 2, 0, 16, 8, -3, -6};
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
-        InsertionSort(array);
-        System.out.println(Arrays.toString(array));
+public class Heap {
 
+    
+
+        
+        
+    private int array[];
+    public static int n; 
+    
+    public static void sort(int arr[])  
+    {
+            buildMaxHeap(arr);
+            
+            for(int i=arr.length-1; i>=0; i--){
+                int temp=arr[0];
+                arr[0] = arr[i];
+                arr[i]= temp;
+
+                n--;
+                
+                maxHeapify(arr,0);
+		}
     }
-    public static void InsertionSort(int[] array) {
-        for (int i = 1; i < array.length; i++) {
-            for (int j = i; j > 0; j--) {
-                if (array[j] < array[j - 1]) {
-                    swap(array, j, j - 1);
-                } else
-                    break;
+    
+    public static void maxHeapify(int[] arr, int i) 
+    {
+		int leftChild= (2*i)+1;
+		int rightChild=(2*i)+2;
+		
+                int max;
+                
+                if((leftChild < n) && (arr[leftChild] > arr[i])) 
+			max=leftChild;
+                else max = i;
+                
+		if( (rightChild < n) && (arr[rightChild] > arr[max])) 
+			max=rightChild;
+		
+                if(max!=i){
+			int temp = arr[max];
+			arr[max] = arr[i];
+			arr[i] = temp;
+                        maxHeapify(arr, max);
+		}
+	}  
+    
+    public static void main(String[] args)throws IOException {
+        try{
+            int size,c;
+            int array[];
+            
+            File input = new File("input.txt");         
+            File output = new File("output.txt");       
+            
+            Scanner sc = new Scanner(input);                
+            PrintWriter pw = new PrintWriter(output);
+            
+            size = sc.nextInt();
+            c=0;
+            array = new int [size];
+            
+            while(sc.hasNext()){
+            array[c++] = sc.nextInt();
             }
+            
+            sort(array);                    
+           
+             for(c = 0;c<array.length;c++){
+                 System.out.print(array[c]+" ");
+            }
+            System.out.println("");
+            
+            for(c = 0;c<array.length;c++){
+                pw.print(array[c]+" ");
+            }
+            pw.close();
+        }
+        catch(FileNotFoundException e){
+            System.out.print(e);
         }
     }
-    public static void swap(int[] array, int ind1, int ind2) {
-        int temp = array[ind1];
-        array[ind1] = array[ind2];
-        array[ind2] = temp;
+    
+    public static void buildMaxHeap(int [] array){
+    
+        n=array.length;
+        
+        for(int i=array.length/2; i>=0; i--){
+            maxHeapify(array, i);
+        }
     }
 }

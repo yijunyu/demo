@@ -1,136 +1,64 @@
-// Arnold Beckmann, 19.10.2010 (Swansea)
+import java.util.*;
 
-/*
-  File:  200910/Week01/Experiment.java
-  Descr: Experiments with sorting algorithms on sorted inputs
+public class Example {
 
-  "Experiment_up N" calls the sorting algorithm N times with upwards
-  sorted inputs; the statistics are output to standard output.
-*/
+   public static void main(String[] args) {
 
+      int[] arr = {99, 77, 55, 33, 11, 88, 66, 44, 22};
+      System.out.println("Unsorted: " + Arrays.toString(arr));
 
-class Experiment_up {
+      heapSort(arr);
+      System.out.println("Sorted  : " + Arrays.toString(arr));
+   }
 
-    protected static String program = "Experiment_up";
-    protected static String err = "ERROR[" + program + "]: ";
+   public static void heapSort(int[] arr) {
 
-    public static void main(String[] args) {
+      int size = arr.length;
 
-	//  this program requires one argument on the command line  
-        if (args.length != 1) {
-	    System.err.println(err + "Exactly one parameter is required, the number N of experiments.\n");
-	    return;
-	}
+      for (int i = size / 2 - 1; i >= 0; i--) {
+         heapify(i, arr, size);
+      }
 
-//	long end = System.currentTimeMillis()+2000;
-//	while (System.currentTimeMillis() < end) {};
+      for (int i = arr.length - 1; i >= 0; i--) {
+         swap(arr, 0, i);
+         size = size - 1;
+         heapify(0, arr, size);
+      }
 
-	int N = (Integer.valueOf(args[0]) ).intValue();
-	System.out.println("\n#  Insertion-sort on sorted lists\n");
+   }
 
-	System.out.println("  size executionTime\n");
-	for (int i = 0; i <= N; i++) {
-	    long[] A = Array_Generators.sorted_up(i);
-	    Insertion_Sort.insertion_sort(A);
-	}
+   public static void heapify(int i, int[] arr, int size) {
+      int largestIndex = i;
 
-    }
+      int leftIndex = leftChild(i);
+      if (leftIndex < size && arr[leftIndex] > arr[largestIndex]) {
+         largestIndex = leftIndex;
+      }
 
+      int rightIndex = rightChild(i);
+      if (rightIndex < size && arr[rightIndex] > arr[largestIndex]) {
+         largestIndex = rightIndex;
+      }
+
+      if (largestIndex != i) {
+         swap(arr, i, largestIndex);
+         heapify(largestIndex, arr, size);
+      }
+   }
+
+   static int leftChild(int i) {
+      return 2 * i + 1;
+   }
+
+   static int rightChild(int i) {
+      return 2 * i + 2;
+   }
+
+   static void swap(int[] arr, int index1, int index2) {
+      int temp = arr[index1];
+      arr[index1] = arr[index2];
+      arr[index2] = temp;
+   }   
 }
 
 
-
-/*
-  "Experiment_down N" calls the sorting algorithm N times with downwards
-  sorted inputs; the statistics are output to standard output.
-*/
-
-
-class Experiment_down {
-
-    protected static String program = "Experiment_down";
-    protected static String err = "ERROR[" + program + "]: ";
-
-    public static void main(String[] args) {
-
-	//  this program requires one argument on the command line  
-        if (args.length != 1) {
-	    System.err.println(err + "Exactly one parameter is required, the number N of experiments.\n");
-	    return;
-	}
-
-	int N = (Integer.valueOf(args[0]) ).intValue();
-	System.out.println("\n#  Insertion-sort on reverse sorted lists\n");
-
-	System.out.println("  size executionTime\n");
-	for (int i = 0; i <= N; i++) {
-	    long[] A = Array_Generators.sorted_down(i);
-	    Insertion_Sort.insertion_sort(A);
-	}
-
-    }
-
-}
-
-
-
-/*
-  "Experiment_rand N" calls the sorting algorithm N times with randomly
-  sorted inputs; the statistics are output to standard output.
-*/
-
-
-class Experiment_rand {
-
-    protected static String program = "Experiment_rand";
-    protected static String err = "ERROR[" + program + "]: ";
-
-    public static void main(String[] args) {
-
-	//  this program requires one argument on the command line  
-        if (args.length != 1) {
-	    System.err.println(err + "Exactly one parameter is required, the number N of experiments.\n");
-	    return;
-	}
-
-	int N = (Integer.valueOf(args[0]) ).intValue();
-	System.out.println("\n#  Insertion-sort on random lists\n");
-
-	System.out.println("  size executionTime\n");
-	for (int i = 0; i <= N; i++) {
-	    long[] A = Array_Generators.sorted_rand(i);
-	    Insertion_Sort.insertion_sort(A);
-	}
-
-    }
-
-}
-
-
-
-/*
-
-class ExecutionTimer {
-  private static long start;
-  private static long end;
-
-  public static void start() {
-    start = System.nanoTime();
-  }
-
-  public static void end() {
-    end = System.nanoTime();
-  }
-
-  public static long duration(){
-    return (end-start);
-  }
-
-  public static void reset() {
-    start = 0;  
-    end   = 0;
-  }
-
-}
-
-*/

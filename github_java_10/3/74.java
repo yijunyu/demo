@@ -1,43 +1,61 @@
-package HanoiTower;
+package search.search;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Stack;
 
-public class HanoiTower {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        List<String> a = new ArrayList<>();
-        List<String> b = new ArrayList<>();
-        List<String> c = new ArrayList<>();
-        String temp = scanner.next();
-        while (!temp.equals("stop")) {
-            a.add(temp);
-            temp = scanner.next();
+public class Topological {
+	
+	private int vertices;
+    private LinkedList<Integer> adj[];
+	
+	Topological(Graph g) {
+		vertices = g.getVertices();
+		adj = g.getAdjacencyList();
+	}
+
+    
+    void topologicalSortUtil(int v, boolean visited[],
+                             Stack<Integer> stack)
+    {
+        
+        visited[v] = true;
+        Integer i;
+ 
+        
+        
+        Iterator<Integer> it = adj[v].iterator();
+        while (it.hasNext())
+        {
+            i = it.next();
+            if (!visited[i])
+                topologicalSortUtil(i, visited, stack);
         }
-        hanoi(a.get(0), a, b, c);
-        System.out.println(c.toString());
+ 
+        
+        stack.push(new Integer(v));
     }
-
-    //TODO: variable names should contain more information, just type anme is not enough
-    //TODO: stack will be better
-    private static void hanoi(String string, List<String> home, List<String> helper, List<String> destination) {
-        int indexOfString = home.indexOf(string);
-        if (indexOfString == home.size() - 1) {
-            move(string, home, destination);
-        } else {
-            String childString = home.get(indexOfString + 1);
-            hanoi(childString, home, destination, helper);
-            move(string, home, destination);
-            hanoi(childString, helper, home, destination);
-        }
-    }
-
-    private static void move(String string, List<String> from, List<String> to) {
-        to.add(string);
-        from.remove(string);
-
-//        to.add(from.pop());//TODO
-
+ 
+    
+    
+    public void topologicalSort()
+    {
+        Stack<Integer> stack = new Stack<Integer>();
+ 
+        
+        boolean visited[] = new boolean[vertices];
+        for (int i = 0; i < vertices; i++)
+            visited[i] = false;
+ 
+        
+        
+        
+        for (int i = 0; i < vertices; i++)
+            if (visited[i] == false)
+                topologicalSortUtil(i, visited, stack);
+ 
+        
+        while (stack.empty()==false)
+            System.out.print(stack.pop() + " ");
     }
 }

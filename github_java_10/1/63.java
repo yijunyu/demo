@@ -1,66 +1,40 @@
-import java.util.InputMismatchException;
-        import java.util.LinkedList;
-        import java.util.Queue;
-        import java.util.Scanner;
+package org.colin.sort;
 
-public class BFS {
-
-    private Queue<Integer> queue;
-
-    public BFS() {
-        queue = new LinkedList<Integer>();
-    }
-
-    public void bfs(int adjacency_matrix[][], int source) {
-        int number_of_nodes = adjacency_matrix[source].length - 1;
-
-        int[] visited = new int[number_of_nodes + 1];
-        int i, element;
-
-        visited[source] = 1;
-        queue.add(source);
-
-        while (!queue.isEmpty()) {
-            element = queue.remove();
-            i = element;
-            System.out.print(i + "\t");
-            while (i <= number_of_nodes) {
-                if (adjacency_matrix[element][i] == 1 && visited[i] == 0) {
-                    queue.add(i);
-                    visited[i] = 1;
-                }
-                i++;
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        int number_no_nodes, source;
-        Scanner scanner = null;
-
-        try {
-            System.out.println("Enter the number of nodes in the graph");
-            scanner = new Scanner(System.in);
-            number_no_nodes = scanner.nextInt();
-
-            int adjacency_matrix[][] = new int[number_no_nodes + 1][number_no_nodes + 1];
-            System.out.println("Enter the adjacency matrix");
-            for (int i = 1; i <= number_no_nodes; i++)
-                for (int j = 1; j <= number_no_nodes; j++)
-                    adjacency_matrix[i][j] = scanner.nextInt();
-
-            System.out.println("Enter the source for the graph");
-            source = scanner.nextInt();
-
-            System.out.println("The BFS traversal of the graph is ");
-            BFS bfs = new BFS();
-            bfs.bfs(adjacency_matrix, source);
-
-        } catch (InputMismatchException inputMismatch) {
-            System.out.println("Wrong Input Format");
-        }
-        scanner.close();
-    }
+/**
+ * 插入排序
+ * 
+ * @author Colin{wjd.colin@gmail.com}
+ * @date Dec 5, 2014
+ */
+public class InsertionSort {
+	/**
+	 * 对输入的整型数组进行插入排序
+	 * 
+	 * @param arr
+	 *            待排序的整型数组
+	 */
+	public static void insertSort(int[] arr) {
+		// 认为第一个元素已经有序，从第二个元素开始取值插入已经有序的部分
+		for (int i = 1; i < arr.length; i++) {
+			// 待插入的元素
+			int key = arr[i];
+			// 待插入的位置下标
+			int index = i;
+			// 从后向前遍历数组已经有序的部分，寻找合适的插入位置
+			for (int j = i - 1; j >= 0; j--) {
+				// 如果待插入的元素较小，则将较大的元素依次向后移动，空出合适的插入位置
+				if (arr[j] > key) {
+					// 因为arr[j+1]=arr[i]=key，该元素已经临时存储在了key中，所以不会出现数据丢失
+					arr[j + 1] = arr[j];
+					// 记录下该位置的下标
+					index = j;
+				} else {
+					// 找到了合适的插入位置，则退出这个循环，开始取下一个元素，直到取完所有元素
+					break;
+				}
+			}
+			// 将该元素插入到合适的位置
+			arr[index] = key;
+		}
+	}
 }
-
-

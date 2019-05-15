@@ -1,37 +1,34 @@
-import java.util.Arrays;
 
-public class JavaBubbleSort{
-  public static int counter = 0;
 
-  public static int[] bubbleSort(int arr[]){
-    int n = arr.length;
-    boolean swapped = false;
-    for(int i=0;i<n-1;i++){
-      for(int j=0;j<n-i-1;j++){
-        counter++;
-        if(arr[j]>=arr[j+1]){
-          swapped = true;
-          int temp = arr[j];
-          arr[j] = arr[j+1];
-          arr[j+1] = temp;
+import java.util.*;
+ 
+public class BucketSort {
+    public static void sort(int[] a) {
+        int maxVal = 0;
+        for (int i = 0; i < a.length; i++) {
+            if (maxVal < a[i]) {
+                maxVal = a[i];
+            }
         }
-      }
-      if(swapped)break;break;
+        
+        int[] buckets = new int[maxVal + 1];
+        for (int i = 0; i < a.length; i++) {
+            buckets[a[i]]++;
+        }
+
+        int outPos = 0;
+        for (int i=0; i<buckets.length; i++) {
+            for (int j=0; j<buckets[i]; j++) {
+                a[outPos] = i;
+                outPos++;
+            }
+        }
     }
 
-    return arr;
-  }
-
-  public static  void main(String[] args){
-    JavaBubbleSort jbs = new JavaBubbleSort();
-    //int[] inputs = {2,4,6,2,1,20,45,3,6,5,7,9};
-    int[] inputs = {2,3,4,5,6,7,8,9,10,11,12,13};
-    inputs = jbs.bubbleSort(inputs);
-    print(inputs);
-  }
-
-  public static void print(int arr[]){
-    System.out.println(Arrays.toString(arr));
-    System.out.println(counter);
-  }
+    public static void main(String[] args) {
+        int[] data = {5,3,0,2,4,1,0,5,2,3,1,4};
+        System.out.println("Before: " + Arrays.toString(data));
+        sort(data);
+        System.out.println("After:  " + Arrays.toString(data));
+    }
 }

@@ -1,53 +1,68 @@
-package Sorting;
+import java.io.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.Scanner;
 
-/**
- * Created by parker on 4/10/18.
- */
-public class Insertion extends Sort{
+public class HeapSort 
+{
+    private static int[] a;
+    private static int n;
+    private static int left;
+    private static int right;
+    private static int largest;
 
-    public void sort(Object[] a, Comparator comparator)
-    {
-        for (int i = 1; i < a.length; i++)
-        {
-            for (int j = i; j >= 1; j--)
-            {
-                if (less(comparator, a[j], a[j - 1]))
-                {
-                    exchange(a, j, j - 1);
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
+    
+    public static void buildheap(int []a){
+    	n=a.length-1;
+    	for(int i=n/2;i>=0;i--){
+    		System.out.println(i);
+    		maxheap(a,i);
+    	}
     }
-
-    public static void main(String[] args) throws FileNotFoundException
-    {
-        Scanner scanner = new Scanner(new File(args[0]));
-        int size = scanner.nextInt();
-        Sort sort = new Insertion();
-
-        System.out.println("Total Ints: " + size);
-
-        Integer[] unsorted = new Integer[size];
-        for (int i = 0; i < size && scanner.hasNextInt(); i++)
-        {
-            unsorted[i] = scanner.nextInt();
-        }
-
-        BigDecimal start = new BigDecimal(System.currentTimeMillis());
-        sort.sort(unsorted);
-        BigDecimal end = new BigDecimal(System.currentTimeMillis());
-
-        BigDecimal time = (end.subtract(start).divide(new BigDecimal(1000)));
-        System.out.println("Sort Time: " + time);
+    
+    
+    public static void maxheap(int[] a, int i){
+    	left=2*i;
+    	right=2*i+1;
+    	System.out.println(i + " " + left + " " + right);
+    	if(left <= n && a[left] > a[i]){
+    		largest=left;
+    	}
+    	else{
+    		largest=i;
+    	}
+    	
+    	if(right <= n && a[right] > a[largest]){
+    		largest=right;
+    	}
+    	if(largest!=i){
+    		exchange(i,largest);
+    		maxheap(a, largest);
+    	}
     }
-}
+    
+    
+    public static void exchange(int i, int j){
+    	int t=a[i];
+    	a[i]=a[j];
+    	a[j]=t; 
+    	}
+    
+    
+    public static void sort(int []a0){
+    	a=a0;
+    	buildheap(a);
+    	
+    	for(int i=n;i>0;i--){
+    		exchange(0, i);
+    		n=n-1;
+    		maxheap(a, 0);
+    	}
+    }
+    
+    public static void main(String[] args) {
+		int []a1={3,5,1,2,4};
+    	sort(a1);
+    	for(int i=0;i<a1.length;i++){
+    		System.out.print(a1[i] + " ");
+    	}
+	}
+} 

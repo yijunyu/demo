@@ -1,56 +1,47 @@
-package de.soft.sortieralgorithmen;
+package sorting;
 
-/**
- * @author michaelhahn
- *
- */
-public class Insertionsort {
-	
-	private long sortTime;
-	private int[] data;
+class HeapSortJava {
 
-	/**
-	 * 
-	 */
-	public Insertionsort(int[] array) {
-		if(array != null) {
-			long start = System.currentTimeMillis();
-			
-			data = array;
-			insertionsort();
-			
-			sortTime = System.currentTimeMillis() - start;
-			
-		} else {
-			//Default Werte
-			sortTime = 0;
-			data = new int[] {0};
-		}
-	}
-	
-	private void insertionsort() {
-		int temp, j;
+  int[] doHeapSort(int[] arr) {
+    int n = arr.length;
+    
+    for (int i = n / 2 - 1; i >= 0; i--) {
+      heapify(arr, n, i);
+    }
+    
+    for (int i = n - 1; i >= 0; i--) {
+      int temp = arr[0];
+      arr[0] = arr[i]; 
+      arr[i] = temp;
+      
+      heapify(arr, i, 0);
+    }
+    return arr;
+  }
 
-		 for (int i=1; i < data.length; i++){
-		   temp = data[i];
-		   j = i-1;
+  
+  
+  private void heapify(int arr[], int n, int i) {
+    
+    
+    int largest = i; 
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
 
-		   while (j >= 0 && data[j] > temp){
-		     data[j + 1] = data[j];
-		     j--;
-		   }
+    if (l < n && arr[l] > arr[largest]) {
+      largest = l;
+    }
+    if (r < n && arr[r] > arr[largest]) {
+      largest = r;
+    }
+    
+    if (largest != i) {
+      int swap = arr[i];
+      arr[i] = arr[largest];
+      arr[largest] = swap;
+      
+      heapify(arr, n, largest);
+    }
+  }
 
-		   data[j+1] = temp;
-		 }
-	}
-	
-	public int[] getData() {
-		assert(data != null);
-		return data;
-	}
-	
-	public long getSortTime() {
-		assert(sortTime <= 0);
-		return sortTime;
-	}
 }

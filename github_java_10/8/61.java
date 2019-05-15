@@ -1,40 +1,58 @@
-public class EDIST {
 
-   static int min(int x, int y, int z) {
-      if (x < y && x < z) {
-         return x;
-      }
-      if (y < x && y < z) {
-         return y;
-      } else {
-         return z;
-      }
-   }
 
-   static int editDist(String str1, String str2, int m, int n) {
-      if (m == 0) {
-         return n;
-      }
+public class Quicksort {
 
-      if (n == 0) {
-         return m;
-      }
+	private int length;
+	private int pivot;
 
-      if (str1.charAt(m - 1) == str2.charAt(n - 1)) {
-         return editDist(str1, str2, m - 1, n - 1);
-      }
-      return 1 + min(editDist(str1, str2, m, n - 1),
-         editDist(str1, str2, m - 1, n),
-         editDist(str1, str2, m - 1, n - 1)
-      );
-   }
+	public void sort(int[] inputArr) {
 
-   public static void main(String args[]) {
-      String str1 = "sunday";
-      String str2 = "saturday";
+		if (inputArr == null || inputArr.length == 0) {
+			return;
+		}
+		int array[] = inputArr;
+		length = inputArr.length;
+		pivot = array.length - 1;
+		quickSort(array, length - 1);
+	}
 
-      System.out.println(editDist(str1, str2, str1.length(), str2.length()));
-   }
+	private void quickSort(int array[], int higherIndex) {
+
+		int i = 0;
+
+		if (array[i] > pivot) {
+			int temp = array[i];
+			for (int a = i; a < pivot; a++) {
+				array[a] = array[a + 1];
+				pivot = a;
+			}
+			array[array.length - 1] = temp;
+			i++;
+		}
+
+		if (0 < i) {
+			int newArray[] = new int[array.length - 2];
+			for (int a = 1; a < array.length; a++) {
+				newArray[a - 1] = array[a];
+			}
+			quickSort(newArray, higherIndex);
+		} else {
+			int newArray[] = new int[array.length - 2];
+			for (int a = 1; a < array.length; a++) {
+				newArray[a - 1] = array[a];
+			}
+			quickSort(array, higherIndex);
+		}
+	}
+
+	public static void main(String a[]) {
+
+		Quicksort sorter = new Quicksort();
+		int[] input = { 24, 2, 45, 20, 56, 75, 2, 56, 99, 53, 12 };
+		sorter.sort(input);
+		for (int i : input) {
+			System.out.print(i);
+			System.out.print(" ");
+		}
+	}
 }
-
-

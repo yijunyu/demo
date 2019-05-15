@@ -1,53 +1,73 @@
-package dp_2;
+package _SortingAndSeaechingAlgorithms;
 
-/**
- * Created by polarbear on 6/13/17.
- */
-public class EditDistance_Jul02 {
-    public static void main(String[] a) {//
-        EditDistance_Jul02 mySolution = new EditDistance_Jul02();
-        System.out.println(mySolution.editDistance("abbcc", "dbbcc"));
+import java.util.Arrays;
 
-        System.out.println(mySolution.editDistance("abcabc", "dabacd"));
-        System.out.println(mySolution.editDistance("abbcc", "dbbabc"));
+public class QuickSortJava {
 
+	public static void main(String[] args) {
+		
+		
+		int[] arr = {3, 44, 38, 5, 47, 15, 3, 36, 26, 27, 2, 46, 4, 19, 50, 48, 50};
+		System.out.println(Arrays.toString(arr));
+		
+		int low = 0;
+		int high = arr.length -1;
+		
+		quickSort(arr, low, high);
+		
+		System.out.println(Arrays.toString(arr));
+		
 
-    }
-    public int editDistance(String one, String two) {
-        if (one == null || two == null) {
-            return 0;
-        }
+	}
 
-        if (one.length() == 0) {
-            return two.length();
-        }
-        if (two.length() == 0) {
-            return one.length();
-        }
-
-        int[][] editDistance = new int[one.length() + 1][two.length() + 1];
-        for (int i = 0; i < editDistance.length; i++) {
-            for (int j = 0; j < editDistance[0].length; j++) {
-                if (i == 0 || j == 0) {
-                    editDistance[i][j] = Math.max(i, j);
-                } else {
-                    if (one.charAt(i - 1) == two.charAt(j - 1)) {
-                        editDistance[i][j] = editDistance[i - 1][j - 1];
-                    } else {
-                        int replace = 1 + editDistance[i - 1][j - 1];
-                        int insert = 1 + editDistance[i][j - 1];
-                        int delete = 1 + editDistance[i - 1][j];
-                        editDistance[i][j] = Math.min(Math.min(replace, delete), insert);
-                    }
-                }
-
-            }
-
-        }
-        return editDistance[editDistance.length - 1][editDistance[0].length - 1];
-
-    }
-
-
+	public static void quickSort(int[] arr, int low, int high) {
+		
+		
+		if(arr == null || arr.length == 0){
+			return;
+		}
+		
+		if(low > high){
+			return;
+		}
+		
+		
+		
+		int middle = low +(high - low)/ 2;
+		int pivot = arr[middle];
+		
+		
+		
+		int i = low;
+		int j = high;
+		
+		while(i <= j){
+			
+			while(arr[i] < pivot){
+				i++;
+			}
+			
+			while(arr[j] > pivot){
+				j--;
+			}
+			
+			if(i <= j){
+				int temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+				i++;
+				j--;
+			}
+		}
+		
+		if(low < j){
+			quickSort(arr, low, j);
+		}
+		
+		if(high > i){
+			quickSort(arr, i, high);
+		}
+		
+	}
 
 }

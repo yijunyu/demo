@@ -1,203 +1,162 @@
-package BinaryTree;
+package coursera_algorithms.sorting.mergesort;
 
-public class TreeAvl extends Tree 
-{
-	public Node Root;
-	
-	public int offSpring(Node node)
-	{
-		return (node.left != null) ? (node.right != null ? 2 : 1) : (node.right != null ? 1 : 0);
-	}
-	
-	public Node rightRotate(Node nodo)
-	{
-		Node temp = nodo.left;
-		Node temp2 = temp.right;
-		
-		temp.right = nodo;
-		nodo.left = temp2;
-		
-		nodo.altulra = max(nodo.left.altulra, nodo.right.altulra) + 1;
-		temp.altulra = max(temp.left.altulra, nodo.right.altulra) + 1;
-		
-		return temp;
-		
-	}
-	
-	public int getBalance(Node N) 
-	{
-	        if (N == null)
-	            return 0;
-	        else
-	        	return this.height(N.left) - this.height(N.right);
-	 }
-	public Node leftRotate(Node nodo)
-	{
-		Node temp = nodo.right;
-		Node Temp2 = temp.left;
-		
-		temp.left = nodo;
-		nodo.right = Temp2;
-		
-		nodo.altulra = max(this.height(nodo.left), this.height(nodo.right)) + 1;
-		temp.altulra = max(this.height(temp.left), this.height(nodo.right)) + 1;
-		
-		return temp;
-	}
-	
-	 public int height(Node N)
-	    {
-	        if (N == null)
-	             return 0;
-	         return N.altulra;
-	    }
-	
-	 public int max(int a, int b) 
-	 {
-		 return (a > b) ? a : b;
-	 }
-	 
-	public Node insert(Node root, int toAdd)
-	{
-		if(root == null)
-			return new Node(toAdd);
-		
-		if(toAdd < root.value)
-			root.left = this.insert(root.left, toAdd);
-		else if(toAdd > root.value)
-			root.right = this.insert(root.right, toAdd);
-		else
-			return root;
-		
-		root.altulra = 1 + max(this.height(root.left), this.height(root.right));
-		
-		int balance = getBalance(root);
-		
-		 if (balance > 1 && toAdd < root.left.value)
-			 return rightRotate(root);
-		 
-		 if (balance < -1 && toAdd > root.right.value)
-			 return leftRotate(root);
-		
-		 if (balance > 1 && toAdd > root.left.value) 
-		 {
-			 root.left = leftRotate(root.left);
-			 return rightRotate(root);
-	     }
-		 if (balance < -1 && toAdd < root.left.value) 
-		 {
-			 root.right = rightRotate(root.right);
-			 return	leftRotate(root);
-	     }
-		 
-		 return root;
-	}
-	
-	public Node delete(Node root, int toDelete)
-	{
-		if(root == null)
-			return root;
-		if( toDelete < root.value)
-			root.left =  this.delete(root.left, toDelete);
-		else if(toDelete > root.value)
-			root.right = this.delete(root.right, toDelete);
-		else
-		{
-			 if (root.left == null)
-	                return root.right;
-	            else if (root.right == null)
-	                return root.left;
-	 
-			  Node temp = minValueNode(root.right);
-              root.value= temp.value;
-	      
-	            root.right = delete(temp, root.value);    
-		}
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
-		
-        root.altulra = max(height(root.left), height(root.right)) + 1;
- 
-        int balance = getBalance(root);
- 
-        if (balance > 1 && getBalance(root.left) >= 0)
-            return rightRotate(root);
+import org.apache.commons.io.IOUtils;
 
-        if (balance > 1 && getBalance(root.left) < 0)
-        {
-            root.left = leftRotate(root.left);
-            return rightRotate(root);
+import coursera_algorithms.allClasses.alg4.MergeX;
+import coursera_algorithms.allClasses.stdlib.StdOut;
+
+
+
+
+
+public class Merge {
+
+    
+    private Merge() { }
+
+    
+    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+
+        
+        assert isSorted(a, lo, mid);
+        assert isSorted(a, mid+1, hi);
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k]; 
         }
- 
-        if (balance < -1 && getBalance(root.right) <= 0)
-            return leftRotate(root);
- 
-        if (balance < -1 && getBalance(root.right) > 0)
-        {
-            root.right = rightRotate(root.right);
-            return leftRotate(root);
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)              a[k] = aux[j++];   
+            else if (j > hi)               a[k] = aux[i++];
+            else if (less(aux[j], aux[i])) a[k] = aux[j++];
+            else                           a[k] = aux[i++];
         }
- 
-		return root;
+
+        
+        assert isSorted(a, lo, hi);
+    }
+
+    
+    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, aux, lo, mid);
+        sort(a, aux, mid + 1, hi);
+        merge(a, aux, lo, mid, hi);
+    }
+
+    
+    public static void sort(Comparable[] a) {
+        Comparable[] aux = new Comparable[a.length];
+        sort(a, aux, 0, a.length-1);
+        assert isSorted(a);
+    }
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
+    }
+
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+   
+    
+    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
+
+        
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = index[k]; 
+        }
+
+        
+        int i = lo, j = mid+1;
+        for (int k = lo; k <= hi; k++) {
+            if      (i > mid)                    index[k] = aux[j++];
+            else if (j > hi)                     index[k] = aux[i++];
+            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
+            else                                 index[k] = aux[i++];
+        }
+    }
+
+    
+    public static int[] indexSort(Comparable[] a) {
+        int N = a.length;
+        int[] index = new int[N];
+        for (int i = 0; i < N; i++)
+            index[i] = i;
+
+        int[] aux = new int[N];
+        sort(a, index, aux, 0, N-1);
+        return index;
+    }
+
+    
+    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        sort(a, index, aux, lo, mid);
+        sort(a, index, aux, mid + 1, hi);
+        merge(a, index, aux, lo, mid, hi);
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) throws IOException {
+
+
+
+
+
+
+
+
+
+    	String[] a = readStrings();
+    	
+       
+        Merge.sort(a);
+        show(a);
+    }
+
+	public static String[] readStrings() throws IOException,
+			FileNotFoundException {
+		String[] a =  IOUtils.toString(new FileInputStream("F:\\E-Books + Learning stuff\\Coursera-Algorithms\\Algorithms I\\Algorithms-DATA\\algs4-data\\words3.txt")).split("\\p{javaWhitespace}+");
+		return a;
 	}
-	 Node minValueNode(Node node)
-	    {
-	        Node current = node;
-	        while (current.left != null)
-	           current = current.left;
-	        return current;
-	    }
-	 void preOrder(Node node)
-	    {
-	        if (node != null)
-	        {
-	            System.out.print(node.value + " ");
-	            preOrder(node.left);
-	            preOrder(node.right);
-	        }
-	    }
-	 
-	    public static void main(String[] args)
-	    {
-	        TreeAvl tree = new TreeAvl();
-	 
-	        /* Constructing tree given in the above figure */
-	        tree.root = tree.insert(tree.root, 9);
-	        tree.root = tree.insert(tree.root, 5);
-	        tree.root = tree.insert(tree.root, 10);
-	        tree.root = tree.insert(tree.root, 0);
-	        tree.root = tree.insert(tree.root, 6);
-	        tree.root = tree.insert(tree.root, 11);
-	        tree.root = tree.insert(tree.root, -1);
-	        tree.root = tree.insert(tree.root, 1);
-	        tree.root = tree.insert(tree.root, 2);
-	 
-	        /* The constructed AVL Tree would be
-	           9
-	          /  \
-	         1    10
-	        /  \    \
-	        0    5    11
-	        /    /  \
-	        -1   2    6
-	         */
-	        System.out.println("Preorder traversal of "+
-	                            "constructed tree is : ");
-	        tree.preOrder(tree.root);
-	 
-	        tree.root = tree.delete(tree.root, 10);
-	 
-	        /* The AVL Tree after deletion of 10
-	           1
-	          /  \
-	         0    9
-	        /     / \
-	        -1    5   11
-	        /  \
-	        2    6
-	         */
-	        System.out.println("");
-	        System.out.println("Preorder traversal after "+
-	                           "deletion of 10 :");
-	        tree.preOrder(tree.root);
-	    }
+	
+	
 }

@@ -1,52 +1,36 @@
-package pathfinder.algorithm;
+package SortingProgrammms;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
-import pathfinder.representations.graph.IGraph;
-import pathfinder.representations.graph.Path;
-
-//Straight-forward BFS implementation using a queue
-public class BreadthFirstSearch<E> extends AbstractPathFinder<E> {
-	final private Queue<E> _q;
+public class insertionsort {
 	
-	public BreadthFirstSearch() {
-		super();
-		
-		_q = new LinkedList<E>();
-	}
-	@Override
-	public Path<E> run(IGraph<E> graph, E origin, E destination) {
-		initialize(graph, origin, destination);
-		
-		_q.add(_origin);
-		markVertexAsVisited(_origin);
-		
-		while(!_q.isEmpty()) {
-			E current = _q.remove();
-			
-			//terminates if destination is found
-			if (current.equals(destination)) {
-				_foundDestination = true;
-				break;
-			}
-			
-			// iterate over current neighbors
-			for (E neigh : _graph.adj(current)) {
-				if (!vertexIsVisited(neigh)) {
-					markVertexParent(neigh, current);
-					markVertexAsVisited(neigh);
-					_q.add(neigh);
-				}
-			}
-		}
-		
-		//if the destination has been found, generate the path
-		if (_foundDestination) {
-			generatePath();
-		}
+	public class MyInsertionSort {
+		 
+	    public  void main(String[] args) {
+	         
+	        int[] input = { 4, 2, 9, 6, 23, 12, 34, 0, 1 };
+	        insertionSort(input);
+	    }
+	     
+	    private  void printNumbers(int[] input) {
+	         
+	        for (int i = 0; i < input.length; i++) {
+	            System.out.print(input[i] + ", ");
+	        }
+	        System.out.println("\n");
+	    }
+	 
+	    public  void insertionSort(int array[]) {
+	        int n = array.length;
+	        for (int j = 1; j < n; j++) {
+	            int key = array[j];
+	            int i = j-1;
+	            while ( (i > -1) && ( array [i] > key ) ) {
+	                array [i+1] = array [i];
+	                i--;
+	            }
+	            array[i+1] = key;
+	            printNumbers(array);
+	        }
+	    }
+	
 
-		// TODO throw some exception here
-		return _path;
-	}
-}
+	}}

@@ -1,46 +1,65 @@
 import java.util.*;
+ 
+class Radix {
+ 
+    
+    static int getMax(int arr[], int n)
+    {
+        int mx = arr[0];
+        for (int i = 1; i < n; i++)
+            if (arr[i] > mx)
+                mx = arr[i];
+        return mx;
+    }
+ 
+    static void countSort(int arr[], int n, int exp)
+    {
+        int output[] = new int[n];
+        int i;
+        int count[] = new int[10];
+        Arrays.fill(count,0);
+ 
+        for (i = 0; i < n; i++)
+            count[ (arr[i]/exp)%10 ]++;
+ 
+        for (i = 1; i < 10; i++)
+            count[i] += count[i - 1];
+ 
+        for (i = n - 1; i >= 0; i--)
+        {
+            output[count[ (arr[i]/exp)%10 ] - 1] = arr[i];
+            count[ (arr[i]/exp)%10 ]--;
+        }
+ 
+        for (i = 0; i < n; i++)
+            arr[i] = output[i];
+    }
+ 
+    static void radixsort(int arr[], int n)
+    {
 
-public class Mergesort {
-	
-	public List<Integer> mergesort(List<Integer> left, List<Integer> right) {
-		List<Integer> result = new ArrayList<Integer>();
-		int leftSize = left.size();
-		int rightSize = right.size();
-		if(leftSize == 1 && rightSize==1) {
-			int leftNum = left.remove(0);
-			int rightNum = right.remove(0);
-			
-			if(leftNum<rightNum) {
-				result.add(leftNum);
-				result.add(rightNum);				
-			} else {
-				result.add(rightNum);
-				result.add(leftNum);				
-			}
-		}
-		
-		List<Integer> newLeft = mergesort(left.subList(0,leftSize/2), left.subList(leftSize/2, leftSize));
-		List<Integer> newRight = mergesort(right.subList(0,leftSize/2), right.subList(leftSize/2, leftSize));
-		
-		
-		while(newLeft.size() > 0 || newRight.size() > 0) {
-			if(newLeft.get(0) < newRight.get(0)) {
-				result.add(newLeft.remove(0));
-			} else {
-				result.add(newRight.remove(0));
-			}		
-		}
-		if(newLeft.size()!=0) {
-			while(newLeft.size()>0) {
-				result.add(newLeft.remove(0));
-			}
-		} else {
-			while(newRight.size()>0) {
-				result.add(newRight.remove(0));
-			}
-		}
-		
-		return result;
-	}
-	
+        int m = getMax(arr, n);
+ 
+
+        for (int exp = 1; m/exp > 0; exp *= 10)
+            countSort(arr, n, exp);
+    }
+ 
+
+    static void print(int arr[], int n)
+    {
+        for (int i=0; i<n; i++)
+            System.out.print(arr[i]+" ");
+    }
+ 
+
+
+    public static void main (String[] args)
+    {
+        int arr[] = {170, 45, 75, 90, 802, 24, 2, 66};
+        int n = arr.length;
+        radixsort(arr, n);
+        print(arr, n);
+    }
 }
+

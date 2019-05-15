@@ -1,80 +1,78 @@
-package com.compit.programming.basics.sort;
+import java.util.ArrayList;
 
-import java.util.Random;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 
-/**
- * @author: chaudharimehul
- * @date:	Jun 1, 2017
- * 
- * Bubble Sort
- * 
- * Time taken to sort 1000000 random numbers 2511233 milliseconds = 41.85388333 minutes
- * Sorted txt file size on MAC - 8.5M
- */
-public class Bubble {
+public class Bucketsort {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//int[] arrayToBeSorted = {20, 29, 2, 3, 6, 1, 9, 2, 90, 35, 100, 55, 200, 75, 25, 32};
-		//FileWriter 
-		int[] arrayToBeSorted = new int[1000000];
-		
-		Random rand = new Random();
-		
-		String fileName = "bubbleSortedValues" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) +".txt";
-		BufferedWriter bfw = null;
-		FileWriter fwr = null;
-				
-		
-		System.out.println("Random Number generation started:");
-		for(int i = 0 ; i < arrayToBeSorted.length ; i ++){
-			arrayToBeSorted[i] = rand.nextInt(1000000);
+	
+	ArrayList<Double> input;
+	
+	ArrayList<ArrayList<Double>> bucket;
+
+	
+	private void generateArray(int s) {
+		this.input = new ArrayList<Double>();
+		for (int i = 0; i < s; i++) {
+			this.input.add(Math.random());
 		}
-		System.out.println("Random number generation complete:");
-		
-		int swap;
-		boolean bSortingTakenPlace;
-		long startTime = System.currentTimeMillis();
-
-		for(int i = 0; i < arrayToBeSorted.length ; i++ ){
-			
-			bSortingTakenPlace = false;
-			
-			for(int j = 0 ; j < arrayToBeSorted.length-1 ; j++){
-				if( arrayToBeSorted[j] > arrayToBeSorted[j+1]){
-					swap	=	arrayToBeSorted[j+1];
-					arrayToBeSorted[j+1] = arrayToBeSorted[j];
-					arrayToBeSorted[j] = swap;
-					bSortingTakenPlace = true; 
-				}
-			}
-			
-			if(!bSortingTakenPlace){
-				System.out.println("Iteration taken for sorting: " + i);
-				break;
-			}
-		}
-		System.out.println("Time Taken to bubble sort array:" + (System.currentTimeMillis() - startTime) );
-		try{
-			fwr = new FileWriter(fileName);
-			bfw = new BufferedWriter(fwr);
-			for(int  i = 0 ; i < arrayToBeSorted.length ; i++){
-				bfw.write("[" + arrayToBeSorted[i] + "],");
-			}
-			bfw.write("\n");
-			bfw.close();
-			fwr.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
+		bucket = new ArrayList<ArrayList<Double>>();
+		for (int k = 0; k < s; k++) {
+			bucket.add(new ArrayList<Double>());
 		}
 	}
 
+	
+	public void createBuckets(int n) {
+		bucket = new ArrayList<ArrayList<Double>>();
+		for (int k = 0; k < n; k++) {
+			bucket.add(new ArrayList<Double>());
+		}
+		double nd = n;
+		double range = 1 / nd;
+		for (int i = 0; i < n; i++) {
+			int idx = (int) ((Math.ceil((this.input.get(i) / range)) - 1));
+			int curSize = bucket.get(idx).size();
+			if (curSize == 0) {
+				bucket.get(idx).add(this.input.get(i));
+			} else {
+				bucket.get(idx).add(this.input.get(i));
+				QuickSort qSorter = new QuickSort();
+				qSorter.input = bucket.get(idx);
+				qSorter.sort(0, qSorter.input.size() - 1);
+			}
+
+		}
+
+	}
+
+	
+	private ArrayList<Double> flatten(int n) {
+		ArrayList<Double> f = new ArrayList<Double>();
+		for (int i = 0; i < n; i++) {
+			f.addAll(this.bucket.get(i));
+		}
+		return f;
+	}
+
+	
+	public static void main(String[] args) {
+		try {
+			Bucketsort sorter = new Bucketsort();
+			int n = Integer.parseInt(args[0]);
+			sorter.generateArray(n);
+
+			
+			long startTime = System.nanoTime();
+			sorter.createBuckets(n);
+			long endTime = System.nanoTime();
+			System.out.println(endTime - startTime);
+
+			if (n < 100) {
+				System.out.println(sorter.flatten(n));
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("pleae insert a valid input");
+
+		}
+
+	}
 }

@@ -1,89 +1,95 @@
-/**
-* Insertion Sort using Linked List.
-*
-* @author Kalina Majewska
-*/
+import java.time.*;
 
+class heapsort {
 
-import java.io.*;
-import java.util.*;
+    public static void main(String[] args) 
+    {
+        tester(1000);
+        tester(1000000);
+        tester(10000000);
+        tester(100000000);
+        tester(1000000000);
+    }
 
+    private static double[] makeRandom(int n) 
+    {
+        double[] toBeSorted = new double[n+1];
+        for(int k = 1; k < toBeSorted.length; k++)	
+            toBeSorted[k] = Math.random() * (n); 
+        return toBeSorted;
+    }
 
-class listNode {
-	
-	protected String data; 
-	protected listNode next;
-	
-	public listNode(){
-		this(null);
-	} //default constructor
-	
-	public listNode(String data){
-		this.data = data;
-	} //constructor with manually entered data
-}
-
-
-class linkedList {
-
-	protected listNode listHead, walker;
-	
-	public linkedList(){
-		listHead = new listNode("dummy");
-	} //constructor
-	
-	public void listInsert(String ndata){
-		listNode newNode;
-		walker = listHead;
-		if(walker.next != null && ndata.length() > walker.next.data.length()){
-			walker = walker.next;
-		}
-		newNode = new listNode(ndata);
-		newNode.next = walker.next;
-		walker.next = newNode;
+    private static void sort(double[] A) 
+    {
+        buildHeap(A);
+        for(int k = A.length; k > 1; k--)
+        {
+        	heapify(A, 1, k);
+        	swap(A,1,k-1);
+        }    
 	}
-	
-	public boolean isEmpty(){
-		return listHead == null;
-	}//isEmpty
-	
-	public String printList(){
-		listNode curr = listHead;
-		String Llist = "listHead";
-		while(curr != null && curr.next != null){
-			Llist += " --> (";
-			Llist += curr.data;
-			Llist += ", ";
-			Llist += curr.next.data;
-			Llist += ")";
-		
-			curr = curr.next;
-		}
-		Llist += System.lineSeparator();
-		return Llist;
-	}	
-}
 
+    private static void buildHeap(double[] A) 
+    {
+        for(int k = A.length/2; k >0; k--)
+        {
+            heapify(A, k, A.length); 
+        }
+    }
 
-public class Project1Java {
+    private static void heapify(double[] A, int k, int index) 
+    
+    {
+        int lchild = 2*k; 
+        int rchild = 2*k+1;
+        int max;
+        if((lchild < index) && (A[lchild]>A[k])) 
+        {
+        	max = lchild;
+        } else {
+        	max = k;
+        }
+        if(rchild < index && A[rchild]>A[max]) 
+           	max = rchild;
+        if(max != k) 
+        {
+        	swap(A,max,k);
+        	heapify(A, max, index);
+        }
+    }
 
-	public static void main(String[] args) throws FileNotFoundException{
-		
-		linkedList sList = new linkedList();
-		Scanner inFile = new Scanner(new FileReader(args[0]));
-		PrintWriter outFile = new PrintWriter(args[1]);
-		
-		String word;
-		String output;
-		while(inFile.hasNext()){
-			word = inFile.next();
-			
-			sList.listInsert(word);
-			output = sList.printList();
-			outFile.print(output);
-		}
-		
-		inFile.close();
-		outFile.close();
-	}
+    private static boolean isSorted(double[] A) 
+    
+    {
+        for(int k = 1; k < A.length; k++)
+        {
+            if(A[k]<A[k-1])
+                return false;
+        }
+        return true;
+    }
+
+    private static void swap(double[] A, int p, int q) 
+    {
+        double temp = A[p];
+        A[p] = A[q];
+        A[q] = temp;
+    }
+
+    private static int tester(int n) 
+    {
+        double[] test = makeRandom(n);  
+        long startTime = System.currentTimeMillis(); 
+        sort(test);
+        long endTime = System.currentTimeMillis();
+        long timeElapsed = endTime-startTime;
+        if(!isSorted(test)) 
+        {
+            System.out.println("Sort failed");
+        	return 1;
+        }
+        System.out.println("Sorting of "+n+" integers completed successfully in " +timeElapsed+ " milliseconds");
+        
+        return 0;
+    }
 }

@@ -1,24 +1,23 @@
-package algorithms.hb.advanced.depthfirstsearch.depthfirstsearch;
+import java.util.Scanner;
 
-public class App {
+class TestClass {
+    static void bubbleSort(int[] arr, int n) {
+        for (int i = 0; i < n - 1; i++) {
+            for (int index = n - 1; index >= i + 1; index--) {
+                if (arr[index] < arr[index - 1]) {
+                    int temp = arr[index];
+                    arr[index] = arr[index - 1];
+                    arr[index - 1] = temp;
+                }
+            }
+        }
+    }
 
-	public static void main(String[] args) {
-		
-		
-		
-		Vertex vertex1 = new Vertex("1");
-		Vertex vertex2 = new Vertex("2");
-		Vertex vertex3 = new Vertex("3");
-		Vertex vertex4 = new Vertex("4");
-		Vertex vertex5 = new Vertex("5");
-		
-		vertex1.addNeighbour(vertex2);
-		vertex1.addNeighbour(vertex4);
-		vertex4.addNeighbour(vertex5);
-		vertex2.addNeighbour(vertex3);
-		
-//		DepthFirstSearch depthFirstSearch = new DepthFirstSearch();
-//		depthFirstSearch.dfsNormal(vertex1);
-
-	}
+    public static void main(String[] args) {
+        int[] arr = {31, 41, 59, 26, 41, 58};
+        bubbleSort(arr, arr.length);
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
 }

@@ -1,30 +1,40 @@
-package com.company;
+package algorithms.sort;
 
-import java.util.*;
-
-/**
- * Created by volodyko on 14.02.17.
- */
-public class BFSMain {
-    public static void main(String[] args) {
-        BFS bfs = new BFS();
-
-        bfs.addVertex("S");
-        bfs.addVertex("A");
-        bfs.addVertex("B");
-        bfs.addVertex("C");
-        bfs.addVertex("D");
-
-
-        bfs.addEdege(bfs.getVertex("S"), bfs.getVertex("A"));
-        bfs.addEdege(bfs.getVertex("S"), bfs.getVertex("B"));
-        bfs.addEdege(bfs.getVertex("S"), bfs.getVertex("C"));
-        bfs.addEdege(bfs.getVertex("A"), bfs.getVertex("D"));
-        bfs.addEdege(bfs.getVertex("B"), bfs.getVertex("D"));
-        bfs.addEdege(bfs.getVertex("C"), bfs.getVertex("D"));
-
-        bfs.bfs();
-
-    }
+public class SortInsertionSort {
+	
+	
+public static void main(String args[]){
+		
+		int arr[] = {30,6,2,3,4,6,7,8,10,20,11,5,5,30};
+		
+	    int n = arr.length;
+	    
+	    
+	    for (int i=1; i<n; i++)
+        {
+            int key = arr[i]; 
+             
+            int j = i-1;
+            
+            
+            while (j>=0 && arr[j] > key)  
+            {
+                arr[j+1] = arr[j];
+                
+                j--;
+            }
+            
+            arr[j+1] = key;            
+        }
+	    
+	    
+	  System.out.println(" Sorted Array: " );  
+	  
+	  for(int m=0; m < n; m++){
+		  
+		  System.out.print(" "+ arr[m]);
+	  }
+	  			
+	}
 
 }

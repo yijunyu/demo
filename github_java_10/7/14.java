@@ -1,73 +1,76 @@
-package org.algo.utils;
+package edu.princeton.algs4;
+
+import edu.princeton.stdlib.StdIn;
+import edu.princeton.stdlib.StdOut;
 
 
-/*************************************************************************
- *  Compilation:  javac Topoological.java
- *  Dependencies: Digraph.java DepthFirstOrder.java DirectedCycle.java
- *                EdgeWeightedDigraph.java EdgeWeightedDirectedCycle.java
- *  Data files:   http://algs4.cs.princeton.edu/42directed/jobs.txt
- *
- *  Compute topological ordering of a DAG or edge-weighted DAG.
- *  Runs in O(E + V) time.
- *
- *  % java Topological jobs.txt "/"
- *  Calculus
- *  Linear Algebra
- *  Introduction to CS
- *  Programming Systems
- *  Algorithms
- *  Theoretical CS
- *  Artificial Intelligence
- *  Machine Learning
- *  Neural Networks
- *  Robotics
- *  Scientific Computing
- *  Computational Biology
- *  Databases
- *
- *
- *************************************************************************/
 
-public class Topological {
-    private Iterable<Integer> order;    // topological order
+public class Shell {
 
-    // topological sort in a digraph
-    public Topological(Digraph G) {
-        DirectedCycle finder = new DirectedCycle(G);
-        if (!finder.hasCycle()) {
-            DepthFirstOrder dfs = new DepthFirstOrder(G);
-            order = dfs.reversePost();
+    
+    public static void sort(Comparable[] a) {
+        int N = a.length;
+
+        
+        int h = 1;
+        while (h < N/3) h = 3*h + 1; 
+
+        while (h >= 1) {
+            
+            for (int i = h; i < N; i++) {
+                for (int j = i; j >= h && less(a[j], a[j-h]); j -= h) {
+                    exch(a, j, j-h);
+                }
+            }
+            assert isHsorted(a, h); 
+            h /= 3;
+        }
+        assert isSorted(a);
+    }
+
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        for (int i = 1; i < a.length; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+    
+    private static boolean isHsorted(Comparable[] a, int h) {
+        for (int i = h; i < a.length; i++)
+            if (less(a[i], a[i-h])) return false;
+        return true;
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
         }
     }
 
-    // topological sort in an edge-weighted digraph
-    public Topological(EdgeWeightedDigraph G) {
-        EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
-        if (!finder.hasCycle()) {
-            DepthFirstOrder dfs = new DepthFirstOrder(G);
-            order = dfs.reversePost();
-        }
-    }
-
-    // return topological order if a DAG; null otherwise
-    public Iterable<Integer> order() {
-        return order;
-    }
-
-    // does digraph have a topological order?
-    public boolean hasOrder() {
-        return order != null;
-    }
-
-
+    
     public static void main(String[] args) {
-        String filename  = args[0];
-        String delimiter = args[1];
-        SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
-        Topological topological = new Topological(sg.G());
-        for (int v : topological.order()) {
-            StdOut.println(sg.name(v));
-        }
+        String[] a = StdIn.readStrings();
+        Shell.sort(a);
+        show(a);
     }
 
 }

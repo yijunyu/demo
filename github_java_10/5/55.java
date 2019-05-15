@@ -1,76 +1,65 @@
-package algrithm.sedgewick.graph.undirected;
 
-import fundamental.programmodel.In;
-import fundamental.programmodel.StdOut;
 
-public class DepthFirstSearch {
-	private boolean[] marked; // marked[v] = is there an s-v path?
-	private int count; // number of vertices connected to s
+package com.oracle.graal.jtt.micro;
 
-	/**
-	 * Computes the vertices in graph <tt>G</tt> that are connected to the
-	 * source vertex <tt>s</tt>.
-	 * 
-	 * @param G
-	 *            the graph
-	 * @param s
-	 *            the source vertex
-	 */
-	public DepthFirstSearch(Graph G, int s) {
-		marked = new boolean[G.V()];
-		dfs(G, s);
-	}
+import com.oracle.graal.jtt.*;
+import org.junit.*;
 
-	// depth first search from v
-	private void dfs(Graph G, int v) {
-		count++;
-		marked[v] = true;
-		for (int w : G.adj(v)) {
-			if (!marked[w]) {
-				dfs(G, w);
-			}
-		}
-	}
+public class Bubblesort extends JTTTest {
 
-	/**
-	 * Is there a path between the source vertex <tt>s</tt> and vertex
-	 * <tt>v</tt>?
-	 * 
-	 * @param v
-	 *            the vertex
-	 * @return <tt>true</tt> if there is a path, <tt>false</tt> otherwise
-	 */
-	public boolean marked(int v) {
-		return marked[v];
-	}
+    public static int test(int num) {
+        final int[] array = {23, 8, -9, 5, 882, 0, 0, 1};
 
-	/**
-	 * Returns the number of vertices connected to the source vertex <tt>s</tt>.
-	 * 
-	 * @return the number of vertices connected to the source vertex <tt>s</tt>
-	 */
-	public int count() {
-		return count;
-	}
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[j] < array[i]) {
+                    final int tmp = array[i];
+                    array[i] = array[j];
+                    array[j] = tmp;
+                }
+            }
+        }
+        return array[num];
+    }
 
-	/**
-	 * Unit tests the <tt>DepthFirstSearch</tt> data type.
-	 */
-	public static void main(String[] args) {
-		In in = new In(args[0]);
-		Graph G = new Graph(in);
-		int s = Integer.parseInt(args[1]);
-		DepthFirstSearch search = new DepthFirstSearch(G, s);
-		for (int v = 0; v < G.V(); v++) {
-			if (search.marked(v))
-				StdOut.print(v + " ");
-		}
+    @Test
+    public void run0() throws Throwable {
+        runTest("test", 0);
+    }
 
-		StdOut.println();
-		if (search.count() != G.V())
-			StdOut.println("NOT connected");
-		else
-			StdOut.println("connected");
-	}
+    @Test
+    public void run1() throws Throwable {
+        runTest("test", 1);
+    }
+
+    @Test
+    public void run2() throws Throwable {
+        runTest("test", 2);
+    }
+
+    @Test
+    public void run3() throws Throwable {
+        runTest("test", 3);
+    }
+
+    @Test
+    public void run4() throws Throwable {
+        runTest("test", 4);
+    }
+
+    @Test
+    public void run5() throws Throwable {
+        runTest("test", 5);
+    }
+
+    @Test
+    public void run6() throws Throwable {
+        runTest("test", 6);
+    }
+
+    @Test
+    public void run7() throws Throwable {
+        runTest("test", 7);
+    }
 
 }

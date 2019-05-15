@@ -1,79 +1,25 @@
-package Interview;
+package hm.edu.cs.algdat.sorting.sorters;
 
-import java.util.Arrays;
-import java.util.Random;
+import hm.edu.cs.algdat.sorting.framework.AbstractSorter;
+import hm.edu.cs.algdat.sorting.framework.Sortable;
 
-/**
- * Created by yongyangyu on 8/14/15.
- * The code implement heap-sort on an array of integers.
- * Max heap implementation;
- */
-public class Heapsort {
-    private int[] x;
-    private int[] origin;
 
-    public Heapsort(int[] arr) {
-        // use x[0] as sentinel
-        origin = arr;
-        x = new int[arr.length + 1];
-        for (int i = 0; i < arr.length; i ++) {
-            x[i + 1] = arr[i];
-        }
-    }
+public class SelectionSorter extends AbstractSorter {
 
-    public void sort() {
-        for (int i = 1; i < x.length; i ++) {
-            siftup(i);
-        }
-        for (int i = x.length - 1; i >= 2; i --) {
-            swap(1, i);
-            siftdown(i - 1);
-        }
-        for (int i = 0; i < origin.length; i ++) {
-            origin[i] = x[i + 1];
-        }
-    }
+	@Override
+	protected <T extends Comparable<T>> void sort(Sortable<T> input) {
+		
+		for (int i = 0; i < input.length(); i++) {
+			int min = i;
+			for (int j = i + 1; j < input.length(); j++) {
+				if (input.lessOrEqual(j, min)) {
+					min = j;
+				}
+			}
+			if (min != i) {
+			    input.swap(min, i);
+			}
+		}
+	}
 
-    private void swap(int i, int j) {
-        int t = x[i];
-        x[i] = x[j];
-        x[j] = t;
-    }
-
-    private void siftup(int n) {
-        int i = n;
-        while (true) {
-            if (i == 1) break;
-            int p = i / 2;
-            if (x[p] >= x[i]) break;
-            swap(p, i);
-            i = p;
-        }
-    }
-    private void siftdown(int n) {
-        int i = 1;
-        while (true) {
-            int c = 2 * i;
-            if (c > n) break;
-            if (c + 1 <= n) {
-                if (x[c + 1] > x[c]) {
-                    c ++;
-                }
-            }
-            if (x[i] >= x[c]) break;
-            swap(c, i);
-            i = c;
-        }
-    }
-
-    public static void main(String[] args) {
-        Random rand = new Random();
-        int[] arr = new int[10];
-        for (int i = 0; i < arr.length; i ++) {
-            arr[i] = rand.nextInt(500);
-        }
-        System.out.println(Arrays.toString(arr));
-        new Heapsort(arr).sort();
-        System.out.println(Arrays.toString(arr));
-    }
 }

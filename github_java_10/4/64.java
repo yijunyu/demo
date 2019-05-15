@@ -1,66 +1,71 @@
-/*
-	Program : Implementation of Insertion Sort Algorithm in Java
-	Author : Sarthak Yadav
+import java.util.Arrays;
+class SortingHeap{
+
+void heapify(int arr[],int size,int i)
+{
+	int swapwith=i;
+	int l=2*i+1;
+	int r=2*i+2;
 	
-	Principles: 
-		- Insertion Sort is a sorting algorithm with a average case complexity of O(n^2)
-		- For more details about Insertion Sort visit
-				 https://www.topcoder.com/community/data-science/data-science-tutorials/sorting/
-				 https://www.khanacademy.org/computing/computer-science/algorithms/insertion-sort/a/insertion-sort
-		
-	Instructions:
-		- just compile from command line
-*/
-
-import java.util.Scanner;
-
-public class InsertionSortDemo {
-
-	public static void insertion_sort(int[] arr)
+	
+	
+	if(l<size && arr[l]>arr[swapwith]) 
 	{
-		for(int j=1;j<=arr.length-1;j++)						//iterates from the 2nd element of the array (index no: 1)
-		{
-			int key=arr[j];										//sets key as the value on the current index
-			int i=j-1;	
-			while(i>=0 && arr[i]>key)							//keeps check if i is non negative and the other test condition
-			{
-				arr[i+1]=arr[i];
-				i-=1;
-			}
-			arr[i+1]=key;
-		}
+		swapwith=l;
+	}
+	if(r<size && arr[r]>arr[swapwith]) 
+	{
+		swapwith=r;
+	}	
+	
+	if(swapwith != i)
+	{
+		int tmp =arr[i];
+		arr[i] = arr[swapwith];
+		arr[swapwith] = tmp;
+
+		heapify(arr,size,swapwith); 
+	}	
+		
+}	
+void sort(int arr[],int size)
+{
+	for(int i=(size/2)-1;i>=0;i--)
+	{
+		
+		heapify(arr,size,i);
 	}
 	
-	public static void main(String[] args) 
-	{
-		// Implementation of Insertion Sort
+	for (int i=size-1; i>=0; i--)
+    {
+        
+        
+		int tmp =arr[0];
+		arr[0] = arr[i];
+		arr[i] = tmp;
 		
 		
-		Scanner scanner=new Scanner(System.in);												//to get input from Console
-		System.out.println("---- Implementing Insertion Sort Algorithm ----");
+        
+        heapify(arr, i, 0);
+    }	
+	 
+	 
+		 
+		 
+		 
 		
-		System.out.println("Enter the num of elements in the array");
-		
-		
-		int _num=scanner.nextInt();														//gets the next integer from the console
-		int[] arr=new int[_num];
-		System.out.println("Now enter the elements in the array");
-		for (int i = 0; i < arr.length; i++) 
-		{
-			arr[i]=scanner.nextInt();
-		}
-		scanner.close();															//close the scanner stream
-		System.out.println("Now we will print the sorted array \n");
-
-		insertion_sort(arr);
-		
-		for (int q : arr) 
-		{
-			System.out.println(q);
-		}
-		System.out.println("\n\n------------ End ------------ \n\n");
-		
-	}
-
-
+		 
+	 
 }
+}
+class Heapsort{
+
+public static void main(String args[])
+{
+int[] arr = {12, 11, 13, 5, 6, 7};
+SortingHeap obj=new SortingHeap();
+obj.sort(arr,6);
+
+for(int i=0;i<6;i++)
+	System.out.print(arr[i]+" ")	;
+}}

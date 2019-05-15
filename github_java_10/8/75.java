@@ -1,35 +1,41 @@
-//https://leetcode.com/problems/edit-distance/description/
-package leetcode;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
-import leetcode.*;
-import java.util.*;
+public class QuickSortJava implements JClass{
+    private ArrayList<Comparable> data;
 
-//Solution goes here...
+    public QuickSortJava() {
+        this.data = new ArrayList<>();
+    }
 
-class Solution {
-    public int minDistance(String word1, String word2) {
-        if (word1.equals(word2)) {
-            return 0;
+    public void run() {
+        sortq(0, data.size() - 1);
+    }
+
+    public void setup(int size){
+        data.clear();
+        Random rand = new Random();
+        for(int i = 0; i<size; ++i){
+            data.add(i,rand.nextInt());
         }
-        if (word1.length() == 0 || word2.length() == 0) {
-            return Math.abs(word1.length() - word2.length());
-        }
-        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
-        for (int i = 0; i <= word1.length(); i++) {
-            dp[i][0] = i;
-        }
-        for (int i = 0; i <= word2.length(); i++) {
-            dp[0][i] = i;
-        }
-        for (int i = 1; i <= word1.length(); i++) {
-            for (int j = 1; j <= word2.length(); j++) {
-                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    dp[i][j] = dp[i - 1][j - 1];
-                } else {
-                    dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + 1;
-                }
+    }
+
+   private void sortq(int l, int r) {
+        Comparable pivot = data.get((l + r) / 2);
+        int i = l;
+        int j = r;
+        while (i <= j) {
+            while (data.get(i).compareTo(pivot) < 0) i++;
+            while (data.get(j).compareTo(pivot) > 0) j--;
+            if (i <= j) {
+                Collections.swap(data, i, j);
+                i++;
+                j--;
             }
         }
-        return dp[word1.length()][word2.length()];
-    }
+        if (l < j) sortq(l, j);
+        if (i < r) sortq(i, r);
+   }
 }

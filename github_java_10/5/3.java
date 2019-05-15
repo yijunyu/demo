@@ -1,54 +1,43 @@
-package graphtheory;
+package chapter07;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 
-class Graph2 {
-	int V;
-	LinkedList<Integer> adj[];
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	Graph2(int v){
-		V = v;
-		adj = new LinkedList[v];
-		for(int i=0;i<v;i++) {
-			adj[i] = new LinkedList();
-		}
-	}
-	void addEdge(int v, int u) {
-		adj[v].add(u);
-	}
-	void dfsUtil(int v, boolean visit[]) {
-		visit[v] = true;
-		System.out.println(v+" ");
-		Iterator<Integer> i = adj[v].listIterator();
-		while(i.hasNext()) {
-			int n = i.next();
-			if(!visit[n])
-				dfsUtil(n,visit);
-		}
-	}
-	void dfs() {
-		boolean visit[] = new boolean[V];
-		for(int i=0; i<V; i++) {
-			if(visit[i] == false)
-				dfsUtil(i,visit);
-		}
-	}
-}
-public class Dfs {
 
-	public static void main(String[] args) {
-		Graph2 g = new Graph2(4);
- 
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
-        g.addEdge(2, 0);
-        g.addEdge(2, 3);
-        g.addEdge(3, 3);
- 
-        System.out.println("Following is Depth First Traversal");
- 
-        g.dfs();
-	}
+import java.util.Arrays;
+
+public class BubbleSort {
+    public static void main(String[] args) {
+        double[] numbers = {4, 7, 10, 56, 2, 1, 6, 120, 30, 45, 80};
+        System.out.println(isSorted(numbers));
+        sort(numbers);
+        System.out.println(isSorted(numbers));
+        System.out.println(Arrays.toString(numbers));
+    }
+
+    public static void sort(double... array) {
+        boolean wasChanged = false;
+        do {
+            wasChanged = false;
+            for (int i = 1; i < array.length; i++) {
+                if (array[i - 1] > array[i]) {
+                    swapElements(i -1, i, array);
+                    wasChanged = true;
+                }
+            }
+        } while (wasChanged);
+    }
+
+    public static void swapElements(int i, int j, double... array) {
+        double temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    public static boolean isSorted(double... array) {
+        for (int i = 0; i < array.length - 1; i++) {
+            if (array[i] > array[i + 1])
+                return false;
+        }
+
+        return true;
+    }
 }

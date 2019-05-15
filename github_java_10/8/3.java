@@ -1,39 +1,76 @@
-/*
-@Copyright:LintCode
-@Author:   LLihao
-@Problem:  http://www.lintcode.com/problem/edit-distance
-@Language: Java
-@Datetime: 17-06-05 03:37
-*/
+package com.ddejaege.basics.sorting;
 
-public class Solution {
-    /**
-     * @param word1 & word2: Two string.
-     * @return: The minimum number of steps.
-     */
-    public int minDistance(String word1, String word2) {
-        int m = word1.length() + 1;
-        int n = word2.length() + 1;
-        int[][] edits = new int[m][n];
-        for (int i = 0; i < m; ++i) {
-            edits[i][0] = i;
-        }
-        for (int i = 0; i < n; ++i) {
-            edits[0][i] = i;
-        }
-        
-        for (int i = 1; i < m; ++i) {
-            for (int j = 1; j < n; ++j) {
-                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    edits[i][j] = edits[i - 1][j - 1];
-                } else {
-                    int removeCharFromWord1 = edits[i - 1][j];
-                    int removeCharFromWord2 = edits[i][j - 1];
-                    int removeCharFromBoth = edits[i - 1][j - 1];
-                    edits[i][j] = 1 + Math.min(removeCharFromBoth, Math.min(removeCharFromWord1, removeCharFromWord2));
-                }
-            }
-        }
-        return edits[m - 1][n - 1];
-    }
+public class QuickSort extends Sort {
+	
+	public static void main(String[] args) {
+		
+		int size = 30;
+		
+		QuickSort qSort = new QuickSort();
+		
+		int[] quickSortArray = qSort.initAndPopArray(size);
+		
+		qSort.partition(quickSortArray, 0, quickSortArray.length-1);
+		
+		qSort.print(quickSortArray);
+		
+	}
+	
+	public void partition(int[] quickSortArray, int front, int rear) {
+
+		int pivot = (front+rear)/2;
+		
+		int i = front;
+		int j = rear;
+		
+		while(i < j) {
+			while(quickSortArray[i] <= quickSortArray[pivot] && i < pivot) {
+				i++;
+			}
+			
+			while(quickSortArray[j] >= quickSortArray[pivot] && j > pivot) {
+				j--;
+			}
+			
+			if(quickSortArray[i] > quickSortArray[pivot] && j > pivot) {
+				int temp = quickSortArray[i];
+				quickSortArray[i] = quickSortArray[j];
+				quickSortArray[j] = temp;
+			}
+			else if(quickSortArray[i] > quickSortArray[pivot] && j == pivot) {
+				int temp = quickSortArray[pivot];
+				quickSortArray[pivot] = quickSortArray[i];
+				quickSortArray[i] = quickSortArray[pivot-1];
+				quickSortArray[pivot-1] = temp;
+				pivot--;
+			}
+			
+			if(quickSortArray[j] < quickSortArray[pivot] && i < pivot) {
+				int temp = quickSortArray[j];
+				quickSortArray[j] = quickSortArray[i];
+				quickSortArray[i] = temp;
+			}
+			else if(quickSortArray[j] < quickSortArray[pivot] && i == pivot) {
+				int temp = quickSortArray[pivot];
+				quickSortArray[pivot] = quickSortArray[j];
+				quickSortArray[j] = quickSortArray[pivot+1];
+				quickSortArray[pivot+1] = temp;
+				pivot++;
+			}
+		}		
+		
+		if((pivot - 1) - front > 0) {
+			partition(quickSortArray, front, pivot-1);
+		}
+		
+		if(rear - (pivot + 1) > 0) {
+			partition(quickSortArray, pivot+1, rear);
+		}		
+	}
+	
+	public void print(int[] quickSortArray) {
+		for(int i = 0; i < quickSortArray.length; i++) {
+			System.out.print(quickSortArray[i] + " ");
+		}
+	}
 }

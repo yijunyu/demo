@@ -1,35 +1,27 @@
-package com.pranav.geeksforgeeks;
+import java.util.Arrays;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+public class Shellsort {
+    static int[] gaps = {701, 301, 132, 57, 23, 10, 4, 1};
+    static int[] unsorted = {80, 62, 45, 12, 52, 61, 76, 22, 95, 7, 2, 16, 8, 85, 17, 38, 25, 48, 60, 96};
 
-public class Topological {
-	public static int[] topoSort(ArrayList<Integer> graph[], int N) {
-		Stack<Integer> stack = new Stack<>();
-		Set<Integer> visited = new HashSet<>();
-		for (int i = 0; i < N; i++) {
-			if (!visited.contains(i)) {
-				topoSortUtil(i, graph, stack, visited);
-			}
-		}
-		int[] result = new int[N];
-		int k=0;
-		while(!stack.isEmpty()) {
-			result[k] = stack.pop();
-			k++;
-		}
-		return result;
-	}
+    
+    public int[] sort(int[] list) {
+        for(int gap: gaps) {
+            for (int i = gap; i < list.length; i+=1) {
+                int j = i;
+                int current = list[i];
+                for (; j >= gap && list[j-gap] > current; j-=gap) {
+                    list[j] = list[j-gap];
+                }
+                list[j] = current;
+            }
+        }
+        return list;
+    }
 
-	private static void topoSortUtil(int i, ArrayList<Integer>[] graph, Stack<Integer> stack, Set<Integer> visited) {
-		if (!visited.contains(i)) {
-			visited.add(i);
-			for(int adjElement : graph[i]) {
-				topoSortUtil(adjElement, graph, stack, visited);
-			}
-			stack.push(i);
-		}
-	}
+    public static void main(String[] args) {
+        Shellsort sorter = new Shellsort();
+        System.out.println(Arrays.toString(sorter.sort(unsorted)));
+        return;
+    }
 }

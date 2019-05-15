@@ -1,39 +1,70 @@
-/*****Introduction to Algorithms java code for Insertion Sort *******/
+package com.lbc.algorithms.sort;
 
-class javaInsertionSort{
-	
-public static void insertionSort(int A[] ){
+public class Heapsort {
 
-	int n = A.length;
-	for(int i=1; i < n; i++)
-	{
-		int key = A[i];
-		int j = i - 1;
-/* the item could be in the 0th spot so it could be >= 0 or >-1**/
-		while ((j > -1) && (A[j] > key) )
-		{
-			A[j+1] = A[j];
-			j = j-1;
-		}	
-		A[j+1] = key;
+	private static int heapsize = 0;
+
+	public static void main(String[] args) {
+		int[] a = { 4, 1, 3, 2, 16, 9, 10, 14, 8, 7 };
+		heapsize = a.length;
+		build_max_heap(a);
+		sort(a);
+		printarr(a);
 	}
- }
 
- static void printArray(int A[])
- {
-	int n = A.length;
-	for(int i=0; i < n; i++)
-		System.out.print(A[i] + " ");
+	public static int parent(int i) {
+		return (i - 1) >> 1;
+	}
 
-	System.out.println(); 
- }
+	public static int left(int i) {
+		return (i << 1) + 1;
+	}
 
- public static void main(String args[])
- {
- 	int A[] = {24, 13, 2, 45, 22, 0};
- 	javaInsertionSort ob = new javaInsertionSort();
- 	ob.insertionSort(A);
- 	printArray(A);
- }
+	public static int right(int i) {
+		return (i + 1) << 1;
+	}
+
+	
+	public static void sort(int[] a) {
+		while (heapsize-- >= 2) {
+			exch(a, 0, heapsize);
+			maxheapify(a, 0);
+		}
+	}
+
+	public static void build_max_heap(int[] a) {
+		int ceil = (a.length >> 1);
+		for (int i = ceil; i >= 0; i--) {
+			maxheapify(a, i);
+		}
+	}
+
+	public static void maxheapify(int[] a, int i) {
+		int l = left(i);
+		int r = right(i);
+		int largest = 0;
+		if (l < heapsize && a[l] > a[i]) {
+			largest = l;
+		} else
+			largest = i;
+		if (r < heapsize && a[r] > a[largest]) {
+			largest = r;
+		}
+		if (largest != i) {
+			exch(a, largest, i);
+			maxheapify(a, largest);
+		}
+	}
+
+	static void exch(int[] a, int i, int j) {
+		int tmp = a[i];
+		a[i] = a[j];
+		a[j] = tmp;
+	}
+
+	static void printarr(int[] a) {
+		for (int i = 0; i < a.length; i++) {
+			System.out.print(a[i] + " ");
+		}
+	}
 }
-

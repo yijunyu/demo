@@ -1,44 +1,59 @@
-// Problem: Sorting
-// Input: A sequence of n keys a1, .... aN.
-// Output: The permutation (reordering) of the input sequence such that 
-// 	a'1 <= a'2 <= a'n-1 <= a'n.
-// Source: The Algorithm Design Manual.
-public class InsertionSort {
+package sorting;
 
-	private static int ITEMS[] = { 645, 245, 568, 324, 152, 324 };
+public class HeapSort_MinHeap {
 
-	public static void main(final String[] args) {
-		echoItems("Before");
-		insertionSort();
-		echoItems("After");
-	}
+	public static void main(String[] args) {
+		
 
-	public static void insertionSort() {
-		int ii = 0, jj = 0;
-		for (ii = 1; ii < InsertionSort.ITEMS.length; ii++) {
-			jj = ii;
-			while ((jj > 0)
-					&& (InsertionSort.ITEMS[jj] < InsertionSort.ITEMS[jj - 1])) {
-				swap(jj, jj - 1);
-				jj -= 1;
-			}
+		int a[] = new int[] { 8, 2, 1, 5, 7, 3, 6, 4, 0, 9, 13, 11, 14, 10, 15, 12 };
+
+		heapSort(a);
+
+		for (int i = 0; i < a.length; i++) {
+			System.out.println(a[i]);
 		}
+
 	}
 
-	public static void swap(final int ii, final int jj) {
-		final int temp = InsertionSort.ITEMS[ii];
-		InsertionSort.ITEMS[ii] = InsertionSort.ITEMS[jj];
-		InsertionSort.ITEMS[jj] = temp;
-	}
-
-	public static void echoItems(final String msg) {
-		System.out.print(String.format("%6s Sorting Items[] = ", msg));
-		for (int ii = 0; ii < InsertionSort.ITEMS.length; ii++) {
-			System.out.print(String.format("%04d", InsertionSort.ITEMS[ii]));
-			if (ii < (InsertionSort.ITEMS.length - 1)) {
-				System.out.print(", ");
-			}
+	private static void heapSort(int[] a) {
+		
+		
+		for (int i = a.length / 2 - 1; i >= 0; i--) {
+			heapify(a, a.length-1, i);
 		}
-		System.out.println();
+		
+		for(int i=0;i<a.length-1;i++)
+		{
+			heapify(a, a.length-1, i);
+		}
+		
+		
+
 	}
+
+	private static void heapify(int[] a,int n, int i) {
+		
+
+		int l = 2 * i+1;
+		int r = 2 * i + 2;
+
+		int min = i;
+
+		if (l <= n && a[i] > a[l]) {
+			min = l;
+		}
+
+		if (r <= n && a[r] < a[min]) {
+			min = r;
+		}
+
+		if (min != i) {
+			int temp = a[i];
+			a[i] = a[min];
+			a[min] = temp;
+			heapify(a, n ,min);
+		}
+
+	}
+
 }

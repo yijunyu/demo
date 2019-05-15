@@ -1,44 +1,134 @@
-/**
- * 
- * @author Shivam
- * @date 19-09-2017
- * @description Class Tower of hanoi deals with a problem 'TOWER OF HANOI',
- * in this problem we have given the number of disks(number of pole is constant).
- * Initially, all the disks are placed in first pole (source pole), all these disks has to be move
- * in destination poll via auxillary pole.There are following rules :-
- * 1.Only one disk should be moved at a time.
- * 2.Disks in destination pole should be in same order as that of Source Pole.
- */
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+package hw4;
 
-//class to solve Tower of hanoi problrm
-public class TowerOfHanoi {
-	static ArrayList<String> list = new ArrayList<String>();
-	static String str="";
-	public static ArrayList<String> towerOfHanoi(String source, String destination, String temp, int numOfDisk) {
-		if(numOfDisk == 1) {
-			str= "Move disk "+numOfDisk +" from " +source+" to "+destination;
-			list.add(str);	//addition of string in List<String>			
-		}else {
-			towerOfHanoi( source, temp, destination, numOfDisk-1 );
-			str= "Move disk "+numOfDisk +" from " +source+" to "+destination;
-			list.add(str);	//addition of string in List<String>	
-			towerOfHanoi( temp, destination, source, numOfDisk-1 );
-		}
-		return list;
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Frame Throwable = new Frame("Throwable");
+		Frame Exception = new Frame("Exception", Throwable);
+		Frame Error = new Frame("Error", Throwable);
+		Frame RuntimeException = new Frame("RuntimeException", Exception);
+		Frame IOException = new Frame("IOException", Exception);
+		Frame AWTError = new Frame("AWTError", Error);
+		Frame ThreadDeath = new Frame("ThreadDeath", Error);
+		Frame OutOfMemoryError = new Frame("OutOfMemoryError", Error);
+		Frame ArrayIndexOutOfBoundsException = new Frame("ArrayIndexOutOfBoundsException", RuntimeException);
+		Frame InputMismatchException = new Frame("InputMismatchException", RuntimeException);
+		Frame ClassCastException = new Frame("ClassCastException", RuntimeException);
+		Frame NullPointerException = new Frame("NullPointerException", RuntimeException);
+		Frame ArithmeticException = new Frame("ArithmeticException", RuntimeException);
+
+		TopologicalSort TP = new TopologicalSort(ClassCastException);
+		System.out.println("Output for Test Data #1 & Leaf: ClassCastException");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+		
+		TP = new TopologicalSort(ArrayIndexOutOfBoundsException);
+		System.out.println("Output for Test Data #1 & Leaf: ArrayIndexOutOfBoundsException");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+		
+		TP = new TopologicalSort(NullPointerException);
+		System.out.println("Output for Test Data #1 & Leaf: NullPointerException");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+		
+		TP = new TopologicalSort(InputMismatchException);
+		System.out.println("Output for Test Data #1 & Leaf: InputMismatchException");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+		
+		TP = new TopologicalSort(ArithmeticException);
+		System.out.println("Output for Test Data #1 & Leaf: ArithmeticException");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+		
+		TP = new TopologicalSort(IOException);
+		System.out.println("Output for Test Data #1 & Leaf: IOException");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+
+		TP = new TopologicalSort(AWTError);
+		System.out.println("Output for Test Data #1 & Leaf: AWTError");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+
+		TP = new TopologicalSort(ThreadDeath);
+		System.out.println("Output for Test Data #1 & Leaf: ThreadDeath");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+		
+		TP = new TopologicalSort(OutOfMemoryError);
+		System.out.println("Output for Test Data #1 & Leaf: OutOfMemoryError");
+
+		for(Frame F : TP.precedenceList)
+			System.out.println(F);
+		
+		System.out.println("-------------------");
+		
+		Frame ios = new Frame("ios");
+		Frame istream = new Frame("istream", ios);
+		Frame ostream = new Frame("ostream", ios);
+		Frame ifstream = new Frame("ifstream", istream);
+		Frame iostream = new Frame("iostream", istream, ostream);
+		Frame ofstream = new Frame("ofstream", ostream);
+		Frame fstream = new Frame("fstream", iostream);
+		
+		TopologicalSort TP2 = new TopologicalSort(ifstream);
+		System.out.println("Output for Test Data #2 & Leaf: ifstream");
+
+		for(Frame F : TP2.precedenceList)
+			System.out.println(F);
+		
+		TP2 = new TopologicalSort(ofstream);
+		System.out.println("Output for Test Data #2 & Leaf: ofstream");
+
+		for(Frame F : TP2.precedenceList)
+			System.out.println(F);
+		
+		TP2 = new TopologicalSort(fstream);
+		System.out.println("Output for Test Data #2 & Leaf: fstream");
+
+		for(Frame F : TP2.precedenceList)
+			System.out.println(F);
+		
+		System.out.println("-------------------");
+
+		Frame Employee = new Frame("Employee");
+		Frame TemporaryEmployee = new Frame("TemporaryEmployee", Employee);
+		Frame Consultant = new Frame("Consultant", TemporaryEmployee);
+		Frame Manager = new Frame("Manager", Employee);
+		Frame ConsultantManager = new Frame("ConsultantManager", Consultant, Manager);
+		Frame PermanentEmployee = new Frame("PermanentEmployee", Employee);		
+		Frame PermanentManager = new Frame("PermanentManager", Manager, PermanentEmployee);
+		Frame Director = new Frame("Director", Manager);
+		
+		TopologicalSort TP3 = new TopologicalSort(ConsultantManager);
+		System.out.println("Output for Test Data #3 & Leaf: ConsultantManager");
+
+		for(Frame F : TP3.precedenceList)
+			System.out.println(F);
+		
+		TP3 = new TopologicalSort(PermanentManager);
+		System.out.println("Output for Test Data #3 & Leaf: PermanentManager");
+
+		for(Frame F : TP3.precedenceList)
+			System.out.println(F);
+		
+		TP3 = new TopologicalSort(Director);
+		System.out.println("Output for Test Data #3 & Leaf: Director");
+
+		for(Frame F : TP3.precedenceList)
+			System.out.println(F);
+		
 	}
-	
-	public static void main(String args[]) {
-		System.out.println("Enter a number");
-		Scanner sc = new Scanner(System.in);	//to take number of disks
-		int numberOfDisk = sc.nextInt();
-		sc.close();
-		ArrayList<String> al=towerOfHanoi("A", "B", "C", numberOfDisk);	//method called to solve the problem
-		Iterator<String> itr=al.iterator();  //Iterator to iterate in List
-		while(itr.hasNext()){  
-		   System.out.println(itr.next()); 
-	    }  
-	}
+
 }

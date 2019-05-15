@@ -1,51 +1,42 @@
-package sorting;
+package sorting.noncomparison;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-public class bubblesort {
+public class BucketSort {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		// each large number moves like a bubble to its position
-		// for each iteration largest number will move to last
-		// reduce the inner loop iterations by outer iteration count since those values are already set
-		// optimization is to verify if no swap is done array is already sorted
-        int a[] = {6,1,7,2};
-        Arrays.toString(bubbleSort(a));
-      //  System.out.println(Arrays.toString(recursivebubble(a,0)));
-        
-        Long.valueOf("300100110974924");
-	}
-	
-	public static int[] bubbleSort(int a[]){
-		boolean swapped = true;
-		for(int i=0;i<a.length && swapped;i++){
-			swapped = false;
-			System.out.println(Arrays.toString(a));
-			for(int j=0;j<a.length-i-1;j++){
-				if(a[j]>a[j+1]){
-					int swap = a[j];
-					a[j] = a[j+1];
-					a[j+1]= swap;
-					swapped = true;
-				}
-			}
-		}
-		return a;
-	}
-	
-	public static int[] recursivebubble(int a[],int iterCounter){
-		if(iterCounter==a.length-1){
-			return a;
-		}
-		for(int j=0; j<a.length-iterCounter-1;j++){
-			if(a[j]>a[j+1]){
-				int swap = a[j];
-				a[j] = a[j+1];
-				a[j+1]= swap;
-			}
-		}
-		return recursivebubble(a,iterCounter+1);
-	}
+    public void sort(Double[] A) {
+
+        int n = A.length;
+        List[] B = new ArrayList[n];
+
+        for (int i = 0; i < n; i++)
+            B[i] = new ArrayList<>();
+
+        for (int i = 0; i < n; i++)
+            B[(int) Math.floor(n * A[i])].add(A[i]);
+
+        for (List b : B)
+            Collections.sort(b);
+
+        int i = 0;
+        for (List b : B)
+            for (Object d : b)
+                A[i++] = (Double) d;
+
+    }
+
+    public static void main(String... args) {
+
+        Double[] numbers = {0.15, 0.84, 0.36, 0.99, 0.13, 0.34, 0.91, 0.51};
+        BucketSort bucketSort = new BucketSort();
+        bucketSort.sort(numbers);
+
+        Arrays.asList(numbers).stream().forEach(System.out::println);
+
+    }
+
 
 }

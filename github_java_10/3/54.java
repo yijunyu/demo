@@ -1,24 +1,59 @@
-/*
-TowerOfHanoi problem if we want to move N disks from source to destination, then
-we first move N-1 disks from source to temp, then move the lowest Nth disk from source to
-destination. Then will move N-1 disks from temp to destination
-*/
+import java.util.Scanner;
+import java.util.*;
+class topologicalsort
+{
+	static LinkedList<Integer> list[];
+	public static void main(String[]args)
+	{
+		Scanner scan=new Scanner(System.in);
+		int t,i,j,k,l;
+		// no of vertex
+		int vertex=scan.nextInt();
+		// no of edges
+		int edges=scan.nextInt();
+		list=new LinkedList[vertex];
+		for(k=0;k<vertex;k++)
+		{
+			list[k]=new LinkedList();
+		}
+		for(i=0;i<edges;i++)
+		{	
+			int a=scan.nextInt();
+			int b=scan.nextInt();
+			list[a].add(b);
+		}	
+		boolean visited[]=new boolean[vertex];
+		Stack stack=new Stack();
+		for(j=0;j<vertex;j++)
+		{
+			visited[j]=false;
+		}
 
-package recursive;
-public class TowerOfHanoi {
-
-	public static void towerOfHanoi(int num, char src, char dst, char temp) {
-		if (num < 1)
-			return;
-		
-		towerOfHanoi(num - 1, src, temp, dst);
-		System.out.println("Move " + num + " disk from peg " + src + " to peg " + dst);
-		towerOfHanoi(num - 1, temp, dst, src);
+		for(k=0;k<vertex;k++)
+		{
+			if(!visited[k])
+			{
+				topologicalutil(k,visited,stack);
+			}
+		}
+		for(l=0;l<vertex;l++)
+		{
+			System.out.print(stack.pop()+" ");
+		}
 	}
-
-	public static void main(String[] args) {
-		int num = 3;
-		System.out.println("The sequence of moves in the Tower of Hanoi are : ");
-		towerOfHanoi(num, 'A', 'C', 'B');
+	static void topologicalutil(int v,boolean visited[], Stack stack)
+	{
+		visited[v]=true;
+		Iterator<Integer> it=list[v].iterator();
+		int o;
+		while(it.hasNext())
+		{
+			o=it.next();
+			if(!visited[o])
+			{
+				topologicalutil(o,visited, stack);
+			}
+		}
+		stack.push(v);
 	}
 }

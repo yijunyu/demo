@@ -1,279 +1,128 @@
-/*
- *  Copyright 2006-2007 Columbia University.
- *
- *  This file is part of MEAPsoft.
- *
- *  MEAPsoft is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License version 2 as
- *  published by the Free Software Foundation.
- *
- *  MEAPsoft is distributed in the hope that it will be useful, but
- *  WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MEAPsoft; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- *  02110-1301 USA
- *
- *  See the file "COPYING" for the text of the license.
- */
-package EvacSim.jme3tools.navmesh.util;
+import java.util.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Vector;
+public class _23 {
 
-/**
- * Abstract implementation of the basic functions needed for a binary
- * heap using java.util.Vector as a back end.  
- *
- * Unlike java.util.TreeSet, this data structure can handle duplicate
- * entries.  The implementations of the methods given here implement a
- * MinHeap.  It is abstract so that we can have a MinHeap class that
- * supports deleteMin() and a MaxHeap class that supports deleteMax()
- * but neither of them support both.
- *
- * @author Ron Weiss (ronw@ee.columbia.edu)
- */
-public abstract class Heap<T> extends Vector<T> {
-    // Comparator to use to compare two elements in this Heap (if this
-    // is null, assume that all elements are Comparable)
+	public static void main(String[] args) {
+		
+		Scanner input = new Scanner(System.in);
+		
+		String type = input.nextLine();
+		int sort = input.nextInt();
+		String[] Split = type.split(" ");
+		ArrayList<Integer> num = new ArrayList<Integer>();
+		
+		for(int i = 0; i < Split.length; i++) {
+			while(Integer.parseInt(Split[i]) != -999) {
+				num.add(Integer.parseInt(Split[i]));
+				break;
+			}
+		}
+		
+		ArrayList<Integer> bubbleSort = new ArrayList<Integer>(num);
+		ArrayList<Integer> insertionSort = new ArrayList<Integer>(num);
+		ArrayList<Integer> selectionSort = new ArrayList<Integer>(num);
+		int bubbleCount = 0;
+		int insertionCount = 0;
+		int selectionCount = 0;
+		
+		if(sort == 0) {
+			for(int h = bubbleSort.size() - 1; h > 0; h--) {
+				for(int i = bubbleSort.size() - 2; i >= 0; i--) {
+					if(bubbleSort.get(i) > bubbleSort.get(i+1)) {
+						int temp = bubbleSort.get(i+1);
+						bubbleSort.set(i+1, bubbleSort.get(i));
+						bubbleSort.set(i, temp);
+						bubbleCount++;
+					}
+				}
+			}
 
-    private Comparator<T> comp = null;
-    // Does the current instance obey the heap property?
-    // (all operations aside from sort() are guaranteed to maintain
-    // the heap property, this is just to keep track of whether or not
-    // sort() has screwed stuff up).
-    protected boolean isHeap = true;
+			for(int j = 1; j < insertionSort.size(); j++) {
+				if(insertionSort.get(j) < insertionSort.get(j-1)) {
+					int temp = insertionSort.get(j);
+					for(int m = j - 1; m >= 0; m--) {
+						if(temp < insertionSort.get(m)) {
+							insertionSort.set(m + 1, insertionSort.get(m));
+							insertionSort.set(m, temp);
+							insertionCount++;
+						}
+					}
+				}
+			}
+			for(int n = 0; n < selectionSort.size(); n++) {
+				int min = selectionSort.get(n);
+				int position = 0;
+				for(int m = n; m < selectionSort.size(); m++) {
+					if(min > selectionSort.get(m)) {
+						min = selectionSort.get(m);
+						position = m;
+					}
+				}
+				if(selectionSort.get(n) > min) {
+					int temp = min;
+					selectionSort.set(position, selectionSort.get(n));
+					selectionSort.set(n, temp);
+					selectionCount++;
+				}
+			}
+			
+			for(int z = 0; z < selectionSort.size(); z++) {
+				System.out.print(selectionSort.get(z) + " ");
+			}
+			System.out.println();
+			System.out.println("Bubble Sort change times = " + bubbleCount);
+			System.out.println("Insertion Sort change times = " + insertionCount);
+			System.out.println("Selection Sort change times = " + selectionCount);
+		}
 
-    /**
-     * Creates an empty Heap.
-     */
-    public Heap() {
-        super();
-    }
+		if(sort == 1) {
+			for(int h = bubbleSort.size() - 1; h > 0; h--) {
+				for(int i = bubbleSort.size() - 2; i >= 0; i--) {
+					if(bubbleSort.get(i) < bubbleSort.get(i+1)) {
+						int temp = bubbleSort.get(i+1);
+						bubbleSort.set(i+1, bubbleSort.get(i));
+						bubbleSort.set(i, temp);
+						bubbleCount++;
+					}
+				}
+			}
 
-    /**
-     *  Use given Comparator for all comparisons between elements in
-     *  this Heap.  Otherwise rely on compareTo methods and Comparable
-     *  Objects.
-     */
-    public Heap(Comparator<T> c) {
-        super();
-        comp = c;
-    }
-
-    /**
-     * Creates an empty Heap with the given capacity.
-     */
-    public Heap(int capacity) {
-        super(capacity);
-    }
-
-    /**
-     * Create a new Heap containing the elements of the given
-     * Collection.
-     */
-    public Heap(Collection<T> c) {
-        super();
-        addAll(c);
-    }
-
-    /**
-     * Remove the Object at the given index from the Heap
-     */
-    @Override
-    public T remove(int index) {
-        if (!isHeap) {
-            rebuildHeap();
-        }
-
-        T o = get(index);
-
-        set(index, get(size() - 1));
-        removeElementAt(size() - 1);
-
-        heapify(index);
-
-        return o;
-    }
-
-    /**
-     * Remove the Object o from the Heap and return true.  Returns
-     * false if o is not in the Heap (as measured by o.equals()).
-     */
-    @Override
-    public boolean remove(Object o) {
-        boolean found = false;
-        for (int i = 0; i < size(); i++) {
-            if (o == null ? get(i) == null : o.equals(get(i))) {
-                found = true;
-                remove(i);
-
-                break;
-            }
-        }
-
-        return found;
-    }
-
-    /**
-     * Add o to the Heap.
-     */
-    @Override
-    public boolean add(T o) {
-        if (!isHeap) {
-            rebuildHeap();
-        }
-
-        boolean b = super.add(o);
-
-        for (int node = size() - 1; node > 0;) {
-            int cmp;
-            int parent = (int) ((node - 1) / 2);
-
-            if (cmp(node, parent) < 0) {
-                // swap them and reheapify
-                T tmp = get(node);
-                set(node, get(parent));
-                set(parent, tmp);
-            }
-
-            node = parent;
-        }
-
-        //System.out.print("\nContents: ");
-        //for(int x = 0; x < size(); x++)
-        //    System.out.print(get(x) + " ");
-        //System.out.println();
-
-        return b;
-    }
-
-    /**
-     *  Add the contents of a Collection to the Heap.
-     */
-    @Override
-    public boolean addAll(Collection c) {
-        boolean b = super.addAll(c);
-        rebuildHeap();
-        return (b);
-    }
-
-    /**
-     * Ensure that every element in this heap obeys the heap property.
-     * Runs in linear time.  
-     *
-     * This is meant to be called if/when the Comparator associated
-     * with this object is modified.
-     */
-    public void rebuildHeap() {
-        // do the whole linear time build-heap thing
-        for (int i = (int) (size() / 2); i >= 0; i--) {
-            heapify(i);
-        }
-
-        isHeap = true;
-    }
-
-    /**
-     * Perform an in place heap sort on the data stored in this heap.
-     * After calling sort, a call to this objects iterator() method
-     * will iterate through the data stored in the heap in ascending
-     * sorted order.  This is not a stable sort.
-     */
-    public void sort() {
-        Object[] a = toArray();
-        if (comp == null) {
-            Arrays.sort(a);
-        } else {
-            Arrays.sort((T[])a, comp);
-        }
-
-        elementData = a;
-
-        // there is some wierdo off by one error here that I cannot find...
-        //for(int x = size()-1; x > 0; x--)
-        //{
-        //    // swap end of heap with the root, then heapify whats
-        //    // left.
-        //    Object tmp = get(x);
-        //    set(x, get(0));
-        //    set(0, tmp);
-        //
-        //    heapify(0, x);
-        //}           
-
-        // the above code destroys the heap property - the array is
-        // essentially in reverse sorted order (with respect to the
-        // first element in the heap (min if MinHeap, max if MaxHeap))
-        //
-        // The next call to one of the Heap methods will rebuild the
-        // heap.
-        isHeap = false;
-    }
-
-    /**
-     * Compare two Objects in this heap - wrapper around
-     * compareTo/Comparator.compare.
-     */
-    protected int cmp(int node1, int node2) {
-        int c = 0;
-        if (comp != null) {
-            c = comp.compare(get(node1), get(node2));
-        } else {
-            c = ((Comparable<T>) get(node1)).compareTo(get(node2));
-        }
-
-        return c;
-    }
-
-    /**
-     * Ensure that the subtree of the given size rooted at node obeys
-     * the heap property
-     */
-    private void heapify(int node, int size) {
-        if (node > size) {
-            return;
-        }
-
-        int left = (node + 1) * 2 - 1;
-        int right = (node + 1) * 2;
-
-        int minidx = node;
-
-        if (left < size && cmp(left, node) <= 0) {
-            minidx = left;
-        }
-        if (right < size && cmp(right, node) <= 0 && cmp(right, left) <= 0) {
-            minidx = right;
-        }
-
-        if (minidx != node) {
-            // swap them and recurse on the subtree rooted at minidx
-            T tmp = get(node);
-            set(node, get(minidx));
-            set(minidx, tmp);
-
-            heapify(minidx, size);
-        }
-    }
-
-    /**
-     * Ensure that the subtree rooted at node obeys the heap property
-     */
-    private void heapify(int node) {
-        heapify(node, size());
-    }
-
-    /**
-     * Do the contents of this object currently obey the heap
-     * property?
-     */
-    public boolean isHeap() {
-        return isHeap;
-    }
+			for(int j = 1; j < insertionSort.size(); j++) {
+				if(insertionSort.get(j) > insertionSort.get(j-1)) {
+					int temp = insertionSort.get(j);
+					for(int m = j - 1; m >= 0; m--) {
+						if(temp > insertionSort.get(m)) {
+							insertionSort.set(m + 1, insertionSort.get(m));
+							insertionSort.set(m, temp);
+							insertionCount++;
+						}
+					}
+				}
+			}
+			for(int n = 0; n < selectionSort.size(); n++) {
+				int max = selectionSort.get(n);
+				int position = 0;
+				for(int m = n; m < selectionSort.size(); m++) {
+					if(max < selectionSort.get(m)) {
+						max = selectionSort.get(m);
+						position = m;
+					}
+				}
+				if(selectionSort.get(n) < max) {
+					int temp = max;
+					selectionSort.set(position, selectionSort.get(n));
+					selectionSort.set(n, temp);
+					selectionCount++;
+				}
+			}
+			
+			for(int z = 0; z < selectionSort.size(); z++) {
+				System.out.print(selectionSort.get(z) + " ");
+			}
+			System.out.println();
+			System.out.println("Bubble Sort change times = " + bubbleCount);
+			System.out.println("Insertion Sort change times = " + insertionCount);
+			System.out.println("Selection Sort change times = " + selectionCount);
+		}		
+	}
 }

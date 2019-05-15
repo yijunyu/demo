@@ -1,36 +1,63 @@
-package net.algorithm.fourth.ch04;
+package com.ericzong.algorithm.sort;
 
-/**
- * 深度优先查找
- * @author Administrator
- *
- */
-public class DepthFirstSearch {
-	
-	private boolean[] marked;
-	private int count;
-	
-	public DepthFirstSearch(Graph G,int s){
-		marked = new boolean[G.V()];
-		dfs(G,s);
-	}
+import java.lang.reflect.Array;
+import java.util.Comparator;
 
-	private void dfs(Graph G, int v) {
-		marked[v] = true;
-		count++;
-		for(int w:G.adj(v)){
-			if(!marked[w]){
-				dfs(G, w);
-			}
-		}
-	}
-	
-	public boolean marked(int w){
-		return marked(w);
-	}
-	
-	public int count(){
-		return count;
-	}
-	
+
+public class Bubble {
+    public static <E extends Comparable<E>> void sort(E[] data) {
+        sortImpl(data, null);
+    }
+
+    public static void sort(int[] data) {
+        sortImpl(data, null);
+    }
+
+    public static <E> void sort(E[] data, Comparator<E> comparator) {
+        sortImpl(data, comparator);
+    }
+
+    private static void sortImpl(Object data, Comparator comparator) {
+        int length = Array.getLength(data);
+        if (length <= 1) return;
+
+        for (int i = 0; i < length; i++) {
+            boolean swap = false;
+            for (int j = 0; j < length - i - 1; j++) {
+                swap |= swap(data, j, j + 1, comparator);
+            }
+
+            if (!swap) { 
+                break;
+            }
+        }
+    }
+
+    private static boolean swap(Object data, int i, int j, Comparator comparator) {
+        if (!data.getClass().isArray()) {
+            throw new RuntimeException("Not Array");
+        }
+
+        Object first = Array.get(data, i);
+        Object second = Array.get(data, j);
+
+        if (isOrdered(first, second, comparator)) {
+            return false;
+        }
+
+        Array.set(data, i, second);
+        Array.set(data, j, first);
+
+        return true;
+    }
+
+    private static boolean isOrdered(Object first, Object second, Comparator comparator) {
+        if (comparator != null) {
+            return comparator.compare(first, second) <= 0;
+        } else if (first instanceof Comparable) {
+            return ((Comparable) first).compareTo(second) <= 0;
+        }
+
+        throw new RuntimeException("Uncomparable!");
+    }
 }

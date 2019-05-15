@@ -1,54 +1,72 @@
-package ds.learning.search;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
-public class BreadthFirstSearch {
+import java.awt.*;
+import javax.swing.*;
 
-	public boolean search(Node head, String searchItem) {
-		LinkedList<Node> queue = new LinkedList<Node>();
-		
-		if(head.getData().equals(searchItem)) {
-			return true;
-		} else {
-			queue.add(head);
-			for(Node node : queue) {
-				if(node.getData().equals(searchItem)) {
-					return true;
-				} else {
-					queue.addAll(node.getChild());
-				}
+public class InsertionSorter {
+
+	private int[] arr;
+	private int sorted= -1;
+	private int firstSpot = -1;
+	private int secondSpot = -1;
+	private JComponent component;
+
+	private static final int DELAY = 100;
+	
+	
+
+	public InsertionSorter(int[] arrayOne, JComponent element) {
+		arr = arrayOne;
+		component = element;
+	}
+
+	public void draw(Graphics var) {
+
+		int change = component.getWidth() / arr.length;
+		for (int i = 0; i < arr.length; i++) {
+			if (i == firstSpot) {
+				var.setColor(Color.YELLOW);
+			} else if (i == secondSpot) {
+				var.setColor(Color.YELLOW);
+			} else if (i < sorted) {
+				var.setColor(Color.GRAY);
+			} else {
+				var.setColor(Color.BLACK);
 			}
-			return false;
+			var.fillRect(i * change, 0, 5, 5*arr[i]);
 		}
-	}
-}
+	} 	
+	
+		
+	
+		public void sort() throws InterruptedException {
+			int i = 1;
+			while (i < arr.length) {
+				
+				try {
+					int j = i;
+					while (j > 0 && arr[j-1] > arr[j]) {
+						int i1 = arr[j];
+						int i2 = arr[j-1];
+						arr[j] = i2;
+						arr[j-1] = i1;
+						j--;					
+					}
+					i++;
+					sorted = i;
+					firstSpot = i;
+					secondSpot = j;
+				} finally {
 
-class Node {
-	
-	private String data;
-	private List<Node> child = new ArrayList<Node>();
-	private boolean visit;
-	
-	public String getData() {
-		return data;
+				}
+				pause(2);
+			}
+		}
+	public void pause(int g)
+			throws InterruptedException
+	{
+		component.repaint();
+		Thread.sleep(g * DELAY);
 	}
-	public void setData(String data) {
-		this.data = data;
-	}
-	public List<Node> getChild() {
-		return child;
-	}
-	public void setChild(List<Node> child) {
-		this.child = child;
-	}
-	public boolean isVisit() {
-		return visit;
-	}
-	public void setVisit(boolean visit) {
-		this.visit = visit;
-	}
-	
-	
+
 }

@@ -1,55 +1,40 @@
-package com.tbp.search;
+package sort;
 
-import com.tbp.graph.Edge;
-import com.tbp.graph.IGraph;
+public class Bubblesort {
+	static void bubbleSort(int[] arr) {  
+        int n = arr.length;  
+        int temp = 0;  
+         for(int i=0; i < n; i++){  
+                 for(int j=1; j < (n-i); j++){  
+                          if(arr[j-1] > arr[j]){  
+                                 
+                                 temp = arr[j-1];  
+                                 arr[j-1] = arr[j];  
+                                 arr[j] = temp;  
+                         }  
+                          
+                 }  
+         }  
+  
+    }  
+    public static void main(String[] args) {  
+                int arr[] ={3,60,35,2,45,320,5};  
+                 
+                System.out.println("Array Before Bubble Sort");  
+                for(int i=0; i < arr.length; i++){  
+                        System.out.print(arr[i] + " ");  
+                }  
+                System.out.println();  
+                  
+                bubbleSort(arr);
+                 
+                System.out.println("Array After Bubble Sort");  
+                for(int i=0; i < arr.length; i++){  
+                        System.out.print(arr[i] + " ");  
+                }  
+   
+        }  
+	
+	}
 
-public class DepthFirstSearch implements Search {
 
-
-    private boolean[] marked;    // marked[v] = is there an s-v path?
-    private int count;           // number of vertices connected to s
-
-    /**
-     * Computes the vertices in graph <tt>G</tt> that are
-     * connected to the source vertex <tt>s</tt>.
-     * @param graph the graph
-     * @param s the source vertex
-     */
-    public DepthFirstSearch(IGraph graph, int s) {
-        marked = new boolean[graph.V()];
-        dfs(graph, s);
-    }
-
-    // depth first search from v
-    // O(E + V)
-    private void dfs(IGraph graph, int v) {
-        count++;
-        marked[v] = true;
-        for (Edge edge : graph.adj(v)) {
-            int w = edge.other(v);
-            if (!marked[w]) {
-                dfs(graph, w);
-            }
-        }
-    }
-
-    /**
-     * Is there a path between the source vertex <tt>s</tt> and vertex <tt>v</tt>?
-     * @param v the vertex
-     * @return <tt>true</tt> if there is a path, <tt>false</tt> otherwise
-     */
-    @Override
-    public boolean marked(int v) {
-        return marked[v];
-    }
-
-    /**
-     * Returns the number of vertices connected to the source vertex <tt>s</tt>.
-     * @return the number of vertices connected to the source vertex <tt>s</tt>
-     */
-    @Override
-    public int count() {
-        return count;
-    }
-
-}

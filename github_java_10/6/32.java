@@ -1,49 +1,39 @@
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
-public class Solution {
-  private static long countInversions(int[] arr) {
-    int[] aux = arr.clone();
-    return countInversions(arr, 0, arr.length - 1, aux);
-  }
-  private static long countInversions(int[] arr, int lo, int hi, int[] aux) {
-    if (lo >= hi) return 0;
-    int mid = lo + (hi - lo) / 2;
-    long count = 0;
-    count += countInversions(aux, lo, mid, arr);
-    count += countInversions(aux, mid + 1, hi, arr);
-    count += merge(arr, lo, mid, hi, aux);
-    return count;
-  }
-  private static long merge(int[] arr, int lo, int mid, int hi, int[] aux) {
-    long count = 0;
-    int i = lo, j = mid + 1, k = lo;
-    while (i <= mid || j <= hi) {
-      if (i > mid) {
-        arr[k++] = aux[j++];
-      } else if (j > hi) {
-        arr[k++] = aux[i++];
-      } else if (aux[i] <= aux[j]) {
-        arr[k++] = aux[i++];
-      } else {
-        arr[k++] = aux[j++];
-        count += mid + 1 - i;
-      }
+
+package search_sort;
+
+public class RadixSort {
+    public int[] countSort(int[] data, int exp, int b) {
+        int[] output = new int[data.length];
+        int[] count = new int[b];
+        for (int i = 0; i < data.length; i++) {
+            count[(data[i] / exp) % b]++;
+        }
+        for (int i = 1; i < b; i++) {
+            count[i] += count[i - 1];
+        }
+        for (int i = data.length - 1; i >= 0; i--) {
+            output[count[(data[i] / exp) % b] - 1] = data[i];
+            count[(data[i] / exp) % b]--;
+        }
+        return output;
     }
-    return count;
-  }
-  public static void main(String[] args) {
-    Scanner in = new Scanner(System.in);
-    int t = in.nextInt();
-    for(int a0 = 0; a0 < t; a0++){
-      int n = in.nextInt();
-      int arr[] = new int[n];
-      for(int arr_i=0; arr_i < n; arr_i++){
-        arr[arr_i] = in.nextInt();
-      }
-      System.out.println(countInversions(arr));
+
+    public int[] radixSort(int[] data, int b) {
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < data.length; i++) {
+            max = Math.max(max, data[i]);
+        }
+        for (int exp = 1; max / exp > 0; exp *= b) {
+            data = countSort(data, exp, b);
+        }
+        return data;
     }
-  }
+
+    public static void main(String[] args) {
+        RadixSort test = new RadixSort();
+        int[] output = test.radixSort(new int[] { 170, 45, 75, 82, 24, 0, 66 }, 6);
+        for (int i = 0; i < output.length; i++) {
+            System.out.println(output[i]);
+        }
+    }
 }

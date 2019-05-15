@@ -1,55 +1,127 @@
+package graphs;
+
 import java.util.Stack;
 
-public class TowerOfHanoi {
-	private static Stack[] poles;
+public class TopologicalSort {
 
-	public static void main(String[] args) {
-		poles = new Stack[3];
-		poles[0] = new Stack<Integer>();
-		poles[1] = new Stack<Integer>();
-		poles[2] = new Stack<Integer>();
+    public static void main(String[] args) {
+        Graph g = new Graph(6, true);
+        
+        
+        g.addEdge(1, 2, true);
+        g.addEdge(2, 3, true);
+        g.addEdge(4, 2, true);
+        g.addEdge(4, 5, true);
+        g.addEdge(5, 6, true);
+        g.addEdge(6, 3, true);
+        TopologicalSort ts = new TopologicalSort();
+        ts.topSort(g);
+    }
 
-		poles[0].push(5);
-		poles[0].push(4);
-		poles[0].push(3);
-		poles[0].push(2);
-		poles[0].push(1);
-		moveTower(5, 0, 2, 1);
-		printPoles();
-	}
+    public void topSort(Graph g) {
+        initDfs(g);
+        for (int i = 1; i <= g.numV; i++) {
+            if (!mDiscovered[i]) {
+                idfs(i, g);
+            }
+            if (mFinished) return;
+        }
+        while (mSorted.size() > 0) {
+            out(mSorted.pop() + " ");
+        }
+        outln("");
+    }
 
-	//I can't actually believe the algorithm is this simple
-	private static void moveTower(int height, int fromPole, int toPole, int withPole) {
-		if (height >= 1) {
-			moveTower(height - 1, fromPole, withPole, toPole);
-			moveDisk(fromPole, toPole);
-			moveTower(height - 1, withPole, toPole, fromPole);
-		}
-	}
+    private Stack<Integer> mSorted;
+    private boolean[] mDiscovered;
+    private boolean[] mProcessed;
+    private int[] mParent;
+    private int[] mEntryTime;
+    private int[] mExitTime;
+    private int mTime;
+    private boolean mFinished;
 
-	private static void moveDisk(int fromPole, int toPole) {
-		poles[toPole].push(poles[fromPole].pop());
-	}
+    private void initDfs(Graph g) {
+        mSorted = new Stack<>();
+        mDiscovered = new boolean[g.numV + 1];
+        mProcessed = new boolean[g.numV + 1];
+        mParent = new int[g.numV + 1];
+        mEntryTime = new int[g.numV + 1];
+        mExitTime = new int[g.numV + 1];
+        mFinished = false;
+        for (int i = 0; i <= g.numV; i++) {
+            mDiscovered[i] = mProcessed[i] = false;
+            mParent[i] = -1;
+        }
+    }
 
-	private static void printPoles() {
-		for (int i = 0; i < 3; i++) {
-			System.out.println("POLE " + i);
-			if (poles[i].size() == 0)
-				System.out.println(" ");
-			else 
-				printPole(i);
-		}
-	}
+    
+    private void idfs(int start, Graph g) {
+        Stack<Vertex> stack = new Stack<>();
+        stack.push(new Vertex(start, g.adjacents[start]));
+        mDiscovered[start] = true;
+        mEntryTime[start] = ++mTime;
+        processVertexEarly(start);
 
-	private static void printPole(int pos) {
-		int size = poles[pos].size();
-		for (int i = 0; i < size; i++) {
-			StringBuilder sb = new StringBuilder();
-			int bound = (Integer)poles[pos].pop();
-			for (int j = 0; j < bound; j++) {
-				sb.append("*");
-			}
-			System.out.println(sb.toString());
-		}
-	}
+        while (!stack.isEmpty()) {
+            Vertex vertex = stack.peek();
+            if (vertex.adj != null) {
+                int end = vertex.adj.end;
+                if (!mDiscovered[end]) {
+                    mParent[end] = vertex.v;
+                    processEdge(vertex.v, end, g);
+
+                    stack.push(new Vertex(end, g.adjacents[end]));
+                    mDiscovered[end] = true;
+                    mEntryTime[end] = ++mTime;
+                    processVertexEarly(end);
+                } else if ((!mProcessed[end] && mParent[vertex.v] != end) || g.directed) {
+                    processEdge(vertex.v, end, g);
+                }
+                vertex.adj = vertex.adj.next;
+            } else {
+                stack.pop();
+                processVertexLate(vertex.v);
+                mExitTime[vertex.v] = ++mTime;
+                mProcessed[vertex.v] = true;
+            }
+            if (mFinished) return;
+        }
+    }
+
+    private void processVertexEarly(int vertex) {}
+
+    private void processVertexLate(int vertex) {
+        mSorted.push(vertex);
+    }
+
+    private void processEdge(int vertex, int end, Graph g) {
+        if (classifyEdge(vertex, end) == EdgeType.BACK) {
+            outln("Not a DAG! Cycle detected " + vertex + " -> " + end);
+            mFinished = true;
+        }
+    }
+
+    private EdgeType classifyEdge(int x, int y) {
+        if (mParent[y] == x) return EdgeType.TREE;
+        if (mDiscovered[y] && !mProcessed[y]) return EdgeType.BACK;
+        if (mProcessed[y] && mEntryTime[y] > mEntryTime[x]) return EdgeType.FORWARD;
+        if (mProcessed[y] && mEntryTime[y] < mEntryTime[x]) return EdgeType.CROSS;
+        outln("Warning: self loop " + x + ", " + y);
+        return EdgeType.TREE;
+    }
+
+    private enum EdgeType { TREE, BACK, FORWARD, CROSS };
+
+    private class Vertex {
+        int v;
+        Graph.Adjacent adj;
+        public Vertex(int v, Graph.Adjacent adj) {
+            this.v = v;
+            this.adj = adj;
+        }
+    }
+
+    private static void out(String str) {System.out.print(str);}
+    private static void outln(String str) {System.out.println(str);}
 }

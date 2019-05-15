@@ -1,37 +1,31 @@
-package singular.cluster.bubblesort;
+package Array;
 
-/**
- * Created by Andrew Michel on 10/9/2017.
- */
-public final class Bubblesort
-{
-    // Private constructor
-    private Bubblesort() {}
 
-    public static void sort(int[] array)
-    {
-        sort(array, 0, array.length);
-    }
-
-    public static void sort(int[] array, int startIndex, int endIndex)
-    {
-        boolean swapOccurred = true;
-        int swapValue = Integer.MIN_VALUE;
-
-        for(int i = startIndex; i < endIndex && swapOccurred; i++)
-        {
-            swapOccurred = false;
-
-            for(int k = startIndex; k < endIndex - i - 1; k++)
-            {
-                if(array[k] > array[k + 1])
-                {
-                    swapOccurred = true;
-                    swapValue = array[k];
-                    array[k] = array[k + 1];
-                    array[k + 1] = swapValue;
-                }
-            }
-        }
-    }
+public class FirstMissingPositive {
+	public int firstMissingPositive(int[] A) {
+		int n = A.length;
+		for (int i = 0; i < n; i++) {
+			
+			while (A[i] != i) {
+				
+				if (A[i] < 0 || A[i] >= n)
+					break;
+	 
+				
+				if(A[i]==A[A[i]])
+	                    		break;
+				
+				int temp = A[i];
+				A[i] = A[temp];
+				A[temp] = temp;
+			}
+		}
+	 
+		for (int i = 0; i < n; i++) {
+			if (A[i] != i)
+				return i;
+		}
+	 
+		return n;
+	}
 }

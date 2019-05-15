@@ -1,82 +1,65 @@
+package Graph;
 
-
-import java.util.Scanner;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Stack;
-/**
- * @author Dillon Nagele
- */
 
-/**
- * Class representing a tower
- */
-class HanoiStack extends Stack<Integer>{
-	
-	//Tower name
-	private char tower;
-	
-	//Constructor
-	public HanoiStack(char tower){
-		super();
-		this.tower=tower;
-	}
-	
-	//gets tower name
-	public char getTower(){
-		return tower;
-	}
-}
 
-/**
- * Class running the tower 
- */
-public class TowersOfHanoi {
+public class TopologicalSort {
 
-	
-	public static void main(String[] args) {
-		//user input
-		Scanner input=new Scanner(System.in);
-		
-		HanoiStack startA = new HanoiStack('A'); // start tower in output
-        HanoiStack endC = new HanoiStack('C'); // end tower in output
-        HanoiStack tempB = new HanoiStack('B'); // temporary tower in output
-        int totalDisks; // number of disks
-        
-        System.out.println("Enter number of disks for Tower of Hanoi:");
-        
-        totalDisks=input.nextInt();
-        
-        //adds disks to start tower based on user input
-        for(int i=totalDisks;i>0;i--){
-    	    startA.add(i);
+    int V;
+    LinkedList<Integer> adj[];
+
+    TopologicalSort(int V){
+        this.V = V;
+        adj = new LinkedList[V];
+        for(int i=0; i<V; i++)
+            adj[i] = new LinkedList();
+    }
+
+    public void addEdges(int v, int w){
+        adj[v].add(w);
+    }
+
+    public void topologicalSort(){
+        Stack stack = new Stack();
+
+        boolean visited[] = new boolean[V]; 
+
+        for(int i=0; i<V; i++){
+            if(!visited[i])
+                topologicalSort(i,stack, visited);
         }
-        
-        //Executes Tower of Hanoi
-        solveTowers(totalDisks,startA,endC,tempB);
-        input.close();
-	}
-	
-	/**
-	 * Method executing Tower of Hanoi
-	 * @param n number of towers
-	 * @param startA
-	 * @param endC
-	 * @param tempB
-	 */
-	 private static void solveTowers(int n, HanoiStack startA, HanoiStack endC,
-	            HanoiStack tempB) {
-	        if (n > 0) {
-	        	//Recursion for next move
-	            solveTowers(n - 1, startA, tempB, endC);
-	            //Current disk
-	            Integer d = (Integer) startA.pop(); 
-                // to top of tower C
-                endC.push(d); 
-                //Prints current move
-                System.out.println("Move disk " + d + " from tower "+ startA.getTower() + " to tower " + endC.getTower());
-                //Recursion for next move
-	            solveTowers(n - 1, tempB, endC, startA);
-	        }
-	 
-	    }
-}
 
+        while (!stack.isEmpty())
+            System.out.print(stack.pop() + "  ");
+
+        System.out.println();
+    }
+
+    public void topologicalSort(int v, Stack stack, boolean visited[]){
+        visited[v] = true;
+
+        Iterator<Integer> it = adj[v].iterator();
+        while (it.hasNext()){
+            Integer i = it.next();
+            if(!visited[i])
+                topologicalSort(i,stack,visited);
+        }
+
+        stack.push(new Integer(v));
+    }
+
+    public static void main(String args[]){
+        TopologicalSort graph = new TopologicalSort(6);
+
+        graph.addEdges(5,2);
+        graph.addEdges(5,0);
+        graph.addEdges(4,0);
+        graph.addEdges(4,1);
+        graph.addEdges(2,3);
+        graph.addEdges(3,1);
+
+        graph.topologicalSort();
+    }
+}

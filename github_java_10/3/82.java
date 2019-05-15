@@ -1,92 +1,55 @@
-/**
- * David Lonergan
- * This program solves the Tower of Hanoi puzzle
- * 2^n - 1 moves are required to move n disks.
- * Used textbook, online tower of Hanoi math game and geeksforgeeks video on youtube
- * I worked alone
- * note that the commented out code was past ideas I had
- */
+package com.dreamskiale.basic_algorithms.search;
 
-import java.util.Scanner;
-public class TowerOfHanoi
-{
-    public static void main(String[] args)
-    {
-        int nDisks;
-        System.out.print("Enter the number of disks: ");
-        Scanner keyboard = new Scanner(System.in);
-        nDisks = keyboard.nextInt();
-        keyboard.close();
+import java.util.Deque;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-        moveTower(1, 3, nDisks);
+import com.dreamskiale.basic_algorithms.pojos.Vertex;
+
+public class DepthFirstSearchRecursive<T> implements GraphSearch<T> {
+
+  private Set<Vertex<T>> visited = new LinkedHashSet<>();
+  private Deque<Vertex<T>> topologicalSort = new LinkedList<>();
+
+  @Override
+  public Iterable<Vertex<T>> search(Vertex<T> head) {
+    visited.clear();
+    topologicalSort.clear();
+    dfsRecursive(head);
+    return visited;
+  }
+  
+  public Iterable<Vertex<T>> dfs(List<Vertex<T>> graph) {
+    visited.clear();
+    topologicalSort.clear();
+    for (Vertex<T> v : graph) {
+      if (!visited.contains(v)) {
+        dfsRecursive(v);
+      }
     }
-
-    public static void moveDisk(int fromPeg, int toPeg)
-    {
-        System.out.println("From " + fromPeg + " to " + toPeg);
+    return visited;
+  }
+  
+  private void dfsRecursive(Vertex<T> vertex) {
+    visit(vertex);
+    List<Vertex<T>> adj = vertex.getAdjacent();
+    for (Vertex<T> a : adj) {
+      if (!visited.contains(a)) {
+        dfsRecursive(a);
+      }
     }
+    topologicalSort.addFirst(vertex);
+  }
+  
+  
+  public Deque<Vertex<T>> getTopologicalSort() {
+    return topologicalSort;
+  }
+  
+  private void visit(Vertex<T> v) {
+    visited.add(v);
+  }
 
-    public static void moveTower(int fromPeg, int toPeg, int n)
-    {
-//        if(n==1){
-//            System.out.println("From " + fromPeg + " to " + toPeg);
-//        }
-//        else if(n==2)
-//        {
-//            System.out.println("From " + fromPeg + " to " + (toPeg-1));
-//            moveTower(fromPeg,toPeg,n-1);
-//            System.out.println("From " + (fromPeg+1) + " to " + toPeg);
-//        }
-//        else if(n==3){
-//            moveTower(fromPeg,toPeg,n-2);
-//            System.out.println("From " + fromPeg + " to " + (toPeg-1));
-//            moveTower(toPeg,fromPeg+1,n-2);
-//            moveTower(fromPeg,toPeg,n-2);
-//            System.out.println("From " + fromPeg + " to " + (fromPeg-1));
-//            moveTower(fromPeg+1,toPeg,n-1);
-//            moveTower(fromPeg,toPeg,n-2);
-//
-//        }
-
-//        int aux = 2;
-//        int start = fromPeg;
-//        int end = toPeg;
-//        //first goal is to move n-1 to the aux peg
-//        // if n = 1, then move to the final peg
-//        // then move the n-1 rings to the final peg - use same
-////        method from first step but change the peg conditions
-//
-//        if(n>1){
-//            moveTower(fromPeg,toPeg,n-1);
-//        }
-//        end--;
-//        moveDisk(start,end);
-//        end++;
-//        int aux = 2;
-//        if(n==1)
-//            moveDisk(fromPeg,toPeg);
-//        else if(n==2){
-//            moveTower(fromPeg,aux,n-1);
-//            moveDisk(fromPeg,toPeg);
-//            moveDisk(aux,toPeg);
-//        }
-//        else
-//            if(n%2==0)
-//            moveTower(fromPeg,aux,n-1);
-//        else
-//            moveTower(fromPeg,toPeg,n-1);
-////            moveDisk(fromPeg,toPeg);
-////            moveTower(aux,toPeg,n-1);
-//        System.out.println(n%2);
-        if(n>1) {
-//            System.out.println(aux);
-            moveTower(fromPeg, (6-(fromPeg+toPeg)), n - 1);
-//            System.out.println(aux);
-            moveDisk(fromPeg, toPeg);
-            moveTower((6-(fromPeg+toPeg)), toPeg, n - 1);
-        }
-        else{
-            moveDisk(fromPeg,toPeg);
-        }
-    }
 }

@@ -1,33 +1,32 @@
-/*
-Given two words A and B, find the minimum number of steps required to convert A to B. (each operation is counted as 1 step.)
 
-You have the following 3 operations permitted on a word:
+import java.util.Scanner;
 
-Insert a character
-Delete a character
-Replace a character
-*/
-
-public class Solution {
-	public int minDistance(String a, String b) 
-	{
-	    int[][] numSteps = new int[a.length()+1][b.length()+1];
-	    
-	    for(int i = 0; i <= a.length(); i++)
-	    {
-	        for(int j = 0; j <= b.length(); j++)
-	        {
-	            if(i == 0 && j == 0) numSteps[i][j] = 0;
-	            else if(i == 0 && j != 0) numSteps[i][j] = numSteps[i][j-1]+1;
-	            else if(i != 0 && j == 0) numSteps[i][j] = numSteps[i-1][j]+1;
-	            else if(a.charAt(i-1) == b.charAt(j-1)) numSteps[i][j] = numSteps[i-1][j-1];
-	            else numSteps[i][j] = Math.min( 
-	                Math.min(numSteps[i-1][j-1]+1, numSteps[i-1][j]+1),
-	                numSteps[i][j-1]+1);
-	        }
-	    }
-	    return numSteps[a.length()][b.length()];
-	    
-	}
+public class JavaQuickSort {
+    static Scanner myScanner = new Scanner(System.in);
+    public static void main(String[] args) {
+        int n = myScanner.nextInt();
+        int[] array = new int[n];
+        for (int i = 0; i < array.length ; i++) {
+            array[i]=myScanner.nextInt();
+        }
+        QuickSort.sort(array);
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i]+" ");
+        }
+        int low = 0, high = array.length -1,key;
+        System.out.println("whch vlu u wnt to serch?");
+        key = myScanner.nextInt();
+        while(low<=high){
+            int mid = (low+high)/2;
+            if(array[mid]==key){
+                System.out.println("Value Found: "+key);
+                break;
+            }
+            if(array[mid] > key) high = mid-1;
+            else if(array[mid] < key) low = mid+1;
+            else{
+                System.out.println("Value Not found!!");
+            }
+        }
+    }
 }
-

@@ -1,32 +1,31 @@
-package com.test.graph.bfs;
 
-import java.util.LinkedList;
-import java.util.Queue;
 
-/**
- * Created by kunal on 06/11/17.
- */
-public class BFS {
+public class InsertionSort{
 
-    public void bfs(final Vertex root) {
-        Queue<Vertex> queue = new LinkedList<>();
+    public static void main(String[] args){
+        int[] meuArray = {3, 8, 15, 10, 1, 2, 3};
+        exibirValores(meuArray);
+        ordenarInsertionSort(meuArray);
+        exibirValores(meuArray);
+    }
 
-        if (root != null) {
-            root.setVisited(true);
-            queue.add(root);
+    private static void ordenarInsertionSort(int meuArray[]){
+        for(int i = 1; i < meuArray.length; ++i){
+            int valor = meuArray[i];
+            int j = i - 1;
 
-            while (!queue.isEmpty()) {
-                Vertex vertex = queue.remove();
-                System.out.println(vertex.toString());
-
-                for (Vertex child : vertex.getNeighbourList()) {
-                    if(!child.isVisited()){
-                        child.setVisited(true);
-                        queue.add(child);
-                    }       
-                }
+            while(j >= 0 && meuArray[j] > valor){
+                meuArray[j+1] = meuArray[j];
+                j = j - 1;
             }
+            meuArray[j+1] = valor;
         }
+    }
 
+    private static void exibirValores(int meuArray[]){
+        for(int i = 0; i < meuArray.length; ++i){
+            System.out.print(meuArray[i] + " ");
+        }
+        System.out.println();
     }
 }

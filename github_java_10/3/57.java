@@ -1,17 +1,51 @@
-public class TowerOfHanoi {
-	public static void main(String[] args) {
-	int numOfDisks=3;
-	System.out.println("Tower of Hanoi Problem for Thee disks");
-	towerOfHanoi(numOfDisks,'A','B','C');
+package com.dlh.zambas.graph;
+
+import java.util.Iterator;
+import java.util.Stack;
+
+public class TopologicalSort {
+	public void addEdge(Graph graph, int v, int w) {
+		graph.adjListArray[v].add(w);
 	}
-	public static void towerOfHanoi(int disks,char first,char middle,char last){
-		if(disks==1){
-			System.out.println("Disk 1 from "+first+" to "+last);
+
+	public void topologicalSort(Graph graph) {
+		Stack<Integer> stack = new Stack<>();
+		boolean visited[] = new boolean[graph.vertex];
+
+		for (int i = 0; i < graph.vertex; i++) {
+			if (!visited[i])
+				topologicalSortUtil(graph, i, visited, stack);
 		}
-		else{
-			towerOfHanoi(disks-1, first,last,middle);
-			System.out.println("Disk "+disks+" from "+first+" to "+last);
-			towerOfHanoi(disks-1,middle, first,last);
+
+		
+		while (stack.empty() == false)
+			System.out.print(stack.pop() + " ");
+	}
+
+	private void topologicalSortUtil(Graph graph, int vertex, boolean[] visited, Stack<Integer> stack) {
+		visited[vertex] = true;
+		int i;
+		Iterator<Integer> it = graph.adjListArray[vertex].listIterator();
+		while (it.hasNext()) {
+			i = it.next();
+			if (!visited[i]) {
+				topologicalSortUtil(graph, vertex, visited, stack);
+			}
 		}
+		stack.push(vertex);
+	}
+
+	public static void main(String[] args) {
+		Graph g = new Graph(6);
+		TopologicalSort topologicalSort = new TopologicalSort();
+		
+		topologicalSort.addEdge(g, 3, 1);
+		topologicalSort.addEdge(g, 2, 1);
+		topologicalSort.addEdge(g, 4, 2);
+		topologicalSort.addEdge(g, 5, 3);
+		
+
+		System.out.println("Following is a Topological " + "sort of the given graph");
+		topologicalSort.topologicalSort(g);
 	}
 }

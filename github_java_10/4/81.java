@@ -1,48 +1,71 @@
-import java.util.Scanner;
+package sorting;
+import java.util.ArrayList;
+import java.util.Random;
 
+import structs.priorityqueue.Entry;
+import structs.priorityqueue.HeapPriorityQueue;
 
-public class insertionsort {
-	 public static void main(String a[]){    
-	     int key,j;
-		 Scanner s = new Scanner(System.in);
-	        System.out.print("Enter no. of elements you want in array:");
-	         int no = s.nextInt();
-	         
-	        int arrays[] = new int[no];
-	        System.out.println("Enter all the elements:");
-	        for(int i = 0; i < no; i++)
-	        {
-	            arrays[i] = s.nextInt();
-	        }
-	        
-	        System.out.println("Array Before Sorted...");
-	        for(int i = 0; i < no; i++)
-	        {
-	           System.out.println(arrays[i]);
-	        }
-	        
-	         for(int i=1;i<arrays.length;i++)
-	         {
-	        	 key=arrays[i];
-	        	 j=i;
-	        	 while(j>0 && arrays[j-1]>key)
-	        	 {
-	        		 arrays[j]=arrays[j-1];
-	        		 j--;
-	        	 }
-	        	 arrays[j]=key;
-	         }
-	        
-	        
-	        System.out.println("Sorted Array...");
-	         for (int c = 0; c < ( no ); c++)
-	      	  System.out.println(arrays[c]);
-	         s.close();
-	    }  
-	       
-	   
-	       
-	    }    
-	   
-
-
+public class HeapSort<K,V> extends AbstractSort {
+	
+	private HeapPriorityQueue<K,V> sortHeap;
+	private ArrayList<Entry<K,V>> innerHeapList;
+	private int lastIndex;
+	
+	
+	public HeapSort(ArrayList<Entry<K,V>> a){
+		sortHeap = new HeapPriorityQueue<K,V>(a);
+		innerHeapList = sortHeap.heap;
+		lastIndex = innerHeapList.size() - 1;
+	}
+	
+	public void sort(){
+		
+		while(lastIndex > 0){
+			sortHeap.swap(0, lastIndex);
+			lastIndex--;
+			sortDownheap(0);	
+		}
+	}
+	
+	
+	public void sortDownheap(int i){
+		while(sortHeap.hasLeft(i) && (sortHeap.left(i) < lastIndex)){
+			int leftIndex = sortHeap.left(i);
+			int smallChildIndex = leftIndex;
+			if(sortHeap.hasRight(i)){
+				int rightIndex = sortHeap.right(i);
+				if(sortHeap.compare(innerHeapList.get(leftIndex), innerHeapList.get(rightIndex)) > 0){
+					smallChildIndex = rightIndex;
+				}
+			}
+			
+			if(sortHeap.compare(innerHeapList.get(smallChildIndex), innerHeapList.get(i)) >= 0){
+				break;				  
+			} 
+			
+			sortHeap.swap(i, smallChildIndex);
+			i = smallChildIndex;
+		}
+	}
+	
+	public static <K,V> void showList(ArrayList<Entry<K,V>> a){
+		
+		for (int i = 0; i < a.size(); i++){
+			System.out.print(a.get(i).getKey() + " ");
+		}
+		
+		System.out.println();
+	}
+	
+	public static void main(String[] arg){
+		ArrayList<Entry<Integer, String>> test = new ArrayList<>();
+	
+		HeapSort<Integer, String> testSort = new HeapSort<>(test);
+		System.out.println("Before: ");
+		showList(testSort.innerHeapList);
+	
+		testSort.sort();
+		System.out.println("After: ");
+		showList(test);
+	}
+}

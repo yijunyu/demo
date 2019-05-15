@@ -1,76 +1,30 @@
-package com.hackerrank.interview;
+package PukyungUniv;
 
-import java.util.*;
+import static org.junit.Assert.assertEquals;
 
-public class DFS {
+import java.util.Arrays;
 
-    private static boolean isValid(int[][] matrix, int row, int column) {
+import org.junit.Test;
 
-        if (row < 0 || column < 0 || row >= matrix.length || column >= matrix[row].length ||
-                matrix[row][column] < 1) {
-            return false;
-        } else {
-            return true;
-        }
+public class Sort_BubbleSort {
+
+    @Test
+    public void test() {
+        int[] data = { 1, 3, 5, 7, 2, 4, 6, 8 };
+        Sort_BubbleSort.sort(data);
+        assertEquals(Arrays.toString(new int[] { 1, 2, 3, 4, 5, 6, 7, 8 }), Arrays.toString(data));
     }
-
-    private static int dfs(int[][] matrix, int row, int column) {
-
-        if (!isValid(matrix, row, column)) {
-            return 0;
-        }
-
-        int count = 1;
-        int newX = row;
-        int newY = column;
-        matrix[row][column] = -1;
-
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                newX = row + i;
-                newY = column + j;
-
-                count = count + dfs(matrix, newX, newY);
-            }
-        }
-        return count;
-    }
-
-    public static int solve(int[][] matrix) {
-
-        int maxValue = 0;
-        int tempValue = 0;
-
-        for (int r = 0; r < matrix.length; r++) {
-            for (int c = 0; c < matrix[r].length; c++) {
-                tempValue = dfs(matrix, r, c);
-
-                if (tempValue > maxValue) {
-                    maxValue = tempValue;
+    
+    public static void sort(int[] data) {
+        for (int k = data.length - 1; k > 0; k--) {
+            for (int i = 0; i < k; i++) {
+                if (data[i] > data[i + 1]) {
+                    int tmp = data[i];
+                    data[i] = data[i + 1];
+                    data[i + 1] = tmp;
                 }
             }
         }
-
-        return maxValue;
-    }
-
-    public static void main(String[] args) {
-
-//        int[][] matrix = new int[][] {{1,1,0,0}, {0,1,1,0}, {0,0,1,0}, {1,0,0,0,}};
-//        System.out.println(solve(matrix));
-
-        Scanner inner = new Scanner(System.in);
-        int r = inner.nextInt();
-        int c = inner.nextInt();
-        int[][] matrix = new int[r][c];
-
-        for (int i = 0; i < r; i++) {
-            for (int j = 0; j < c; j++) {
-                matrix[i][j] = inner.nextInt();
-            }
-        }
-        System.out.println(solve(matrix));
-        inner.close();
     }
 
 }

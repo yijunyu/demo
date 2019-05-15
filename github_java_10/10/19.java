@@ -1,56 +1,35 @@
-/**
- * Project Name: algorithms_java
- * File Name: BubbleSort.java
- * Package Name: com.fanglei.resource.chapter_2.chapter_2_problems_bubble_sort
- * Date: Apr 15, 2017 9:58:59 PM
- * Copyright (c) 2017, fanglei@pku.edu.cn All Rights Reserved.
- * 
- */
+package com.odoni.algorithms.sort.bucket;
 
+import com.odoni.algorithms.sort.Sort;
 
-package com.fanglei.resource.chapter_2.chapter_2_problems_bubble_sort;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+public class BucketSort implements Sort {
 
-/**
- * ClassName: BubbleSort
- * Description: bubble-sort algorithm
- * 
- * @author Lei Fang
- * @email fanglei@pku.edu.cn
- * @version
- * @date: Apr 15, 2017 9:58:59 PM
- */
-public class BubbleSort
-{
-	/**
-	 * Method Name: bubbleSort
-	 * Description: bubble-sort algorithm
-	 * 
-	 * @param A the array to be sorted
-	 * 
-	 * ALGORITHM-BUBBLE-SORT(A)
-	 * for i = 1 to A.length - 1
-	 * 		for j = A.length downto i + 1
-	 * 			if A[j] < A[j-1]
-	 * 				exchange A[j] with A[j-1]
-	 *
-	 * @author Lei Fang
-	 */
-	public static void bubbleSort(int[] A)
-	{
-		for(int i = 0; i < (A.length - 1); i++)
-		{
-			for (int j = A.length - 1; j >= (i + 1); j--)
-			{
-				if (A[j] < A[j - 1])
-				{
-					// Switch with a temp variable
-					int temp = A[j];
-					A[j] = A[j - 1];
-					A[j - 1] = temp;
-				}
+	public int[] sort(int[] arrayToSort) {
+		int max = getMaxFromArray(arrayToSort);
+		Map<Integer, Integer> bucketMap = new HashMap<>();
+		for (int i = 0; i <= max; i++) {
+			bucketMap.put(i, 0);
+		}
+		for (int i = 0; i < arrayToSort.length; i++) {
+			bucketMap.put(arrayToSort[i], bucketMap.get(arrayToSort[i])+1);
+		}
+		int sortedArrayIndex = 0;
+		for (Map.Entry<Integer, Integer> entry: bucketMap.entrySet()) {
+			for (int i = 0; i < entry.getValue(); i++) {
+				arrayToSort[sortedArrayIndex++] = entry.getKey();
 			}
 		}
+		return arrayToSort;
 	}
 
+	protected int getMaxFromArray(int[] arrayToSort) {
+		List<Integer> numbers = Arrays.stream(arrayToSort).boxed().collect(Collectors.toList());
+		return numbers.stream().mapToInt(Integer::intValue).max().getAsInt();
+	}
 }

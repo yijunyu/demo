@@ -1,84 +1,96 @@
-package c03_stacks_and_queues.p3_4;
 
-import java.util.Stack;
 
-/**
- * Created by sharath on 8/10/14.
- *
- * Problem description:
- * Classic problem of tower of Hanoi.
- * You have 3 towers and N disks of different sizes.
- * Disks can slide onto any towers.
- * Puzzle starts with disks in ascending order from top to bottom on tower 1.
- * Following are the constraints
- * 1. Only one disk can be moved at a time.
- * 2. A disk is slid off the top of one tower onto next.
- * 3. A disk can only be placed on top of larger disk.
- *
- * Write a program to move all disks from tower 1 to 3 using stacks.
- *
- */
-public class Tower {
+public class AcyclicSP {
 
-    private int N;
+    private double[] distTo;    
+    private DirectedEdge[] edgeTo;  
 
-    private Stack<Integer>[] towers;
+    
+    
+    public AcyclicSP(EdgeWeightedDigraph G, int s) {
+        distTo = new double[G.V()];
+        edgeTo = new DirectedEdge[G.V()];
 
-    @SuppressWarnings("unchecked")
-    public Tower(int numOfDisks) {
-        N = numOfDisks;
-        towers = new Stack[4];
-        towers[1] = new Stack<>();
-        towers[2] = new Stack<>();
-        towers[3] = new Stack<>();
+        validateVertex(s);
 
-        for(int i = numOfDisks; i > 0; i--) {
-            towers[1].push(i);
+        for (int v = 0; v < G.V(); v++) {
+            distTo[v] = Double.POSITIVE_INFINITY;
+        }
+        distTo[s] = 0.0;
+
+        
+        Topological topological = new Topological(G);
+        if (!topological.hasOrder()) {
+            throw new IllegalArgumentException("Digraph is not acyclic.");
+        }
+        for (int v : topological.order()) {
+            for (DirectedEdge e : G.adj(v)) {
+                relax(e);
+            }
         }
     }
 
-    public void hanoi(int n, int a, int b, int c) {
-        if(n > 0) {
-            hanoi(n - 1 , a, c, b);
-            towers[c].push(towers[a].pop());
-            display();
-            hanoi(n - 1, b, a, c);
+    
+    private void relax(DirectedEdge e) {
+        int v = e.from(), w = e.to();
+        if (distTo[w] > distTo[v] + e.weight()) {
+            distTo[w] = distTo[v] + e.weight();
+            edgeTo[w] = e;
         }
     }
 
+    
+    public double distTo(int v) {
+        validateVertex(v);
+        return distTo[v];
+    }
+
+    
+    public boolean hasPathTo(int v) {
+        validateVertex(v);
+        return distTo[v] < Double.POSITIVE_INFINITY;
+    }
+
+    
+    public Iterable<DirectedEdge> pathTo(int v) {
+        validateVertex(v);
+        if (!hasPathTo(v)) {
+            return null;
+        }
+        Stack<DirectedEdge> path = new Stack<DirectedEdge>();
+        for (DirectedEdge e = edgeTo[v]; e != null; e = edgeTo[e.from()]) {
+            path.push(e);
+        }
+        return path;
+    }
+
+    
+    private void validateVertex(int v) {
+        int V = distTo.length;
+        if (v < 0 || v >= V) {
+            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
+        }
+    }
+
+    
     public static void main(String[] args) {
-        int numDisks = 5;
-        Tower t = new Tower(numDisks);
-        t.display();
-        t.hanoi(numDisks, 1, 2, 3);
-    }
+        In in = new In(args[0]);
+        int s = Integer.parseInt(args[1]);
+        EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
 
-    private void display() {
-        System.out.println("  A  |  B  |  C");
-        System.out.println("---------------");
-        for(int i = N - 1; i >= 0; i--)
-        {
-            String d1 = " ", d2 = " ", d3 = " ";
-            try
-            {
-                d1 = String.valueOf(towers[1].get(i));
+        
+        AcyclicSP sp = new AcyclicSP(G, s);
+        for (int v = 0; v < G.V(); v++) {
+            if (sp.hasPathTo(v)) {
+                System.out.printf("%d to %d (%.2f)  ", s, v, sp.distTo(v));
+                for (DirectedEdge e : sp.pathTo(v)) {
+                    System.out.print(e + "  ");
+                }
+                System.out.println();
             }
-            catch (Exception e){
+            else {
+                System.out.printf("%d to %d   no path\n", s, v);
             }
-            try
-            {
-                d2 = String.valueOf(towers[2].get(i));
-            }
-            catch (Exception e){
-            }
-            try
-            {
-                d3 = String.valueOf(towers[3].get(i));
-            }
-            catch (Exception e){
-            }
-            System.out.println("  "+d1+"  |  "+d2+"  |  "+d3);
         }
-        System.out.println("\n");
     }
 }

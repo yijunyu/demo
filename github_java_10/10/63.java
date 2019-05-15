@@ -1,124 +1,66 @@
-package lecture8;
+package sort.definition;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
-public class bubblesort {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int[] array = { 5, 2, 3, 4, 1 };
-		int[] array2={5,2,3};
-		//bsort(array);
-		isort(array);
-		lecture6.arrays.display(array);
-		System.out.println(binarysearch(array,5));
-		ArrayList<Integer> n=new ArrayList<Integer>();
-		n=intersection(array,array2);
-		 
-		System.out.println(n);
-	}
+public class BucketSort {
+    
+    
+    private  class Person{
+        private String name;
+        private int key;
+        public Person(String name, int key) {
+            super();
+            this.name = name;
+            this.key = key;
+        }
+        @Override
+        public String toString() {
+            return "Person [name=" + name + ", key=" + key + "]";
+        }
+        
+    }
+    public static void sort(Person[] a){
+       int[] count = new int[5];
+       int[] accum = new int[6];
+       int n = a.length;
+       Person[] aux = new Person[n];
+       for (int i = 0; i < n; i++){
+           count[a[i].key]++;
+       }
+       accum[0] = 0;
+       for (int i = 0; i < 5; i++){
+           accum[i + 1]  = count[i] + accum[i];
 
-	public static void bsort(int[] array)
-	{
-		int counter=1;
-		while(counter<=array.length)
-		{
-			for(int i=0;i<array.length-counter;i++)
-			{
-				if(array[i+1]<array[i])
-				{
-					int temp=array[i+1];
-					array[i+1]=array[i];
-					array[i]=temp;
-				}
-					
-			}
-			counter++;
-		}
-	}
-	public static void ssort(int[] array)
-	{
-		int counter=1;
-		while(counter<=array.length)
-		{
-			for(int i=counter;i<=array.length-1;i++)
-			{
-				if(array[i]<array[counter-1])
-				{
-					int temp=array[i];
-					array[i]=array[counter-1];
-					array[counter-1]=temp;
-				}
-					
-			}
-			counter++;
-		}
-	}
-	public static void isort(int[] array)
-	{
-		int counter=1;
-		while(counter<=array.length-1)
-		{
-			for(int i=counter;i>0;i--)
-			{
-				if(array[i]<array[i-1])
-				{
-					int temp=array[i];
-					array[i]=array[i-1];
-					array[i-1]=temp;
-				}
-				else
-					break;
-					
-			}
-			counter++;
-		}
-	}
-	public static int binarysearch(int[] array,int key)
-	{
-		int start=0,end=array.length-1,mid=(start+end)/2;
-		while(start<=end)
-		{
-			if(array[mid]==key)
-				return mid;
-			if(array[mid]<key)
-			{
-				start=mid+1;
-				mid=(start+end)/2;
-			}
-			if(array[mid]>key)
-			{
-				end=mid-1;
-				mid=(start+end)/2;
-			}
-		}
-		return -1;
-	}
-	public static ArrayList<Integer> intersection(int[] array1,int[] array2)
-	{
-		ArrayList<Integer> nlist=new ArrayList<Integer>();
-		isort(array1);
-		isort(array2);
-		for(int i=0,j=0;i<array1.length-1||j<array2.length-1;)
-		{
-			
-			if(array1[i]==array2[j])
-			{
-						nlist.add(array1[i]);
-						i++;j++;
-			}
-			if(array1[i]>array2[j])
-			{
-						j++;
-			}
-			if(array1[i]<array2[j])
-			{
-						i++;
-			}
-		}
-		return nlist;
-		
-	}
-	
+       }
+       for (int i = 0; i < n; i++){
+           aux[accum[a[i].key]++] = a[i];
+       }
+       for (int i = 0; i < n; i++){
+           a[i] = aux[i];
+       }
+    }
+    
+    public static void main(String[] args) {
+      
+        Person p1 = new BucketSort().new Person("wilson1", 1);
 
+        Person p2 = new BucketSort().new Person("wilson2", 2);
+        Person p3 = new BucketSort().new Person("wilson3", 2);
+        Person p4 = new BucketSort().new Person("wilson4", 3);
+        Person p5 = new BucketSort().new Person("wilson5", 4);
+        Person p6 = new BucketSort().new Person("wilson6", 1);
+        Person p7 = new BucketSort().new Person("wilson7", 0);
+        Person p8 = new BucketSort().new Person("wilson8", 0);
+        Person p9 = new BucketSort().new Person("wilson9", 4);
+        Person p10 = new BucketSort().new Person("wilson10", 4);
+        Person p11 = new BucketSort().new Person("wilson11", 1);
+        Person p12 = new BucketSort().new Person("wilson11", 3);
+        Person[] a = new Person[]{p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12};
+        System.out.println(Arrays.toString(a));
+        sort(a);
+        System.out.println(Arrays.toString(a));
+        
+    }
+    
 }

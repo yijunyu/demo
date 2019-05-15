@@ -1,38 +1,29 @@
-package bubblesort;
 
-import java.util.ArrayList;
+import java.util.*;
 
-public class Bubblesort {
-	private static int[] Input = new int[20];
-	
-	public static void main(String[] args) {
-		new Bubblesort();
-	}
-
-	public Bubblesort() {
-		super();
-		for(int i = 0; i<20; i++) {
-			Input[i] = (int) (Math.random()*100);
-		}
-		
-		
-		
-		int k = 0;
-		int temp;
-		for(int i = Input.length; i>0;i--) {
-			for(k=0; k<i-1; k++) {
-				if(Input[k]<Input[k+1]) {
-					temp = Input[k+1];
-					Input[k+1] = Input[k];
-					Input[k] = temp;	
-				}
-			}
-		}
-		
-		for(int i = 0; i< Input.length; i++) {
-			System.out.println(Input[i]);
-		}
-	}
-	
-	
+public class TopKFrequentElements {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+    	
+        Map<Integer, Integer> cnts = new HashMap<Integer, Integer>();
+        Map<Integer, List<Integer>> cntLists = new HashMap<Integer, List<Integer>>();
+        
+        for(int num : nums) {
+            int oriCnt = cnts.getOrDefault(num, 0);
+            cnts.put(num, oriCnt + 1);
+        }
+        
+        for(int num : cnts.keySet()) {
+            int cnt = cnts.get(num);
+            if(cntLists.get(cnt) == null) cntLists.put(cnt, new ArrayList<Integer>());
+            cntLists.get(cnt).add(num);
+        }
+        
+        List<Integer> res = new ArrayList<Integer>();
+        for(int cnt = nums.length; cnt >= 0 && res.size() < k; cnt --)
+            
+            if(cntLists.containsKey(cnt)) res.addAll(cntLists.get(cnt));
+        
+        return res;
+        
+    }
 }

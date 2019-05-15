@@ -1,122 +1,46 @@
-package hw4;
+package yuan.jin.interviewQuestions.sort;
 
-import java.util.ArrayList;
-
-public class TopologicalSort {
-	//properties
-	Frame instance;
-	ArrayList<Pair> pairs;
-	ArrayList<Frame> precedenceList;
-	ArrayList<Frame> frames;
-
-	public TopologicalSort(Frame instance){
-		this.instance = instance;
-		pairs = new ArrayList<Pair>();
-		precedenceList = new ArrayList<Frame>();
-		frames = new ArrayList<Frame>();
-		createPairs(instance);
-
-		sort();
-
-		System.out.println("Done");
-	}
-
-	private void createPairs(Frame target)
-	{
-		frames.add(target);
-		Frame current = target;
+import java.util.Arrays;
 
 
-		if(current.getLeftSuperclass() != null && current.getRightSuperclass() != null)
-		{
-			pairs.add(new Pair(current, current.getLeftSuperclass()));
-			pairs.add(new Pair(current.getLeftSuperclass(), current.getRightSuperclass()));
-			createPairs(current.getLeftSuperclass());
-			createPairs(current.getRightSuperclass());
+public class Shellsort {
+
+	
+	public static void shellSort(int[] a) {
+		
+		for (int hop = a.length / 2; hop > 0; hop /= 2) {
+			
+			for (int i = hop; i < a.length; i++) {
+				int key = a[i];
+				int j = i;
+				for (; j >= hop && (a[j - hop] > key); j -= hop)
+					a[j] = a[j - hop];
+				a[j] = key;
+			}
 		}
-		else
-			if(current.getLeftSuperclass() != null && current.getRightSuperclass() == null)
-			{
-				pairs.add(new Pair(current, current.getLeftSuperclass()));
-				createPairs(current.getLeftSuperclass());
-			}
-			else
-				if(target.getLeftSuperclass() == null && target.getRightSuperclass() == null)
-					pairs.add(new Pair(current));
 	}
-
-	private void sort()
-	{
-		while(!pairs.isEmpty())
-		{
-			ArrayList<String> exposed = getExposedClasses();
-
-			if(exposed.size() == 1)
-			{
-				precedenceList.add(find(exposed.get(0)));
-				removeFromPairs(exposed.get(0));
-			}
-			else
-				if(exposed.size() == 2)
-				{
-					int i = 1;
-					boolean cont = true;
-					String current = precedenceList.get(precedenceList.size() - i).getName();
-					while( cont)
-					{
-						if(precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(0)) && !precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(1)) )
-						{
-							precedenceList.add(find(exposed.get(0)));
-							removeFromPairs(exposed.get(0));
-							cont = false;
-						}
-						else
-							if(!precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(0)) && precedenceList.get(precedenceList.size() - i).isSuperclass(exposed.get(1)) )
-							{
-								precedenceList.add(find(exposed.get(1)));
-								removeFromPairs(exposed.get(1));
-								cont = false;
-							}
-							else
-								i++;
-					}
+	
+	
+	public static void shellSort2(int[] a) {
+		int N = a.length;
+		int h = 1;
+		while (h < N/3) h = 3*h + 1;
+		while (h >= 1) {
+			for (int i = h; i < N; i++)
+				for (int j = i; j >= h && a[j] < a[j-h]; j -= h) {
+					int t = a[j];
+					a[j] = a[j-h];
+					a[j-h] = t;
 				}
-		}
-
-
-	}
-
-	private Frame find(String name)
-	{
-		for(Frame F : frames)
-			if(F.getName().compareTo(name) == 0)
-				return F;
-		return null;
-	}
-
-	private void removeFromPairs(String name)
-	{
-		for( int i = 0; i < pairs.size(); i++)
-		{
-			if(pairs.get(i).getFirst().compareTo(name) == 0)
-				pairs.remove(i--);
+			h = h/3;
 		}
 	}
 
-	private ArrayList<String> getExposedClasses()
-	{
-		ArrayList<String> exposed = new ArrayList<String>();
-		for (Pair P1 : pairs)
-		{
-			boolean add = true;
-			for( Pair P2 : pairs)
-			{
-				if(P2.getSecond() != null && P1.getFirst().compareTo(P2.getSecond()) == 0)
-					add = false;
-			}
-			if(add && !exposed.contains(P1.getFirst()))
-				exposed.add(P1.getFirst());
-		}
-		return exposed;
+	public static void main(String[] args) {
+		int[] seq = { 3, 5, 0, 2, 1, 6 };
+
+		shellSort(seq);
+		System.out.println(Arrays.toString(seq));
 	}
+
 }

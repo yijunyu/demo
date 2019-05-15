@@ -1,41 +1,65 @@
-package BubleSort;
 
-public class Principal { 
 
-public static void main(String[] args){
 
-int[] vet = {5,10,2,6,3,2};
-int aux;
-int x;
-int y;
-int cont = 0;
-System.out.println("Numeros Desordenados");
 
-	for (x = 0; x < vet.length; x++) { 
-	
-		System.out.print (" "+vet[x]); // imprime numeros desordenados
 
-}  
- //organiza os valores.
-	for ( x = 0; x < vet.length; x++) { 
 
-		for (y = 0; y < vet.length - 1; y++,cont++) { 
-			if (vet[y] > vet[y + 1]) { 
-				aux = vet[y]; 
-				vet[y] = vet[y + 1]; 
-				vet[y + 1] = aux;
-				
-			} 
-	
-		}
-	
-	}
-	System.out.println(""); 
-	System.out.println("Vetor organizado:"); 
-		for(x = 0; x<vet.length; x++){
-			System.out.print(" "+vet[x]);
-		}
-	System.out.println(""); 
-	System.out.println("Numero de trocas: \n"+cont); 
-	}
+
+
+
+
+
+
+
+
+public void bucketsort(int array[], int N) {
+    if( N <= 0 )
+      return;                                   
+
+    int min = array[0];
+    int max = min;
+    for( int i = 1; i < N; i++ )                
+      if( array[i] > max )
+        max = array[i];
+      else if( array[i] < min )
+        min = array[i];
+
+    int bucket[] = new int[max-min+1];          
+    
+    for( int i = 0; i < N; i++ )                
+      bucket[array[i]-min]++;                   
+
+    int i = 0;                                  
+    for( int b = 0; b < bucket.length; b++ )    
+      for( int j = 0; j < bucket[b]; j++ )      
+        array[i++] = b + min;                     
 }
+
+public static void sort(int[] a, int maxVal) {
+    int [] bucket=new int[maxVal+1];
+ 
+    for (int i=0; i<bucket.length; i++) {
+         bucket[i]=0;
+    }
+ 
+    for (int i=0; i<a.length; i++) {
+         bucket[a[i]]++;
+    }
+ 
+    int outPos=0;
+    for (int i=0; i<bucket.length; i++) {
+        for (int j=0; j<bucket[i]; j++) {
+           a[outPos++]=i;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+

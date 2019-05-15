@@ -1,194 +1,102 @@
-/*************************************************************************
- *  Compilation:  javac Insertion.java
- *  Execution:    java Insertion < input.txt
- *  Dependencies: StdOut.java StdIn.java
- *  Data files:   http://algs4.cs.princeton.edu/21sort/tiny.txt
- *                http://algs4.cs.princeton.edu/21sort/words3.txt
- *  
- *  Sorts a sequence of strings from standard input using insertion sort.
- *
- *  % more tiny.txt
- *  S O R T E X A M P L E
- *
- *  % java Insertion < tiny.txt
- *  A E E L M O P R S T X                 [ one string per line ]
- *
- *  % more words3.txt
- *  bed bug dad yes zoo ... all bad yet
- *
- *  % java Insertion < words3.txt
- *  all bad bed bug dad ... yes yet zoo   [ one string per line ]
- *
- *************************************************************************/
+package ArbolHeapSort;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 
-/**
- *  The <tt>Insertion</tt> class provides static methods for sorting an
- *  array using insertion sort.
- *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/21elementary">Section 2.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Insertion {
+public class HeapSortMax {
+	public int aux, posicion,raiz,pad,hij;
+	public NodoHeapSort[] arbolHeapSortMax;
+	private ArrayList<String> arbol=new ArrayList<String>();
+	
+	public HeapSortMax(){
+		aux=0;
+		posicion=0;
+		raiz=0;
+		arbolHeapSortMax=new NodoHeapSort[255];
+		
+	}
+	public synchronized void insertar(int pesoN, String urlN){
+		NodoHeapSort nuevo= new NodoHeapSort(pesoN, urlN);
+		NodoHeapSort auxiliarP;
+		NodoHeapSort auxiliarH;
+		if (posicion%2==1) {
+			nuevo.padre=posicion/2;
+		} else {
+			nuevo.padre=posicion/2-1;
+		}
+		nuevo.hijoIzquierdo=posicion*2+1;
+		nuevo.hijoDerecho=posicion*2+2;
+		if (arbolHeapSortMax[0]==null) {
+			arbolHeapSortMax[posicion]=nuevo;
+			posicion++;
+		} 
+		else {
+			if (arbolHeapSortMax[nuevo.padre].peso>=nuevo.peso) {
+				arbolHeapSortMax[posicion]=nuevo;
+				posicion++;
+			}
+			else {
+				arbolHeapSortMax[posicion]=nuevo;
+				hij=posicion;
+				pad=nuevo.padre;
+				aux=pad;
+				while(arbolHeapSortMax[pad].peso<arbolHeapSortMax[hij].peso) {
+					auxiliarP=arbolHeapSortMax[pad];
+					auxiliarH=arbolHeapSortMax[hij];
+					arbolHeapSortMax[pad]=auxiliarH;
+					arbolHeapSortMax[hij]=auxiliarP;
+					hij=pad;
+					pad=hij/2;
+				}
+				posicion++;
+				ordenarFamilia();
+			}
+			
+			
+		}
+	}
+	public synchronized void imprimir() {
+		for (int i = 0; arbolHeapSortMax[i] != null; i++) {
+			System.out.println(arbolHeapSortMax[i].peso+" : "+arbolHeapSortMax[i].url);
+		}
+		
+	}
+	public synchronized void ordenarFamilia(){
+		for (int i = 0; arbolHeapSortMax[i]!=null; i++) {
+			arbolHeapSortMax[i].hijoDerecho=i*2+2;
+			arbolHeapSortMax[i].hijoIzquierdo=i*2+1;
+			if (i%2==1) {
+				arbolHeapSortMax[i].padre=i/2;
+			} else {
+				arbolHeapSortMax[i].padre=i/2-1;
+			}
+		}
+	}
+	public synchronized boolean buscar(String urln){
+		for (int i = 0; arbolHeapSortMax[i] != null;) {
+			if (arbolHeapSortMax[i].url.equalsIgnoreCase(urln)) {
+				return true;
+				
+			} else {
+				i++;
 
-    // This class should not be instantiated.
-    private Insertion() { }
+			}
+		}
+		return false;
+	}
+	public synchronized ArrayList<String> obtener(){
+		for (int i = 0; arbolHeapSortMax[i]!=null; i++) {
+			arbol.add(arbolHeapSortMax[i].url);
+		}
+		return arbol;
+	}
 
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static void sort(Comparable[] a) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
-            for (int j = i; j > 0 && less(a[j], a[j-1]); j--) {
-                exch(a, j, j-1);
-            }
-            assert isSorted(a, 0, i);
-        }
-        assert isSorted(a);
-    }
-
-    /**
-     * Rearranges the subarray a[lo..hi] in ascending order, using the natural order.
-     * @param a the array to be sorted
-     * @param lo left endpoint
-     * @param hi right endpoint
-     */
-    public static void sort(Comparable[] a, int lo, int hi) {
-        for (int i = lo; i <= hi; i++) {
-            for (int j = i; j > 0 && less(a[j], a[j-1]); j--) {
-                exch(a, j, j-1);
-            }
-        }
-        assert isSorted(a, lo, hi);
-    }
-
-    /**
-     * Rearranges the array in ascending order, using a comparator.
-     * @param a the array
-     * @param comparator the comparator specifying the order
-     */
-    public static void sort(Object[] a, Comparator comparator) {
-        int N = a.length;
-        for (int i = 0; i < N; i++) {
-            for (int j = i; j > 0 && less(a[j], a[j-1], comparator); j--) {
-                exch(a, j, j-1);
-            }
-            assert isSorted(a, 0, i, comparator);
-        }
-        assert isSorted(a, comparator);
-    }
-
-    /**
-     * Rearranges the subarray a[lo..hi] in ascending order, using a comparator.
-     * @param a the array
-     * @param lo left endpoint
-     * @param hi right endpoint
-     * @param comparator the comparator specifying the order
-     */
-    public static void sort(Object[] a, int lo, int hi, Comparator comparator) {
-        for (int i = lo; i <= hi; i++) {
-            for (int j = i; j > 0 && less(a[j], a[j-1], comparator); j--) {
-                exch(a, j, j-1);
-            }
-        }
-        assert isSorted(a, lo, hi, comparator);
-    }
-
-
-    // return a permutation that gives the elements in a[] in ascending order
-    // do not change the original array a[]
-    /**
-     * Returns a permutation that gives the elements in the array in ascending order.
-     * @param a the array
-     * @return a permutation <tt>p[]</tt> such that <tt>a[p[0]]</tt>, <tt>a[p[1]]</tt>,
-     *    ..., <tt>a[p[N-1]]</tt> are in ascending order
-     */
-    public static int[] indexSort(Comparable[] a) {
-        int N = a.length;
-        int[] index = new int[N];
-        for (int i = 0; i < N; i++)
-            index[i] = i;
-
-        for (int i = 0; i < N; i++)
-            for (int j = i; j > 0 && less(a[index[j]], a[index[j-1]]); j--)
-                exch(index, j, j-1);
-
-        return index;
-    }
-
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
-    
-    // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
-    }
-
-    // is v < w ?
-    private static boolean less(Object v, Object w, Comparator comparator) {
-        return (comparator.compare(v, w) < 0);
-    }
-        
-    // exchange a[i] and a[j]
-    private static void exch(Object[] a, int i, int j) {
-        Object swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
-
-    // exchange a[i] and a[j]  (for indirect sort)
-    private static void exch(int[] a, int i, int j) {
-        int swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
-
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        return isSorted(a, 0, a.length - 1);
-    }
-
-    // is the array sorted from a[lo] to a[hi]
-    private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo + 1; i <= hi; i++)
-            if (less(a[i], a[i-1])) return false;
-        return true;
-    }
-
-    private static boolean isSorted(Object[] a, Comparator comparator) {
-        return isSorted(a, 0, a.length - 1, comparator);
-    }
-
-    // is the array sorted from a[lo] to a[hi]
-    private static boolean isSorted(Object[] a, int lo, int hi, Comparator comparator) {
-        for (int i = lo + 1; i <= hi; i++)
-            if (less(a[i], a[i-1], comparator)) return false;
-        return true;
-    }
-
-   // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
-        }
-    }
-
-    /**
-     * Reads in a sequence of strings from standard input; insertion sorts them;
-     * and prints them to standard output in ascending order.
-     */
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        Insertion.sort(a);
-        show(a);
-    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

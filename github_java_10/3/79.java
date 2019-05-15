@@ -1,34 +1,55 @@
-	import java.io.*;
-	class Hanoi
-	{
-		public int n; //n= number of operations taken in entire process
-		public void hanoi(int p1,int p2,int p3,int nd)
-		{
-				if(nd==1)
-				{
-					n=n+1;
-		System.out.println("Step-"+n+":Move Disc-"+nd+" from Peg-"+p1+" to Peg-"+p2);
-							return;
-				}
-				hanoi(p1,p3,p2,nd-1);
-				n++;
-		System.out.println("Step-"+n+":Move Disc-"+nd+" from Peg-"+p1+" to Peg-"+p2);
-				hanoi(p3,p2,p1,nd-1);
-				
-		}
-	}
-	class tower
-	{
-		public static void main(String args[])throws IOException
-		{
-			int p1=1,p2=2,p3=3;
-			int nd,n;
-	BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
-			System.out.print("\nEnter number of disc to be transfered - ");
-			nd=Integer.parseInt(br.readLine());
-			Hanoi H=new Hanoi();
-			H.n=0;
-			H.hanoi(p1,p2,p3,nd);
-			System.out.println("Number of operations performed are- "+H.n);
-		}
-	}
+import java.util.*;
+
+class TopologicalSort{
+ static LinkedList<Integer> arr[];
+ static boolean visited[];
+ static Stack<Integer> stack;
+ TopologicalSort(int v){
+  arr = new LinkedList[v];
+  visited = new boolean[v];
+  stack = new Stack<>();
+  for(int i=0;i<v;i++){
+   arr[i] = new LinkedList();
+   visited[i] = false;
+  }
+ }
+ public void addEdge(int src, int dest){
+  arr[src].add(dest);
+ }
+ public void sort(int i){
+  visited[i] = true;
+  Iterator<Integer> ite = arr[i].listIterator();
+  while(ite.hasNext()){
+   int item = ite.next();
+   if(!visited[item]){
+     sort(item);
+   }
+  }
+  stack.push(i);
+ }
+ public static void main(String[] args){
+  System.out.println("Enter number of vertices");
+  Scanner sc = new Scanner(System.in);
+  int nov = sc.nextInt();
+  TopologicalSort ts = new TopologicalSort(nov);
+  System.out.println("Enter number of edges");
+  int noe = sc.nextInt();
+  System.out.println("Enter source and destination of edge");
+  for(int i=0;i<noe;i++){
+  int src=sc.nextInt();
+  int dest = sc.nextInt();
+  ts.addEdge(src, dest);
+  }
+  Iterator<Integer> ite;
+ for(int i=0;i<nov;i++){
+  ite = arr[i].listIterator();
+  if(!visited[i]){
+    ts.sort(i);
+   }
+  }
+ System.out.println("Sorted vertices");
+ while(!stack.isEmpty()){
+    System.out.println(stack.pop());
+  }
+ }
+}

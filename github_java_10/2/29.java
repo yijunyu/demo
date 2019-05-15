@@ -1,20 +1,70 @@
-//  Copyright 2017 The keepTry Open Source Project
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+import java.util.Scanner; 
 
-/**
- * https://en.wikipedia.org/wiki/AVL_tree
- * <a href="https://intelligentjava.wordpress.com/tag/avl-tree/">AVL</a>
- */
-package tree.binary_search_tree.self_balancing_binary_search_tree.AVL_tree;
+public class mergesort {
+  public void solve() { 
+    
+    Scanner sc = new Scanner(System.in);
+    String[] input = sc.nextLine().split(" ");
+    int n = input.length; 
+    int[] arr = new int[n];
+    for (int j = 0; j < n; j++) 
+      arr[j] = Integer.parseInt(input[j]);
+    
+    arr = mergesort(arr);
+    
+    for (int i = 0; i < arr.length; i++) 
+      System.out.println(arr[i]);
+  }
+  
+  public int[] mergesort(int[] arr) {
+    int len = arr.length; 
+    if (len <= 1)
+      return arr; 
+    int alen = len / 2; 
+    int blen = len - alen; 
+    int[] a = new int[alen];
+    int[] b = new int[blen]; 
+    for (int i = 0; i < alen; i++) 
+      a[i] = arr[i];
+    for (int i = 0; i < blen; i++)
+      b[i] = arr[alen + i];
+    return merge(mergesort(a), mergesort(b));
+  }
+  
+  public int[] merge(int[] a, int[] b) {
+    int alen = a.length; 
+    int blen = b.length; 
+    int len = alen + blen; 
+    int[] arr = new int[len];
+    int i = 0, j = 0, k = 0; 
+    while (k < len) { 
+      while (i < alen && j < blen) 
+        if (a[i] < b[j])  
+          arr[k++] = a[i++];
+        else if (a[i] > b[j]) 
+          arr[k++] = b[j++];
+        else { 
+          arr[k++] = a[i++]; 
+          arr[k++] = b[j++];
+        }
+        while (i < alen)  
+          arr[k++] = a[i++];
+        while (j < blen)
+          arr[k++] = b[j++];
+    }
+    return arr; 
+  }
+  
+  public void run() { 
+    int[] a = {1,4,5,6,7}; 
+    int[] b = {2, 3, 5, 7, 8};
+    int[] arr = merge(a, b);
+    
+    for (int i = 0; i < arr.length; i++) 
+      System.out.println(arr[i]); 
+  }
+  
+  public static void main(String args[]) { 
+    new mergesort().run(); 
+  }
+}

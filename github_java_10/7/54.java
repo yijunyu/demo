@@ -1,59 +1,41 @@
-import java.util.Scanner;
-import java.util.*;
-class topologicalsort
-{
-	static LinkedList<Integer> list[];
-	public static void main(String[]args)
-	{
-		Scanner scan=new Scanner(System.in);
-		int t,i,j,k,l;
-		// no of vertex
-		int vertex=scan.nextInt();
-		// no of edges
-		int edges=scan.nextInt();
-		list=new LinkedList[vertex];
-		for(k=0;k<vertex;k++)
-		{
-			list[k]=new LinkedList();
-		}
-		for(i=0;i<edges;i++)
-		{	
-			int a=scan.nextInt();
-			int b=scan.nextInt();
-			list[a].add(b);
-		}	
-		boolean visited[]=new boolean[vertex];
-		Stack stack=new Stack();
-		for(j=0;j<vertex;j++)
-		{
-			visited[j]=false;
-		}
+package com.gerrard.sort.compare.comb;
 
-		for(k=0;k<vertex;k++)
-		{
-			if(!visited[k])
-			{
-				topologicalutil(k,visited,stack);
-			}
-		}
-		for(l=0;l<vertex;l++)
-		{
-			System.out.print(stack.pop()+" ");
-		}
-	}
-	static void topologicalutil(int v,boolean visited[], Stack stack)
-	{
-		visited[v]=true;
-		Iterator<Integer> it=list[v].iterator();
-		int o;
-		while(it.hasNext())
-		{
-			o=it.next();
-			if(!visited[o])
-			{
-				topologicalutil(o,visited, stack);
-			}
-		}
-		stack.push(v);
-	}
+import com.gerrard.sort.Sort;
+import com.gerrard.util.ArrayHelper;
+
+
+public class CombSort implements Sort {
+
+    private double shrink = 1.3;
+
+    public double getShrink() {
+        return shrink;
+    }
+
+    public void setShrink(double shrink) {
+        this.shrink = shrink;
+    }
+
+    @Override
+    public void sort(int[] array) {
+        int gap = array.length;
+        boolean sorted = false;
+        while (!sorted) {
+            gap = (int) (gap / shrink);
+            if (gap > 1) {
+                sorted = false;
+            } else {
+                gap = 1;
+                sorted = true;
+            }
+            int i = 0;
+            while (i + gap < array.length) {
+                if (array[i] > array[i + gap]) {
+                    ArrayHelper.swap(array, i, i + gap);
+                    sorted = false;
+                }
+                i++;
+            }
+        }
+    }
 }

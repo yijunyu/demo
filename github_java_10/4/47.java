@@ -1,117 +1,253 @@
-/**
- * Berlin Brown 
- * Insertion Sort. 
- */
-package org.berlin.algo.basic;
 
-import java.util.Random;
+package sort_time;
 
-/**
- * Insertion Sort with simple cost and time statistics.
- * Based on logic from "Introduction to algorithms", coreman, stein.
- * 
- * Using recursion.
- */
-public class InsertionSortRecursionWithCost {
+import static java.lang.Math.pow;
 
-  private final CalledTimesCount times = new CalledTimesCount();
-  
-  /**
-   * Add a count of cost.     
-   */
-  private class CalledTimesCount {
-    private int c1N = 0;
-    private int c2N = 0;
-    private int c4N = 0;
-    private int c5N = 0;
-    private int c6N = 0;
-    private int c7N = 0;
-    private int c8N = 0;
+
+public class Sort_time {
+
     
-    public String toString() {
-      return "{Cost and Times T(n): N-for-C2=" + c2N + ", N-for-C6=" + c6N + ", N-for-C8=" + c8N + "}";
+    public static void main(String[] args) {
+        double [] randomInsertSortTime = new double [7];
+        double [] randomInsertBinarySortTime = new double [7];
+        double [] randomQuickSortTime = new double [7];
+        double [] randomHeapSortTime = new double [7];
+        double [] nearlyRandomInsertSortTime = new double [7];
+        double [] nearlyRandomInsertBinarySortTime = new double [7];
+        double [] nearlyRandomQuickSortTime = new double [7];
+        double [] nearlyRandomHeapSortTime = new double [7];
+        double [] sortedInsertSortTime = new double [7];
+        double [] sortedInsertBinarySortTime = new double [7];
+        double [] sortedQuickSortTime = new double [7];
+        double [] sortedHeapSortTime = new double [7];
+        
+        for (int k = 2; k < 9; k++){                        
+            randomInsertSortTime [k-2] = SortTime(k,1,1);
+            nearlyRandomInsertSortTime [k-2] = SortTime(k,2,1);
+            sortedInsertSortTime [k-2] = SortTime(k,3,1);
+            randomInsertBinarySortTime [k-2] = SortTime(k,1,2);
+            nearlyRandomInsertBinarySortTime [k-2] = SortTime(k,2,2);
+            sortedInsertBinarySortTime [k-2] = SortTime(k,3,2);
+            randomQuickSortTime [k-2] = SortTime(k,1,3);
+            nearlyRandomQuickSortTime [k-2] = SortTime(k,2,3);
+            sortedQuickSortTime [k-2] = SortTime(k,3,3);
+            randomHeapSortTime [k-2] = SortTime(k,1,4);
+            nearlyRandomHeapSortTime [k-2] = SortTime(k,2,4);
+            sortedHeapSortTime [k-2] = SortTime(k,3,4);
+            System.out.format("%f %f %f %f %f %f %f %f %f %f %f %f\n",randomInsertSortTime [k-2],nearlyRandomInsertSortTime [k-2],
+            sortedInsertSortTime [k-2], randomInsertBinarySortTime [k-2], nearlyRandomInsertBinarySortTime [k-2],
+            sortedInsertBinarySortTime [k-2], randomQuickSortTime [k-2], nearlyRandomQuickSortTime [k-2], 
+            sortedQuickSortTime [k-2], randomHeapSortTime [k-2], nearlyRandomHeapSortTime [k-2],
+            sortedHeapSortTime [k-2]);
+        }        
     }
-  }
-  public InsertionSortRecursionWithCost insertionSort(final int [] A) {                  
-    times.c1N = A.length;           
-    return insertionSort(A, 1);    
-  }
-  public InsertionSortRecursionWithCost insertionSort(final int [] A, int j) {
-    if (j >= A.length) {
-      return this;
-    }
-    int key = A[j];              
-    int i = j - 1;
-    times.c2N++;
-    times.c4N = times.c2N;
-    i = insertionSort(A, key, i);
-    A[i + 1] = key;
-    times.c8N++;
-    return insertionSort(A, j + 1);
-  }
-  public int insertionSort(final int [] A, int key, int i) {
-    if (!(i >= 0 && A[i] > key)) {
-      return i;
-    }        
-    times.c6N++;
-    A[i + 1] = A[i];    
-    return insertionSort(A, key, i-1);
-  }    
-  public String toString() {
-    return String.valueOf(times);
-  }
-  
-  public static void logBefore(final int [] A) {
-    System.out.print("A {N=" + A.length + "}= [");
-    for (int i = 0; i < A.length; i++) {
-      System.out.print(A[i] + ", " );
-    }
-    System.out.println("].");    
-  }  
-  public static void logAfter(final int [] A, final InsertionSortRecursionWithCost insertionSort) {
 
-    System.out.print("A(after sort) = [");
-    for (int i = 0; i < A.length; i++) {
-      System.out.print(A[i] + ", " );
+    
+    public static int[] rndArray(int length) {
+        int[] array = new int[length];
+        for (int i = 0; i < length; i++) {
+            array[i] = rnd(length);
+        }
+        return array;
     }
-    System.out.println("].");
-    System.out.println(insertionSort);
-    System.out.println();     
-  }
-  
-  public static void main(final String [] args) {
-    System.out.println("Running main - insertion sort - with recursion");
-    {
-      final int A [] = {
-          5, 2, 4, 6, 1, 3
-      };
-      logBefore(A);
-      // Run the insertion sort and update the entries for the array A
-      final InsertionSortRecursionWithCost insertionSort = new InsertionSortRecursionWithCost().insertionSort(A);
-      logAfter(A, insertionSort);          
+
+    
+    public static int[] sortedArray(int length) {
+        int[] array = new int[length];
+        array[0] = (int) (Math.random() * 100) + 1;
+        for (int i = 1; i < length; i++) {
+            array[i] = array[i - 1] + (int) (Math.random() * 100) + 1;
+        }
+        return array;
     }
-    {
-      // With random N
-      final int A2 [] = new int [30];
-      final Random rand = new Random(System.currentTimeMillis());
-      for (int i = 0; i < A2.length; i++) {
-        A2[i] = rand.nextInt(1000);
-      }
-      logBefore(A2);    
-      final InsertionSortRecursionWithCost insertionSort2 = new InsertionSortRecursionWithCost().insertionSort(A2);
-      logAfter(A2, insertionSort2);
+
+    
+    public static int[] almostSortedArray(int length) {
+        int[] array = new int[length];
+        array[0] = (int) (Math.random() * 100) + 1;
+        for (int i = 1; i < length; i++) {
+            array[i] = array[i - 1] + (int) (Math.random() * 100) + 1;
+        }
+        for (int i = 50; i < length; i += 50) {
+            array[i] = rnd(length);
+        }
+        return array;
     }
-    {
-      // Best case with sorted values.
-      final int A3 [] = {
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-      };
-      logBefore(A3);
-      // Run the insertion sort and update the entries for the array A
-      final InsertionSortRecursionWithCost insertionSort = new InsertionSortRecursionWithCost().insertionSort(A3);
-      logAfter(A3, insertionSort);          
+
+    
+    public static int rnd(int length) {
+        return (int) (Math.random() * length);
     }
-    System.out.println("Done");
-  }  
-  
-} // End of the Class //
+    
+    public static void insertSort(int [] array){        
+        for (int i = 1; i < array.length; i++){
+            int a = array[i];
+            for (int k = i; k > 0 && a <= array[k-1]; k--){                               
+                array[k] = array[k-1];
+                array[k-1] = a;                                              
+            }                      
+        }
+    }
+    
+    public static void insertBinarySort (int [] array){
+        for (int i = 1; i < array.length; i++){
+            int a = array[i];            
+            int p = i-1;
+            int l = 0;
+            while (l <= p){
+                int k = (l+p)/2;
+                if (a > array[k]){
+                    l = k+1;
+                }
+                else{
+                    p = k-1;
+                }
+            }
+            int j = i;
+            while (j > l){
+                array[j] = array[j-1];
+                j--;
+            }   
+            array[l] = a;
+        }
+    }
+    
+    public static void quickSort(int []array, int l, int p){
+        int i = l;
+        int j = p;
+        int piv = array[((l+p)/2)];
+        while (i <= j){
+            while (piv > array[i])
+                i++;
+            while (piv < array[j])
+                j--;
+            if (i <= j){
+                int a = array[i];
+                array[i] = array[j];
+                array[j] = a;
+                i++;
+                j--;
+            }
+        }
+        if (l < j)
+            quickSort(array, l, j);
+        if (i < p)
+            quickSort(array, i, p);
+    }
+    
+    public static void heapSort(int []array){
+        int []heap = new int [array.length + 1];
+        for (int i = 1; i < heap.length; i++){
+            heap [i] = array[i-1];
+            fixHeapUp(heap, i);
+        }
+        for (int i = heap.length-1; i > 1; i--){              
+            array[i-1] = heap[1];
+            heap[1] = heap[i];
+            fixHeapDown(heap, i);
+            if (i == 2){
+                array[0] = heap[2];
+            }
+        }           
+    }
+    
+    public static void fixHeapUp (int []heap, int i){
+        while (i > 1 && heap[i] < heap[i/2]){
+            int a = heap[i];
+            heap[i] = heap[i/2];
+            heap[i/2] = a;
+            i = i/2;
+        }
+    }
+    
+    public static void fixHeapDown(int []heap, int i){
+        int j = 1;  
+        while (2*j < i){
+            int k = 2*j;    
+            if ((k <= i) && (heap[k] > heap[k+1])){
+                k++;                
+            }
+            if (heap[k] < heap[j]){
+                int a = heap[j];
+                heap[j] = heap[k];
+                heap[k] = a;                
+            }
+            else{                
+                break;
+            }
+            j = k;            
+        }        
+    }
+    
+    public static double SortTime(int k, int type, int algor){
+        int length = (int)pow(10,k);
+        if (k < 5){
+            double time = 0;
+            for(int i = 0; i < 50; i++){
+                int[] array = new int [length];
+                if (type == 1)
+                    array = rndArray(length);
+                else if (type == 2)
+                    array = almostSortedArray(length);
+                else
+                    array = sortedArray(length);
+                
+                if (algor == 1){
+                    double t0 = System.nanoTime();
+                    insertSort(array);
+                    time += System.nanoTime() - t0;
+                }
+                else if (algor == 2){
+                    double t0 = System.nanoTime();
+                    insertBinarySort(array);
+                    time += System.nanoTime() - t0;
+                }
+                else if (algor == 3){
+                    double t0 = System.nanoTime();
+                    quickSort(array, 0, length-1);
+                    time += System.nanoTime() - t0;
+                }
+                else {
+                    double t0 = System.nanoTime();
+                    heapSort(array);
+                    time += System.nanoTime() - t0;
+                }
+            }
+            return time/50;
+        }
+        else{
+            double time = 0;
+            for(int i = 0; i < 3; i++){
+                int[] array = new int [length];
+                if (type == 1)
+                    array = rndArray(length);
+                else if (type == 2)
+                    array = almostSortedArray(length);
+                else
+                    array = sortedArray(length);
+                
+                if (algor == 1){
+                    double t0 = System.nanoTime();
+                    insertSort(array);
+                    time += System.nanoTime() - t0;
+                }
+                else if (algor == 2){
+                    double t0 = System.nanoTime();
+                    insertBinarySort(array);
+                    time += System.nanoTime() - t0;
+                }
+                else if (algor == 3){
+                    double t0 = System.nanoTime();
+                    quickSort(array, 0, length-1);
+                    time += System.nanoTime() - t0;
+                }
+                else {
+                    double t0 = System.nanoTime();
+                    heapSort(array);
+                    time += System.nanoTime() - t0;
+                }
+            }
+            return time/3;
+        } 
+    }
+}

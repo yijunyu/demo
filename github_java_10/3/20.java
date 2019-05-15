@@ -1,37 +1,73 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Chapter18Review;
+package Graph;
 
-import java.util.Scanner;
+import java.util.Iterator;
+import java.util.LinkedList;
 
-/**
- *
- * @author dsli
- */
-public class TowerOfHanoi {
-    public static int runs = 0;
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        System.out.print("Enter number of disks: ");
-        int n = input.nextInt();
-        
-        //Find the solution recursively
-        System.out.println("The moves are: ");
-        moveDisks(n, 'A', 'B', 'C');
-        System.out.println("The method runs " + runs + " times.");
-    }
-    //The method for finding the solution to move n disks from fromTower to toTower with auxTower
-    public static void moveDisks(int n, char fromTower, char toTower, char auxTower) {
-        runs++;
-        if (n == 1) //Stopping condition
-            System.out.println("Move disk " + n + " from " + fromTower + " to " + toTower);
-        else {
-            moveDisks(n - 1, fromTower, auxTower, toTower);
-            System.out.println("Move disk " + n + " from " + fromTower + " to " + toTower);
-            moveDisks(n - 1, auxTower, toTower, fromTower);
+import java.util.ArrayList;
+import java.util.Stack;
+
+
+public class TopologicalSort {
+    private int vertex;
+    private LinkedList<Integer> adj[];
+
+    public TopologicalSort(int v) {
+        vertex = v;
+        adj = new LinkedList[v];
+        for (int i = 0; i < v; i++) {
+            adj[i] = new LinkedList<>();
         }
     }
+    void addEdge(int v, int e) {
+        adj[v].add(e);
+    }
+
+    public static void main(String[] args) {
+        TopologicalSort topologicalSort=new TopologicalSort(6);
+        topologicalSort.addEdge(5,2);
+        topologicalSort.addEdge(5,0);
+        topologicalSort.addEdge(4,0);
+        topologicalSort.addEdge(4,1);
+        topologicalSort.addEdge(2,3);
+        topologicalSort.addEdge(3,1);
+
+        topologicalSort.topologicalSort();
+    }
+
+    public  void topologicalSort() {
+        Stack stack=new Stack();
+        boolean visited[]=new boolean[vertex];
+        for(int i=0;i<vertex;i++) {
+            visited[i]=false;
+        }
+        for(int j=0;j<vertex;j++) {
+            if(visited[j]==false) {
+                topologicalSortUtil(visited,stack,j);
+            }
+        }
+        while(stack.empty()==false) {
+            System.out.println(stack.pop() + " ");
+        }
+    }
+
+    public void topologicalSortUtil(boolean[] visited, Stack stack,int vertexData) {
+        
+            visited[vertexData] = true;
+            
+           
+            Iterator<Integer> iterator = adj[vertexData].iterator();
+            while (iterator.hasNext()) {
+                
+                int nextData = iterator.next();
+                
+                if (!visited[nextData]) {
+                    topologicalSortUtil(visited, stack, nextData);
+                }
+                
+
+            }
+            stack.push(vertexData);
+        
+    }
+
 }

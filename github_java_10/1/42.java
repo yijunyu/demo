@@ -1,67 +1,40 @@
-package aima.core.search.uninformed;
-
-import java.util.List;
-
-import aima.core.agent.Action;
-import aima.core.search.framework.Metrics;
-import aima.core.search.framework.Node;
-import aima.core.search.framework.Problem;
-import aima.core.search.framework.Search;
-import aima.core.search.framework.qsearch.GraphSearch;
-import aima.core.search.framework.qsearch.QueueSearch;
-import aima.core.util.datastructure.FIFOQueue;
-
 /**
- * Artificial Intelligence A Modern Approach (3rd Edition): Figure 3.11, page
- * 82.<br>
- * <br>
+ * @author Luca Castelli Aleardi (Ecole Polytechnique, INF311, 2014) 
  * 
- * <pre>
- * function BREADTH-FIRST-SEARCH(problem) returns a solution, or failure
- *   node &lt;- a node with STATE = problem.INITIAL-STATE, PATH-COST=0
- *   if problem.GOAL-TEST(node.STATE) then return SOLUTION(node)
- *   frontier &lt;- a FIFO queue with node as the only element
- *   explored &lt;- an empty set
- *   loop do
- *      if EMPTY?(frontier) then return failure
- *      node &lt;- POP(frontier) // chooses the shallowest node in frontier
- *      add node.STATE to explored
- *      for each action in problem.ACTIONS(node.STATE) do
- *          child &lt;- CHILD-NODE(problem, node, action)
- *          if child.STATE is not in explored or frontier then
- *              if problem.GOAL-TEST(child.STATE) then return SOLUTION(child)
- *              frontier &lt;- INSERT(child, frontier)
- * </pre>
- * 
- * Figure 3.11 Breadth-first search on a graph.<br>
- * <br>
- * <b>Note:</b> Supports TreeSearch, GraphSearch, and BidirectionalSearch. Just
- * provide an instance of the desired QueueSearch implementation to the
- * constructor!
- * 
- * @author Ciaran O'Reilly
- * @author Ruediger Lunde
+ * This class provides an implementation of insertion sorting algorithm
  */
-public class BreadthFirstSearch implements Search {
+public class InsertionSort implements SortingAlgorithm {
 
-	private final QueueSearch implementation;
-
-	public BreadthFirstSearch() {
-		this(new GraphSearch());
+	final ElementComparator c; // comparator defining a total order
+	final Element[] t; // array of elements to sort
+	//Draw d = new Draw("InsertionSort", 1000, 200); // useful for drawings and
+													// animations
+	public InsertionSort(Element[] t, ElementComparator c) {
+		this.t = t;
+		this.c = c;
+		//d.draw(t);
 	}
 
-	public BreadthFirstSearch(QueueSearch impl) {
-		implementation = impl;
-		// Goal test is to be applied to each node when it is generated
-		// rather than when it is selected for expansion.
-		implementation.setCheckGoalBeforeAddingToFrontier(true);
+	/**
+	 * Copy the input element e at position k in the array this.t
+	 */
+	public void replace(int k, Element e) {
+		//d.erase(k, t[k]);
+		t[k] = e; // recopie finale
+		//d.blink(k, t[k]);
 	}
 
-	public List<Action> search(Problem p) {
-		return implementation.search(p, new FIFOQueue<Node>());
+	public void run() {
+		for(int i = 1; i < t.length; i++){
+			Element tmps = t[i];
+			int k=i;
+			while((k > 0) && (tmps.isSmaller(t[k-1],c))){
+				t[k]=t[k-1];
+				k=k-1;
+			}
+			replace(k,tmps);
+			//d.draw(t);
+		}
 	}
-
-	public Metrics getMetrics() {
-		return implementation.getMetrics();
-	}
+	
 }

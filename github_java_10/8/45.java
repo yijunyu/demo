@@ -1,136 +1,198 @@
-package scorer.termproject;
+package sorting;
 
-import java.io.IOException;
-import java.util.*;
+public class QuickSort {
 
-import org.galagosearch.core.parse.Document;
-import org.galagosearch.core.parse.TagTokenizer;
-import org.galagosearch.exercises.TermAssociationManager;
+	public static class QuickSortPartitionLast {
+		public int[] quickSort(int[] nums) {
+			quickSort(nums, 0, nums.length - 1);
+			return nums;
+		}
 
-public class QueryModifier {
-    final static String CLOSER = " )";
-    final static String INTAPP_SCORER = "#feature:class=scorer.termproject.IntappScorer( ";
+		private void quickSort(int[] nums, int low, int high) {
+			if (low < high) {
+				int pi = partitionLast(nums, low, high);
+				quickSort(nums, low, pi - 1);
+				quickSort(nums, pi + 1, high);
+			}
 
-    public static String modifyQuery(String query) {
-        TagTokenizer tokenizer = new TagTokenizer();
-        String modQuery = query;
-        StringBuffer sbuff = new StringBuffer();
+		}
 
-        if (query.contains("#")) {
-            return query;
-        }
+		private int partitionLast(int[] nums, int low, int high) {
+			int pivot = nums[high];
+			int i = (low - 1);
+			for (int j = low; j <= high - 1; j++) {
+				if (nums[j] <= pivot) {
+					i++;
+					
+					int temp = nums[i];
+					nums[i] = nums[j];
+					nums[j] = temp;
+				}
+			}
 
-        try {
-            Document tokenizeResult = tokenizer.tokenize(query);
-            List<String> tokens = tokenizeResult.terms;
+			
+			int temp = nums[i + 1];
+			nums[i + 1] = nums[high];
+			nums[high] = temp;
 
-            TermAssociationManager termAssociationManager = TermAssociationManager.get();
-            termAssociationManager.init();
-            HashMap<String, Float> expandTokens = null;
-            expandTokens = termAssociationManager.MakeAssoTermList(tokens.get(0));
+			return i + 1;
+		}
+	}
 
-            // If query contains one start character with hyphen, make a acronym.
-            if (tokens.size() == 2 && tokens.get(0).length() == 1)
-                tokens.add(tokens.get(0) + tokens.get(1).charAt(0));
+	public static class QuickSortPartitionFirst {
+		public int[] quickSort(int[] nums) {
+			quickSort(nums, 0, nums.length - 1);
+			return nums;
+		}
 
-            // If query contains 3 or more words, make a acronym.
-            if (tokens.size() > 2 && !tokens.contains("of") && !tokens.contains("and")) {
-                String initialAcronym = "";
-                for (String x : tokens) {
-                    initialAcronym += x.charAt(0);
-                }
-                tokens.add(initialAcronym);
-            }
+		private void quickSort(int[] nums, int low, int high) {
+			if (low < high) {
+				int pi = partitionFirst(nums, low, high);
+				quickSort(nums, low, pi - 1);
+				quickSort(nums, pi + 1, high);
+			}
 
-            // If query contains hyphen(-), just remove hyphen add ato token list.
-            if (query.contains("-")) {
-                tokens.add(query.trim().replace("-", ""));
-            }
+		}
 
-            for (String token : tokens) {
-                sbuff.append("#scale:weight=");
-                sbuff.append("1");
-                sbuff.append("( ");
-                sbuff.append(INTAPP_SCORER);
-                sbuff.append(token);
-                sbuff.append(CLOSER);
-                sbuff.append(CLOSER);
-                sbuff.append(" ");
+		
+		private int partitionFirst(int[] list, int first, int last) {
+			int pivot = list[first];
+			int low = first + 1; 
+			int high = last;
+			while (low < high) {
+				
+				while (low <= high && list[low] < pivot)
+					low++;
+				
+				while (low <= high && list[high] >= pivot)
+					high--;
+				
+				if (high > low) {
+					int temp = list[high];
+					list[high] = list[low];
+					list[low] = temp;
+				}
+			}
 
-            }
-            if (expandTokens != null) {
-                // Calculate whole frequency
-                float freqDenominator = 0;
-                for (String expandTokenKey : expandTokens.keySet()) {
-                    freqDenominator += expandTokens.get(expandTokenKey);
-                }
+			while (high > first && list[high] >= pivot)
+				high--;
+			
+			if (pivot > list[high]) {
+				list[first] = list[high];
+				list[high] = pivot;
+				return high;
+			} else {
+				return first;
+			}
+		}
+	}
+	
+	public static void main(String... args){
+		int[] nums = InsertionSort.generateRandomArray(17);
 
-                // Expand tokens to querystring with weight by assoValue
-                for (String expandTokenKey : expandTokens.keySet()) {
-                    float expandTokenAssoValue = expandTokens.get(expandTokenKey);
-                    float incentive = (expandTokenAssoValue / freqDenominator) * 0.15f;
+		SortUtils.print(nums);
 
-                    // Check Levenshtein-Distance and add incentives.
-                    if (calculateLevenshteinDistance(tokens.get(0), expandTokenKey) == 0) {
-                        continue;
-                    } else if (calculateLevenshteinDistance(tokens.get(0), expandTokenKey) < 2) {
-                        incentive = incentive * 2;
-                    }
 
-                    sbuff.append("#scale:weight=");
-                    sbuff.append(incentive);
-                    sbuff.append("( ");
-                    sbuff.append(INTAPP_SCORER);
-                    sbuff.append(expandTokenKey);
-                    sbuff.append(CLOSER);
-                    sbuff.append(CLOSER);
-                    sbuff.append(" ");
-                }
-            }
-            if (sbuff.length() > 0) modQuery = sbuff.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		QuickSort test = new QuickSort();
 
-        return modQuery;
-    }
 
-    /**
-     * 두 문자열 사이에 Levenshtein 거리를 측정하는 함수 구현체
-     *
-     * @param s0 문자열 1
-     * @param s1 문자열 2
-     * @return Levenshtein 거리
-     */
-    public static int calculateLevenshteinDistance(String s0, String s1) {
-        int len0 = s0.length() + 1;
-        int len1 = s1.length() + 1;
 
-        int[] cost = new int[len0];
-        int[] newcost = new int[len0];
+		SortUtils.print(test.quickSort_pivot_median_20160628(nums));
+		
+		
+	}
+	
+	int[] quickSort_20160628(int[] nums){
+		quickSort_20160628(nums, 0, nums.length-1);
+		return nums;
+	}
 
-        for (int i = 0; i < len0; i++) cost[i] = i;
+	void quickSort_20160628(int[] nums, int low, int high) {
+		if(low < high){
+			int pi = partition_20160628(nums, low, high);
+			quickSort_20160628(nums, low, pi-1);
+			quickSort_20160628(nums, pi+1, high);
+		}
+	}
 
-        for (int j = 1; j < len1; j++) {
+	int partition_20160628(int[] nums, int low, int high) {
+		int pivot = nums[high];
+		int i = low-1;
+		for(int j = low; j <= high-1; j++){
+			if(nums[j] <= pivot){
+				i++;
+				
+				int temp = nums[i];
+				nums[i] = nums[j];
+				nums[j] = temp;
+			}
+		}
+		
+		int temp = nums[i+1];
+		nums[i+1] = nums[high];
+		nums[high] = temp;
+		return i+1;
+	}
+	
+	
+	int[] quickSort_pivot_first_20160628(int[] nums){
+		quickSort_pivot_first_20160628(nums, 0, nums.length-1);
+		return nums;
+	}
 
-            newcost[0] = j - 1;
+	private void quickSort_pivot_first_20160628(int[] nums, int low, int high) {
+		if (low < high) {
+			int pi = partition_pivot_first_20160628(nums, low, high);
+			quickSort_pivot_first_20160628(nums, low, pi - 1);
+			quickSort_pivot_first_20160628(nums, pi + 1, high);
+		}
+	}
 
-            for (int i = 1; i < len0; i++) {
+	private int partition_pivot_first_20160628(int[] nums, int low, int high) {
+		int pivot = nums[low];
+		int i = high+1;
+		for(int j = high; j > low; j--){
+			if(nums[j] > pivot){
+				i--;
+				
+				int temp = nums[j];
+				nums[j] = nums[i];
+				nums[i] = temp;
+			}
+		}
+		
+		int temp = nums[low];
+		nums[low] = nums[i-1];
+		nums[i-1] = temp;
+		
+		return i-1;
+	}
+	
+	int[] quickSort_pivot_median_20160628(int[] nums){
+		quickSort_pivot_median_20160628(nums, 0, nums.length-1);
+		return nums;
+	}
 
-                int match = (s0.charAt(i - 1) == s1.charAt(j - 1)) ? 0 : 1;
+	void quickSort_pivot_median_20160628(int[] nums, int low, int high) {
+		if(nums == null || nums.length == 0) return ;
+		if(low >= high) return;
+		
+		int i = low, j = high, mid = (low+high)/2, pivot = nums[mid];
+		
+		while(i <= j){
+			while(nums[i] < pivot) i++;
+			while(nums[j] > pivot) j--;
+			if(i <= j){
+				int temp = nums[i];
+				nums[i] = nums[j];
+				nums[j] = temp;
+				i++;
+				j--;
+			}
+		}
+		
+		if(low < j) quickSort_pivot_median_20160628(nums, low, j);
+		if(i < high) quickSort_pivot_median_20160628(nums, i, high);
+	}
 
-                int cost_replace = cost[i - 1] + match;
-                int cost_insert = cost[i] + 1;
-                int cost_delete = newcost[i - 1] + 1;
-
-                // keep minimum cost
-                newcost[i] = Math.min(Math.min(cost_insert, cost_delete), cost_replace);
-            }
-            int[] swap = cost;
-            cost = newcost;
-            newcost = swap;
-        }
-        // the distance is the cost for transforming all letters in both strings
-        return cost[len0 - 1];
-    }
 }

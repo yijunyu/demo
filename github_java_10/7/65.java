@@ -1,48 +1,48 @@
-package simulator.algorithms;
+import java.io.*;
+import java.util.*;
+class Shellsort{
+	public static int gap = 0;
+	public static int getGap(){
+		gap = gap/2;
+		return gap;
+	}
+	public static void display(int a[],int n){
+		for(int i=0;i<n;i++){
 
-import simulator.algorithms.AlgorithmBase.AlgorithmContent;
-import simulator.algorithms.AlgorithmBase.AlgorithmElement;
-
-/**
- * Trida predstavujici zapis pseudokodu algoritmu topologickeho usporadani. 
- * @author Jakub Varadinek <jvaradinek at gmail.com>
- */
-public class AlgorithmTopologicalSort extends AbstractAlgorithm{
-
-  protected AlgorithmElement[] content = new AlgorithmElement[] {
-    new AlgorithmElement(AlgorithmBase.algorithmHeadingName, new AlgorithmContent[] {      
-      new AlgorithmContent(AlgorithmBase.algorithmName, "Topological-Sort"), 
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, "("),
-      new AlgorithmContent(AlgorithmBase.algorithmVariableName, "G"),
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, ")"),
-    }),
-    new AlgorithmElement(AlgorithmBase.algorithmLineName0, new AlgorithmContent[] {      
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, "zavolej "), 
-      new AlgorithmContent(AlgorithmBase.algorithmMethodsName, "DFS"), 
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, "("),
-      new AlgorithmContent(AlgorithmBase.algorithmVariableName, "G"),
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, ")"),
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, " pro výpočet hodnot "), 
-      new AlgorithmContent(AlgorithmBase.algorithmVariableName, "f"),
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, " ["),
-      new AlgorithmContent(AlgorithmBase.algorithmVariableName, "v"),
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, "]"),
-    }),
-    new AlgorithmElement(AlgorithmBase.algorithmLineName0, new AlgorithmContent[] {      
-      new AlgorithmContent(AlgorithmBase.algorithmOthersName, "každý dokončený uzel zařaď na začátek seznamu uzlů "), 
-      new AlgorithmContent(AlgorithmBase.algorithmVariableName, "L"),
-    }),
-    new AlgorithmElement(AlgorithmBase.algorithmLineName0, new AlgorithmContent[] {      
-      new AlgorithmContent(AlgorithmBase.algorithmKeywordsName, "return "), 
-      new AlgorithmContent(AlgorithmBase.algorithmVariableName, "L"),
-    }),
-  };
-  
-  public AlgorithmTopologicalSort() {
-    this.algorithmParts.add(content);
-    this.algorithmParts.add(AlgorithmDfs.content1);
-    this.algorithmParts.add(AlgorithmDfs.content2);
-    this.addAlgorithm();
-  }
-  
+			System.out.print(a[i]+" ");
+		}
+	}
+	public static void shellSorting(int a[],int n){
+		int g = getGap();
+		if(g==0){
+			if(n>=2 && a[0]>a[1])
+			{
+				int temp = a[0];
+				a[0] = a[1];
+				a[1] = temp;	
+			}
+			display(a,n);
+		}
+		else{
+		for(int i=0;i<n-g;i++){
+			if(a[i]>a[i+g])
+			{
+				int temp = a[i];
+				a[i] = a[i+g];
+				a[i+g] = temp;
+			}
+		}
+		shellSorting(a,n);
+	}
+}
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the elements :");
+		int n = sc.nextInt();
+		int a[] = new int[n];
+		for(int i=0;i<n;i++)
+			a[i] = sc.nextInt();
+		gap = a.length;
+		shellSorting(a,n);
+	}
 }

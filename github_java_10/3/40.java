@@ -1,30 +1,46 @@
-public class TowerOfHanoi
-{
-  public static int cnt = 0;
-  public static void solveTowers( int disk, int source, 
-                      int destination, int temp )
-  {
-      cnt++;
-      if( disk == 1 )
-      {
-        System.out.printf( "\n%d --> %d", source, destination );
-        return;
-      }
-      solveTowers(disk - 1, source, temp, destination );
-      
-      System.out.printf( "\n%d --> %d", source, destination );
-      
-      solveTowers(disk - 1, temp, destination, source  );  
-  }
-  
-  public static void main( String[] args ) 
-  {
-      int start = 2;
-      int end   = 3;
-      int temp  = 1;
-      int disks = 20;
-      TowerOfHanoi.solveTowers( disks, start, end, temp );
-      System.out.printf("\nNo. of moves: %d\n", TowerOfHanoi.cnt );
-      System.exit(0);
-  }
+package algs4;
+
+
+public class Topological {
+    private Iterable<Integer> order;    
+
+    
+    public Topological(Digraph G) {
+        DirectedCycle finder = new DirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
+    }
+
+    
+    public Topological(EdgeWeightedDigraph G) {
+        EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
+    }
+
+    
+    public Iterable<Integer> order() {
+        return order;
+    }
+
+    
+    public boolean hasOrder() {
+        return order != null;
+    }
+
+
+    public static void main(String[] args) {
+        String filename  = args[0];
+        String delimiter = args[1];
+        SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
+        Topological topological = new Topological(sg.G());
+        for (int v : topological.order()) {
+            StdOut.println(sg.name(v));
+        }
+    }
+
 }

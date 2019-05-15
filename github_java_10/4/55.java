@@ -1,62 +1,75 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package coding.cormen;
-import java.util.*;
-/**
- *
- * @author getsa
- */
-public class insertionsort 
-{
-     Scanner alpha = new Scanner(System.in);
-    public static void main(String[] args)
-    {        
-        insertionsort beeta = new insertionsort();        
-        int[] A = beeta.arrayinput();        
-        int[] B = beeta.insertionsort(A);        
-        beeta.printarray(B);           
-    }
-    void printarray(int[] arr)
-    {
-        int[] myarray = insertionsort(arr);
-        for(int i=0;i<myarray.length;i++)
-        {
-         System.out.println(myarray[i]);   
-        }    
-    }
-    int[] insertionsort(int[] array)
-        {
-           int[] arr = array;         
-           for (int i=1;i<arr.length;i++)
-           {
-               int key = arr[i];
-               int j = i-1;
-               while((j>=0)&&(key>arr[j]))
-               {
-                   arr[j+1] = arr[j];
-                   arr[j] = key;
-                   j--;
-               }
-               
-           }         
-           return arr;
-           
-        }
-    public int[] arrayinput()
-        {
-            System.out.println("Enter the size of the array");
-            int n = alpha.nextInt();
-            int [] array = new int [n];
-            System.out.println("Enter the elements of the array");
-            for(int i=0;i<n;i++)
-            {
-               array[i] = alpha.nextInt();
-            }
-            return array;
-            
-        }
+package com.source.leetcode;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class HeapSort {
+	
+	
+	
+	public static void MinHeapUp(int a[],int position){
+		int nodeParent=(position-1)/2;
+		int temp=a[position];
+		while(nodeParent>=0 && position!=0){
+			if(a[nodeParent]<=temp)
+				break;
+			a[position]=a[nodeParent];
+			position=nodeParent;
+			nodeParent=(position-1)/2;
+		}
+		a[position]=temp;
+	}
+	
+	public static void MinHeapDown(int a[]){
+		int index=a.length-1;
+		int i=0,j=0;
+		a[i]=a[index];
+		int temp=a[i];
+		j=2*i+1;
+		while(j<a.length-1){
+			if(a[j]>a[j+1])
+				j=j+1;
+			if(a[j]>=temp)
+				break;
+			a[i]=a[j];
+			i=j;
+			j=2*i+1;
+		}
+		a[i]=temp;
+	}
+	
+	public static void printArray(int[] array){
+		for (int i : array) {
+			System.out.print(i+" ");
+		}
+		System.out.println();
+	}
+	
+	public static void swapInt(int a,int b){
+		int temp=a;
+		a=b;
+		b=temp;
+	}
+
+	public static void main(String[] args) throws Exception {
+		
+		
+		
+		int[] array={1,5,2,4,7,3,9};
+		int n=array.length;
+		HeapSort.printArray(array);
+		Heap heap=new Heap();
+		heap.MakeMinHeap(array, n);
+		HeapSort.printArray(array);
+		for(int i=n-1;i>=1;i--){
+			int temp=array[i];
+			array[i]=array[0];
+			array[0]=temp;
+			heap.MinHeapDown(array, 0, i);
+		}
+		HeapSort.printArray(array);
+		
+	}
 
 }

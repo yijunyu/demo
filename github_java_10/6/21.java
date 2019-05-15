@@ -1,61 +1,169 @@
-import java.util.*;
+package apps;
 
-public class Example {
+import java.io.IOException;
+import java.util.Scanner;
+import structures.Node;
 
-   public static void main(String[] args) {
 
-      int[] list = {97,75,53,31,19,86,64,42,20};
-      System.out.println("Unsorted: " + Arrays.toString(list));
+public class Radixsort {
 
-      mergeSort(list);
-      System.out.println("Sorted  :  " + Arrays.toString(list));
-   }
+	
+	Node<String> masterListRear;
+	
+	
+	Node<String>[] buckets;
+	
+	
+	int radix=10;
+	
+	
+	public Radixsort() {
+		masterListRear = null;
+		buckets = null;
+	}
+	
+	
+	public Node<String> sort(Scanner sc) 
+	throws IOException {
+		
+		if (!sc.hasNext()) { 
+			return null;
+		}
+		
+		
+		radix = sc.nextInt();
+		buckets = (Node<String>[])new Node[radix];
+		
+		
+		createMasterListFromInput(sc);
+		
+		
+		int maxDigits = getMaxDigits();
+		
+		for (int i=0; i < maxDigits; i++) {
+			scatter(i);
+			gather();
+		}
 
-   public static void mergeSort(int[] arr) {
-      if (arr.length > 1) {
-         int[] left = leftHalf(arr);
-         int[] right = rightHalf(arr);
+		return masterListRear;
+		
+	}
+	
+	
+	public void createMasterListFromInput(Scanner sc) 
+	throws IOException {
+		while(sc.hasNext()){
+			String input = sc.nextLine();
+			if(masterListRear == null){
+				masterListRear = new Node<String>(input, null);
+				masterListRear.next = masterListRear;
+			} else {
+				Node<String> newLink = new Node<String>(input, null);
+				newLink.next = masterListRear.next;
+				masterListRear.next = newLink;
+				masterListRear=newLink;
+			}
+		}
+		masterListRear.next = masterListRear.next.next;
+	}
+	
+	
+	public int getMaxDigits() {
+		int maxDigits = masterListRear.data.length();
+		Node<String> ptr = masterListRear.next;
+		while (ptr != masterListRear) {
+			int length = ptr.data.length();
+			if (length > maxDigits) {
+				maxDigits = length;
+			}
+			ptr = ptr.next;
+		}
+		return maxDigits;
+	}
+	
+	
+	public void scatter(int pass) {
+		
+		if(masterListRear.data.length() < 4) {
+			int numOfZeroes = getMaxDigits() - masterListRear.data.length();
+			for(int i = 0; i < numOfZeroes; i++) {
+				masterListRear.data = "0" + masterListRear.data;
+			}
+		}
+		Node<String> ptr = masterListRear.next;
+		while(ptr != masterListRear) {
+			if(ptr.data.length() == 0) 
+				ptr = ptr.next;
+			int numOfZeroes = getMaxDigits() - ptr.data.length();
+			for(int i = 0; i < numOfZeroes; i++) {
+				ptr.data = "0" + ptr.data;
+			}
+			ptr = ptr.next;
+		}
+		
+		Node<String> end = masterListRear;
+		Node<String> front = masterListRear.next;
+		
+		for(Node<String> ptr2 = front; ptr2 != end; ptr2 = ptr2.next) {
+			char number = ptr2.data.charAt(3 - pass);
+			int bucketNumber = Character.digit(number, radix);
+			Node<String> node2 = new Node<String>(ptr2.data, null);
+			
+			if(buckets[bucketNumber] == null) {
+				buckets[bucketNumber] = node2;
+			} else {
+				for(Node<String> ptr3 = buckets[bucketNumber]; ptr3 != null; ptr3 = ptr3.next) {
+					if(ptr3.next == null) {
+						ptr3.next = node2;
+						break;
+					}
+				}
+			}
+		}
+		
+		char rearNumber = end.data.charAt(3 - pass);
+		int bucketNumber = Character.digit(rearNumber, radix);
+		
+		Node<String> node2 = new Node<String>(end.data, null);
+		
+		if(buckets[bucketNumber] == null) {
+			buckets[bucketNumber] = node2;
+		} else {
+			for(Node<String> ptr3 = buckets[bucketNumber]; ptr3 != null; ptr3 = ptr3.next) {
+				if(ptr3.next == null) {
+					ptr3.next = node2;
+					break;
+				}
+			}
+		}
+	}
 
-         mergeSort(left);
-         mergeSort(right);
-
-         mergeArrays(arr, left, right);
-      }
-   }
-
-   public static int[] leftHalf(int[] arr) {
-      int size = arr.length / 2;
-      int[] left = new int[size];
-      for (int i = 0; i < size; i++) {
-         left[i] = arr[i];
-      }
-      return left;
-   }
-
-   public static int[] rightHalf(int[] arr) {
-      int size1 = arr.length / 2;
-      int size2 = arr.length - size1;
-      int[] right = new int[size2];
-      for (int i = 0; i < size2; i++) {
-         right[i] = arr[i + size1];
-      }
-      return right;
-   }
-
-   public static void mergeArrays(int[] arr, int[] left, int[] right) {
-      int i1 = 0;
-      int i2 = 0;
-
-      for (int i = 0; i < arr.length; i++) {
-         if (i2 >= right.length || (i1 < left.length && left[i1] <= right[i2])) {
-            arr[i] = left[i1];
-            i1++;
-         } else {
-            arr[i] = right[i2];
-            i2++;
-         }
-      }
-   }
+	
+	public void gather() {
+		Node<String> MLptr = masterListRear.next;
+		for(int i = 0; i < radix; i++) {
+			Node<String> front = buckets[i];
+			for(Node<String> ptr = front; ptr != null; ptr = ptr.next) {
+				MLptr.data = ptr.data;
+				MLptr = MLptr.next;
+			}
+			buckets[i] = null;
+		}
+		removeZeros();
+	}
+	
+	private void removeZeros() {
+		while(masterListRear.data.startsWith("0")) {
+			masterListRear.data = masterListRear.data.substring(1);
+		}
+		
+		for(Node<String> ptr = masterListRear.next; ptr != masterListRear; ptr= ptr.next) {
+			while(ptr.data.startsWith("0")) {
+				ptr.data = ptr.data.substring(1);
+			}
+		}
+	}
 }
+	
 
 

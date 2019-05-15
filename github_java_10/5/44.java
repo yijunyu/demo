@@ -1,43 +1,39 @@
-package com.timepass.graphtheory.revised;
+package com.sysmech.simpulse.experiment;
 
-public class DepthFirstSearch {
-	private boolean [] marked;
-	private int count;
-	
-	public DepthFirstSearch(Graph graph, int source){
-		marked = new boolean[graph.V()];	
-		
-		dfs(graph, source);
-	}	
-	
-	private void dfs(Graph graph, int vertex){
-		System.out.println("Visiting: " + vertex);
-		marked[vertex] = true;
-		count++;
-		for (int v: graph.adj(vertex)) {
-			if(!marked[v]){
-				dfs(graph, v);
-			}
-		}
-	}
-	
-	public int count(){
-		return count;
-	}
-	
-    public static void main(String[] args) {
-        Graph graph = new Graph(10);
-        
-        graph.addEdge(0, 9);
-        graph.addEdge(9, 3);
-        graph.addEdge(3, 6);
-        graph.addEdge(6, 2);
-        
-        DepthFirstSearch depthFirstSearch = new DepthFirstSearch(graph, 0);
-        if(depthFirstSearch.count() == graph.V()){
-        	System.out.println("Connected");
-        } else{
-        	System.out.println("Not Connected");
+import net.jcip.annotations.NotThreadSafe;
+
+
+@NotThreadSafe
+public class JavaBubbleSort {
+
+    public int[] recursiveBubble(final int[] args,
+                                 final int startIndex,
+                                 final int endIndex) {
+
+        if(startIndex > endIndex){
+            return args;
         }
+
+        if (startIndex == endIndex - 1) {
+
+            recursiveBubble(args, 0, endIndex - 1);
+
+        } else if (args[startIndex] > args[startIndex+1]) {
+
+            int currentNumber = args[startIndex];
+            args[startIndex] = args[startIndex + 1];
+            args[startIndex + 1] = currentNumber;
+
+            recursiveBubble(args, startIndex + 1, endIndex);
+
+        } else  {
+
+            recursiveBubble(args, startIndex + 1, endIndex);
+
+        }
+
+        return args;
+
     }
+
 }

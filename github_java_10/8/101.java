@@ -1,58 +1,181 @@
-/**
- * Created by liuxiongcheng on 2017/4/10.
- */
-public class Editdistance {
+package quicksort_multithreaded;
+import java.util.*;
 
- static int min(int x,int y,int z)
-  {
-    if(x<y&&x<z)
-        return x;
-    else if(y<x&&y<z)
-        return y;
-    else
-        return x;
-}
-//递归函数解决
-     static int editDist(String str1,String str2,int m,int n)/*把第一个字符串变成第二字符串*/ {
-         if (m == 0) return n;
-         if (n == 0) return m;
-         if (str1.charAt(m - 1) == str2.charAt(n - 1))
-             return editDist(str1, str2, m - 1, n - 1);
-        /*无论如何都要操作一次，三种操作中选出最小的数字,分别对应插入，替换，删除*/
-             return 1 + min(editDist(str1, str2, m, n - 1), editDist(str1, str2, m - 1, n - 1), editDist(str1, str2, m - 1, n));
+public class QuickSort {
 
-     }
-     //采用动态规划的思想解决
-     static  int editDsitDP(String str1,String str2,int m,int n)
-     {
-         int dp[][]=new int [m+1][n+1];
-         for(int i=0;i<=m;i++)
-         {
-             for(int j=0;j<=n;j++)
-             {
-                 if(i==0)
-                 {
-                     dp[i][j]=j;
-                 }
-               else  if (j==0)
-                 {
-                     dp[i][j]=i;
-                 }
-               else  if(str1.charAt(i-1)==str2.charAt(j-1))
-                     dp[i][j]=dp[i-1][j-1];
-                 else
-                     dp[i][j]=1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+	int size;
+	int[] tab;
+	int index_first = 0;
+	int index_last;
+	int pivot_first;
+	int pivot_second;
+	int pivot_third;
+	FirstThread First;
+	SecondThread Second;
+	AnotherThread Third;
+	AnotherThread Fourth;
+	
+	QuickSort(int size, int tab[], boolean print){
+		
+		this.size = size;
+		this.index_last = size - 1;
+		this.tab = tab;
 
-             }
-         }
-         return dp[m][n];
-     }
-     public static void main(String[] args) {
-        String a="saturday";
-        String b="sunday";
-        int m=a.length();
-        int n=b.length();
-        System.out.println(editDist(b,a,n,m));
-    }
+		this.First = new FirstThread("Pierwszy!");
+		try{
+			System.out.println("Oczekiwanie W�tku g��wnego na zako�czenie w�tk�w!");
+			this.First.First.join();
+		}catch (InterruptedException e){
+			
+		}
+		System.out.println(">>Wszystkie w�tki zosta�y zako�czone!");
+		
+		if(print){
+			System.out.println("Prezentowanie macierzy!");
+			for(int i = 0;i < size; i++){
+				System.out.println(this.tab[i]);
+			}
+		}	
+	}
+	
+	private class FirstThread implements Runnable{
+		
+		Thread First;
+		String name;
+		FirstThread(String threadname){
+			name = threadname;
+			First = new Thread(this,name);
+			System.out.println("<NEW>Konstruktor W�tku: " + First);
+			First.start();
+		}
+		@Override
+		public void run() {
+			System.out.println("<BEGIN>Rozpocz�cie W�tku: " + First);
+			
+			QuickSort.this.pivot_second = QuickSort.this.sort_once(QuickSort.this.index_first, QuickSort.this.index_last);
+						
+			QuickSort.this.Second = new QuickSort.SecondThread("W�tek!");
+				
+			QuickSort.this.pivot_first = QuickSort.this.sort_once(QuickSort.this.index_first, QuickSort.this.pivot_second);
+			
+			QuickSort.this.Third = new QuickSort.AnotherThread("Trzeci!", QuickSort.this.pivot_first + 1, QuickSort.this.pivot_second);
+			
+			QuickSort.this.sort_till_the_end(QuickSort.this.index_first, QuickSort.this.pivot_first);
+			
+			try{
+				if(QuickSort.this.Second.Second.isAlive())
+					QuickSort.this.Second.Second.join();
+				if(QuickSort.this.Third.Another.isAlive())
+					QuickSort.this.Third.Another.join();
+				if(QuickSort.this.Fourth.Another.isAlive())
+					QuickSort.this.Fourth.Another.join();
+				
+			}catch (InterruptedException e){
+				
+			}	
+			System.out.println("<END>Zako�czenie W�tku: " + First);
+		}
+	}
+	private class SecondThread implements Runnable{
+		
+		Thread Second;
+		String name;
+		SecondThread(String threadname){
+			name = threadname;
+			Second = new Thread(this,name);
+			System.out.println("<NEW>Konstruktor W�tku: " + Second);
+			Second.start();
+		}
+		@Override
+		public void run() {
+			System.out.println("<BEGIN>Rozpocz�cie W�tku: " + Second);
+			
+			QuickSort.this.pivot_third = QuickSort.this.sort_once(QuickSort.this.pivot_second + 1, QuickSort.this.index_last);
+			
+			QuickSort.this.Fourth = new QuickSort.AnotherThread("Czwarty!", QuickSort.this.pivot_third + 1, QuickSort.this.index_last);
+			
+			QuickSort.this.sort_till_the_end(QuickSort.this.pivot_second + 1, QuickSort.this.pivot_third);
+			
+			System.out.println("<END>Zako�czenie W�tku: " + Second);
+		}	
+	}
+	private class AnotherThread implements Runnable{
+		
+		Thread Another;
+		String name;
+		int from;
+		int to;
+		AnotherThread(String threadname, int from, int to){
+			name = threadname;
+			this.from = from;
+			this.to = to;
+			Another = new Thread(this,name);
+			System.out.println("<NEW>Konstruktor W�tku: " + Another);
+			Another.start();
+		}
+		@Override
+		public void run() {
+			System.out.println("<BEGIN>Rozpocz�cie W�tku: " + Another);
+			
+			QuickSort.this.sort_till_the_end(from, to);
+			
+			System.out.println("<END>Zako�czenie W�tku: " + Another);
+		}
+	}
+	public void swap(int i, int j){
+		int tmp = this.tab[i];
+		this.tab[i] = this.tab[j];
+		this.tab[j] = tmp;
+	}
+	
+	public int sort_once(int left, int right){
+		
+		int i = left-1;
+		int j = right+1;
+		int pivot_index = (int)(Math.round((left+right)/2));
+		int pivot_value = this.tab[pivot_index];
 
+		while(true){
+			i=i+1;
+			while(pivot_value>this.tab[i]){
+				i=i+1;
+			}
+			j=j-1;
+			while(pivot_value<this.tab[j]){
+				j=j-1;
+			}
+			if(i >= j){
+				break;
+			}
+			this.swap(i, j);
+		}
+		return j;
+	}
+	public void sort_till_the_end(int left, int right){
+		
+		if( left < right){
+			int i = left-1;
+			int j = right+1;
+			int pivot_index = (int)(Math.round((left+right)/2));
+			int pivot_value = this.tab[pivot_index];
+			
+			while(i<j){
+				i=i+1;
+				while(pivot_value>this.tab[i]){
+					i=i+1;
+				}
+				j=j-1;
+				while(pivot_value<this.tab[j]){
+					j=j-1;
+				}
+				if(i >= j){
+					break;
+				}else{
+					this.swap(i, j);
+				}
+			}
+			this.sort_till_the_end(left, j);
+			this.sort_till_the_end(j+1, right);
+		}
+	}
 }

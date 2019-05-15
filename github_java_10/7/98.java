@@ -1,79 +1,58 @@
-package basic;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Stack;
-
-public class TopologicalSort {
-	//https://www.youtube.com/watch?v=Q9PIxaNGnig
-	LinkedList<Integer>[] adjList;
-	int edges, vertex1, vertex2, numberOfnodes;
-	TopologicalSort(int v)
-    {
-		numberOfnodes = v;
-		adjList = new LinkedList[v];
-        for (int i=0; i<v; ++i)
-        	adjList[i] = new LinkedList();
+class ArraySh{
+    private long[] theArray;
+    private int nElems;
+    
+    public ArraySh(int max){
+        theArray = new long[max];
+        nElems = 0;
     }
-	 void addEdge(int v,int w) 
-	 { 
-		 adjList[v].add(w); 
-	}
-		void printGraph()
-		{
-			for(int i=0;i<adjList.length;i++)
-			{
-				System.out.print((i)+"->");
-				Iterator<Integer> itr=adjList[i].iterator();
-				while(itr.hasNext())
-				{
-					System.out.print((itr.next())+"-");
-				}
-				System.out.println();
-			}
-		}
-		void topologicalSort()
-		{
-			HashSet<Integer> visited=new HashSet<>();
-			Stack<Integer> stack=new Stack<>();
-			for(int i=0;i<numberOfnodes;i++)
-			{
-				if(!visited.contains(i))
-				{
-					topologicalSortUtil(i, visited, stack);
-				}
-			}
-			while(!stack.isEmpty())
-			{
-				System.out.print(stack.peek()+" ");
-				stack.pop();
-			}
-		}
-		void topologicalSortUtil(int vertex, HashSet<Integer> visited, Stack<Integer> stack)
-		{
-			visited.add(vertex);
-			Iterator<?> itr=adjList[vertex].iterator();
-			while(itr.hasNext())
-			{
-				Integer i=(Integer) itr.next();
-				if(!visited.contains(i))
-				{
-					topologicalSortUtil(i, visited, stack);
-				}
-			}
-			stack.push(new Integer(vertex));
-		}
-		public static void main(String[] args) {
-			TopologicalSort obj=new TopologicalSort(6);
-			obj.addEdge(5, 2);
-			obj.addEdge(5, 0);
-			obj.addEdge(4, 0);
-			obj.addEdge(4, 1);
-			obj.addEdge(2, 3);
-			obj.addEdge(3, 1);
-	 
-	        System.out.println("Following is a Topological sort of the given graph");
-	        obj.topologicalSort();
-		}
+    public void insert(long value){
+        theArray[nElems] = value;
+        nElems++;
+    }
+    public void display(){
+        System.out.print("A=");
+        for(int j = 0; j<nElems; j++){
+            System.out.print(theArray[j] + " ");
+        }
+        System.out.println();
+    }
+    public void shellSort(){
+        int inner, outer;
+        long temp;
+        int h =1;
+        while (h <= nElems/3){
+            h = h*3 + 1;
+        }
+        while(h>0){
+            for(outer = h; outer<nElems; outer++){
+                temp = theArray[outer];
+                inner = outer;
+                while(inner> h-1 && theArray[inner-h] <= temp){
+                    theArray[inner] = theArray[inner-h];
+                    inner -= h;
+                }
+                theArray[inner] = temp;
+            }
+            h = (h-1) / 3;
+        }
+    }
+}
+
+class ShellSortApp
+{
+    public static void main(String[] args)
+    {
+        int maxSize = 10;
+        ArraySh arr;
+        arr = new ArraySh(maxSize);
+        for(int j=0; j<maxSize; j++)
+        {
+            long n = (int)(java.lang.Math.random()*99);
+            arr.insert(n);
+        }
+        arr.display();
+        arr.shellSort();
+        arr.display();
+    }
 }

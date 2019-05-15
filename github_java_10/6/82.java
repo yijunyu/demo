@@ -1,56 +1,58 @@
-import java.util.Arrays;
+package ce1103.ChefREST.sort;
 
-public class Mergesort {
-  public static void main(String []args){
-    int a[]={49,38,65,97,76,13,27,49,78,34,12,64,5,4,62,99,98,54,56,17,18,23,34,15,35,25,53,51};
-    int numbers [] = sorting(a,0,a.length-1);
-    System.out.println(Arrays.toString(numbers));
-  }
+import java.util.ArrayList;
+import java.util.List;
 
-public static int[] sorting(int[] data, int left, int right) {
-    // TODO Auto-generated method stub
-    if(left<right){
-        //find the center
-        int center=(left+right)/2;
-        //recursively sort the left part
-        sorting(data,left,center);
-        //recursively sort the right part
-        sorting(data,center+1,right);
-        //merge
-        return merge(data,left,center,right);
+public class RadixSortGrains {
+	
+	
+	int[] radixSort;
+	
+	public RadixSortGrains(int[] arra){
+		radixSort = arra;
+		radixsort(radixSort);
+	}
 
-    }
-    return data;
-}
-public static int[] merge(int[] data, int left, int center, int right) {
-    // TODO Auto-generated method stub
-    int [] tmpArr=new int[data.length];
-    int mid=center+1;
-    //third log the center
-    int third=left;
-    int tmp=left;
-    while(left<=center&&mid<=right){
+	  public int[] getRadixSort() {
+		return radixSort;
+	}
 
-   //choose the smaller of the two arrays to the middle arrays
-        if(data[left]<=data[mid]){
-            tmpArr[third++]=data[left++];
-        }else{
-            tmpArr[third++]=data[mid++];
-        }
-    }
-    //rest part put into the arrays sequentially
-    while(mid<=right){
-        tmpArr[third++]=data[mid++];
-    }
-    while(left<=center){
-        tmpArr[third++]=data[left++];
-    }
-    //Copy the middle part to the original arrays
-    while(tmp<=right){
-        data[tmp]=tmpArr[tmp++];
-    }
-    return data;
-    //System.out.println(Arrays.toString(data));
-}
+	public void setRadixSort(int[] radixSort) {
+		this.radixSort = radixSort;
+	}
 
+	
+	 public void radixsort(int[] input) {
+		  final int RADIX = 10;
+		  
+		  List<Integer>[] bucket = new ArrayList[RADIX];
+		  for (int i = 0; i < bucket.length; i++) {
+		    bucket[i] = new ArrayList<Integer>();
+		  }
+		 
+		  
+		  boolean maxLength = false;
+		  int tmp = -1, placement = 1;
+		  while (!maxLength) {
+		    maxLength = true;
+		    
+		    for (Integer i : input) {
+		      tmp = i / placement;
+		      bucket[tmp % RADIX].add(i);
+		      if (maxLength && tmp > 0) {
+		        maxLength = false;
+		      }
+		    }
+		    
+		    int a = 0;
+		    for (int b = 0; b < RADIX; b++) {
+		      for (Integer i : bucket[b]) {
+		        input[a++] = i;
+		      }
+		      bucket[b].clear();
+		    }
+		    
+		    placement *= RADIX;
+		  }
+		} 
 }

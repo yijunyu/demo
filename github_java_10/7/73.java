@@ -1,90 +1,73 @@
-package com.practice.sorting;
+package org.slevental.anaphora.core.algs;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.Stack;
 
-public class TopologicalSort
-{
-	private Stack<Integer> stack;
 
-	public TopologicalSort() 
-	{
-		stack = new Stack<Integer>();
-	}
+public class Shell {
 
-	public int [] topological(int adjacency_matrix[][], int source) throws NullPointerException
-	{
-		int number_of_nodes = adjacency_matrix[source].length - 1;
-		int[] topological_sort = new int [number_of_nodes + 1];
-		int pos = 1;
-		int j ;
-		int visited[] = new int[number_of_nodes + 1];
-		int element = source;
-		int i = source;
-		visited[source] = 1;
-		stack.push(source);
+    
+    public static void sort(Comparable[] a) {
+        int N = a.length;
 
-		while (!stack.isEmpty())
-		{
-			element = stack.peek();
-			while (i <= number_of_nodes)
-			{
-				if (adjacency_matrix[element][i] == 1 && visited[i] == 1)
-				{
-					if (stack.contains(i))
-					{
-						System.out.println("TOPOLOGICAL SORT NOT POSSIBLE");
-						return null;
-					}
-				}  
-				if (adjacency_matrix[element][i] == 1 && visited[i] == 0)
-				{
-					stack.push(i);
-					visited[i] = 1;
-					element = i;
-					i = 1;
-					continue;
-				}
-				i++;
-			}
-			j = stack.pop();	
-			topological_sort[pos++] = j;
-			i = ++j;
-		}
-		return topological_sort;
-	}	
+        
+        int h = 1;
+        while (h < N/3) h = 3*h + 1; 
 
-	public static void main(String...arg)
-	{
-		int number_no_nodes, source;
-		int topological_sort[]  = null;
-		try 
-		{
-			number_no_nodes = 4;
-			/*
-			0 1 0 0
-			0 0 1 1
-			0 0 0 0
-			0 0 0 0
-			 */
-			int adjacency_matrix[][] = {{0 ,1 ,0, 0},{0 ,0 ,1, 1},{0 ,0 ,0, 0},{0 ,0 ,0, 0}};
-			System.out.println("Enter the source for the graph");
-			source = 1;
-			System.out.println("The Topological sort for the graph is given by ");
-			TopologicalSort toposort = new TopologicalSort();
-			topological_sort = toposort.topological(adjacency_matrix, source);
-			System.out.println();
-			for (int i = topological_sort.length - 1; i > 0; i-- )
-			{
-				if (topological_sort[i] != 0)
-					System.out.print(topological_sort[i]+"\t");
-			} 	
-		}catch(InputMismatchException inputMismatch)
-		{
-			System.out.println("Wrong Input format");
-		}catch(NullPointerException nullPointer)
-		{
-		}
-	}
+        while (h >= 1) {
+            
+            for (int i = h; i < N; i++) {
+                for (int j = i; j >= h && less(a[j], a[j-h]); j -= h) {
+                    exch(a, j, j-h);
+                }
+            }
+            assert isHsorted(a, h); 
+            h /= 3;
+        }
+        assert isSorted(a);
+    }
+
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
+    }
+
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        for (int i = 1; i < a.length; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+    
+    private static boolean isHsorted(Comparable[] a, int h) {
+        for (int i = h; i < a.length; i++)
+            if (less(a[i], a[i-h])) return false;
+        return true;
+    }
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readStrings();
+        Shell.sort(a);
+        show(a);
+    }
+
 }

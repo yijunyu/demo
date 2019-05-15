@@ -1,68 +1,172 @@
-package retiming;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
-import scheduler.Graph;
-import scheduler.Node;
 
-/**
- * This class contains basic operations required for retiming of nodes in a graph.
- * @author Mitja Stachowiak, Ludwig Meysel
- */
-public abstract class Retimer {
-  protected final Graph graph;
-  private final ArrayList<Node> topologicalSort;
-  private static class TopologicalComparator implements Comparator<Node> {
-    @Override
-    public int compare(Node o1, Node o2) { return o1.getDepth() - o2.getDepth(); }
-  }
-  private final TopologicalComparator topologicalComp = new TopologicalComparator();
-  
-  public Retimer (Graph graph) {
-    this.graph = graph;
-    this.topologicalSort = new ArrayList<Node>(graph.size());
-    Iterator<Node> it = graph.iterator();
-    while (it.hasNext()) topologicalSort.add(it.next());
-  }
-  
-  /**
-   * @return the longest path (delayed) in the graph. This will be the duration of a ASAP or ALAP-schedule
-   */
-  protected int longestPath () {
-    topologicalSort.sort(topologicalComp);
-    // set tmp1 to 0
-    if (graph.tmp1Used) throw new IllegalArgumentException("An other function is using tmp1 in this graph!");
-    else graph.tmp1Used = true;
-    for (int i = 0; i < topologicalSort.size(); i++) topologicalSort.get(i).tmp1 = 0;
-    // set start times in paths
-    for (int i = 0; i < topologicalSort.size(); i++) {
-      int nextStartTime = topologicalSort.get(i).tmp1 + topologicalSort.get(i).getDelay();
-      HashMap<Node, Integer> succ = topologicalSort.get(i).allSuccessors();
-      Iterator<Entry<Node, Integer>> it = succ.entrySet().iterator();
-      while (it.hasNext()) {
-        Entry<Node, Integer> e = it.next();
-        if (e.getValue() != 0) continue; // don't regard edges to later iterations
-        if (nextStartTime > e.getKey().tmp1) e.getKey().tmp1 = nextStartTime;
-      }
-    }
-    // add last node's delay to paths and store maximum
-    int longestPath = 0;
-    for (int i = 0; i < topologicalSort.size(); i++) {
-      topologicalSort.get(i).tmp1 += topologicalSort.get(i).getDelay();
-      if (topologicalSort.get(i).tmp1 > longestPath) longestPath = topologicalSort.get(i).tmp1;
-    }
-    graph.tmp1Used = false;
-    return longestPath;
-  }
-  
-  /**
-   * Processes a retiming on the graph, that was given to this retimer in the constructor
-   * @return
-   * returns an array of three integers, holding the start and the end cost and the number of needed cycles.
-   */
-  public abstract int[] retime (int quality);
+public class Search {
+
+	static int findMax(int[] arr) {
+		
+		int max = 0;
+		for(int i=1; i < arr.length; i++) {
+			if (arr[i] > arr[max])
+				max = i;
+		}
+		return max;
+
+	}
+
+	static int findElement (int[] arr, int element) {
+
+		int pos = 0;
+		boolean isFound = false;
+		while (!isFound && (pos < arr.length)) {
+			
+			if (arr[pos] == element)
+				isFound = true;
+			else
+				pos++;
+		}
+		
+		if (isFound)
+			return pos;
+		else
+			return -1;
+	}
+
+	static void bubbleSort(int[] arr) {
+
+		int temp = 0;
+		for(int i = arr.length - 1; i >= 0; i--)
+			for( int j = 0; j <= i - 1; j++) {
+
+				if (arr[j] > arr[j + 1]) {
+
+					temp = arr[j];
+					arr[j] = arr[j + 1];
+					arr[j + 1] = temp;
+				}
+			}
+	}
+
+	static int findElementbinary (int[] arr, int element) {
+
+		boolean isFound = false;
+		int left = 0, right = arr.length - 1, middle = 0;
+		int zaehler = 0;
+		while (!isFound && (left <= right))	{
+
+			middle = (left + right) / 2;
+			zaehler++;
+			if (arr[middle] == element)
+				isFound = true;
+			else {
+				if (arr[middle] > element)
+					right = middle - 1;
+				else
+					left = middle + 1;
+
+			}
+		}
+
+		System.out.println("Es wurde beim binarySearch " 
+					+ zaehler + " mal zugegriffen.\n");
+
+		if (isFound)
+			return middle;
+		else
+			return -1;
+	}
+
+	static void insertionSort(int[] arr) {
+
+		int temp = 0, j = 0;
+		for(int i = 1; i < arr.length; i++) {
+
+			temp = arr[i];
+			j = i;
+			while(j > 0 && arr[j-1] > temp) {
+
+				arr[j] = arr[j-1];
+				j--;
+			}
+			arr[j] = temp;
+		}
+	}
+	
+	static void shellSort(int[] arr) {
+		int temp = 0, h = 1, j = 0;
+		do
+			h = 3 * h + 1;
+		while (h < arr.length);
+		do {
+			h = h / 3;
+			for(int i = h; i < arr.length; i++) {
+				temp = arr[i];
+				j = i;
+				while ((j >= h) && (arr[j-h] > temp)) {
+					arr[j] = arr[j - h];
+					j = j - h;
+				}
+				arr[j] = temp;
+			}			
+		} while (h != 1);
+	}
+
+
+	public static void main(String...args) {
+		
+		int arg[] = {3, 6, 2, 12, 1, 15, 13, 9};
+
+		System.out.println();
+
+		
+		int erg, find = 6;
+		erg = findMax(arg);
+		System.out.println("Index mit groesstem Wert: " + erg + "\t Wert im Array: " + arg[erg] + "\n");
+
+		
+		erg = findElement(arg, find);
+		if (erg == -1)
+			System.out.println("Die Zahl " + find + " wurde nicht im array gefunden.");
+		else 
+			System.out.println("Index des gesuchten Werts: " + erg + "\t gesuchter Wert im array: " + arg[erg] + "\n");
+	
+		
+		shellSort(arg);
+		System.out.println("Nach Shell-Sort: ");
+		for(int i=0; i < arg.length; i++)
+			System.out.print(arg[i] + " ");
+		System.out.println("\n");
+		
+		
+		insertionSort(arg);
+		System.out.println("Nach insertionSort: ");
+		for(int i=0; i < arg.length; i++)
+			System.out.print(arg[i] + " ");
+		System.out.println("\n");
+
+
+		
+		bubbleSort(arg);
+		System.out.println("Nach bubbleSort: ");
+		for(int i=0; i < arg.length; i++)
+			System.out.print(arg[i] + " ");
+		System.out.println("\n");
+		
+		
+		erg = findElementbinary(arg, find);
+		if (erg == -1)
+			System.out.println("Die Zahl " + find + " wurde nicht im array gefunden.");
+		else 
+			System.out.println("Index des gesuchten Werts: " + erg + "\t gesuchter Wert im array: " + arg[erg] + "\n");
+
+		
+
+
+	}
 }
+
+
+
+
+
+

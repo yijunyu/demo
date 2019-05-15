@@ -1,110 +1,77 @@
-package question1;
+import java.util.*;
 
+public class TopologicalSort {
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+    public static void main(String[] args) {
+        String s = "std, ieee, des_system_lib, dw01, dw02, dw03, dw04, dw05,"
+                + "dw06, dw07, dware, gtech, ramlib, std_cell_lib, synopsys";
 
+        Graph g = new Graph(s, new int[][]{
+            {2, 0}, {2, 14}, {2, 13}, {2, 4}, {2, 3}, {2, 12}, {2, 1},
+            {3, 1}, {3, 10}, {3, 11},
+            {4, 1}, {4, 10},
+            {5, 0}, {5, 14}, {5, 10}, {5, 4}, {5, 3}, {5, 1}, {5, 11},
+            {6, 1}, {6, 3}, {6, 10}, {6, 11},
+            {7, 1}, {7, 10},
+            {8, 1}, {8, 10},
+            {9, 1}, {9, 10},
+            {10, 1},
+            {11, 1},
+            {12, 0}, {12, 1},
+            {13, 1}
+        });
 
-/**
- * Class description
- * 
- *  This class will solve the TowerOfHanoi Problem
- * 
- * @version1.10 19 Jul 2017
- * @author Pawan Manglani
- */
+        System.out.println("Topologically sorted order: ");
+        System.out.println(g.topoSort());
+    }
+}
 
-public class TowerOfHanoi {
+class Graph {
+    String[] vertices;
+    boolean[][] adjacency;
+    int numVertices;
 
+    public Graph(String s, int[][] edges) {
+        vertices = s.split(",");
+        numVertices = vertices.length;
+        adjacency = new boolean[numVertices][numVertices];
 
-	/** The al. type of ArrayList*/
-	private ArrayList<String> al = new ArrayList<>();
+        for (int[] edge : edges)
+            adjacency[edge[0]][edge[1]] = true;
+    }
 
-	/** The step type of String. */
-	private String step;
+    List<String> topoSort() {
+        List<String> result = new ArrayList<>();
+        List<Integer> todo = new LinkedList<>();
 
-	/** The number of disk. */
-	public int number_of_disk=0;
+        for (int i = 0; i < numVertices; i++)
+            todo.add(i);
 
-	/**
-	 * Tower of hanoi.
-	 *
-	 * @param source the source String
-	 * @param destination the destination String
-	 * @param auxiliary the auxiliary String
-	 * @param disk_count the count of disk
-	 * @throws IllegalArgumentException the illegal argument exception
-	 * @throws NullPointerException the null pointer exception
-	 */
-	protected void towerOfHanoi(String source,String destination,
-			String auxiliary,int disk_count) throws IllegalArgumentException,NullPointerException{
+        try {
+            outer:
+            while (!todo.isEmpty()) {
+                for (Integer r : todo) {
+                    if (!hasDependency(r, todo)) {
+                        todo.remove(r);
+                        result.add(vertices[r]);
+                         
+                        continue outer;
+                    }
+                }
+                throw new Exception("Graph has cycles");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+        return result;
+    }
 
-		if(number_of_disk<=0) {
-			throw new IllegalArgumentException("Number of disk should not be less than 1");
-		}
-		else if((source== null) || (destination== null) || (auxiliary== null)) {
-			throw new NullPointerException("String Can't be null");
-		}
-		if(disk_count==number_of_disk) {
-			step = "Move Disk "+ (disk_count)+" from " + source + " to " + destination;
-			al.add(step);
-		}
-		else {
-			towerOfHanoi(source,auxiliary,destination,disk_count+1);
-			step = "Move Disk "+ (disk_count)+" from " + source + " to " + destination;
-			al.add(step);
-			towerOfHanoi(auxiliary,destination,source,disk_count+1);
-		}
-	}
-
-	/**
-	 *  solveHanoi function.
-	 *
-	 * 
-	 * @param disk_count the disk count
-	 * @param source the source String
-	 * @param destination the destination String
-	 * @param auxiliary the auxiliary String
-	 * @return the array list
-	 */
-	public List<String> solveHanoi(int disk_count,
-			String source,String destination,String auxiliary) {
-		List<String> result = new ArrayList<>();
-		try {
-			number_of_disk = disk_count;
-			disk_count = 1;
-			towerOfHanoi(source,destination,auxiliary,disk_count);
-			result = al;
-		}catch(Exception e) {
-			System.out.println(e.getMessage());
-			result.add(e.getMessage());
-		}
-		return result;
-	}
-
-
-	/**
-	 * The main method.
-	 *
-	 * @param args the command-line arguments
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		TowerOfHanoi obj = new TowerOfHanoi();
-		List<String> result;
-		int disk_count = 1;
-		String source = "A",destination="B",auxiliary="C";
-		try {
-			result = obj.solveHanoi(disk_count, source, destination, auxiliary);
-			Iterator<String> itr =result.iterator();
-			while(itr.hasNext()) {
-				System.out.println(itr.next());
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
+    boolean hasDependency(Integer r, List<Integer> todo) {
+        for (Integer c : todo) {
+            if (adjacency[r][c])
+                return true;
+        }
+        return false;
+    }
 }

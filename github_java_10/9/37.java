@@ -1,60 +1,111 @@
-import java.util.Arrays;
 
-public class HeapSort {
-	public static void sort(int [] arr) {
-		buildMaxHeap(arr);
 
-		for(int i = 0; i < arr.length; i++) {
-			extractMax(arr, arr.length-i);
-		}
-	}
 
-	public static void buildMaxHeap(int [] arr) {
-		if(arr.length <= 1)
-			return;
 
-		for(int i = (arr.length/2)-1; i >= 0; i--) {
-			maxHeapify(arr, i, arr.length);
-		}
-	}
 
-	public static void extractMax(int [] arr, int size) {
-		if(size > 1) {
-			swap(arr, 0, size-1);
-			maxHeapify(arr, 0, size-1);
-		}
-	}
 
-	public static void maxHeapify(int [] arr, int i, int n) {
-		int l = 2 * i + 1;
-		int r = 2 * i + 2;
-		int j = n, max = Integer.MIN_VALUE;
-		boolean swap = false;
-		if(l < n && arr[i] < arr[l]) {
-			max = arr[l];
-			j = l;
-			swap = true;
-		}
 
-		if(r < n && arr[i] < arr[r]) {
-			if(arr[r] > max) {
-				max = arr[r];
-				j = r;
-				swap = true;
+
+
+
+
+
+
+
+import java.applet.Applet;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+public class TwoSorts extends Applet{
+
+	private final int APPLET_WIDTH = 500;
+    private final int APPLET_HEIGHT = 500;
+    int[] sortSelection;
+    int[] sortInsertion;
+    private int index = 0;
+    private int index2 = 1;
+	private int min = 0;
+	private int temp;
+	
+	
+	
+	public void init()
+	   {
+	      setBackground (Color.yellow);
+	      setSize (APPLET_WIDTH, APPLET_HEIGHT);  
+	      
+	      sortSelection = new int [10];
+	      sortInsertion = new int [10];
+	      
+	      for(int i = 0; i < sortSelection.length; i++){
+	    	  int rand = (int) (Math.random() * 100) + 1;
+	    	  sortSelection[i] = rand;
+	    	  sortInsertion[i] = rand;
+	      }
+	      init2();
+	   }
+	 
+	 
+	 
+	 public void paint (Graphics page)
+	   {
+		 page.drawString("Selection Sort", 185, 135);
+		 page.drawString("Insertion Sort", 185, 285);
+		 int location = 150;
+		 int location2 = 150;
+		 min = index;
+		 
+ 			for (int i = 0; i < sortSelection.length; i++){
+ 				page.fillRect(location,150,10,sortSelection[i]);
+ 				location += 15;
+		 			}
+ 			
+ 			for (int i = 0; i < sortInsertion.length; i++){
+ 				page.fillRect(location2,300,10,sortInsertion[i]);
+ 				location2 += 15;
+		 			}
+			for (int scan = index+1; scan < sortSelection.length; scan++){
+            if (sortSelection[scan] < (sortSelection[min]))
+            min = scan;
 			}
-		}
+		 		 
+	 		temp = sortSelection[min];
+	 		sortSelection[min] = sortSelection[index];
+	 		sortSelection[index] = temp;
+		 			
+		 	int key = sortInsertion[index2];
+ 	        int position = index2;
 
-		if(swap == true) {
-			swap(arr, i, j);
-			if(j < n/2)
-				maxHeapify(arr, j, n);
-		}	
-	}
+ 	        while (position > 0 && key < (sortInsertion[position-1]))
+ 	        {
+ 	        	sortInsertion[position] = sortInsertion[position-1];
+ 	            position--;
+ 	        }
+ 	            
+ 	        sortInsertion[position] = key;
+ 	      	}
+			   
+			Button butn = new Button("Pass");
+			
+			
+			public void init2() {
+		        butn.addActionListener(new ButnHandler());
+			    this.add(butn); 
+			    }
+			
+			
+		    class ButnHandler implements ActionListener {
+		        public void actionPerformed(ActionEvent e) {
 
-	public static void swap(int [] arr, int i, int j) {
-		int temp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = temp;
-	}
-
-}
+		        	repaint();
+		        	if(index < sortSelection.length - 1){index++;}
+		        	else {System.out.println("Selection sort finished");}
+		        	if(index2 < sortInsertion.length - 1){index2++;}
+		        	else {System.out.println("Insertion sort finished");}
+		        } 
+		    }    
+	 }

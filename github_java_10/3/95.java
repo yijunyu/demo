@@ -1,105 +1,53 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
+package com.facebook.common.collect;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
+import com.google.common.collect.Sets;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-public class TowerOfHanoi {
-
-    public static void main(String[] args) throws Exception {
-        new TowerOfHanoi();
+public class TopologicalSort
+{
+  public static <T> ImmutableList<TopologicalSort.Node<T>> a(Collection<TopologicalSort.Node<T>> paramCollection)
+  {
+    LinkedHashSet localLinkedHashSet = Sets.b();
+    Iterator localIterator1 = paramCollection.iterator();
+    while (localIterator1.hasNext())
+    {
+      TopologicalSort.Node localNode3 = (TopologicalSort.Node)localIterator1.next();
+      if (!localNode3.b.isEmpty())
+        continue;
+      localLinkedHashSet.add(localNode3);
     }
-
-    int N = 4;       
-    Hanoi hanoi;
-    List<String> list = new ArrayList<String>();  
-
-    public TowerOfHanoi() throws Exception {
-        hanoi = new Hanoi(N);
-        list.add("(init) " + hanoi.toString());    
-
-        recursive(N, 0, 2);   
-
-        int i = 0;
-        for (String e : list) {
-            System.out.println((i++) + " : " + e);
-        }
+    ImmutableList.Builder localBuilder = ImmutableList.e();
+    while (!localLinkedHashSet.isEmpty())
+    {
+      TopologicalSort.Node localNode1 = (TopologicalSort.Node)localLinkedHashSet.iterator().next();
+      localLinkedHashSet.remove(localNode1);
+      localBuilder.b(localNode1);
+      Iterator localIterator3 = localNode1.c.iterator();
+      while (localIterator3.hasNext())
+      {
+        TopologicalSort.Edge localEdge = (TopologicalSort.Edge)localIterator3.next();
+        TopologicalSort.Node localNode2 = localEdge.b;
+        localIterator3.remove();
+        localNode2.b.remove(localEdge);
+        if (!localNode2.b.isEmpty())
+          continue;
+        localLinkedHashSet.add(localNode2);
+      }
     }
-
-  
-    void recursive(int n, int from, int to) {
-        if (n > 0) {
-            int work = 3 - (from + to);
-            recursive(n - 1, from, work);
-            hanoi.move(from, to);
-            String log = String.valueOf((char)('A' + from)) + " -> " + String.valueOf((char)('A' + to));
-            log += " " + hanoi.toString();
-            list.add(log);  
-            recursive(n - 1, work, to);
-        }
+    Iterator localIterator2 = paramCollection.iterator();
+    while (localIterator2.hasNext())
+    {
+      if (((TopologicalSort.Node)localIterator2.next()).b.isEmpty())
+        continue;
+      throw new RuntimeException("Cycle in background tasks dependencies");
     }
-
-   
-    class Hanoi {
-        int n;   
-
-        @SuppressWarnings("unchecked")
-        Deque<Integer>[] stack = new Deque[3];    
-        {
-            for (int i = 0; i < 3; i++) {
-                stack[i] = new ArrayDeque<Integer>();
-            }
-        }
-
-        public Hanoi(int n) {
-            this.n = n;
-
-            while (n > 0) {
-                push(0, n--);  
-            }
-        }
-
-        void push(int to, int no) {
-            stack[to].addLast(no);
-        }
-
-
-        int pop(int from) {
-            return stack[from].removeLast();
-        }
-
-        void move(int from, int to) {
-            push(to, pop(from));
-        }
-
-        @Override
-        public String toString() {
-            final StringBuilder sb = new StringBuilder(n * 9);
-            for (int i = 0; i < 3; i++) {
-                if (i > 0) {
-                    sb.append(",");
-                }
-                if (stack[i].isEmpty()) {
-                    sb.append("[]");
-                    continue;
-                }
-
-                int j = 0;
-                Iterator<Integer> it = stack[i].iterator();
-                sb.append("[");
-                while (it.hasNext()) {
-                    int v = it.next();
-                    if (v == 0) {
-                        break;
-                    }
-                    if (j++ > 0) {
-                        sb.append(",");
-                    }
-                    sb.append(v);
-                }
-                sb.append("]");
-            }
-            return sb.toString();
-        }
-    }
+    return localBuilder.b();
+  }
 }
+

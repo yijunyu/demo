@@ -1,38 +1,34 @@
-package com.practice.stanford.graphs;
+class InsertionSort
+{
+  void sort(int arr[])
+  {
+    int n=arr.length;
+    for(int i=1;i<n;++i)
+    {
+      int key=arr[i];
+      int j=i-1;
+      while(j>=0&& arr[j]>key)
+      {
+        arr[j+1]=arr[j];
+        j=j-1;
+      }
+      arr[j+1]=key;
+    }
+  }
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+  static void printArray(int arr[])
+  {
+    int n=arr.length;
+    for(int i=0;i<n;++i)
+      System.out.print(arr[i]+" ");
+    System.out.println();
+  }
 
-public class BFS {
-
-	public static void bfs(int start, Map<Integer, List<Integer>> adjancylist) {
-
-		Set<Integer> vertices = adjancylist.keySet();
-		Set<Integer> visited = new HashSet<Integer>();
-
-		Queue<Integer> queue = new LinkedList<>();
-		queue.add(start);
-		visited.add(start);
-		while (!queue.isEmpty()) {
-
-			int v = queue.poll();
-
-			List<Integer> connected = adjancylist.get(v);
-			for (Integer w : connected) {
-
-				if (!visited.contains(w)) {
-					visited.add(w);
-					queue.add(w);
-				}
-
-			}
-
-		}
-
-	}
-
+  public static void main(String args[])
+  {
+    int arr[]={12,11,14,5,6};
+    InsertionSort insertSort=new InsertionSort();
+    insertSort.sort(arr);
+    printArray(arr);
+  }
 }

@@ -1,86 +1,115 @@
-package edu.kit.informatik;
 
-/**
- * Calculates the Levenshtein-Distance of two Strings.
- * 
- * @author Markus Iser
- * @author Philipp Merkle
- * @version 1.3
- */
-public class Levenshtein {
 
-    private final String w1;
-    private final String w2;
-    private int[][] distance;
+public class Quick {
 
-    /**
-     * Creates a new Levenshtein distance object.
-     * <p>
-     * Passing null as an argument sets the respective parameter to the empty String.
-     * 
-     * @param w1
-     *            the first word
-     * @param w2
-     *            the second word
-     */
-    public Levenshtein(String w1, String w2) {
-        this.w1 = w1 == null ? "." : "." + w1.toLowerCase();
-        this.w2 = w2 == null ? "." : "." + w2.toLowerCase();
-        this.distance = new int[this.w2.length()][this.w1.length()];
+    
+    public static void sort(Comparable[] a) {
+        StdRandom.shuffle(a);
+        sort(a, 0, a.length - 1);
     }
 
-    /**
-     * Returns the first word.
-     * 
-     * @return the first word, or an empty String if the first word is {@code null}
-     */
-    public String getFirstWord() {
-        return w1.substring(1);
+    
+    private static void sort(Comparable[] a, int lo, int hi) { 
+        if (hi <= lo) return;
+        int j = partition(a, lo, hi);
+        sort(a, lo, j-1);
+        sort(a, j+1, hi);
+        assert isSorted(a, lo, hi);
     }
 
-    /**
-     * Returns the second word.
-     * 
-     * @return the second word, or an empty String if the second word is {@code null}
-     */
-    public String getSecondWord() {
-        return w2.substring(1);
-    }
+    
+    
+    private static int partition(Comparable[] a, int lo, int hi) {
+        int i = lo;
+        int j = hi + 1;
+        Comparable v = a[lo];
+        while (true) { 
 
-    /**
-     * Calculates and returns the edit distance of the two words.
-     * 
-     * @return the Levenshtein distance of the two words
-     */
-    public double getDistance() {
-        distance[0][0] = 0;
-        for (int i = 0; i < w2.length(); i++) {
-            for (int j = 0; j < w1.length(); j++) {
-                if (i != 0 || j != 0) {
-                    distance[i][j] = Math.min(replace(i, j), Math.min(delete(i, j), insert(i, j)));
-                }
-            }
+            
+            while (less(a[++i], v))
+                if (i == hi) break;
+
+            
+            while (less(v, a[--j]))
+                if (j == lo) break;      
+
+            
+            if (i >= j) break;
+
+            exch(a, i, j);
         }
-        return distance[w2.length() - 1][w1.length() - 1];
+
+        
+        exch(a, lo, j);
+
+        
+        return j;
     }
 
-    private int getDistanceAt(int i, int j) {
-        if (i < 0 || j < 0 || i > w2.length() || j > w1.length()) {
-            return Integer.MAX_VALUE - 1;
+   
+    public static Comparable select(Comparable[] a, int k) {
+        if (k < 0 || k >= a.length) {
+            throw new RuntimeException("Selected element out of bounds");
         }
-        return distance[i][j];
+        StdRandom.shuffle(a);
+        int lo = 0, hi = a.length - 1;
+        while (hi > lo) {
+            int i = partition(a, lo, hi);
+            if      (i > k) hi = i - 1;
+            else if (i < k) lo = i + 1;
+            else return a[i];
+        }
+        return a[lo];
     }
 
-    private int delete(int i, int j) {
-        return getDistanceAt(i, j - 1) + 1;
+
+
+   
+    
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+    
+    private static void exch(Object[] a, int i, int j) {
+        Object swap = a[i];
+        a[i] = a[j];
+        a[j] = swap;
     }
 
-    private int insert(int i, int j) {
-        return getDistanceAt(i - 1, j) + 1;
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        return isSorted(a, 0, a.length - 1);
     }
 
-    private int replace(int i, int j) {
-        return w2.charAt(i) == w1.charAt(j) ? getDistanceAt(i - 1, j - 1) : getDistanceAt(i - 1, j - 1) + 1;
+    private static boolean isSorted(Comparable[] a, int lo, int hi) {
+        for (int i = lo + 1; i <= hi; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        String[] a = StdIn.readStrings();
+        Quick.sort(a);
+        show(a);
+
+        
+        StdOut.println();
+        for (int i = 0; i < a.length; i++) {
+            String ith = (String) Quick.select(a, i);
+            StdOut.println(ith);
+        }
     }
 
 }

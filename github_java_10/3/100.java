@@ -1,35 +1,58 @@
-import java.util.Scanner;
+package companies.apple.experience;
 
-/**
- This program is used for solving tower of hanoi.
+import java.util.*;
 
-*/
-public class towerofhanoi {
-	/**
-		Recursive method for solving the program
-		@Param:
-			n: int, number of disc
-			start: the Starting Pole
-			temp :place to  storing disk temporarily
-			end: end: final spot
 
-	*/
-	   public void solve(int n, String start, String temp, String end) {
-	       if (n == 1) {
-	           System.out.println(start + " -> " + end);
-	       } else {
-	           solve(n - 1, start, end, temp);
-	           System.out.println(start + " -> " + end);
-	           solve(n - 1, temp, start, end);
-	       }
-	   }
-		
-	// Main method to input number of disc.
-	   public static void main(String[] args) {
-	       towerofhanoi towersOfHanoi = new towerofhanoi();
-	       System.out.print("Enter number of discs: ");
-	       Scanner scanner = new Scanner(System.in);
-	       int discs = scanner.nextInt();
-	       towersOfHanoi.solve(discs, "A", "B", "C");
-	   }
-	}
+public class TopologicalSort {
+    
+    public static List<List<String>> topSort(Map<String, List<String>> dependencies) {
+        Map<String, Integer> inCount = new HashMap<String, Integer>();
+        List<List<String>> ret = new ArrayList<List<String>>();
+        Set<String> roots = new HashSet<String>();
+
+        for (String n : dependencies.keySet()) {
+            if (!inCount.containsKey(n)) {
+                roots.add(n);
+            }
+
+            for (String s : dependencies.get(n)) {
+                if (inCount.containsKey(s)) {
+                    inCount.put(s, inCount.get(s) + 1);
+                } else {
+                    inCount.put(s, 1);
+                }
+
+                if (roots.contains(s)) {
+                    roots.remove(s);
+                }
+            }
+        }
+
+        ret.add(new ArrayList<String>(roots));
+        topSort(inCount, dependencies, ret);
+
+        return ret;
+    }
+
+    private static void topSort(Map<String, Integer> inCount, Map<String, List<String>> dependencies, List<List<String>> ret) {
+        while (!inCount.isEmpty()) {
+            List<String> newNodes = new ArrayList<String>();
+
+            for (String node : ret.get(ret.size() - 1)) {
+                if (dependencies.containsKey(node)) {
+                    List<String> dependency = dependencies.get(node);
+                    for (String n : dependency) {
+                        int count = inCount.get(n);
+                        inCount.put(n, count - 1);
+                        if (count == 1) {
+                            newNodes.add(n);
+                            inCount.remove(n);
+                        }
+                    }
+                }
+            }
+
+            ret.add(newNodes);
+        }
+    }
+}

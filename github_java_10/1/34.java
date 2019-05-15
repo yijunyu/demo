@@ -1,78 +1,85 @@
-package br.com.mertins.ufpel.fia.exaustiva;
 
-import br.com.mertins.ufpel.fia.util.BasicSearch;
-import br.com.mertins.ufpel.fia.util.BoardState;
-import br.com.mertins.ufpel.fia.util.Element;
-import br.com.mertins.ufpel.fia.util.Observator;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 
-/**
- * Busca em amplitude no quebra-cabeça deslizante
- *
- * @author mertins
- */
-public class BreadthFirstSearch extends BasicSearch {
 
-    /**
-     * Construtor para realizar busca em amplitude no quebra-cabeça deslizante
-     *
-     * @param observator classe responsável em receber as informações que
-     * servirão ao relatório
-     * @param isShuffle embaralhar qual candidato é visitável primeiro (reduz a
-     * repetição de ir e vir da mesma peça)
-     * @param withHash usa tabela de hash para evitar movimentos já avaliados
-     */
-    public BreadthFirstSearch(Observator observator, boolean isShuffle, boolean withHash) {
-        super(observator, isShuffle, withHash);
-    }
+import java.io.*;
+import java.util.*;
 
-    @Override
-    public List<BoardState> run() {
-        Queue<BoardState> lista = new LinkedList<>();
-        lista.add(beginState);
-        int nivel = 0;
-        long hashColision = 0;
-        try {
-            while (!lista.isEmpty()) {
-                if (observator.isTimeOver()) {
-                    observator.errSolution(nivel);
-                    throw new RuntimeException(String.format("Tempo excedido! Nivel atingido [%s]", nivel));
-                }
-                BoardState testState = lista.poll();
-//            this.board.print(testState);    // informações parciais
-                if (!this.board.isTheSolution(testState)) {
-                    nivel = testState.getHeight() + 1;
-                    Element[] findCandidates = this.board.findCandidates(testState, isShuffle);
-                    for (Element possibilidade : findCandidates) {
-                        BoardState move = this.board.move(possibilidade, testState);
-                        if (!withHash || !this.hashTable.contains(move)) {
-                            move.setHeight(nivel);
-                            move.setFather(testState);
-                            if (withHash) {
-                                this.hashTable.add(move);
-                            }
-                            lista.add(move);
-                        } else {
-                            observator.setHashColision(hashColision++);
-                        }
-                    }
-                    observator.setChangePath(nivel);
-                } else {
-                    observator.okSolution();
-                    lista.clear();
-                    return this.makeSolution(testState);
-                }
-            }
-        } catch (OutOfMemoryError ex) {
-            observator.errSolution(nivel);
-            lista.clear();
-            throw new RuntimeException(String.format("Memory full! Nivel atingido [%s]", nivel));
-        }
-        observator.errSolution(nivel);
-        throw new RuntimeException("Falha! Não encontrou solução e Collection vazia");
-    }
+
+class listNode {
+	
+	protected String data; 
+	protected listNode next;
+	
+	public listNode(){
+		this(null);
+	} 
+	
+	public listNode(String data){
+		this.data = data;
+	} 
+}
+
+
+class linkedList {
+
+	protected listNode listHead, walker;
+	
+	public linkedList(){
+		listHead = new listNode("dummy");
+	} 
+	
+	public void listInsert(String ndata){
+		listNode newNode;
+		walker = listHead;
+		if(walker.next != null && ndata.length() > walker.next.data.length()){
+			walker = walker.next;
+		}
+		newNode = new listNode(ndata);
+		newNode.next = walker.next;
+		walker.next = newNode;
+	}
+	
+	public boolean isEmpty(){
+		return listHead == null;
+	}
+	
+	public String printList(){
+		listNode curr = listHead;
+		String Llist = "listHead";
+		while(curr != null && curr.next != null){
+			Llist += " --> (";
+			Llist += curr.data;
+			Llist += ", ";
+			Llist += curr.next.data;
+			Llist += ")";
+		
+			curr = curr.next;
+		}
+		Llist += System.lineSeparator();
+		return Llist;
+	}	
+}
+
+
+public class Project1Java {
+
+	public static void main(String[] args) throws FileNotFoundException{
+		
+		linkedList sList = new linkedList();
+		Scanner inFile = new Scanner(new FileReader(args[0]));
+		PrintWriter outFile = new PrintWriter(args[1]);
+		
+		String word;
+		String output;
+		while(inFile.hasNext()){
+			word = inFile.next();
+			
+			sList.listInsert(word);
+			output = sList.printList();
+			outFile.print(output);
+		}
+		
+		inFile.close();
+		outFile.close();
+	}
 }

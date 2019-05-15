@@ -1,21 +1,48 @@
-package algorithms.hb.problems.recursiveproblems.towersofhanoi;
 
-import test.algorithms.hb.problems.recursiveproblems.towersofhanoi.TowerOfHanoiBuilder;
 
-public class App {
+package edu.princeton.cs.algorithms;
 
-	public static void main(String[] args) {
+import edu.princeton.cs.algorithms.stdlib.StdOut;
 
-		// TowerOfHanoi algorithm = new TowerOfHanoi();
-		// algorithm.solveHanoiProblem(3, 'A', 'B', 'C');
+public class Topological {
+    private Iterable<Integer> order; 
 
-		final Plate SMALL_PLATE = new Plate(3);
-		final Plate MEDIUM_PLATE = new Plate(2);
-		final Plate LARGE_PLATE = new Plate(1);
-		final TowerOfHanoiBuilder TOWER_OF_HANOI_BUILDER = new TowerOfHanoiBuilder();
+    
+    public Topological(Digraph G) {
+        DirectedCycle finder = new DirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
+    }
 
-		TowerOfHanoi towerOfHanoi = TOWER_OF_HANOI_BUILDER.withPlate(LARGE_PLATE).withPlate(MEDIUM_PLATE).withPlate(SMALL_PLATE).build();
-		towerOfHanoi.solveHanoiProblem(3);
+    
+    public Topological(EdgeWeightedDigraph G) {
+        EdgeWeightedDirectedCycle finder = new EdgeWeightedDirectedCycle(G);
+        if (!finder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
+    }
 
-	}
+    
+    public Iterable<Integer> order() {
+        return order;
+    }
+
+    
+    public boolean hasOrder() {
+        return order != null;
+    }
+
+    public static void main(String[] args) {
+        String filename = args[0];
+        String delimiter = args[1];
+        SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
+        Topological topological = new Topological(sg.G());
+        for (int v : topological.order()) {
+            StdOut.println(sg.name(v));
+        }
+    }
+
 }

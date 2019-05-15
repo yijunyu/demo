@@ -1,65 +1,194 @@
-/**
- * 
- */
-package algorithm.sort.stable;
+package apps;
 
-/**
- * @author aaaajl
- *
- */
-public class Merge_MergeSort {
-	/**
-	 * Worst case performance	O(n log n)
-	 * Best case performance	O(n log n) typical,O(n) natural variant
-	 * Average case performance	O(n log n)
-	 * Worst case space complexity	O(n) auxiliary
-	 * */
-	public static void sort(Comparable[] data){
-		long start = System.nanoTime();
-		int len = data.length-1;
-		mergeSort(data,0,len);
-		long end = System.nanoTime();
-		System.out.println("\nMergeSort Execute time:"+(end-start));
+import java.io.IOException;
+import java.util.Scanner;
+import structures.Node;
+
+
+public class Radixsort {
+
+	
+	Node<String> masterListRear;
+	
+	
+	Node<String>[] buckets;
+	
+	
+	int radix=10;
+	
+	
+	public Radixsort() {
+		masterListRear = null;
+		buckets = null;
 	}
-
-	private static void mergeSort(Comparable[] data, int begin, int end) {
-		if(begin<end){
-			int mid = (begin+end)/2;
-			mergeSort(data, begin, mid);
-			mergeSort(data, mid+1, end);
-			merge(data,begin,mid,end);
+	
+	
+	public Node<String> sort(Scanner sc) 
+	throws IOException {
+		
+		if (!sc.hasNext()) { 
+			return null;
 		}
+		
+		
+		radix = sc.nextInt();
+		buckets = (Node<String>[])new Node[radix];
+		
+		
+		createMasterListFromInput(sc);
+		
+		
+		int maxDigits = getMaxDigits();
+		
+		for (int i=0; i < maxDigits; i++) {
+			scatter(i);
+			gather();
+		}
+		
+		return masterListRear;
 	}
-
-	private static void merge(Comparable[] data, int begin, int mid, int end) {
-		int leftIndex = begin;
-		int rightIndex = mid+1;
-		Comparable[] tmp = new Comparable[end-begin+1];
-		int tmpIndex = 0;
-		while (leftIndex<=mid && rightIndex<=end) {
-			if(data[leftIndex].compareTo(data[rightIndex])>0)
-			{
-				tmp[tmpIndex] = data[rightIndex];
-				rightIndex++;
-			}else{
-				tmp[tmpIndex] = data[leftIndex];
-				leftIndex++;
+	
+	
+	
+	public void createMasterListFromInput(Scanner sc) 
+	throws IOException {
+		sc.nextLine(); 
+		while(sc.hasNextLine()){
+			
+			String s = sc.nextLine();
+			
+			Node<String> Node = new Node<String>(s, null);
+			
+			if(masterListRear == null){
+				Node.next = Node;
+				masterListRear = Node;
 			}
-			tmpIndex++;			
-		}
-		while(leftIndex<=mid){
-			tmp[tmpIndex]=data[leftIndex];
-			tmpIndex++;
-			leftIndex++;
-		}
-		while(rightIndex<=end){
-			tmp[tmpIndex]=data[rightIndex];
-			tmpIndex++;
-			rightIndex++;
-		}
-		for(int i=0;i<tmpIndex;i++)
-		{
-			data[begin+i] = tmp[i];
+			else{
+				Node.next = masterListRear.next;
+				masterListRear.next = Node;
+				masterListRear = Node;
+			}
 		}
 	}
+		
+	
+	
+	
+	public int getMaxDigits() {
+		int maxDigits = masterListRear.data.length();
+		Node<String> ptr = masterListRear.next;
+		while (ptr != masterListRear) {
+			int length = ptr.data.length();
+			if (length > maxDigits) {
+				maxDigits = length;
+			}
+			ptr = ptr.next;
+		}
+		return maxDigits;
+	}
+	
+	
+	public void scatter(int pass) {
+		for(int i = 0; i < buckets.length; i++){
+			buckets[i] = null;
+		}
+
+		do{
+			Node<String> ptr = masterListRear.next;
+			masterListRear.next = masterListRear.next.next;
+			char c;
+			String s = ptr.data;
+			if(s.length()-1-pass < 0){
+				c = '0';
+			}else{
+				c = s.charAt(s.length()-1-pass);
+			}
+			
+			int num = Character.digit(c, radix);
+			
+			if(buckets[num] == null){
+				ptr.next = ptr;
+				buckets[num] = ptr;
+			}
+			else{
+				ptr.next = buckets[num].next;
+				buckets[num].next = ptr;
+				buckets[num] = ptr;
+			}
+			
+			
+		}while(masterListRear != masterListRear.next);
+		
+		char c;
+		String s = masterListRear.data;
+		if(s.length()-1-pass < 0){
+			c = '0';
+		}else{
+			c = s.charAt(s.length()-1-pass);
+		}
+		
+		int num = Character.digit(c, radix);
+		
+		if(buckets[num] == null){
+			masterListRear.next = masterListRear;
+			buckets[num] = masterListRear;
+		}
+		else{
+			masterListRear.next = buckets[num].next;
+			buckets[num].next = masterListRear;
+			buckets[num] = masterListRear;
+		}
+	
+		masterListRear = null;
+		
+
+		}
+	
+
+	 
+	public void gather() {
+	
+		for(int i = 0; i < buckets.length; i++){
+			
+			if(buckets[i] == null){
+				continue;
+			}
+			else{
+				
+				if(buckets[i].next != buckets[i]){
+				
+					do{	
+						Node<String> ptr = buckets[i].next;
+						buckets[i].next = buckets[i].next.next;
+						
+						if(masterListRear == null){
+							ptr.next = ptr;
+							masterListRear = ptr;
+						}
+						else{
+							
+							ptr.next = masterListRear.next;
+							masterListRear.next = ptr;
+							masterListRear = ptr;	
+						}
+					}while(buckets[i] != buckets[i].next);
+				}
+				
+				if(masterListRear == null){
+					buckets[i].next = buckets[i];
+					masterListRear = buckets[i];
+				}
+				else{
+					buckets[i].next = masterListRear.next;
+					masterListRear.next = buckets[i];
+					masterListRear = buckets[i];	
+				}
+			}
+		}
+	}	
+	
 }
+
+
+	
+

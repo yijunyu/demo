@@ -1,64 +1,72 @@
-package com.codecool.bfsexample;
+package ue4;
 
-import com.codecool.bfsexample.model.UserNode;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class BFSExample {
+public class Insertionsort {
 
-    public static List<UserNode> populateDB(EntityManager em) {
+	public static void main(String[] args) {
+		
+		ArrayList<Integer> n = new ArrayList<>();
+		int max = 100000;
+		int min = 1;
+		
 
-        RandomDataGenerator generator = new RandomDataGenerator();
-        List<UserNode> users = generator.generate();
 
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-        for (UserNode user : users) {
-            em.persist(user);
-        }
-        transaction.commit();
 
-        GraphPlotter.plot(users);
-        
-        System.out.println("Done!");
 
-        return users;
-    }
 
-    public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bfsExampleUnit");
-        EntityManager em = emf.createEntityManager();
 
-        em.clear();
 
-        List<UserNode> happyTreeFriends = populateDB(em);
 
-        BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch();
 
-        breadthFirstSearch.breadthFirstSearch(happyTreeFriends.get(2), happyTreeFriends.get(8));
-        System.out.println(breadthFirstSearch.getDistance());
+		long midel = 0;
+		long lg = 0;
+		
+		for (int k = 0; k < 100; k++) {
+			for (int i = 0; i < 500; i++) {
+				int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
+				n.add(randomNum);
+			}
+			int[] conv = convertIntegers(n);
+			long timeStart = System.nanoTime();
+			insertionSort(conv);
+			long timeStop = System.nanoTime();
+			midel += (timeStop - timeStart);
+			lg += conv.length;
+			System.out.println(lg/100 + ";" + midel/100);
+			
+		}
+	}
+	
+	public static void insertionSort(int[] A)
+	{
+	    int i, key;
+	    for (int j=1; j<A.length; j++){
+	        key=A[j];
+	        i=j-1;
+	        while (i>=0 && A[i]>key){
+	            A[i+1]=A[i];
+	            i--;
+	        }
+	        A[i+1]=key;
+	    }
+	    
+	    
+	}
+	
+	public static int[] convertIntegers(List<Integer> integers)
+	{
+	    int[] ret = new int[integers.size()];
+	    Iterator<Integer> iterator = integers.iterator();
+	    for (int i = 0; i < ret.length; i++)
+	    {
+	        ret[i] = iterator.next().intValue();
+	    }
+	    return ret;
+	}
 
-        breadthFirstSearch.breadthFirstSearch(happyTreeFriends.get(8), happyTreeFriends.get(2));
-        System.out.println(breadthFirstSearch.getDistance());
-
-        Set<UserNode> friendsOfNode = breadthFirstSearch.friendsOfFriends(happyTreeFriends.get(3), 2);
-        Map<UserNode, Integer> userDistance = breadthFirstSearch.getUserDistance();
-        System.out.println("FRIENDS OF "+happyTreeFriends.get(3).getId()+": " + happyTreeFriends.get(3).getFirstName() +
-                            " " + happyTreeFriends.get(3).getLastName());
-        for(UserNode friend: friendsOfNode) {
-            System.out.println("Connection line " + userDistance.get(friend) + "\n" +
-                                "Friend "+friend.getId()+" : " + friend.getFirstName() + " " + friend.getLastName());
-        }
-
-        List<String> shortestPath =
-                breadthFirstSearch.findShortest("Christopher Myles", "Christopher Hillary", happyTreeFriends);
-        System.out.println(shortestPath);
-    }
 }
+

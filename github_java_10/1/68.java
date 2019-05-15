@@ -1,62 +1,32 @@
-import java.util.*;
+//Implements insertion sort algorithm
 
-/**
- * Implementation of a Breadth First Search
- *
- * @author Unknown
- *
- */
-public class BFS{
-
-	/**
-	 * The BFS implemented in code to use.
-	 *
-	 * @param a Structure to perform the search on a graph, adjacency matrix etc.
-	 * @param vertices The vertices to use
-	 * @param source The Source
-	 */
-	public static void bfsImplement(byte [][] a,int vertices,int source){  //passing adjacency matrix and no of vertices
-		byte []b=new byte[vertices];    //flag container containing status of each vertices
-		Arrays.fill(b,(byte)-1);   //status initialization
-		/*       code   status
-				 -1  =  ready
-				  0  =  waiting
-				  1  =  processed       */
-
-		Stack st = new Stack(vertices);     //operational stack
-		st.push(source);                                                 //assigning source
-		while(!st.isEmpty()){
-			b[st.peek()]=(byte)0;                                   //assigning waiting status
-			System.out.println(st.peek());
-			int pop=st.peek();
-			b[pop]=(byte)1;               //assigning processed status
-			st.pop();                  //removing head of the queue
-			for(int i=0;i<vertices;i++){
-				if(a[pop][i]!=0 && b[i]!=(byte)0 && b[i]!=(byte)1 ){
-					st.push(i);
-					b[i]=(byte)0;                        //assigning waiting status
-				}}}
-	}
+//Olu Gbadebo
+//Oct 4, 2016
 
 
-	/**
-	 * The main method
-	 *
-	 * @param args Command line arguments
-	 */
-		public static void main(String args[]){
-		Scanner in=new Scanner(System.in);
-		int vertices=in.nextInt(),source=in.nextInt();
-		byte [][]a=new byte [vertices][vertices];
-		//initially all elements of a are initialized with value zero
-
-		for(int i=0;i<vertices;i++){
-			int size =in.nextInt();
-			for(int j=0;j<size;j++){
-				a[i][in.nextInt()]=1;      //taking adjacency entries by assigning 1
+public class Insertionsort {
+	
+	public static int[] sort(int[] list) {
+		//this goes thru the array from the second element to the end
+		//*second element: so as to avoid OutOfBoundException when checking the element before
+		for (int i = 1; i < list.length; i++){
+			//save the element we are checking
+			int temp = list[i];
+			//hold the index of the element before the element we are checking
+			int j = i - 1;
+			
+			//this traverses thru the array from the index of the element we are checking backwards to 
+			//beginning of the array.
+			//while the element before the index we are checking is smaller and we are not at the 
+			//beginning of the array
+			while (j >= 0 && temp < list[j]){
+				//swap elements
+				list[j + 1] = list[j];
+				j--;
 			}
+			//put the saved element in the right position
+			list[j + 1] = temp;
 		}
-		bfsImplement(a,vertices,source);         //function call
-		in.close();
+		return list;
 	}
 }

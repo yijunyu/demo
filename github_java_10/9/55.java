@@ -1,100 +1,264 @@
-package com.source.leetcode;
+package com.algos.week3.main;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Scanner;
 
-public class HeapSort {
-	
-	/*public static void minHeapDown(int[] num,int start,int end){
-		int node=start;
-		int left=2*node+1;
-		int tmp=num[node];
-		for(;left<=end;left=2*left+1){
-			if(left<end && num[left]<num[left+1]);
-		}
-	}
-	
-	public static void heapSort(int[] num){
+import com.algos.week3.elementarysorts.InsertionSort;
+import com.algos.week3.elementarysorts.SelectionSort;
+import com.algos.week3.elementarysorts.ShellSort;
+import com.algos.week3.shuffle.KnuthShuffle;
+import com.algos.week3.sorting.MergeSort;
+
+public class Program {
+	static Scanner scanner;
+	static Integer[] intArray;
+	static Character[] charArray;
+	static String[] stringArray;
+	static int response;
+
+	public static void main(String[] args) {
 		
-	}*/
-	
-	public static void MinHeapUp(int a[],int position){
-		int nodeParent=(position-1)/2;
-		int temp=a[position];
-		while(nodeParent>=0 && position!=0){
-			if(a[nodeParent]<=temp)
-				break;
-			a[position]=a[nodeParent];
-			position=nodeParent;
-			nodeParent=(position-1)/2;
-		}
-		a[position]=temp;
-	}
-	
-	public static void MinHeapDown(int a[]){
-		int index=a.length-1;
-		int i=0,j=0;
-		a[i]=a[index];
-		int temp=a[i];
-		j=2*i+1;
-		while(j<a.length-1){
-			if(a[j]>a[j+1])
-				j=j+1;
-			if(a[j]>=temp)
-				break;
-			a[i]=a[j];
-			i=j;
-			j=2*i+1;
-		}
-		a[i]=temp;
-	}
-	
-	public static void printArray(int[] array){
-		for (int i : array) {
-			System.out.print(i+" ");
-		}
-		System.out.println();
-	}
-	
-	public static void swapInt(int a,int b){
-		int temp=a;
-		a=b;
-		b=temp;
-	}
-
-	public static void main(String[] args) throws Exception {
 		
-		/*int[] array={1,5,2,4,7,3,9};
-		//HeapSort.heapSort(array);
-		for(int i=array.length-1;i>=1;i--){
-			HeapSort.MinHeapDown(array);
-		}
-		for (int i : array) {
-			System.out.print(i+" ");
-		}*/
-		//HeapSort.MinHeapUp(array,1);
-		int[] array={1,5,2,4,7,3,9};
-		int n=array.length;
-		HeapSort.printArray(array);
-		Heap heap=new Heap();
-		heap.MakeMinHeap(array, n);
-		HeapSort.printArray(array);
-		for(int i=n-1;i>=1;i--){
-			int temp=array[i];
-			array[i]=array[0];
-			array[0]=temp;
-			heap.MinHeapDown(array, 0, i);
-		}
-		HeapSort.printArray(array);
-		/*System.out.println("a[0] value="+array[0]+" a[n-1] value="+array[n-1]);
-		HeapSort.swapInt(array[0], array[n-1]);
-		System.out.println("a[0] value="+array[0]+" a[n-1] value="+array[n-1]);
-		heap.MinHeapDown(array, 0, n-1);
-		HeapSort.printArray(array);
-		HeapSort.swapInt(array[0], array[n-2]);
-		heap.MinHeapDown(array, 0, n-2);
-		HeapSort.printArray(array);*/
+		 sortString(); 
+		
 	}
 
+	private static void sortString() {
+		System.out.println("Enter the size of (String)array:");
+		scanner = new Scanner(System.in);
+		int N = scanner.nextInt();
+		stringArray = new String[N];
+		System.out.println("Enter the array Elements:");
+		for (int i = 0; i < N; i++) {
+			stringArray[i] = scanner.next();
+		}
+		System.out.println("Select the sorting method to be used");
+		System.out.println("1.SelectionSort\n2.InsertionSort\n3.ShellSort\n4.MergeSort");
+		response = scanner.nextInt();
+		callSortingFunction(response, 3);
+	}
+
+	private static void sortCharacter() {
+		System.out.println("Enter the size of (char)array:");
+		scanner = new Scanner(System.in);
+		int N = scanner.nextInt();
+		charArray = new Character[N];
+		System.out.println("Enter the array Elements:");
+		for (int i = 0; i < N; i++) {
+			charArray[i] = scanner.next(".").charAt(0);
+		}
+		System.out.println("Select the sorting method to be used");
+		System.out.println("1.SelectionSort\n2.InsertionSort\n3.ShellSort\n4.MergeSort");
+		response = scanner.nextInt();
+		callSortingFunction(response, 2);
+	}
+
+	private static void sortInteger() {
+		System.out.println("Enter the size of (int)array:");
+		scanner = new Scanner(System.in);
+		int N = scanner.nextInt();
+		intArray = new Integer[N];
+		System.out.println("Enter the array Elements:");
+		for (int i = 0; i < N; i++) {
+			intArray[i] = scanner.nextInt();
+		}
+		System.out.println("Select the sorting method to be used");
+		System.out.println("1.SelectionSort\n2.InsertionSort\n3.ShellSort\n4.MergeSort");
+		response = scanner.nextInt();
+		callSortingFunction(response, 1);
+	}
+
+	private static void callSortingFunction(int response, int arrayType) {
+		switch (response) {
+		case 1:
+			selectionSort(arrayType);
+			break;
+		case 2:
+			insertionSort(arrayType);
+			break;
+		case 3:
+			shellSort(arrayType);
+			break;
+		case 4:
+			mergeSort(arrayType);
+			break;
+		default:
+			System.out.println("Wrong option Bro!!");
+			break;
+		}
+	}
+
+	private static void mergeSort(int arrayType) {
+		System.out.println("Before Merge Sort");
+		switch (arrayType) {
+		case 1:
+			mergeSortIntArray();
+			break;
+		case 2:
+			mergeSortCharArray();
+			break;
+		case 3:
+			mergeSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
+
+	private static void mergeSortIntArray() {
+		MergeSort<Integer> mergeSort = new MergeSort<>();
+		mergeSort.display(intArray);
+		mergeSort.sort(intArray);
+		System.out.println("After Merge Sort");
+		mergeSort.display(intArray);
+	}
+
+	private static void mergeSortCharArray() {
+		MergeSort<Character> mergeSort = new MergeSort<>();
+		mergeSort.display(charArray);
+		mergeSort.sort(charArray);
+		System.out.println("After Merge Sort");
+		mergeSort.display(charArray);
+	}
+
+	private static void mergeSortStringArray() {
+		MergeSort<String> mergeSort = new MergeSort<>();
+		mergeSort.display(stringArray);
+		mergeSort.sort(stringArray);
+		System.out.println("After Merge Sort");
+		mergeSort.display(stringArray);
+	}
+
+	private static void shellSort(int arrayType) {
+		System.out.println("Before Shell Sort");
+		switch (arrayType) {
+		case 1:
+			shellSortIntArray();
+			break;
+		case 2:
+			shellSortCharArray();
+			break;
+		case 3:
+			shellSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
+
+	private static void shellSortIntArray() {
+		ShellSort<Integer> shellSort = new ShellSort<>();
+		shellSort.display(intArray);
+		shellSort.sort(intArray);
+		System.out.println("After Shell Sort");
+		shellSort.display(intArray);
+	}
+
+	private static void shellSortCharArray() {
+		ShellSort<Character> shellSort = new ShellSort<>();
+		shellSort.display(charArray);
+		shellSort.sort(charArray);
+		System.out.println("After Shell Sort");
+		shellSort.display(charArray);
+	}
+
+	private static void shellSortStringArray() {
+		ShellSort<String> shellSort = new ShellSort<>();
+		shellSort.display(stringArray);
+		shellSort.sort(stringArray);
+		System.out.println("After Shell Sort");
+		shellSort.display(stringArray);
+	}
+
+	private static void insertionSort(int arrayType) {
+		System.out.println("Before Insertion Sort");
+		switch (arrayType) {
+		case 1:
+			insertionSortIntArray();
+			break;
+		case 2:
+			insertionSortCharArray();
+			break;
+		case 3:
+			insertionSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
+
+	private static void insertionSortStringArray() {
+		InsertionSort<String> insertionSort = new InsertionSort<>();
+		insertionSort.display(stringArray);
+		insertionSort.sort(stringArray);
+		System.out.println("After Insertion Sort");
+		insertionSort.display(stringArray);
+	}
+
+	private static void insertionSortCharArray() {
+		InsertionSort<Character> insertionSort = new InsertionSort<>();
+		insertionSort.display(charArray);
+		insertionSort.sort(charArray);
+		System.out.println("After Insertion Sort");
+		insertionSort.display(charArray);
+	}
+
+	private static void insertionSortIntArray() {
+		InsertionSort<Integer> insertionSort = new InsertionSort<>();
+		insertionSort.display(intArray);
+		insertionSort.sort(intArray);
+		System.out.println("After Insertion Sort");
+		insertionSort.display(intArray);
+	}
+
+	private static void selectionSort(int arrayType) {
+		System.out.println("Before Selection Sort");
+		switch (arrayType) {
+		case 1:
+			selectionSortIntArray();
+			break;
+		case 2:
+			selectionSortCharArray();
+			break;
+		case 3:
+			selectionSortStringArray();
+			break;
+		default:
+			System.out.println("Array Type Not supported!!");
+			break;
+		}
+	}
+
+	private static void selectionSortStringArray() {
+		SelectionSort<String> selectionSort = new SelectionSort<>();
+		selectionSort.display(stringArray);
+		selectionSort.sort(stringArray);
+		System.out.println("After Selection Sort");
+		selectionSort.display(stringArray);
+	}
+
+	private static void selectionSortCharArray() {
+		SelectionSort<Character> selectionSort = new SelectionSort<>();
+		selectionSort.display(charArray);
+		selectionSort.sort(charArray);
+		System.out.println("After Selection Sort");
+		selectionSort.display(charArray);
+	}
+
+	private static void selectionSortIntArray() {
+		SelectionSort<Integer> selectionSort = new SelectionSort<>();
+		selectionSort.display(intArray);
+		selectionSort.sort(intArray);
+		System.out.println("After Selection Sort");
+		selectionSort.display(intArray);
+	}
+
+	private static void shuffleArray() {
+		KnuthShuffle<Integer> knuthShuffle = new KnuthShuffle<>();
+		knuthShuffle.shuffle(intArray);
+		System.out.println("After Shuffling");
+		knuthShuffle.display(intArray);
+	}
 }

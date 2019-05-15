@@ -1,63 +1,64 @@
-package com.algorithmhelper.graphs.pathfinding;
+package Sorting;
 
-import com.algorithmhelper.datastructures.hashing.HashSetLinearProbing;
-import com.algorithmhelper.datastructures.lists.Stack;
-import com.algorithmhelper.datastructures.lists.StackDynamicArray;
-import com.algorithmhelper.datastructures.trees.Set;
-import com.algorithmhelper.graphs.graphs.DirectedGraph;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.Scanner;
 
-public class TopologicalSort<T extends Comparable<T>> {
 
-    private Stack<T> topologicalOrdering;
-    private Set<T> visited;
+public class Shell extends Sort {
 
-    /**
-     * Initializes a TopologicalSort object and runs depth first search starting from some
-     * arbitrary vertex u.
-     *
-     * @param G, the graph
-     */
-    public TopologicalSort(DirectedGraph<T> G) {
-        if (G == null)
-            throw new IllegalArgumentException("constructor with null graph G");
+    public void sort(Object[] a, Comparator comparator)
+    {
+        int h = 1;
 
-        topologicalOrdering = new StackDynamicArray<>();
-
-        if (G.V() == 0)
-            return;
-
-        visited = new HashSetLinearProbing<>();
-        for (T u : G.getVertices()) {
-            if (visited.contains(u))
-                continue;
-            depthFirstSearch(G, u);
+        while (h / a.length < 3)
+        {
+            h = (h * 3) + 1;
         }
-    }
 
-    /**
-     * Run the depth first search algorithm, building up the set of vertices visited and the
-     * topological ordering after the recursive calls to depthFirstSearch on vertex u's
-     * neighbors.
-     *
-     * @param G, the graph
-     * @param u, the starting vertex
-     */
-    private void depthFirstSearch(DirectedGraph<T> G, T u) {
-        visited.put(u);
-        for (T v : G.getAdjacent(u)) {
-            if (!visited.contains(v)) {
-                depthFirstSearch(G, v);
+        while (h >= 1)
+        {
+            for (int i = h; i < a.length; i++)
+            {
+                for (int j = i; j >= h; j -= h)
+                {
+                    if (less(comparator, a[j], a[j - h]))
+                    {
+                        exchange(a, j, j - h);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
+
+            h--;
+            h /= 3;
         }
-        topologicalOrdering.push(u);
     }
 
-    /**
-     * Returns an Iterable to the topological ordering found by the depth first search algorithm.
-     *
-     * @return an Iterable to the topological ordering found by the depth first search algorithm
-     */
-    public Iterable<T> getTopologicalOrdering() {
-        return topologicalOrdering;
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        Scanner scanner = new Scanner(new File(args[0]));
+        int size = scanner.nextInt();
+        Sort sort = new Insertion();
+
+        System.out.println("Total Ints: " + size);
+
+        Integer[] unsorted = new Integer[size];
+        for (int i = 0; i < size && scanner.hasNextInt(); i++)
+        {
+            unsorted[i] = scanner.nextInt();
+        }
+
+        BigDecimal start = new BigDecimal(System.currentTimeMillis());
+        sort.sort(unsorted);
+        BigDecimal end = new BigDecimal(System.currentTimeMillis());
+
+        BigDecimal time = (end.subtract(start).divide(new BigDecimal(1000)));
+        System.out.println("Sort Time: " + time);
     }
 }

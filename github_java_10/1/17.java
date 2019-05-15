@@ -1,51 +1,33 @@
-/*
- *  Licensed to GraphHopper GmbH under one or more contributor
- *  license agreements. See the NOTICE file distributed with this work for
- *  additional information regarding copyright ownership.
- *
- *  GraphHopper GmbH licenses this file to you under the Apache License,
- *  Version 2.0 (the "License"); you may not use this file except in
- *  compliance with the License. You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-package com.graphhopper.util;
+ import  java.util.Scanner ;
+public class insertionsort {
+   
 
-import com.graphhopper.coll.GHBitSet;
 
-/**
- * Implementation of breadth first search (BFS)
- * <p>
- *
- * @author Peter Karich
- */
-public class BreadthFirstSearch extends XFirstSearch {
-    @Override
-    public void start(EdgeExplorer explorer, int startNode) {
-        SimpleIntDeque fifo = new SimpleIntDeque();
-        GHBitSet visited = createBitSet();
-        visited.add(startNode);
-        fifo.push(startNode);
-        int current;
-        while (!fifo.isEmpty()) {
-            current = fifo.pop();
-            if (!goFurther(current))
-                continue;
-
-            EdgeIterator iter = explorer.setBaseNode(current);
-            while (iter.next()) {
-                int connectedId = iter.getAdjNode();
-                if (checkAdjacent(iter) && !visited.contains(connectedId)) {
-                    visited.add(connectedId);
-                    fifo.push(connectedId);
-                }
+    public  static  void  main ( String [] args ) {
+        
+        Scanner tcl =  new  Scanner ( System.in);
+        
+        int vetor [] = new int [5];
+        
+        for( int i =  0 ; i < vetor.length; i ++ ) {
+            vetor [i] = tcl . nextInt ();
+        }
+        int aux;
+        
+        for( int i =  0 ; i < vetor.length; i ++ ) {
+            aux = vetor [i];
+            
+            for( int j = i - 1 ; j >=  0 && vetor[j] > aux; j -- ) {
+            vetor [j +  1 ] = vetor [j];  
+            vetor [j] = aux;  
             }
         }
+        System.out.println("");
+        
+        for( int i =  0 ; i < vetor.length; i ++ ) {
+            System.out.print(vetor [i]+"\t");
+        }
     }
+    
 }
+

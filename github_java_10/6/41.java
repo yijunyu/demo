@@ -1,51 +1,43 @@
-import java.util.Arrays;
 
-/**
- * Created by howardos on 23.04.2016.
- */
-public class MergeSort {
-    public int[] a;
-    public static int[] arr;
-
-    public MergeSort(int size) {
-        a = new int[size];
-        for (int i=0; i <size; i++) {
-            a[i] = (int) (Math.random()*100);
-        }
-    }
-    public int[] mergeSort(int[] a){
-        if (a.length <= 1) return a;
-        int middle = a.length/2;
-        return merge(mergeSort(Arrays.copyOfRange(a, 0, middle)), mergeSort(Arrays.copyOfRange(a,middle,a.length)));
-
-    }
-
-    public int[] merge(int[] a1, int[] a2) {
-        int a = 0;
-        int b = 0;
-        arr = new int[a1.length+a2.length];
-        for(int i = 0; i < a1.length+a2.length; i++) {
-            if (a < a1.length && b < a2.length) {
-                if (a1[a] <= a2[b]) arr[i] = a1[a++];
-                else arr[i] = a2[b++];
+public class RadixSort{
+    public int getMax(int[] arr){
+        int max = arr[0];
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] > max){
+                max = arr[i];
             }
-            else if (a < a1.length) arr[i] = a1[a++];
-            else arr[i] = a2[b++];
         }
-        return arr;
+        return max;
     }
-
-    public static void main(String[] args){
-        MergeSort mergeSort = new MergeSort(30);
-        mergeSort.mergeSort(mergeSort.a);
-        for (int i = 0; i < mergeSort.a.length; i++) {
-            System.out.print(mergeSort.a[i] + " ");
+    public void countSort(int[] arr, int n, int exp){
+        int[] count = new int[n];
+        int[] output = new int[arr.length];
+        for(int i = 0; i < arr.length; i++){
+            count[(arr[i]/exp)%n] ++;
         }
-        System.out.println();
-         for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
+        for(int i = 1; i < n; i++){
+            count[i] += count[i-1];
+        }
+        for(int i = arr.length - 1; i >= 0; i--){
+            output[count[(arr[i]/exp)%n] - 1] = arr[i];
+            count[(arr[i]/exp)%n] --;
+        }
+        for(int i = 0; i < arr.length; i++){
+            arr[i] = output[i];
         }
     }
-
-
+    public void radixSort(int[] arr){
+        int max = getMax(arr);
+        for(int exp = 1; max/exp > 0; exp *= arr.length){
+            countSort(arr, arr.length, exp);
+        }
+    }
+    public static void main(String[] argvs){
+        RadixSort rs = new RadixSort();
+        int[] arr = {170, 45, 75, 90, 802, 24, 2, 66};
+        rs.radixSort(arr);
+        for(int i = 0; i < arr.length; i++){
+            System.out.print(String.valueOf(arr[i]) + " ");
+        }
+    }
 }

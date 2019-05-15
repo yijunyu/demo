@@ -1,35 +1,53 @@
-package code.Kiran.algo;
-/**
- * write a program to sort an array using insertion sort.
- * @author Kiran
- * description:Insertion sort iterates through the list by
- * consuming one input element at each repetition, and growing
- * a sorted output list. On a repetition, insertion sort 
- * removes one element from the input data, finds the location
- * it belongs within the sorted list, and inserts it there. 
- * It repeats until no input elements remain.
- */
-public class Insertionsort {
-	public static void main(String[] args) {
-		int[] Array = { 10, 34, 2, 56, 7, 67, 88, 42 };
-		insertsort(Array);
-		for (int i : Array) {
-			System.out.print(i);
-		}
-	}
 
-	public static int[] insertsort(int[] Array) {
+package org.apache.hadoop.util;
 
-		int temp;
-		for (int i = 1; i < Array.length; i++) {
-			for (int j = i; j > 0; j--) {
-				if (Array[j] < Array[j - 1]) {
-					temp = Array[j];
-					Array[j] = Array[j - 1];
-					Array[j - 1] = temp;
-				}
-			}
-		}
-		return Array;
-	}
+import org.apache.hadoop.classification.InterfaceAudience;
+import org.apache.hadoop.classification.InterfaceStability;
+
+
+@InterfaceAudience.Private
+@InterfaceStability.Unstable
+public final class HeapSort implements IndexedSorter {
+
+  public HeapSort() { }
+
+  private static void downHeap(final IndexedSortable s, final int b,
+      int i, final int N) {
+    for (int idx = i << 1; idx < N; idx = i << 1) {
+      if (idx + 1 < N && s.compare(b + idx, b + idx + 1) < 0) {
+        if (s.compare(b + i, b + idx + 1) < 0) {
+          s.swap(b + i, b + idx + 1);
+        } else return;
+        i = idx + 1;
+      } else if (s.compare(b + i, b + idx) < 0) {
+        s.swap(b + i, b + idx);
+        i = idx;
+      } else return;
+    }
+  }
+
+  
+  public void sort(IndexedSortable s, int p, int r) {
+    sort(s, p, r, null);
+  }
+
+  
+  public void sort(final IndexedSortable s, final int p, final int r,
+      final Progressable rep) {
+    final int N = r - p;
+    
+    final int t = Integer.highestOneBit(N);
+    for (int i = t; i > 1; i >>>= 1) {
+      for (int j = i >>> 1; j < i; ++j) {
+        downHeap(s, p-1, j, N + 1);
+      }
+      if (null != rep) {
+        rep.progress();
+      }
+    }
+    for (int i = r - 1; i > p; --i) {
+      s.swap(p, i);
+      downHeap(s, p - 1, 1, i - p + 1);
+    }
+  }
 }

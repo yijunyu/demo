@@ -1,34 +1,73 @@
-package ctci.recursionDP;
+package com.company;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Stack;
 
-/**
- * Created by raula on 3/3/2017.
- */
-public class TowerOfHanoi {
-    public static void main(String[] args) {
-        Stack<Integer> source = new Stack();
-        Stack<Integer> dest = new Stack();
-        Stack<Integer> buf = new Stack();
-        int n=7;
-        for (int i = n; i >0 ; i--) {
-            source.push(i);
-        }
 
-        moveDisks(source, buf,dest,n);
-        while(!dest.isEmpty()) System.out.println(dest.pop());
-        while(!source.isEmpty()) System.out.println(source.pop());
-        while(!buf.isEmpty()) System.out.println(buf.pop());
+public class TopologicalSort {
+    int V;
+    LinkedList<Integer>[] adj;
+
+    TopologicalSort(int V){
+        this.V=V;
+        adj=new LinkedList[V];
+        for(int i=0;i<V;i++){
+            adj[i]=new LinkedList<>();
+        }
     }
 
-    private static void moveDisks(Stack<Integer> source, Stack<Integer> buf, Stack<Integer> dest,int n) {
-        if (n==1){
-            dest.push(source.pop());
-        }else{
-            moveDisks(source,dest,buf,n-1);
-            dest.push(source.pop());
-            moveDisks(buf,source,dest,n-1);
+
+    void addEdge(int v,int w){
+        adj[v].add(w);
+    }
+
+    void tsort(){
+        boolean[] visited=new boolean[V];
+        for(int i=0;i<V;i++){
+            visited[i]=false;
         }
 
+        Stack<Integer> stack=new Stack();
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                tsortUtil(visited,i,stack);
+            }
+        }
+        while(!stack.isEmpty()){
+            System.out.println(stack.pop());
+        }
+
+
+    }
+
+    void tsortUtil(boolean[] visited,int start,Stack<Integer> stack){
+
+        visited[start]=true;
+        Integer next;
+        Iterator<Integer> iterator=adj[start].iterator();
+        while(iterator.hasNext()){
+            next=iterator.next();
+            if(!visited[next]){
+                tsortUtil(visited,next,stack);
+            }
+        }
+
+        stack.push(start);
+    }
+
+
+
+
+
+    public static  void main(String[] args){
+        TopologicalSort topologicalSort=new TopologicalSort(6);
+        topologicalSort.addEdge(5, 2);
+        topologicalSort.addEdge(5, 0);
+        topologicalSort.addEdge(4, 0);
+        topologicalSort.addEdge(4, 1);
+        topologicalSort.addEdge(2, 3);
+        topologicalSort.addEdge(3, 1);
+        topologicalSort.tsort();
     }
 }

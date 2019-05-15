@@ -1,178 +1,182 @@
-/*************************************************************************
- *  Compilation:  javac Merge.java
- *  Execution:    java Merge < input.txt
- *  Dependencies: StdOut.java StdIn.java
- *  Data files:   http://algs4.cs.princeton.edu/22mergesort/tiny.txt
- *                http://algs4.cs.princeton.edu/22mergesort/words3.txt
- *   
- *  Sorts a sequence of strings from standard input using mergesort.
- *   
- *  % more tiny.txt
- *  S O R T E X A M P L E
- *
- *  % java Merge < tiny.txt
- *  A E E L M O P R S T X                 [ one string per line ]
- *    
- *  % more words3.txt
- *  bed bug dad yes zoo ... all bad yet
- *  
- *  % java Merge < words3.txt
- *  all bad bed bug dad ... yes yet zoo    [ one string per line ]
- *  
- *************************************************************************/
 
-/**
- *  The <tt>Merge</tt> class provides static methods for sorting an
- *  array using mergesort.
- *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/22mergesort">Section 2.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *  For an optimized version, see {@link MergeX}.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class Merge {
 
-    // This class should not be instantiated.
-    private Merge() { }
+package io.mycat.memory.unsafe.utils.sort;
 
-    // stably merge a[lo .. mid] with a[mid+1 ..hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
-        // precondition: a[lo .. mid] and a[mid+1 .. hi] are sorted subarrays
-        assert isSorted(a, lo, mid);
-        assert isSorted(a, mid+1, hi);
 
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = a[k]; 
+import io.mycat.memory.unsafe.Platform;
+import io.mycat.memory.unsafe.array.LongArray;
+
+public class RadixSort {
+
+  
+  public static int sort(
+          LongArray array, int numRecords, int startByteIndex, int endByteIndex,
+          boolean desc, boolean signed) {
+    assert startByteIndex >= 0 : "startByteIndex (" + startByteIndex + ") should >= 0";
+    assert endByteIndex <= 7 : "endByteIndex (" + endByteIndex + ") should <= 7";
+    assert endByteIndex > startByteIndex;
+    assert numRecords * 2 <= array.size();
+    int inIndex = 0;
+    int outIndex = numRecords;
+    if (numRecords > 0) {
+      long[][] counts = getCounts(array, numRecords, startByteIndex, endByteIndex);
+      for (int i = startByteIndex; i <= endByteIndex; i++) {
+        if (counts[i] != null) {
+          sortAtByte(
+            array, numRecords, counts[i], i, inIndex, outIndex,
+            desc, signed && i == endByteIndex);
+          int tmp = inIndex;
+          inIndex = outIndex;
+          outIndex = tmp;
         }
-
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)              a[k] = aux[j++];   // this copying is unnecessary
-            else if (j > hi)               a[k] = aux[i++];
-            else if (less(aux[j], aux[i])) a[k] = aux[j++];
-            else                           a[k] = aux[i++];
-        }
-
-        // postcondition: a[lo .. hi] is sorted
-        assert isSorted(a, lo, hi);
+      }
     }
+    return inIndex;
+  }
 
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, aux, lo, mid);
-        sort(a, aux, mid + 1, hi);
-        merge(a, aux, lo, mid, hi);
+  
+  private static void sortAtByte(
+      LongArray array, int numRecords, long[] counts, int byteIdx, int inIndex, int outIndex,
+      boolean desc, boolean signed) {
+    assert counts.length == 256;
+    long[] offsets = transformCountsToOffsets(
+      counts, numRecords, array.getBaseOffset() + outIndex * 8, 8, desc, signed);
+    Object baseObject = array.getBaseObject();
+    long baseOffset = array.getBaseOffset() + inIndex * 8;
+    long maxOffset = baseOffset + numRecords * 8;
+    for (long offset = baseOffset; offset < maxOffset; offset += 8) {
+      long value = Platform.getLong(baseObject, offset);
+      int bucket = (int)((value >>> (byteIdx * 8)) & 0xff);
+      Platform.putLong(baseObject, offsets[bucket], value);
+      offsets[bucket] += 8;
     }
+  }
 
-    /**
-     * Rearranges the array in ascending order, using the natural order.
-     * @param a the array to be sorted
-     */
-    public static void sort(Comparable[] a) {
-        Comparable[] aux = new Comparable[a.length];
-        sort(a, aux, 0, a.length-1);
-        assert isSorted(a);
-    }
-
-
-   /***********************************************************************
-    *  Helper sorting functions
-    ***********************************************************************/
+  
+  private static long[][] getCounts(
+      LongArray array, int numRecords, int startByteIndex, int endByteIndex) {
+    long[][] counts = new long[8][];
     
-    // is v < w ?
-    private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
+    
+    long bitwiseMax = 0;
+    long bitwiseMin = -1L;
+    long maxOffset = array.getBaseOffset() + numRecords * 8;
+    Object baseObject = array.getBaseObject();
+    for (long offset = array.getBaseOffset(); offset < maxOffset; offset += 8) {
+      long value = Platform.getLong(baseObject, offset);
+      bitwiseMax |= value;
+      bitwiseMin &= value;
     }
+    long bitsChanged = bitwiseMin ^ bitwiseMax;
+    
+    for (int i = startByteIndex; i <= endByteIndex; i++) {
+      if (((bitsChanged >>> (i * 8)) & 0xff) != 0) {
+        counts[i] = new long[256];
         
-    // exchange a[i] and a[j]
-    private static void exch(Object[] a, int i, int j) {
-        Object swap = a[i];
-        a[i] = a[j];
-        a[j] = swap;
-    }
-
-
-   /***********************************************************************
-    *  Check if array is sorted - useful for debugging
-    ***********************************************************************/
-    private static boolean isSorted(Comparable[] a) {
-        return isSorted(a, 0, a.length - 1);
-    }
-
-    private static boolean isSorted(Comparable[] a, int lo, int hi) {
-        for (int i = lo + 1; i <= hi; i++)
-            if (less(a[i], a[i-1])) return false;
-        return true;
-    }
-
-
-   /***********************************************************************
-    *  Index mergesort
-    ***********************************************************************/
-    // stably merge a[lo .. mid] with a[mid+1 .. hi] using aux[lo .. hi]
-    private static void merge(Comparable[] a, int[] index, int[] aux, int lo, int mid, int hi) {
-
-        // copy to aux[]
-        for (int k = lo; k <= hi; k++) {
-            aux[k] = index[k]; 
+        for (long offset = array.getBaseOffset(); offset < maxOffset; offset += 8) {
+          counts[i][(int)((Platform.getLong(baseObject, offset) >>> (i * 8)) & 0xff)]++;
         }
+      }
+    }
+    return counts;
+  }
 
-        // merge back to a[]
-        int i = lo, j = mid+1;
-        for (int k = lo; k <= hi; k++) {
-            if      (i > mid)                    index[k] = aux[j++];
-            else if (j > hi)                     index[k] = aux[i++];
-            else if (less(a[aux[j]], a[aux[i]])) index[k] = aux[j++];
-            else                                 index[k] = aux[i++];
+  
+  private static long[] transformCountsToOffsets(
+      long[] counts, int numRecords, long outputOffset, int bytesPerRecord,
+      boolean desc, boolean signed) {
+    assert counts.length == 256;
+    int start = signed ? 128 : 0;  
+    if (desc) {
+      int pos = numRecords;
+      for (int i = start; i < start + 256; i++) {
+        pos -= counts[i & 0xff];
+        counts[i & 0xff] = outputOffset + pos * bytesPerRecord;
+      }
+    } else {
+      int pos = 0;
+      for (int i = start; i < start + 256; i++) {
+        long tmp = counts[i & 0xff];
+        counts[i & 0xff] = outputOffset + pos * bytesPerRecord;
+        pos += tmp;
+      }
+    }
+    return counts;
+  }
+
+  
+  public static int sortKeyPrefixArray(
+      LongArray array,
+      int numRecords,
+      int startByteIndex,
+      int endByteIndex,
+      boolean desc,
+      boolean signed) {
+    assert startByteIndex >= 0 : "startByteIndex (" + startByteIndex + ") should >= 0";
+    assert endByteIndex <= 7 : "endByteIndex (" + endByteIndex + ") should <= 7";
+    assert endByteIndex > startByteIndex;
+    assert numRecords * 4 <= array.size();
+    int inIndex = 0;
+    int outIndex = numRecords * 2;
+    if (numRecords > 0) {
+      long[][] counts = getKeyPrefixArrayCounts(array, numRecords, startByteIndex, endByteIndex);
+      for (int i = startByteIndex; i <= endByteIndex; i++) {
+        if (counts[i] != null) {
+          sortKeyPrefixArrayAtByte(
+            array, numRecords, counts[i], i, inIndex, outIndex,
+            desc, signed && i == endByteIndex);
+          int tmp = inIndex;
+          inIndex = outIndex;
+          outIndex = tmp;
         }
+      }
     }
+    return inIndex;
+  }
 
-    /**
-     * Returns a permutation that gives the elements in the array in ascending order.
-     * @param a the array
-     * @return a permutation <tt>p[]</tt> such that <tt>a[p[0]]</tt>, <tt>a[p[1]]</tt>,
-     *    ..., <tt>a[p[N-1]]</tt> are in ascending order
-     */
-    public static int[] indexSort(Comparable[] a) {
-        int N = a.length;
-        int[] index = new int[N];
-        for (int i = 0; i < N; i++)
-            index[i] = i;
-
-        int[] aux = new int[N];
-        sort(a, index, aux, 0, N-1);
-        return index;
+  
+  private static long[][] getKeyPrefixArrayCounts(
+      LongArray array, int numRecords, int startByteIndex, int endByteIndex) {
+    long[][] counts = new long[8][];
+    long bitwiseMax = 0;
+    long bitwiseMin = -1L;
+    long limit = array.getBaseOffset() + numRecords * 16;
+    Object baseObject = array.getBaseObject();
+    for (long offset = array.getBaseOffset(); offset < limit; offset += 16) {
+      long value = Platform.getLong(baseObject, offset + 8);
+      bitwiseMax |= value;
+      bitwiseMin &= value;
     }
-
-    // mergesort a[lo..hi] using auxiliary array aux[lo..hi]
-    private static void sort(Comparable[] a, int[] index, int[] aux, int lo, int hi) {
-        if (hi <= lo) return;
-        int mid = lo + (hi - lo) / 2;
-        sort(a, index, aux, lo, mid);
-        sort(a, index, aux, mid + 1, hi);
-        merge(a, index, aux, lo, mid, hi);
-    }
-
-    // print array to standard output
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
+    long bitsChanged = bitwiseMin ^ bitwiseMax;
+    for (int i = startByteIndex; i <= endByteIndex; i++) {
+      if (((bitsChanged >>> (i * 8)) & 0xff) != 0) {
+        counts[i] = new long[256];
+        for (long offset = array.getBaseOffset(); offset < limit; offset += 16) {
+          counts[i][(int)((Platform.getLong(baseObject, offset + 8) >>> (i * 8)) & 0xff)]++;
         }
+      }
     }
+    return counts;
+  }
 
-    /**
-     * Reads in a sequence of strings from standard input; mergesorts them; 
-     * and prints them to standard output in ascending order. 
-     */
-    public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        Merge.sort(a);
-        show(a);
+  
+  private static void sortKeyPrefixArrayAtByte(
+      LongArray array, int numRecords, long[] counts, int byteIdx, int inIndex, int outIndex,
+      boolean desc, boolean signed) {
+    assert counts.length == 256;
+    long[] offsets = transformCountsToOffsets(
+      counts, numRecords, array.getBaseOffset() + outIndex * 8, 16, desc, signed);
+    Object baseObject = array.getBaseObject();
+    long baseOffset = array.getBaseOffset() + inIndex * 8;
+    long maxOffset = baseOffset + numRecords * 16;
+    for (long offset = baseOffset; offset < maxOffset; offset += 16) {
+      long key = Platform.getLong(baseObject, offset);
+      long prefix = Platform.getLong(baseObject, offset + 8);
+      int bucket = (int)((prefix >>> (byteIdx * 8)) & 0xff);
+      long dest = offsets[bucket];
+      Platform.putLong(baseObject, dest, key);
+      Platform.putLong(baseObject, dest + 8, prefix);
+      offsets[bucket] += 16;
     }
+  }
 }

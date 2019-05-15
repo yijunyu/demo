@@ -1,102 +1,60 @@
-package search;
 
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Set;
-
-import search.path.impl.Path;
+package com.anuragkapur.sorting;
 
 
-public class BreadthFirstSearch<T extends Number & Comparable<T>, U> {
+public class InsertionSort {
+
+    public void sort(int a[]) {
+
+        if(a == null || a.length <= 1) {
+            return;
+        }
+
+        insertNumberAtIndexInSortedArray(a, 1);
+    }
+
+    private void insertNumberAtIndexInSortedArray(int a[], int index) {
+
+        if (index == a.length) {
+            return;
+        }
+
+        int number = a[index];
+        int i;
+        for (i=index-1; i >= 0; i--) {
+            if (number < a[i]) {
+                a[i+1] = a[i];
+            } else {
+                break;
+            }
+        }
+
+        a[i+1] = number;
+
+        insertNumberAtIndexInSortedArray(a, index+1);
+    }
+
 	
-	private final Set<U> goal;
-	private final Set<U> explored = new HashSet<U>();
-	private final PriorityQueue<Path<T, U>> frontier = new PriorityQueue<Path<T, U>>();
-	private final Problem<U> problem;
-	private final Set<BreadthFirstSearchListener<T, U>> breadthFirstSearchListeners = new HashSet<BreadthFirstSearchListener<T, U>>();
-	
-	public BreadthFirstSearch(final Set<U> goal, final U initial,
-			final Problem<U> problem) {
-		this.goal = goal;
-		this.frontier.offer(new Path<T, U>(null, initial));
-		this.problem = problem;
-	}
-	
-	public Path<T, U> search() {
-		return search(new NoStopCriteria<T, U>());
-	}
-
-	public Path<T, U> search(StopCriteria<T, U> stopCriteria) {
-		stopCriteria.init();
+	public static void main(String[] args) {
 		
-		while (true) {
-			if (stopCriteria.isStop() || isFrontierEmpty()) {
-				break;
+		
+		int a[] = {5,1,4,3,8,6,9,10,7,2};
+
+        
+		for (int i = 1; i < a.length; i++) {
+			int key = a[i];
+			int j = i - 1;
+			while(j >= 0 && a[j] > key) {
+				a[j + 1] = a[j];
+				j --;
 			}
-			Path<T, U> path = removeChoice();
-			if (path == null || stopCriteria.isStop(path)) {
-				break;
-			}
-			U end = path.getEnd();
-			addToExplored(end);
-			if (isGoal(end)) {
-				return path;
-			}
-			
-			for (U action : problem.getActions(end)) {
-				addToFrontierUnlessNotAlreadyExplored(path, action);
-			}
+			a[j + 1] = key;
 		}
-		// TODO: avoid null
-		return null;
-	}
-
-	public void addListener(
-			BreadthFirstSearchListener<T, U> breadthFirstSearchListener) {
-		breadthFirstSearchListeners.add(breadthFirstSearchListener);
-	}
-
-	public void removeListener(
-			BreadthFirstSearchListener<T, U> breadthFirstSearchListener) {
-		breadthFirstSearchListeners.remove(breadthFirstSearchListener);
-	}
-
-	private void addToFrontierUnlessNotAlreadyExplored(Path<T, U> path, U action) {
-		if (!(isInExplored(action) || isInFrontier(action))) {
-			Path<T, U> newPath = new Path<T, U>(path, action);
-			frontier.offer(newPath);
-			// addToExplored(action);
-			for (BreadthFirstSearchListener<T, U> breadthFirstSearchListener : breadthFirstSearchListeners) {
-				breadthFirstSearchListener.addPathPerformed(newPath);
-			}
+		
+		
+		for (int i = 0; i < a.length; i++) {
+			System.out.println(a[i]);
 		}
 	}
 
-	private boolean isInExplored(U action) {
-		return explored.contains(action);
-	}
-
-	private boolean isInFrontier(U action) {
-		for (Path<T, U> path : frontier) {
-			if (action.equals(path.getEnd()))
-				return true;
-		}
-		return false;
-	}
-
-	private boolean isFrontierEmpty() {
-		return frontier.isEmpty();
-	}
-
-	private void addToExplored(U end) {
-		explored.add(end);
-	}
-
-	private boolean isGoal(final U head) {
-		return goal.contains(head);
-	}
-
-	private Path<T, U> removeChoice() {
-		return frontier.poll();
-	}
 }

@@ -1,60 +1,60 @@
-package hw5;
+import java.util.*;
 
-import java.util.Arrays;
+public class Bucketsort
+{
 
-import java.util.Arrays;
+  public static void main(String[] args)
+  {
+    int[] testArray = {7, 11, 36, 36, 2, 15, 52, 48, 43};
+    Bucketsort bs = new Bucketsort();
+    ArrayList<Integer> sorted = bs.sort(testArray);
+    printArray(sorted);
+  }
 
-/**
- * @author Crunchify.com. 
- * How to Implement Bubble sort algorithm in Java? Ascending and Descending Order Tutorial
- */
- 
-public class bubble {
- 
-	public static void main(String[] args) {
-		int crunchifyArry[] = { 4,6,2,5,3,12,13 };
-		log("Let's get started on Bubble Sort implementation in Java \n");
-		log("============ Ascending Order result:" + Arrays.toString(CrunchifyBubbleSortAsceMethod(crunchifyArry)) + "\n");
-		log("============ Descending Order result:" + Arrays.toString(CrunchifyBubbleSortDescMethod(crunchifyArry)) + "\n");
-	}
- 
-	// Bubble Sort Algorithm in Ascending Order
-	public static int[] CrunchifyBubbleSortAsceMethod(int[] crunchifyArr) {
-		int temp;
-		for (int i = 0; i < crunchifyArr.length - 1; i++) {
- 
-			for (int j = 1; j < crunchifyArr.length - i; j++) {
-				if (crunchifyArr[j - 1] > crunchifyArr[j]) {
-					temp = crunchifyArr[j - 1];
-					crunchifyArr[j - 1] = crunchifyArr[j];
-					crunchifyArr[j] = temp;
-				}
-			}
-			log("Iteration " + (i + 1) + ": " + Arrays.toString(crunchifyArr));
-		}
-		return crunchifyArr;
-	}
- 
-	// Bubble Sort Algorithm in Descending Order
-	public static int[] CrunchifyBubbleSortDescMethod(int[] crunchifyArr) {
-		int temp;
-		for (int i = 0; i < crunchifyArr.length - 1; i++) {
- 
-			for (int j = 1; j < crunchifyArr.length - i; j++) {
-				if (crunchifyArr[j - 1] < crunchifyArr[j]) {
-					temp = crunchifyArr[j - 1];
-					crunchifyArr[j - 1] = crunchifyArr[j];
-					crunchifyArr[j] = temp;
-				}
-			}
-			log("Iteration " + (i + 1) + ": " + Arrays.toString(crunchifyArr));
-		}
-		return crunchifyArr;
-	}
- 
-	// Simple log util
-	private static void log(String result) {
-		System.out.println(result);
- 
-	}
+  static void printArray(ArrayList<Integer> array)
+   {
+      for(Integer val: array)
+      {
+        System.out.println(val);
+      }
+   }
+
+  public ArrayList<Integer> sort(int[] array)
+  {
+    int maxElement = getMaxElement(array);
+    int[] buckets = new int[maxElement];
+
+    for (int i=0; i<buckets.length; i++)
+    {
+      buckets[i]=0;
+    }
+
+    for(int value : array)
+    {
+      buckets[value-1]++;
+    }
+
+    ArrayList<Integer> sorted = new ArrayList<Integer>();
+    for(int i=0; i<buckets.length; i++)
+    {
+      for(int j = 0; j < buckets[i]; j++)
+      {
+        sorted.add(i);
+      }
+    }
+    return sorted;
+  }
+
+  public int getMaxElement(int[] array)
+  {
+    int maxElem = 0;
+    for(int value: array)
+    {
+      if(value > maxElem)
+      {
+        maxElem = value;
+      }
+    }
+    return maxElem;
+  }
 }

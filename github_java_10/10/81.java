@@ -1,34 +1,72 @@
-package sorting.simpleSorting;
+package com.marmoush.javasamples.javase.algorithms.sorting;
 
-import sorting.SortingImpl;
+import java.util.Arrays;
 
-/**
- * The bubble sort algorithm pushes big elements to the right or small elements to 
- * the left by exchanging adjacent elements. The algorithm must sort the elements from 
- * leftIndex to rightIndex (inclusive). 
- */
-public class Bubblesort<T extends Comparable<T>> extends SortingImpl<T> {
 
-	@Override
-	protected void sort(T[] array, int leftIndex, int rightIndex) {
-		
-		if (array.length > 1) {
-			
-			T aux = array[leftIndex];
-			
-			for (int i = leftIndex; i < rightIndex; i++) {
-				for (int j = leftIndex; j < rightIndex; j++) {
-					
-					if (array[j].compareTo(array[j+1]) > 0) {
-						aux = array[j];
-						array[j] = array[j+1];
-						array[j+1] = aux;
-					}
-					
-				}
-			}
-		}
-		
-	}
+class BucketSort {
+  public static void main(String[] args) {
+    int[] data = {3, 1, 6};
 
+    System.out.println("Before: " + Arrays.toString(data));
+    
+    bucketSort02(data, 6);
+    System.out.println("After:  " + Arrays.toString(data));
+  }
+
+  public static void bucketSort01(int a[], int m) {
+    int[] buckets = new int[m];
+    for (int i = 0; i < m; i++) {
+      buckets[i] = 0;
+    }
+    for (int i = 0; i < a.length; i++) {
+      ++buckets[a[i]];
+    }
+    for (int i = 0, j = 0; j < m; j++) {
+      for (int k = buckets[j]; k > 0; k--) {
+        a[i++] = j;
+      }
+    }
+  }
+
+  public static void bucketSort02(int[] a, int maxVal) {
+    int[] buckets = new int[maxVal + 1];
+
+    for (int i = 0; i < buckets.length; i++) {
+      buckets[i] = 0;
+    }
+
+    for (int i = 0; i < a.length; i++) {
+      buckets[a[i]]++;
+    }
+
+    int pos = 0;
+    for (int i = 0; i < buckets.length; i++) {
+      for (int j = 0; j < buckets[i]; j++) {
+        a[pos++] = i;
+        System.out.println(buckets[i] + "---" + pos);
+      }
+    }
+  }
+
+  public static void bucketSort03(int array[]) {
+    int min = array[0];
+    int max = min;
+    for (int i = 1; i < array.length; i++)
+      
+      if (array[i] > max) max = array[i];
+      else if (array[i] < min) min = array[i];
+
+    int bucket[] = new int[max - min + 1]; 
+
+    for (int i = 0; i < array.length; i++)
+      
+      bucket[array[i] - min]++;
+
+    int i = 0;
+    for (int b = 0; b < bucket.length; b++)
+      
+      for (int j = 0; j < bucket[b]; j++)
+        
+        array[i++] = b + min;
+  }
 }

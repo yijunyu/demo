@@ -1,38 +1,50 @@
-package co.com.diccionario.utilidades;
+package arrayTest;
 
-public class LevenshteinDistance {
+import java.util.Arrays;
 
-	private static int minimum(int a, int b, int c) {
-		if (a <= b && a <= c) {
-			return a;
+public class QuickSortJava {
+
+	public static int[] quickSort(int[] data){
+		int lenD = data.length;
+		int pivot = 0;
+		int ind = lenD/2;
+		int i,j = 0,k = 0;
+		if(lenD<2){
+			return data;
 		}
-		if (b <= a && b <= c) {
-			return b;
-		}
-		return c;
-	}
-
-	public static int computeLevenshteinDistance(String str1, String str2) {
-		return computeLevenshteinDistance(str1.toCharArray(), str2.toCharArray());
-	}
-
-	private static int computeLevenshteinDistance(char[] str1, char[] str2) {
-		int[][] distance = new int[str1.length + 1][str2.length + 1];
-
-		for (int i = 0; i <= str1.length; i++) {
-			distance[i][0] = i;
-		}
-		for (int j = 0; j <= str2.length; j++) {
-			distance[0][j] = j;
-		}
-		for (int i = 1; i <= str1.length; i++) {
-			for (int j = 1; j <= str2.length; j++) {
-				distance[i][j] = minimum(distance[i - 1][j] + 1, distance[i][j - 1] + 1,
-						distance[i - 1][j - 1] + ((str1[i - 1] == str2[j - 1]) ? 0 : 1));
+		else{
+			int[] L = new int[lenD];
+			int[] R = new int[lenD];
+			int[] sorted = new int[lenD];
+			pivot = data[ind];
+			for(i=0;i<lenD;i++){
+				if(i!=ind){
+					if(data[i]<pivot){
+						L[j] = data[i];
+						j++;
+					}
+					else{
+						R[k] = data[i];
+						k++;
+					}
+				}
 			}
+			int[] sortedL = new int[j];
+			int[] sortedR = new int[k];
+			System.arraycopy(L, 0, sortedL, 0, j);
+			System.arraycopy(R, 0, sortedR, 0, k);
+			sortedL = quickSort(sortedL);
+			sortedR = quickSort(sortedR);
+			System.arraycopy(sortedL, 0, sorted, 0, j);
+			sorted[j] = pivot;
+			System.arraycopy(sortedR, 0, sorted, j+1, k);
+			return sorted;
 		}
-		return distance[str1.length][str2.length];
-
 	}
-
+	
+	public static void main(String[] args) {
+		int []arra = {8,2,13,11,4,9,14,5,10,7,12,6,15,3};
+		arra = quickSort(arra);
+		System.out.println(Arrays.toString(arra));
+	}
 }

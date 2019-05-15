@@ -1,36 +1,59 @@
-package org.c4i.util;
+package datastructure;
 
-/**
- * @author Arvid Halma
- * @version 10-12-2017 - 20:03
- */
-public class StringUtilDemo {
-    public static void main(String[] args) {
+public class QuickSortJava {
 
-        System.out.println("Distance");
-        System.out.println("StringUtil.levenshteinDistance(\"abc\", \"def\") = " + StringUtil.levenshteinDistance("abc", "def"));
-        System.out.println("StringUtil.levenshteinDistance(\"abc\", \"abc\") = " + StringUtil.levenshteinDistance("abc", "abc"));
-        System.out.println("StringUtil.levenshteinDistance(\"abc\", \"bc\") = " + StringUtil.levenshteinDistance("abc", "bc"));
-        System.out.println("StringUtil.levenshteinDistance(\"bc\", \"abc\") = " + StringUtil.levenshteinDistance("bc", "abc"));
-
-
-        System.out.println("Similarity");
-        System.out.println("StringUtil.levenshteinSimilarity(\"abc\", \"b\") = " + StringUtil.levenshteinSimilarity("abc", "b"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"b\", \"abc\") = " + StringUtil.levenshteinSimilarity("b", "abc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"b\", \"b\") = " + StringUtil.levenshteinSimilarity("b", "b"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"abc\", \"def\") = " + StringUtil.levenshteinSimilarity("abc", "def"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"abc\", \"abc\") = " + StringUtil.levenshteinSimilarity("abc", "abc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"abc\", \"bc\") = " + StringUtil.levenshteinSimilarity("abc", "bc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"bc\", \"abc\") = " + StringUtil.levenshteinSimilarity("bc", "abc"));
-
-        System.out.println("StringUtil.levenshteinSimilarity(\"aabbcc\", \"def\") = " + StringUtil.levenshteinSimilarity("aabbcc", "def"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"aabbcc\", \"aabbcc\") = " + StringUtil.levenshteinSimilarity("aabbcc", "aabbcc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"aabbcc\", \"bbcc\") = " + StringUtil.levenshteinSimilarity("aabbcc", "bbcc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"bbcc\", \"aabbcc\") = " + StringUtil.levenshteinSimilarity("bbcc", "aabbcc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"bbcc\", \"aabbcccccccccccccc\") = " + StringUtil.levenshteinSimilarity("bbcc", "aabbcccccccccccccc"));
-
-        System.out.println("StringUtil.levenshteinSimilarity(\"aabbcc\", \"aacc\") = " + StringUtil.levenshteinSimilarity("aabbcc", "aacc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"aacc\", \"aabbcc\") = " + StringUtil.levenshteinSimilarity("aacc", "aabbcc"));
-        System.out.println("StringUtil.levenshteinSimilarity(\"aacc\", \"aabbcccccccccccccc\") = " + StringUtil.levenshteinSimilarity("aacc", "aabbcccccccccccccc"));
-    }
+	int partition(int arr[], int left, int right)
+	{
+		
+		
+	      int i = left, j = right;
+	      
+	      int tmp;
+	      
+	      
+	      int pivot = arr[(left + right) / 2];
+	     
+	      while (i <= j) {
+	            while (arr[i] < pivot)
+	            {
+	                  i++;
+	            }
+	            while (arr[j] > pivot)
+	            {
+	                  j--;
+	            }
+	            if (i <= j) {
+	                  tmp = arr[i];
+	                  arr[i] = arr[j];
+	                  arr[j] = tmp;
+	                  i++;
+	                  j--;
+	            }
+	      }
+	     
+	      return i;
+	}
+	 
+	int[] quickSort(int arr[], int left, int right) {
+		
+	      int index = partition(arr, left, right);
+	      
+	      if (left < index - 1)
+	            quickSort(arr, left, index - 1);
+	      if (index < right)
+	            quickSort(arr, index, right);
+	      
+	      return arr;
+	}
+	
+	public static void main(String[] args) {
+		int a[]={2,1,3,4,5};
+		
+		
+		int [] aa=new QuickSortJava().quickSort(a,0,4);
+		for(int k:aa)
+		{
+			System.out.print(k+" ");
+		}
+	}
 }

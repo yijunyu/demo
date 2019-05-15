@@ -1,28 +1,84 @@
-package sorting;
-import java.util.Arrays;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-import sorting.BubbleSort;
+class Heap {
 
-public class InsertionSort {
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		int arr[] = BubbleSort.takeInput();
-		iSort(arr, arr.length);
-		System.out.println(Arrays.toString(arr));
+	int heap_size;
+	
+	public int left(int i) {
+		return (2*i);
 	}
-
-	private static void iSort(int[] arr, int n) {
-		int i, j, temp;
-		for(i = 0; i < n-1; i++){
-			for(j = i+1; j >= 1 && arr[j] < arr[j-1]; j--){
-				temp = arr[j];
-				arr[j] = arr[j-1];
-				arr[j-1] = temp;
-			}
+	
+	public int right(int i) {
+		return (2*i + 1);
+	}
+	
+	public int parent(int i) {
+		return (int)Math.floor(i/2);
+	}
+	
+	public void swap(int a[], int i, int j) {
+		int temp = a[i];
+		a[i] = a[j];
+		a[j] = temp;
+	}
+	
+	public void maxHeapify(int a[], int i) {
+		int l = left(i);
+		int r = right(i);
+		int largest;
+		if(l <= heap_size && a[l] > a[i])
+			largest = l;
+		else
+			largest = i;
+		if(r <= heap_size && a[r] > a[largest])
+			largest = r;
+		if(largest != i) {
+			swap(a, i, largest);
+			maxHeapify(a, largest);
+		}
+		
+	}
+	
+	
+	public void buildMaxHeap(int a[], int n) {
+		for(int i = (int)Math.floor(n/2); i >= 1; i--) {
+			maxHeapify(a,i);
 		}
 	}
-
+	
+	public void heapSort(int a[], int n) {
+		buildMaxHeap(a, n);
+		for(int i = n; i>=2; i--) {
+			swap(a, 1, i);
+			heap_size --;
+			maxHeapify(a,1);
+		}
+		
+	}
+	
+	public static void main(String arg[]) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt(); 
+		int a[] = new int[n+1];
+		for(int i = 1; i<=n; i++) {
+			a[i] = sc.nextInt();
+		}
+		
+		System.out.println("Before Heap Sort");
+		for(int i = 1; i<=n; i++)
+			System.out.print(a[i] + " ");
+		System.out.println();	
+		
+		Heap heap = new Heap();
+		heap.heap_size = n;
+		heap.heapSort(a, n);
+		
+		System.out.println();	
+		System.out.println("After Heap Sort");
+		for(int i = 1; i<=n; i++)
+			System.out.print(a[i] + " ");
+		
+	}
 }

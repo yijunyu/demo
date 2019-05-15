@@ -1,80 +1,108 @@
-package chp03_StacksAndQueues;
+package geek.topinterview;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
-/*
- * In the classic problem of the Towers of Hanoi, 
- * you have 3 rods and N disks of different sizes 
- * which can slide onto any tower
- * 
- * The puzzle starts with disks sorted in ascending 
- * order of size from top to bottom 
- * (eg, each disk sits on top of an even larger one)
- * You have the following constraints: 
- * (A) Only one disk can be moved at a time 
- * (B) A disk is slid off the top of one rod onto the next rod  
- * (C) A disk can only be placed on top of a larger disk 
- * Write a program to move the disks from the first 
- * rod to the last using Stacks
- */
-public class TowerOfHanoi {
-	private Stack<Integer> disks;
-	private int index;
-	
-	public TowerOfHanoi(int _index) {
-		disks = new Stack<Integer>();
-		index = _index;
-	}
-	
-	public int index() {
-		return index;
-	}
-	
-	public void add(int d) {
-		if(!disks.isEmpty() && disks.peek() <= d) {
-			System.out.println("Error placing disk " + d);
-		} else {
-			disks.push(d);
-		}
-	}
-	
-	public void moveTop(TowerOfHanoi tower) {
-		int top = disks.pop();
-		tower.add(top);
-		System.out.println("Move disk " + top + " from " + index() + 
-				" to " + tower.index());
-	}
-	
-	public void move(int n, TowerOfHanoi dest, TowerOfHanoi buffer) {
-		if(n > 0) {
-			move(n - 1, buffer, dest);
-			moveTop(dest);
-			buffer.move(n - 1, dest, this);
-		}
-	}
-	
-	public void print() {
-		if(disks.size() == 0) {
-			System.out.println("null");
-			return;
-		}
-		for(int i : disks) {
-			System.out.print(i + " ");
-		}
-		System.out.print("\n");
-	}
-	
-	public static void main(String[] args) {
-		int n = 6;
-		TowerOfHanoi[] towers = new TowerOfHanoi[3];
-		for(int i = 0; i < 3; i ++) {
-			towers[i] = new TowerOfHanoi(i);
-		}
-		for(int i = n - 1; i >= 0; i--) {
-			towers[0].add(i);
-		}
-		for(TowerOfHanoi t : towers) t.print();
-		towers[0].move(n, towers[2], towers[1]);
-		for(TowerOfHanoi t : towers) t.print();
-	}
+
+public class TopologicalSort {
+    public static class Node {
+        
+        List<Node> children;
+        
+        int val;
+        int id;
+        
+        boolean visited;
+
+        
+        public Node(int id, int val) {
+            
+            this.val= val;
+            children = new LinkedList<>();
+            this.id = id;
+            visited = false;
+        }
+        public String toString() {
+            return "node id"+id+": value ="+val;
+        }
+    }
+    public static class Graph {
+        
+        
+        Node[] graph;
+        
+        public Graph(int size) {
+            graph = new Node[size];
+        }
+        public void clearVisited() {
+            Arrays.stream(graph).forEach((nd)-> {
+                if(nd!=null) {
+                    nd.visited=false;
+                }
+            });
+        }
+        
+        public void addNode(int id, int val) {
+            
+            
+            
+            Node nd = new Node(id, val);
+            
+            graph[id] = nd;
+        }
+
+        
+        public void addEdge(int fromNode, int toNode) {
+            
+            if((graph[fromNode]==null)||(graph[toNode]==null)) {
+                throw new RuntimeException("Node does not exist");
+            }
+            graph[fromNode].children.add(graph[toNode]);
+        }
+
+        public void printTopologicalOrder() {
+            Stack<Node> tOrder = getTopologicalOrder();
+            tOrder.stream().forEach((nd)-> System.out.println("Visited node"+ nd));
+        }
+
+        
+        public Stack<Node> getTopologicalOrder() {
+            Stack<Node> tOrder = new Stack<Node>();
+            for(Node nd:graph) {
+                visitTopological(nd, tOrder);
+            }
+            return tOrder;
+        }
+        private void visitTopological(Node nd, Stack<Node> tOrder) {
+            if(!nd.visited) {
+                List<Node> childr= nd.children;
+                if((childr!=null)||(!childr.isEmpty())) {
+                    for(Node chld: childr) {
+                        visitTopological(chld, tOrder);
+                    }
+                }
+                nd.visited=true;
+                tOrder.add(nd);
+            }
+        }
+
+    }
+    public static void testTopologicalOrder() {
+        int sz = 7;
+        Graph graph = new Graph(sz);
+        for(int i=0; i<sz; i++ ) {
+            graph.addNode(i, i+10);
+        }
+        graph.addEdge(0,1);
+        graph.addEdge(0,5);
+        graph.addEdge(1,3);
+        graph.addEdge(5,1);
+        graph.printTopologicalOrder();
+    }
+    public static void main(String[] args) {
+        testTopologicalOrder();
+    }
+
 }

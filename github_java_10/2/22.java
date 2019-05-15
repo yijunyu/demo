@@ -1,223 +1,111 @@
-public class AvlTree {
-	private AvlNode root;
-	
-	/*
-	 * Iterate over the binary tree to find a specific node.
-	 * Returns the node
-	 * @params AvlNode root, int data
-	 * @author Luke Pfeiffer
-	 */
-	public AvlNode search(AvlNode root, int data ) {
-		AvlNode returnNode = null;
-		if( root == null ) {
-			return null;
-	    } else if( root.getData() == data ) {
-			return root;
-		} else if ( root.getRight() == null && root.getLeft() == null ) {
-			return null;
-		}
-		
-		if( root.getData() <= data ) {
-			returnNode = search( root.getLeft(), data );
-		} else if( root.getData() > data ) {
-			returnNode = search( root.getLeft(), data );
-		}
-		
-		return returnNode;
-	}
-	
-	/*
-	 * Preorder traversal of the tree
-	 * @params AvlNode root, StringBuilder sBuilder
-	 * @author Luke Pfeiffer
-	 */
-	public String preOrder( AvlNode root, StringBuilder sBuilder ) {
-		if( root == null ) {
-			return sBuilder.toString();
-		}
-	    
-		sBuilder.append( root.getData() + " " );
-		if( root.getLeft() != null ) {
-			preOrder( root.getLeft(), sBuilder );
-		}
-		
-		if( root.getRight() != null ) {
-			preOrder( root.getRight(), sBuilder);
-		}
-		
-		return sBuilder.toString();
-	}
-	
-	/*
-	 * Return string of in order traversal of tree
-	 * @params AvlNode root, StringBuilder sBuilder
-	 * @author Luke Pfeiffer
-	 */
-	public String inOrder( AvlNode root, StringBuilder sBuilder ) {
-		if( root == null ) {
-			return sBuilder.toString();
-		}
-	    
-		if( root.getLeft() != null ) {
-			preOrder( root.getLeft(), sBuilder );
-		}
-		
-		sBuilder.append( root.getData() + " " );
+package Sorting;
 
-		if( root.getRight() != null ) {
-			preOrder( root.getRight(), sBuilder);
-		}
-		
-		return sBuilder.toString();
-	}
-	
-	/*
-	 * Returns string of post order traversal of tree
-	 * @params AvlNode root, StringBuilder sBuilder
-	 * @author Luke Pfeiffer
-	 */
-	
-	public String postOrder( AvlNode root, StringBuilder sBuilder ) {
-		if( root == null ) {
-			return sBuilder.toString();
-		}
-	    
-		if( root.getLeft() != null ) {
-			preOrder( root.getLeft(), sBuilder );
-		}
-
-		if( root.getRight() != null ) {
-			preOrder( root.getRight(), sBuilder);
-		}
-		
-		sBuilder.append( root.getData() + " ");
-		
-		return sBuilder.toString();
-	}
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.Scanner;
 
 
-	/*
-	 * Insert a new node into the tree like a normal binary search tree.
-	 * The difference being that after each addition of a node, check the balance
-	 * of the tree and balance if needed
-	 * @params int data
-	 * @author Luke Pfeiffer
-	 */
-	public AvlNode insert(AvlNode node, int data ) {
-		
-		//If root of tree is null, set root and return
-	    if( this.root == null ) {
-	    	this.root = new AvlNode( data );
-	        return this.root;
-	    }
-	    
-	    //If node is null, return a new node with data
-	    if( node == null ) {
-	    	return new AvlNode( data );
-	    }
-	    
-	    //Normal insertion for binary tree
-		if( data < node.getData() ) {
-			node.setLeft( insert( node.getLeft(), data ) );
-		} else if( data > root.getData() ) {
-			node.setRight( insert( node.getRight(), data ));
-		} else {
-			return node;
-		}
-		
-		//Set the new height of the node to be the max of its children
-		node.setHeight( max( nodeHeight( node.getLeft()), nodeHeight( node.getRight() ) + 1 ) );
-		
-		//Get balance factor
-		int balance = getBalanceFactor( node );
-		
-		//Left followed by left case
-		if( balance > 1 && data < node.getLeft().getData() ) {
-			return rotateRight( node );
-		}
-		
-		//Right followed by right case
-		if( balance < -1 && data > node.getRight().getData() ) {
-			return rotateLeft( node );
-		}
-		
-		//Left then right case
-		if( balance > 1 && data > node.getLeft().getData() ) {
-			node.setLeft( rotateLeft( node.getLeft() ) );
-			return rotateRight( node );
-		}
-		
-		//Right then left case;
-		if( balance < -1 && data < node.getRight().getData() ) {
-			node.setRight( rotateRight( node.getRight() ) );
-			return rotateLeft( node );
-		}
-		
-		return node;
-	}
-	
-	private int getBalanceFactor( AvlNode node ) {
-		if( node == null ) {
-			return 0;
-		}
-		
-		return nodeHeight( node.getLeft() ) - nodeHeight( node.getRight() );
-	}
-	
-	//Utitility function to get max of two integers
-	private int max( int a, int b ) {
-		if( a > b ) {
-			return a;
-		} else {
-			return b;	
-		}
-	}
-	
-	//Utitlity function to return height of a given node
-	private int nodeHeight( AvlNode node ) {
-		if( node == null ) {
-			return 0;
-		}
-		
-		return node.getHeight();
-	}
-	
-	//Rotate the tree right around a given node
-	private AvlNode rotateRight( AvlNode root ) {
-		//Establisting temp variables
-		AvlNode newRoot = root.getLeft();
-		AvlNode tempTwo = newRoot.getRight();
-		
-		//Right rotation
-		newRoot.setRight( root )	;
-		root.setLeft( tempTwo );
-		
-		//Increment heights
-		root.setHeight( max( nodeHeight( root.getLeft()), nodeHeight( root.getRight() ) ) + 1 );
-		newRoot.setHeight( max( nodeHeight( newRoot.getLeft() ), nodeHeight( newRoot.getRight() )) + 1 );
-		
-		return newRoot;
-	}
-	
-	//Rotate the tree left around a given node
-	private AvlNode rotateLeft( AvlNode root ) {
-		//Establishing temp variables
-		AvlNode newRoot = root.getRight();
-		AvlNode tempTwo = newRoot.getLeft();
-		
-		//Left rotation
-		newRoot.setLeft( root );
-		root.setRight( tempTwo );
-		
-		//Create new height
-		root.setHeight( max( nodeHeight( root.getLeft()), nodeHeight( root.getRight() ) ) + 1 );
-		newRoot.setHeight( max( nodeHeight( newRoot.getLeft() ), nodeHeight( newRoot.getRight() )) + 1 );
-		
-		//Return the new root
-		return newRoot;
-	}
-	
-	public AvlNode getRoot() {
-		return root;
-	}
+public class Merge extends Sort {
+
+    public void sort(Object[] arr, Comparator comparator)
+    {
+        int low = 0;
+        int high = arr.length - 1;
+
+        Object[] aux = new Object[arr.length];
+
+        sort(comparator, arr, aux, low, high);
+    }
+
+    private void sort(Comparator c, Object[] arr, Object[] aux, int low, int high)
+    {
+        if (high <= low)
+        {
+            return;
+        }
+
+        int mid = low + (high - low) / 2;
+        sort(c, arr, aux, low, mid);
+        sort(c, arr, aux, mid + 1, high);
+
+        if (!less(c, arr[mid + 1], arr[mid]))
+        {
+            return;
+        }
+
+        merge(c, arr, aux, low, mid, high);
+    }
+
+    private void merge(Comparator c, Object[] arr, Object[] aux, int low, int mid, int high)
+    {
+        assert isSorted(c, arr, low, mid);
+        assert isSorted(c, arr, mid + 1, high);
+
+        for (int k = low; k <= high; k++)
+        {
+            aux[k] = arr[k];
+        }
+
+        int i = low;
+        int j = mid + 1;
+
+        for (int k = low; k <= high; k++)
+        {
+            if (i > mid)
+            {
+                arr[k] = aux[j++];
+            }
+            else if (j > high)
+            {
+                arr[k] = aux[i++];
+            }
+            else if (less(c, aux[j], aux[i]))
+            {
+                arr[k] = aux[j++];
+            }
+            else
+            {
+                arr[k] = aux[i++];
+            }
+        }
+
+        assert isSorted(c, arr, low, high);
+    }
+
+    private Boolean isSorted(Comparator c, Object[] arr, int low, int high)
+    {
+        for (int i = low + 1; i <= high; i++)
+        {
+            if (less(c, arr[i], arr[i - 1]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException
+    {
+        Scanner scanner = new Scanner(new File(args[0]));
+        int size = scanner.nextInt();
+        Merge merge = new Merge();
+
+        System.out.println("Total Ints: " + size);
+
+        Integer[] unsorted = new Integer[size];
+        for (int i = 0; i < size && scanner.hasNextInt(); i++)
+        {
+            unsorted[i] = scanner.nextInt();
+        }
+
+        BigDecimal start = new BigDecimal(System.currentTimeMillis());
+        merge.sort(unsorted);
+        BigDecimal end = new BigDecimal(System.currentTimeMillis());
+
+        BigDecimal time = (end.subtract(start).divide(new BigDecimal(1000)));
+        System.out.println("Sort Time: " + time);
+    }
 }

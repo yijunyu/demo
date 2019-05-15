@@ -1,25 +1,74 @@
-package calculus.utilities;
 
-public class LevenshteinDistance {                                               
-    private static int minimum(int a, int b, int c) {                            
-        return Math.min(Math.min(a, b), c);                                      
-    }                                                                            
- 
-    public static int computeLevenshteinDistance(String str1,String str2) {      
-        int[][] distance = new int[str1.length() + 1][str2.length() + 1];        
- 
-        for (int i = 0; i <= str1.length(); i++)                                 
-            distance[i][0] = i;                                                  
-        for (int j = 1; j <= str2.length(); j++)                                 
-            distance[0][j] = j;                                                  
- 
-        for (int i = 1; i <= str1.length(); i++)                                 
-            for (int j = 1; j <= str2.length(); j++)                             
-                distance[i][j] = minimum(                                        
-                        distance[i - 1][j] + 1,                                  
-                        distance[i][j - 1] + 1,                                  
-                        distance[i - 1][j - 1] + ((str1.charAt(i - 1) == str2.charAt(j - 1)) ? 0 : 1));
- 
-        return distance[str1.length()][str2.length()];                           
-    }                                                                            
+public class Sort_quickSort {
+    
+
+
+
+    
+    
+    
+    
+    
+    
+
+    public int[] quickSort(int[] num) {
+        if (num.length == 0 || num.length == 1) return num;
+
+        int left = 0;
+        int right = num.length - 1;
+
+        quickSortHelper(num, left, right);
+
+        return num;
+    }
+
+
+    public void quickSortHelper(int[] num, int left, int right) {
+        
+        if(left >= right) return;
+        int pivot = partition(num, left, right);
+        quickSortHelper(num, left, pivot - 1);
+        quickSortHelper(num, pivot + 1, right);
+    }
+
+    int partition(int[] num, int left, int right){
+        int pivot = right;
+        System.out.print("pivot: " + pivot);
+        
+        int i = left;
+
+        System.out.print(" left: " + num[i]);
+
+        while(i < pivot){
+            while(i < pivot && num[pivot] >= num[i]){
+                i++;
+            }
+            if(i < pivot){
+                swap(num, i , pivot-1);
+                swap(num, pivot, pivot-1);
+                pivot--;
+            }
+        }
+        return pivot;
+    }
+
+    public void swap(int[] num, int i, int j){
+        int tmp = num[i];
+        num[i] = num[j];
+        num[j] = tmp;
+    }
+
+
+    public static void main(String[] args) {
+        
+        int[] arr = new int[]{2,4,3,6,5,4};
+        Sort_quickSort q = new Sort_quickSort();
+        q.quickSort(arr);
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + ",");
+        }
+        System.out.print("]");
+    }
+
 }

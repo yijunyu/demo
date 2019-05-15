@@ -1,38 +1,41 @@
-import java.util.*;
+package com.kmcho.com.geeks.graph.toposort;
 
-public class TowerOfHanoi
-{
-    public static void main(String[] args) {
-        towerOfHanoi(4);
-        System.out.println();
-        System.out.println();
-        towerOfHanoi(7);
-        System.out.println();
-        System.out.println();
-        towerOfHanoi(21);
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Stack;
+
+
+public class GfG2 {
+    public static int[] topoSort(ArrayList<Integer> graph[], int N) {
+        boolean[] visited = new boolean[N];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < N; i++) {
+            if (!visited[i]) {
+                sort(graph, i, visited, stack);
+            }
+        }
+
+        int[] result = new int[stack.size()];
+        int i = 0;
+        while (!stack.isEmpty()) {
+            result[i++] = stack.pop();
+        }
+
+        return result;
     }
 
+    private static void sort(ArrayList<Integer> graph[], int start, boolean[] visited, Stack<Integer> stack) {
+        visited[start] = true;
 
-    public static void towerOfHanoi(int n) {
-        List<Stack<Integer>> pegs = new ArrayList<Stack<Integer>>();
-        for(int i=0; i<3; ++i) {
-            pegs.add(new Stack<Integer>());
+        Iterator<Integer> iterator = graph[start].iterator();
+        while (iterator.hasNext()) {
+            int next = iterator.next();
+            if (!visited[next]) {
+                sort(graph, next, visited, stack);
+            }
         }
-        for(int i=n; i>0; --i) {
-            pegs.get(0).push(new Integer(i));
-        }
-        transfer(n, pegs, 0, 1, 2);
-    }
 
-    private static void transfer(int n, List<Stack<Integer>> pegs, int from, 
-            int to, int intermediary)
-    {
-        if(n>0) {
-            transfer(n-1, pegs, from, intermediary, to);
-            pegs.get(to).push(pegs.get(from).pop());
-            System.out.println("Block " + n + " moved from " + 
-                    from + " to " + to);
-            transfer(n-1, pegs, intermediary, to, from);
-        }
-    }
+        stack.push(start);
+     }
 }

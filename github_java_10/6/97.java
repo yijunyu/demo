@@ -1,56 +1,50 @@
-/*Implement Merge Sort */
- 
-    public static int[] merge_sort(int arr[]){
-      if(arr.length <= 1) return arr;
-      
-      int middle = arr.length / 2;
-      int leftArray[] = new int[middle];
-      int rightArray[] = new int [arr.length - middle];
-      
-      //Populate left array with left half of input array
-      for(int i = 0; i < middle; i++)
-        leftArray[i] = arr[i];
-      
-      //Populate right array with right half of input array
-      int rIndex = 0;
-      for(int j = middle; j < arr.length; j++)
-       rightArray[rIndex++] = arr[j];
-      
-      //Recursive calls on left array and on right array
-      leftArray = merge_sort(leftArray);
-      rightArray = merge_sort(rightArray);
-      
-      //Merge the results and return
-      return  merge(leftArray, rightArray);
-      
-    }
-    
-    public static int[] merge(int left[],int right[]){
-      int result[]  = new int[left.length + right.length];
-      int lIndex = 0;
-      int rIndex = 0;
-      int resultIndex = 0;
-      
-      while(lIndex < left.length || rIndex < right.length){
-      
-        //Condition 1. We have elements on both sides
-          if(lIndex < left.length && rIndex < right.length){
-            if(left[lIndex] <= right[rIndex])
-              result[resultIndex++] = left[lIndex++];
-            else  
-              result[resultIndex++] = right[rIndex++]; 
-        
-          }else{
-         
-         //Condition 2. We only have elements on left side
-          if(lIndex < left.length)    
-          result[resultIndex++] = left[lIndex++];
-         
-         //Condition 3. We only have elements on the right side
-          if(rIndex < right.length)
-          result[resultIndex++] = right[rIndex++];
-        }
-      }
-      return result;
-    }
+package com.ccsi.sorts;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class RadixSort {
+    public static void main(String[] args) {
+        int[] nums={342,356,58,576,123};
+        radixSort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            System.out.println(nums[i]);
+        }
+    }
+    public static void radixSort(int[] nums){
+        if(nums==null||nums.length<=1)return;
+        int max=Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            max=max>nums[i]?max:nums[i];           
+        }
+
+        int count=0;                               
+        while(max>0){
+            max/=10;
+            count++;
+        }
+
+        int dev=10;
+        for (int i = 0; i < count; i++) {
+            List<Integer>[] buckets=new ArrayList[10];   
+            for (int j = 0; j < 10; j++) {               
+                buckets[j]=new ArrayList<>();
+            }
+
+            for (int j = 0; j < nums.length; j++) {      
+                int idx=nums[j]%dev*10/dev;
+                buckets[idx].add(nums[j]);
+            }
+
+            int index=0;
+            for (int j = 0; j < 10; j++) {               
+                for (Integer ele:buckets[j]
+                     ) {
+                    nums[index++]=ele;
+                }
+            }
+            dev*=10;                                     
+        }
+    }
+}

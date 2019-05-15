@@ -1,169 +1,163 @@
-/* Topological Sort
- * This is just the implementation of DFS
- * arrange the finish array in Descending order, it will give you the Topological Sort of Graph.
- */
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+package cs111c;
 
-class Graph {
+import java.util.*;
 
-	int V;
+public class Sorts {
 
-	public char color[];
-	public LinkedList<Integer> AdjList[];
-	public int discover[];
-	public int finish[];
-	public int Pi[];
-	public LinkedList<Integer> Topological; 
-	int t = 0;
-
-	public Graph(int n) {
-		this.V = n;
-		AdjList = new LinkedList[n];
-		Topological = new LinkedList<Integer>();
-		color = new char[n];
-		discover = new int[n];
-		finish = new int[n];
-		Pi = new int[n];
-
-		for (int i = 0; i < n; i++) {
-			AdjList[i] = new LinkedList<>();
-		}
-		Pi[0] = 0;
-	}
-}
-
-public class Topologicalsort {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		Scanner s = new Scanner(System.in);
-
-		System.out.println("Enter the number of nodes you have :");
-		int n = s.nextInt();
-
-		Graph vertex = new Graph(n);
-		int u;
-		int v;
-
-		do {
-			System.out.println("Enter the edges with start vertex u and end vertex v :");
-			u = s.nextInt();
-			v = s.nextInt();
-
-			if (u == 0 && v == 0)
-				break;
-
-			addnode(vertex, u, v);
-
-		} while (u != 0 || v != 0);
-
-		printGraph(vertex);
-
-		BFSTraversal(vertex, 0, vertex.color);
-
-		System.out.println("Print various array : ");
-
-		printArrays(vertex, n);
-
-		System.out.println("Print DFS Traversal of Tree : ");
-		printDFSTraversal(vertex, n);
+	   public static void main(String[] args) {
 		
-		System.out.println("The Topological Sort of Graph : ");
-		for(Integer i : vertex.Topological)
-		{
-			System.out.println(i);
-		}
-	}
-
-	private static void printDFSTraversal(Graph vertex, int n) {
-		System.out.println();
-		int index = 0;
-		System.out.print(index + " ");
-
-		while (index < n) {
-			index++;
-			for (int i = 1; i < n; i++) {
-				if (vertex.discover[i] == index) {
-					System.out.print(i + " ");
-				}
-			}
-		}
-	}
-
-	private static void printArrays(Graph vertex, int n) {
-
-		System.out.println("The Pi tree of BFS is = ");
-
-		for (int i = 0; i < n; i++) {
-			System.out.print(vertex.Pi[i] + " ");
-		}
-		System.out.println();
-		System.out.println("The color tree of BFS is = ");
-
-		for (int i = 0; i < n; i++) {
-			System.out.print(vertex.color[i] + " ");
-		}
-		System.out.println();
-		System.out.println("The discovery tree of BFS is = ");
-
-		for (int i = 0; i < n; i++) {
-			System.out.print(vertex.discover[i] + " ");
-		}
-		System.out.println();
-		System.out.println("The finish tree of BFS is = ");
-
-		for (int i = 0; i < n; i++) {
-			System.out.print(vertex.finish[i] + " ");
-		}
-	}
-
-	private static void BFSTraversal(Graph v, Integer u, char[] color) {
-
-		v.discover[u] = v.t++;
-		v.color[u] = 'Y';
-
-		if (!v.AdjList[u].isEmpty()) {
-			for (Integer i : v.AdjList[u]) {
-				if (v.color[i] == 'R') {
-					v.Pi[i] = u;
-					v.color[i] = 'Y';
-					BFSTraversal(v, i, v.color);
-				}
-			}
-		}
-
-		v.color[u] = 'B';
-		v.finish[u] = v.t++;
-		//for topological sort insert in begining to get the correct order
-		v.Topological.addFirst(u);
+		Integer[] test1 = generateRandomArrayWithLength(200);
+		Integer[] test2 = generateRandomArrayWithLength(200);
 		
-	}
+		int selection = numberOfComparsionInSelectionSort(test1);
+		
+		System.out.println("The number of comparison for Selection Sort is :" + selection);
+		System.out.println("The number of swap for Selection Sort is :"+numberOfSwapInSelectionSort);
+		        for (int i =0;i< test1.length;i++)
+		        {
+			        System.out.print(test1[i]+"");
+		        }
+		        System.out.println("");        
+		int shell = numberOfComparisonInShellSort(test2);
+		System.out.println("The number of comparison for Shell Sort is :" + shell);
+		System.out.println("The number of swap for Shell Sort is :"+ numberOfSwapInShellSort);
+				for (int j=0;j<test2.length;j++)
+				{
+					System.out.print(test2[j]+"");
+				}
+	    
+	   }
 
-	public static void addnode(Graph v, int start, int end) {
-		v.AdjList[start].add(end);
 
-		if (v.color[start] != 'R')
-			v.color[start] = 'R';
+  
+       public static int numberOfComparsionInSelectionSort=0;
+	   public static int numberOfComparisonInShellSort=0;
+       public static int numberOfSwapInSelectionSort=0;
+	   public static int numberOfSwapInShellSort=0;
+	   
+	   public static <T extends Comparable<? super T>> void selectionSort(T[] a, int n)
+	   {
 
-		//v.AdjList[end].addFirst(start);
+	       for (int index = 0; index < n - 1; index++)
+	       {
+	          int indexOfNextSmallest = getIndexOfSmallest(a, index, n - 1);
+	          swap(a, index, indexOfNextSmallest);
+	         
+	       } 
+	   } 
+	   
+	   
+	   
+	   
+	   
+	   private static <T extends Comparable<? super T>>
+	           int getIndexOfSmallest(T[] a, int first, int last)
+	   {
 
-		if (v.color[end] != 'R')
-			v.color[end] = 'R';
+	       T min = a[first];
+	       int indexOfMin = first;
+	       for (int index = first + 1; index <= last; index++)
+	       {
+	          if (a[index].compareTo(min) < 0)
+	          {
+	             min = a[index];
+	             indexOfMin = index;
+	          }
+	          numberOfComparsionInSelectionSort++;
+	          
+	       } 
+	      
+	       return indexOfMin;
+	   } 
 
-	}
+	   
+	   private static void swap(Object[] a, int i, int j)
+	   {
+	      Object temp = a[i];
+	      a[i] = a[j];
+	      a[j] = temp; 
+	      numberOfSwapInSelectionSort++;
+	   }
+	   
+	   public static <T extends Comparable<? super T>>
+	          int numberOfComparsionInSelectionSort(T[] a)
+	   {
+		   selectionSort(a, a.length);
+		   return numberOfComparsionInSelectionSort;
+	   }
+	   
+	   
+	   public static <T extends Comparable<? super T>>
+       void betterShellSort(T[] a, int n)
+       {
+		   betterShellSort(a,0,n-1);
+       }
+	   
+	   public static <T extends Comparable<? super T>>
+	       void betterShellSort(T[] a, int first, int last)
+	   {		
+		
+		   int n = last - first + 1; 
+		   for (int space = n / 2; space > 0; space = space / 2)		
+		   {			
+			   if (space % 2 == 0) 
+				space++;			
+			   for (int begin = first; begin < first + space; begin++)				
+				   incrementalInsertionSort(a, begin, last, space);		
+		   } 
+	   } 
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   private static <T extends Comparable<? super T>>
+       void incrementalInsertionSort(T[] a, int first, int last, int space)
+	   {  
+		   int unsorted, index; 
+		   for (unsorted = first + space; unsorted <= last; 
+                unsorted = unsorted + space)  
+		   {     
+			   T nextToInsert = a[unsorted];     
+			   index = unsorted - space;     
+			   while ((index >= first) && (nextToInsert.compareTo(a[index]) < 0))    
+			   {                  
+				   a[index + space] = a[index];     
+				   index = index - space;  
+				   numberOfSwapInShellSort++;
+			   } 
+			   a[index + space] = nextToInsert; 
+			   numberOfComparisonInShellSort++;
+		   } 
+	   } 
+	   
+	   public static <T extends Comparable<? super T>>
+               int numberOfComparisonInShellSort(T[] a)
+       {
+		   betterShellSort(a,a.length);
+		   return numberOfComparisonInShellSort;		   
+       }
+	   
+	   public static Integer[] generateRandomArrayWithLength(int length)
+	   {
+		   if(length>100 && length<10000)
+		   {		   
+			   Random generate = new Random();		   
+			   Integer[] a = new Integer[length];
+			   for (int i=0;i<length;i++)		   
+			   {			   
+				   a[i]=generate.nextInt(length);		   
+			   }
+			   return a;
+		   }
+		   else
+			   throw new IndexOutOfBoundsException();
+	   }
+	   
 
-	static void printGraph(Graph vertex) {
-		for (int v = 0; v < vertex.V; v++) {
-			System.out.println("Adjacency list of vertex " + v);
-			System.out.print("head");
-			System.out.print(vertex.color[v]);
-			for (Integer pCrawl : vertex.AdjList[v]) {
-				System.out.print(" -> " + pCrawl);
-			}
-			System.out.println("\n");
-		}
-	}
 }

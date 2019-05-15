@@ -1,74 +1,42 @@
-// Java program to print DFS traversal from a given given graph
-import java.io.*;
-import java.util.*;
- 
-// This class represents a directed graph using adjacency list
-// representation
-class Graph
-{
-    private int V;   // No. of vertices
- 
-    // Array  of lists for Adjacency List Representation
-    private LinkedList<Integer> adj[];
- 
-    // Constructor
-    Graph(int v)
-    {
-        V = v;
-        adj = new LinkedList[v];
-        for (int i=0; i<v; ++i)
-            adj[i] = new LinkedList();
-    }
- 
-    //Function to add an edge into the graph
-    void addEdge(int v, int w)
-    {
-        adj[v].add(w);  // Add w to v's list.
-    }
- 
-    // A function used by DFS
-    void DFSUtil(int v,boolean visited[])
-    {
-        // Mark the current node as visited and print it
-        visited[v] = true;
-        System.out.print(v+" ");
- 
-        // Recur for all the vertices adjacent to this vertex
-        Iterator<Integer> i = adj[v].listIterator();
-        while (i.hasNext())
-        {
-            int n = i.next();
-            if (!visited[n])
-                DFSUtil(n, visited);
-        }
-    }
- 
-    // The function to do DFS traversal. It uses recursive DFSUtil()
-    void DFS(int v)
-    {
-        // Mark all the vertices as not visited(set as
-        // false by default in java)
-        boolean visited[] = new boolean[V];
- 
-        // Call the recursive helper function to print DFS traversal
-        DFSUtil(v, visited);
-    }
- 
-    public static void main(String args[])
-    {
-        Graph g = new Graph(4);
- 
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(1, 2);
-        g.addEdge(2, 0);
-        g.addEdge(2, 3);
-        g.addEdge(3, 3);
- 
-        System.out.println("Following is Depth First Traversal "+
-                           "(starting from vertex 2)");
- 
-        g.DFS(2);
-    }
+package practicalseven.sort;
+
+
+
+public class BubbleSort extends Sorter {
+
+  
+  private static int ARRAY_START = 0;
+
+  
+  public BubbleSort() {
+    name = "BubbleSort";
+  }
+
+  
+  public char[] sort(char[] source) {
+    int length = source.length;
+    char[] sorted = new char[source.length];
+    
+    return sorted;
+  }
+
+  
+  public int[] sort(int[] source) {
+    int length = source.length;
+    int[] sorted = new int[source.length];
+    
+    return sorted;
+  }
+
+  
+  public static void main(String[] args) {
+    char[] letters = {'C', 'E', 'B', 'D', 'A', 'I', 'J', 'L', 'K', 'H', 'G', 'F'};
+    System.out.println("Before: " + java.util.Arrays.toString(letters));
+    char[] sortedLetters = (new BubbleSort()).sort(letters);
+    System.out.println("After : " + java.util.Arrays.toString(sortedLetters));
+    int[] numbers = {1, 2, 4, 4, 9, 10, -10, 3, 8, 7, 20, 0};
+    System.out.println("Before: " + java.util.Arrays.toString(numbers));
+    int[] sortedNumbers = (new BubbleSort()).sort(numbers);
+    System.out.println("After : " + java.util.Arrays.toString(sortedNumbers));
+  }
 }
-// This code is contributed by Aakash Hasija

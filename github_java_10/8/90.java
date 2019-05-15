@@ -1,67 +1,117 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-package org.ucb.c5.sequtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
-/**
- *
- * @author J. Christopher Anderson
- */
-public class CalcEditDistance {
+public class Sort
+{
+    private static final int DEFAULT_SIZE = 30;
     
-    public void initiate() throws Exception {
+    public static void main(String[] args)
+    {
         
-    }
-    
-    /**
-     * Compute edit distance between two Strings using the Smith-Waterman
-     * Algorithm
-     *
-     * @param s1
-     * @param s2
-     * @return
-     */
-    public int run(String s1, String s2) throws Exception {
-        int s1len = s1.length();
-        int s2len = s2.length();
-
-        int[][] dist = new int[s1len + 1][s2len + 1];
-
-        for (int a = 0; a <= s1len; a++) {
-            for (int b = 0; b <= s2len; b++) {
-                if (a == 0) {
-                    dist[a][b] = b;
-                } else if (b == 0) {
-                    dist[a][b] = a;
-                } else if (s1.charAt(a - 1) == s2.charAt(b - 1)) {
-                    dist[a][b] = dist[a - 1][b - 1];
-                } else {
-                    dist[a][b] = 1 + Math.min(Math.min(dist[a][b - 1], dist[a - 1][b]), dist[a - 1][b - 1]);
-                }
+        long startTime;
+        double elapsedQuickSort;
+        double elapsedHeapSort;
+        int[] quick;
+        
+        
+        if (args.length != 0)
+        {
+            try
+            {
+                quick = generateIntArray(Integer.parseInt(args[0]));
+            } catch (NumberFormatException n)
+            {
+                System.out.println("'array size' argument must be greater than 0 and be an Integer.");
+                System.out.printf("You entered as an argument: %s\n", args[0]);
+                System.out.println("Continuing with default size of 30...");
+                quick = generateIntArray(DEFAULT_SIZE);
             }
         }
+        else
+        {
+            quick = generateIntArray(DEFAULT_SIZE);
+        }
+        
+         
+        int[] heap = quick; 
 
-        return dist[s1len][s2len];
+        int n = quick.length;
+
+        printArray(quick, "original", 0);
+
+        
+        startTime = System.nanoTime();
+        QuickSort.sort(quick, 0, n - 1); 
+        elapsedQuickSort = (System.nanoTime() - startTime) * 1e-6; 
+
+        printArray(quick, "quickSort", elapsedQuickSort);
+
+        
+        startTime = System.nanoTime();
+        HeapSort.sort(heap); 
+        elapsedHeapSort = (System.nanoTime() - startTime) * 1e-6; 
+
+        printArray(heap, "heapSort", elapsedHeapSort);
     }
+
     
-    public static void main(String[] args) throws Exception {
-        CalcEditDistance func = new CalcEditDistance();
-        func.initiate();
-        
-        int distance = func.run("AACAAGATAT", "AATAAGATAT");
-        System.out.println(distance);
-        
-        distance = func.run("AACAAGTTAT", "AATAAGATAT");
-        System.out.println(distance);
+    private static int[] generateIntArray(int size)
+    {
+        Random rand = new Random(System.currentTimeMillis());
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++)
+        {
+            arr[i] = rand.nextInt(size);
+        }
+        return arr;
+    }
+
+    
+    private static void printArray(int a[], String sortMethod, double executionTime)
+    {
+        int n = a.length;
+
+        switch (sortMethod)
+        {
+            case "quickSort":
+            {
+                System.out.printf("QuickSort took %.3f ms: ", executionTime);
+                for (int i = 0; i < n; i++)
+                {
+                    System.out.printf("%d ", a[i]);
+                }
+                System.out.print("\n");
+                break;
+            }
+
+            case "heapSort":
+            {
+                System.out.printf("HeapSort took %.3f ms: ", executionTime);
+                for (int i = 0; i < n; i++)
+                {
+                    System.out.printf("%d ", a[i]);
+                }
+                System.out.print("\n");
+                break;
+            }
+
+            case "original":
+            {
+                System.out.print("Original (Unsorted): ");
+                for (int i = 0; i < n; i++)
+                {
+                    System.out.printf("%d ", a[i]);
+                }
+                System.out.print("\n");
+                break;
+            }
+
+            default:
+            {
+                System.out.println("Something went wrong...");
+                break;
+            }
+        }
     }
 }

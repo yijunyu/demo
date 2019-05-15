@@ -1,111 +1,55 @@
-package coursera_algorithms.graphs.undirected;
+package com.sort;
 
-import utils.MiscUtils;
-import coursera_algorithms.allClasses.alg4.BreadthFirstPaths;
-import coursera_algorithms.allClasses.alg4.DepthFirstPaths;
-import coursera_algorithms.allClasses.stdlib.In;
-import coursera_algorithms.allClasses.stdlib.StdOut;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
-/*************************************************************************
- *  Compilation:  javac DepthFirstSearch.java
- *  Execution:    java DepthFirstSearch filename.txt s
- *  Dependencies: Graph.java StdOut.java
- *  Data files:   http://algs4.cs.princeton.edu/41undirected/tinyG.txt
- *
- *  Run depth first search on an undirected graph.
- *  Runs in O(E + V) time.
- *
- *  % java DepthFirstSearch tinyG.txt 0
- *  0 1 2 3 4 5 6 
- *  NOT connected
- *
- *  % java DepthFirstSearch tinyG.txt 9
- *  9 10 11 12 
- *  NOT connected
- *
- *************************************************************************/
+public class Bubble {
 
-/**
- *  The <tt>DepthFirstSearch</tt> class represents a data type for 
- *  determining the vertices connected to a given source vertex <em>s</em>
- *  in an undirected graph. For versions that find the paths, see
- *  {@link DepthFirstPaths} and {@link BreadthFirstPaths}.
- *  <p>
- *  This implementation uses depth-first search.
- *  The constructor takes time proportional to <em>V</em> + <em>E</em>
- *  (in the worst case),
- *  where <em>V</em> is the number of vertices and <em>E</em> is the number of edges.
- *  It uses extra space (not including the graph) proportional to <em>V</em>.
- *  <p>
- *  For additional documentation, see <a href="/algs4/41graph">Section 4.1</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
-public class DepthFirstSearch {
-    private boolean[] marked;    // marked[v] = is there an s-v path?
-    private int count;           // number of vertices connected to s
+	public static void main(String[] args) throws IOException {
+		
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter pw = new PrintWriter(System.out, true);
+		
+		pw.println("Enter the element of an array on a single line separated by blank space");
+		String arrNum[] = br.readLine().split(" ");
+	    
+		int arr[] = new int [arrNum.length];
+		
+		for( int i =0 ; i < arrNum.length ; i++){ 
+		   arr[i] = Integer.parseInt(arrNum[i]);
+		   System.out.print(arr[i]+ " ");
+		}
+		 System.out.println("");
+		 System.out.println("Dispay results in sorted order");
+		
+		
+		arr = bubbleSort(arr);	
+		
+		for(int x : arr){
+			System.out.print(x+ " ");
+		}
 
-    /**
-     * Computes the vertices in graph <tt>G</tt> that are
-     * connected to the source vertex <tt>s</tt>.
-     * @param G the graph
-     * @param s the source vertex
-     */
-    public DepthFirstSearch(Graph G, int s) {
-        marked = new boolean[G.V()];
-        dfs(G, s);
-    }
-
-    // depth first search from v
-    private void dfs(Graph G, int v) {
-        count++;
-        marked[v] = true;
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                dfs(G, w);
-            }
-        }
-    }
-
-    /**
-     * Is there a path between the source vertex <tt>s</tt> and vertex <tt>v</tt>?
-     * @param v the vertex
-     * @return <tt>true</tt> if there is a path, <tt>false</tt> otherwise
-     */
-    public boolean marked(int v) {
-        return marked[v];
-    }
-
-    /**
-     * Returns the number of vertices connected to the source vertex <tt>s</tt>.
-     * @return the number of vertices connected to the source vertex <tt>s</tt>
-     */
-    public int count() {
-        return count;
-    }
-
-    /**
-     * Unit tests the <tt>DepthFirstSearch</tt> data type.
-     */
-    public static void main(String[] args) {
-    	String fileName = MiscUtils.ALGORITHMS_SAMPLE_DATA + "tinyG.txt";
-    	String node = "7";
-        In in = new In(fileName);
-        Graph G = new Graph(in);
-        int s = Integer.parseInt(node);
-        DepthFirstSearch search = new DepthFirstSearch(G, s);
-        for (int v = 0; v < G.V(); v++) {
-            if (search.marked(v))
-                StdOut.print(v + " ");
-        }
-
-        StdOut.println();        
-        StdOut.println();
-        StdOut.println(G);
-        if (search.count() != G.V()) StdOut.println("NOT connected");
-        else                         StdOut.println("connected");
-    }
-
+	}
+	
+	public static int [] bubbleSort(int arr[]){
+		
+		int n = arr.length;
+		for(int i= n-2 ; i >=0 ; i-- ){
+			for(int j = 0 ; j <= i ; j ++){
+				
+				if(arr[j] > arr[j+1]) 
+				{
+					int temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j+1] = temp;
+				}
+			}
+		}
+		
+		return arr ;
+	}
+	
 }

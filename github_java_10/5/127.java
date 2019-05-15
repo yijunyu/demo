@@ -1,61 +1,51 @@
-package aima.core.search.uninformed;
+package bubbleSort;
 
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
-import aima.core.agent.Action;
-import aima.core.search.framework.Metrics;
-import aima.core.search.framework.Node;
-import aima.core.search.framework.NodeExpander;
-import aima.core.search.framework.QueueFactory;
-import aima.core.search.framework.SearchForActions;
-import aima.core.search.framework.SearchForStates;
-import aima.core.search.framework.SearchUtils;
-import aima.core.search.framework.problem.Problem;
-import aima.core.search.framework.qsearch.QueueSearch;
+public class Bubble {
 
-/**
- * Artificial Intelligence A Modern Approach (3rd Edition): page 85.<br>
- * <br>
- * Depth-first search always expands the deepest node in the current frontier of
- * the search tree. <br>
- * <br>
- * <b>Note:</b> Supports TreeSearch, GraphSearch, and BidirectionalSearch. Just
- * provide an instance of the desired QueueSearch implementation to the
- * constructor!
- * 
- * @author Ravi Mohan
- * @author Ruediger Lunde
- * 
- */
-public class DepthFirstSearch implements SearchForActions, SearchForStates {
+	public static void main(String[] args) throws IOException {
+		
+		String CurLine = ""; 
+		
+		System.out.println("Enter a line of text (type 'sort' to sort): ");
+		InputStreamReader converter = new InputStreamReader(System.in);
+		BufferedReader in = new BufferedReader(converter);
 
-	QueueSearch implementation;
-
-	public DepthFirstSearch(QueueSearch impl) {
-		implementation = impl;
+		ArrayList<Integer> toSort = new ArrayList<Integer>();
+		while (!(CurLine.equals("sort"))){
+			CurLine = in.readLine();
+			if(!CurLine.equals("sort")){
+				try{
+					toSort.add(Integer.parseInt(CurLine));
+				}catch(Exception e){
+					System.out.println("Did you mean 'sort'? I can't sort strings.");
+				}
+				
+			}else{
+				
+				boolean sorted = false;
+				boolean verifySorted = false;
+				while(!sorted&&!verifySorted){
+					sorted = true;
+					for(int i=0;i< toSort.size();i++){
+						try{
+							if(toSort.get(i) > toSort.get(i+1)){
+								int temp = toSort.get(i+1);
+								toSort.set(i+1, toSort.get(i));
+								toSort.set(i, temp);
+								sorted = false;
+							}
+						}catch(Exception e){}
+						System.out.print(toSort.get(i)+ " ");
+					}
+					System.out.print('\n');
+				}
+			}
+		}
 	}
 
-	@Override
-	public List<Action> findActions(Problem p) {
-		implementation.getNodeExpander().useParentLinks(true);
-		Node node = implementation.findNode(p, QueueFactory.<Node>createLifoQueue());
-		return node == null ? SearchUtils.failure() : SearchUtils.getSequenceOfActions(node);
-	}
-	
-	@Override
-	public Object findState(Problem p) {
-		implementation.getNodeExpander().useParentLinks(false);
-		Node node = implementation.findNode(p, QueueFactory.<Node>createLifoQueue());
-		return node == null ? null : node.getState();
-	}
-	
-	@Override
-	public NodeExpander getNodeExpander() {
-		return implementation.getNodeExpander();
-	}
-	
-	@Override
-	public Metrics getMetrics() {
-		return implementation.getMetrics();
-	}
 }

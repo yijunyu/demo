@@ -1,42 +1,110 @@
-package com.aman.sorting;
+package algs24;
+import stdlib.*;
 
-public class InsertionSort {
 
-	public static void main(String[] args) {
-		InsertionSort insertionSort = new InsertionSort();
-		int[] input = { 2, 7, 0, 1 };
-		insertionSort.insertionSort(input);
-		int[] input2 = { 10, 11, 15, 3, 66, 4, 1 };
-		insertionSort.insertionSort(input2);
-		int[] input3 = { 1, 6, 7, 27, 4, 3, 2 };
-		insertionSort.insertionSort(input3);
-		int[] input4 = { 10, 25, 8, 2, 1 };
-		insertionSort.insertionSort(input4);
-		int[] input5 = { 30, 9, 8, 88, 1, 29, 0 };
-		insertionSort.insertionSort(input5);
-	}
+public class Heap {
 
-	public void insertionSort(int[] array) {
-		int previousIndex;
-		int value;
-		int i;
-		for (i = 0; i < array.length; i++) {
-			previousIndex = i - 1;
-			value = array[i];
-			while ((previousIndex >= 0) && (array[previousIndex] > value)) {
-				// need to swap the value
-				array[previousIndex + 1] = array[previousIndex];
-				previousIndex = previousIndex - 1;
-			}
-			array[previousIndex + 1] = value;
+    public static <T extends Comparable<? super T>> void sort(T[] pq) {
+        int N = pq.length;
+        for (int k = N/2; k >= 1; k--) {
+            sink(pq, k, N);
+        }
+        while (N > 1) {
+            exch(pq, 1, N--);
+            sink(pq, 1, N);
+        }
+    }
 
-		}
-		System.out
-				.println("Printing the sorted Array using the insertion sort");
-		for (int j = 0; j < array.length; j++) {
-			System.out.print(array[j] + " ");
+    
 
-		}
-		System.out.println();
-	}
+    private static <T extends Comparable<? super T>> void sink(T[] pq, int k, int N) {
+        while (2*k <= N) {
+            int j = 2*k;
+            if (j < N && less(pq, j, j+1)) j++;
+            if (!less(pq, k, j)) break;
+            exch(pq, k, j);
+            k = j;
+        }
+    }
+
+    
+    private static <T extends Comparable<? super T>> boolean less(T[] pq, int i, int j) {
+        ops++;
+        return pq[i-1].compareTo(pq[j-1]) < 0;
+    }
+
+    private static <T> void exch(T[] pq, int i, int j) {
+        ops++;
+        final T swap = pq[i-1];
+        pq[i-1] = pq[j-1];
+        pq[j-1] = swap;
+    }
+
+    
+    private static <T extends Comparable<? super T>> boolean less(T v, T w) {
+        ops++;
+        return (v.compareTo(w) < 0);
+    }
+
+
+    
+    private static <T extends Comparable<? super T>> boolean isSorted(T[] a) {
+        for (int i = 1; i < a.length; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+    
+    private static <T> void show(T[] a) {
+        for (T element : a) {
+            StdOut.println(element);
+        }
+    }    
+
+    private static int ops;
+    private static double time;
+    private static void countops (int N) {
+        final Integer[] a = new Integer[N];
+        
+        for (int i = 0; i < a.length; i++) a[i] = StdRandom.uniform (N);
+        
+        
+        
+
+        ops = 0;
+        final Stopwatch sw = new Stopwatch ();
+        sort (a);
+        time = sw.elapsedTime ();
+        if (! isSorted (a)) throw new Error ();
+        
+    }
+    public static void main(String[] args) {
+        int N = 2000;
+        countops (N);
+        
+        double prevOps = ops;
+        double prevTime = time;
+        for (int i=0; i<40; i++) {
+            N *= 2;
+            countops (N);
+            StdOut.printf("%8d %10d %5.1f [%5.3f %5.3f]\n", N, ops, ops/prevOps, time, time/prevTime);
+            prevOps = ops;
+            prevTime = time;
+        }
+    }
+
+    
+    public static void bookMain(String[] args) {
+        
+        
+
+        
+        
+        
+
+        final String[] a = StdIn.readAllStrings();
+        sort(a);
+        show(a);
+    }
 }

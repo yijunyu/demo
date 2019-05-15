@@ -1,79 +1,68 @@
-// Given a set of characters represented by a String, return a list containing all subsets of the characters.
-//
-// Assumptions
-// There could be duplicate characters in the original set.
-//
-// Examples
-// Set = "abc", all the subsets are ["", "a", "ab", "abc", "ac", "b", "bc", "c"]
-// Set = "abb", all the subsets are ["", "a", "ab", "abb", "b", "bb"]
-// Set = "", all the subsets are [""]
-// Set = null, all the subsets are []
 
-/*
- * Method 1
- */
-/*
-public class Solution {
-  public List<String> subSets(String set) {
-    List<String> result = new ArrayList<String>();
-    // Corner check
-    if (set == null) {
-      return result;
-    }
-    // Depth-First-Search
-    char[] array = set.toCharArray();
-    Arrays.sort(array);
-    StringBuilder sb = new StringBuilder();
-    DFS(array, result, 0, sb);
-    return result;
-  }
-  
-  private void DFS(char[] array, List<String> result, int index, StringBuilder sb) {
-    // Base case
-    if (index == array.length) {
-      result.add(sb.toString());
-      return;
-    }
-    // Recursion rule
-    DFS(array, result, index + 1, sb.append(array[index]));
-    sb.deleteCharAt(sb.length() - 1);
-    // Skip all the consecutive and duplicate elements.
-    while (index < array.length - 1 && array[index] == array[index + 1]) {
-      index++;
-    }
-    DFS(array, result, index + 1, sb);
-  }
-}
-*/
 
-/*
- * Method 2
- */
-public class Solution {
-  public List<String> subSets(String set) {
-    List<String> result = new ArrayList<>();
-    // Corner check
-    if (set == null) {
-      return result;
+import java.util.*;
+import java.nio.file.*;
+import java.io.*;
+
+public class Bubble{
+
+    public static void main(String[] args) throws IOException{
+        
+        Scanner in = new Scanner(Paths.get("../input/input_integers.txt"), "UTF-8");
+        PrintWriter outTime = new PrintWriter("../output/bubble_sort/time.txt", "UTF-8");
+        int[] origin=new int[1<<17];
+        for(int i = 0; i < 1<<17; i++){
+            origin[i] = in.nextInt();
+        }
+
+        int[] exp={2, 5, 8, 11, 14, 17};
+        
+        for(int index : exp){
+            int[] partArray = Arrays.copyOf(origin, 1<<index);
+            
+            
+            long enduration = sort(partArray)/1000;
+            
+            
+            outTime.println("index: " + index + "\ntime: " + enduration + "\tmicroseconds.");
+            outTime.flush();
+
+            
+            System.out.println("index: " + index + "\ntime: " + enduration + "\tmicroseconds.");
+            PrintWriter outSort = new PrintWriter("../output/bubble_sort/result_"+index+".txt", "UTF-8");
+            for(int j = 0; j < 1<<index; j++){
+                outSort.println(partArray[j]);
+                outSort.flush();
+            }
+        }
     }
-    // Depth-First-Search
-    char[] array = set.toCharArray();
-    Arrays.sort(array);
-    StringBuilder sb = new StringBuilder();
-    DFS(array, result, 0, sb);
-    return result;
-  }
-  
-  private void DFS(char[] array, List<String> result, int index, StringBuilder sb) {
-    // Base case
-    result.add(sb.toString());
-    // Recursion rule
-    for (int i = index; i < array.length; i++) {
-      if (i == index || array[i] != array[i - 1]) {
-        sb.append(array[i]);
-        DFS(array, result, i + 1, sb);
-        sb.deleteCharAt(sb.length() - 1);
-      }
+    
+    
+    public static long sort(int[] A){
+        
+        long startTime = System.nanoTime();
+        
+        
+        bubble_sort(A);
+
+        
+        long endTime = System.nanoTime();
+        return endTime - startTime;
     }
-  }
+
+    public static void bubble_sort(int[] A){
+        int tmp;
+        int l = A.length;
+        for(int i = 0; i < l - 1; i++){
+            for(int j = 1; j < l; j++){
+                if(A[j - 1] > A[j]){
+                    
+                    tmp = A[j];
+                    A[j] = A[j - 1];
+                    A[j - 1] = tmp;
+                }
+            }
+        }
+    }
 }
+

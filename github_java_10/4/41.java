@@ -1,42 +1,75 @@
-package com.sorting;
 
-/**
- * Created with IntelliJ IDEA.
- * User: abyss
- * Date: 8/9/12
- * Time: 12:03 PM
- * To change this template use File | Settings | File Templates.
- */
-public class Insertionsort {
-    private int[] numbers;
+package heapsort;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 
-    public void sort(int[] values) {
-        // Check for empty or null array
-        if (values ==null || values.length==0){
-            return;
-        }
-        this.numbers = values;
-        for(int i = 1; i < numbers.length; i++) {
-           int j = i;
-           int value = numbers[i];
+public class Heapsort {
 
-           while(j > 0 && (numbers[j-1] > value))     {
-               numbers[j] = numbers[j-1];
-               j--;
-           }
-
-           numbers[j] = value;
-        }
-        for(int n=0; n< numbers.length; n++) {
-            System.out.print(numbers[n] + ", ");
+    public static void main(String args[]) throws IOException
+    {
+       File file = new File("C:\\Users\\Rangita\\Documents\\NetBeansProjects\\heapsort\\src\\heapsort\\heapsort.txt");
+        byte[] bytes = new byte[(int) file.length()];
+        FileInputStream fis = new FileInputStream(file);
+        fis.read(bytes);
+        fis.close();
+        String[] valueStr = new String(bytes).trim().split("\\s+");
+        int[] ec = new int[valueStr.length];
+        for (int i = 0; i < valueStr.length; i++) 
+        ec[i] = Integer.parseInt(valueStr[i]);
+        Heapsort ob = new Heapsort();
+        print(ec);
+        ob.sort(ec);
+        print(ec);
+    }
+    static void print(int sorted[])
+    {
+        int n = sorted.length;
+        for (int i=0; i<n; ++i)
+            System.out.print(sorted[i]+" ");
+        System.out.println();
+    }
+ 
+    public void sort(int eCost[])
+    {
+        int n = eCost.length;
+ 
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify_eC(eCost, n, i);
+ 
+        
+        for (int i=n-1; i>=0; i--)
+        {
+            
+            int temp = eCost[0];
+            eCost[0] = eCost[i];
+            eCost[i] = temp;
+            heapify_eC(eCost, i, 0);
         }
     }
-
-    public static void main(String ... args)  {
-        Insertionsort is = new Insertionsort();
-        int a[] = {3,7,8,5,2,1,9,5,4};
-        is.sort(a);
-   }
-
+ 
+    void heapify_eC(int sorting[], int n, int i)
+    {
+        int root = i;  
+        int r = 2*i + 2;  
+        int l = 2*i + 1; 
+         
+        if (l < n && sorting[l] > sorting[root])
+            root = l;
+ 
+        if (r < n && sorting[r] > sorting[root])
+            root = r;
+         
+        if (root != i)
+        {
+            int temp = sorting[i];
+            sorting[i] = sorting[root];
+            sorting[root] = temp;
+            heapify_eC(sorting, n, root);
+        }
+    }
+ 
+    
 }
