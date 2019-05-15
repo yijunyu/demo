@@ -1,14 +1,4 @@
-
-
-public class Shellsort {
-
-  static Counter counter = null;
-  public Shellsort(Counter c) {
-      this.counter = c;
-    }
-
-    
-    public static <T extends Comparable<? super T>> void sort(T[] input) {
+ public static <T extends Comparable<? super T>> void sort(T[] input) {
         if (input == null || input.length < 2) {
             return;
         }
@@ -30,9 +20,3 @@ public class Shellsort {
         }
     }
     
-    private static void count() {
-      if (counter != null) {
-        counter.counterUp(1);
-      }
-    }
-}

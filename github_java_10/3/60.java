@@ -53,41 +53,5 @@ public class TopologicalSort
         return topological_sort;
     }	
  
-    public static void main(String...arg)
-    {
-        int number_no_nodes, source;
-        Scanner scanner = null;
-        int topological_sort[]  = null;
-        try 
-        {
-            System.out.println("Enter the number of nodes in the graph");
-            scanner = new Scanner(System.in);
-            number_no_nodes = scanner.nextInt();
- 
-            int adjacency_matrix[][] = new int[number_no_nodes + 1][number_no_nodes + 1];
-            System.out.println("Enter the adjacency matrix");
-	    for (int i = 1; i <= number_no_nodes; i++)
-                for (int j = 1; j <= number_no_nodes; j++)
-                    adjacency_matrix[i][j] = scanner.nextInt();
- 
-            System.out.println("Enter the source for the graph");
-            source = scanner.nextInt();
- 
-            System.out.println("The Topological sort for the graph is given by ");
-            TopologicalSort toposort = new TopologicalSort();
-            topological_sort = toposort.topological(adjacency_matrix, source);
-            System.out.println();
-            for (int i = topological_sort.length - 1; i > 0; i-- )
-            {
-                if (topological_sort[i] != 0)
-                    System.out.print(topological_sort[i]+"\t");
-            } 	
-        }catch(InputMismatchException inputMismatch)
-         {
-             System.out.println("Wrong Input format");
-         }catch(NullPointerException nullPointer)
-         {
-         }
-        scanner.close();
-    }
+    
 }

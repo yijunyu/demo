@@ -1,25 +1,3 @@
-package com.lufficc.algorithm.Sort.HeapSort;
-
-import com.lufficc.algorithm.utils.Printer;
-import com.lufficc.algorithm.utils.RandomUtils;
-
-
-public class HeapSort {
-    int a[] = RandomUtils.randomArray(0);
-
-    public static void main(String[] args) {
-        HeapSort heapSort = new HeapSort();
-        Printer.printArray(heapSort.a);
-        heapSort.buildMaxHeap(heapSort.a);
-        Printer.printArray(heapSort.a);
-        Printer.print("maximum:" + heapSort.maximum());
-        Printer.print("extractMax:" + heapSort.extractMax());
-        Printer.print("after extractMax:");
-        Printer.printArray(heapSort.a);
-        Printer.print("after heapIncreaseKey:");
-        heapSort.heapIncreaseKey(5, 9999);
-        Printer.printArray(heapSort.a);
-    }
 
     public void heapSort(int[] a) {
         buildMaxHeap(a);
@@ -111,4 +89,4 @@ public class HeapSort {
         this.a = newA;
         heapIncreaseKey(a.length - 1, key);
     }
-}
+

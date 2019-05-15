@@ -1,17 +1,4 @@
-import java.util.Arrays;
-
-public class Example {
-
-   public static void main(String[] args) {
-
-      int[] arr = {95,74,58,32,11,88,64,42,23,3};
-      System.out.println("Unsorted: " + Arrays.toString(arr));
-
-      selectionSort(arr);
-      System.out.println("Sorted  : " + Arrays.toString(arr));
-   }
-
-   public static void selectionSort(int[] arr) {
+  public static void selectionSort(int[] arr) {
 
       for (int i = 0; i < arr.length - 1; i++) {
          int index = i;
@@ -26,6 +13,3 @@ public class Example {
          arr[i] = tmp;
       }
    }
-}
-
-

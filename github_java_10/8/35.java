@@ -1,7 +1,4 @@
-
-class QuickSort
-{
-    static int partition(int arr[], int low, int high)
+ static int partition(int arr[], int low, int high)
     {
         int pivot = arr[high]; 
         int i = (low-1); 
@@ -42,22 +39,3 @@ class QuickSort
         }
     }
  
-    
-    static void printArray(int arr[])
-    {
-        int n = arr.length;
-        for (int i=0; i<n; ++i)
-            System.out.print(arr[i]+" ");
-        System.out.println();
-    }
- 
-    
-    public static void main(String args[])
-    {
-        int arr[] = {10,7,8,9,1,5};
-        int n = arr.length;
-        sort(arr, 0, n-1);
-        System.out.println("sorted array");
-        printArray(arr);
-    }
-}

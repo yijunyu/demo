@@ -1,8 +1,4 @@
-import java.lang.Comparable;
 
-
-public class Shell {
-    
     public static void sort(Comparable[] a) {
         int N = a.length;
         
@@ -34,4 +30,3 @@ public class Shell {
         a[i] = a[j];
         a[j] = swap;
     }
-}

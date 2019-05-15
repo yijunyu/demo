@@ -1,16 +1,4 @@
-package Sorting;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
-
-public class Quick extends Sort {
-
-    @Override
-    public void sort(Object[] arr, Comparator comparator) {
+ public void sort(Object[] arr, Comparator comparator) {
         
         shuffleArray(arr);
         sort(arr, 0, arr.length - 1, comparator);
@@ -76,4 +64,3 @@ public class Quick extends Sort {
 
         return j;
     }
-}

@@ -1,10 +1,3 @@
-package mx.sorting;
-
-public class Mergesort {
-  private int[] array;
-  private int[] tempMergArr;
-  private int length;
-
 
   public void sort(int inputArr[]) {
     this.array = inputArr;
@@ -51,15 +44,3 @@ public class Mergesort {
     }
 
   }
-
-  public static void main(String a[]) {
-
-    int[] inputArr = {45, 23, 11, 9};
-    Mergesort mms = new Mergesort();
-    mms.sort(inputArr);
-    for(int i : inputArr) {
-      System.out.print(i);
-      System.out.print(" ");
-    }
-  }
-}

@@ -1,18 +1,4 @@
-import java.lang.*;
-import java.io.*;
-import java.util.*;
-public class Mergesort{
-  private static int sz;
-  private static int arr[];
-  public static void main(String args[])
-  {
-    read();
-    printarr();
-    mergesort(0,sz-1);
-    printarr();
-  }
-  
-  private static void mergesort(int l,int r)
+ private static void mergesort(int l,int r)
   {
     if(l<r)
     {
@@ -53,25 +39,3 @@ public class Mergesort{
           arr[k++]=a[i++];
   }
   
-  private static void read()
-  {
-    println("Enter the size of the array needed to be sorted:-");
-    Scanner cin=new Scanner(System.in);
-    sz=cin.nextInt();
-    println("Enter "+sz+" elements needed to be sorted:-");
-    arr=new int[sz];
-    for(int i=0;i<sz;i++)
-      arr[i]=cin.nextInt();
-  }
-  
-  private static void printarr(){
-    for(int i:arr)
-      System.out.print(i+" ");
-    System.out.println();
-  }
-  
-  private static void println(Object line)
-  {
-    System.out.println(line);
-  }
-}

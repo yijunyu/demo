@@ -1,20 +1,8 @@
-import java.time.*;
-
-class heapsort {
-
-    public static void main(String[] args) 
-    {
-        tester(1000);
-        tester(1000000);
-        tester(10000000);
-        tester(100000000);
-        tester(1000000000);
-    }
 
     private static double[] makeRandom(int n) 
     {
         double[] toBeSorted = new double[n+1];
-        for(int k = 1; k < toBeSorted.length; k++)	
+        for(int k = 1; k < toBeSorted.length; k++)  
             toBeSorted[k] = Math.random() * (n); 
         return toBeSorted;
     }
@@ -24,10 +12,10 @@ class heapsort {
         buildHeap(A);
         for(int k = A.length; k > 1; k--)
         {
-        	heapify(A, 1, k);
-        	swap(A,1,k-1);
+            heapify(A, 1, k);
+            swap(A,1,k-1);
         }    
-	}
+    }
 
     private static void buildHeap(double[] A) 
     {
@@ -45,16 +33,16 @@ class heapsort {
         int max;
         if((lchild < index) && (A[lchild]>A[k])) 
         {
-        	max = lchild;
+            max = lchild;
         } else {
-        	max = k;
+            max = k;
         }
         if(rchild < index && A[rchild]>A[max]) 
-           	max = rchild;
+            max = rchild;
         if(max != k) 
         {
-        	swap(A,max,k);
-        	heapify(A, max, index);
+            swap(A,max,k);
+            heapify(A, max, index);
         }
     }
 
@@ -75,21 +63,3 @@ class heapsort {
         A[p] = A[q];
         A[q] = temp;
     }
-
-    private static int tester(int n) 
-    {
-        double[] test = makeRandom(n);  
-        long startTime = System.currentTimeMillis(); 
-        sort(test);
-        long endTime = System.currentTimeMillis();
-        long timeElapsed = endTime-startTime;
-        if(!isSorted(test)) 
-        {
-            System.out.println("Sort failed");
-        	return 1;
-        }
-        System.out.println("Sorting of "+n+" integers completed successfully in " +timeElapsed+ " milliseconds");
-        
-        return 0;
-    }
-}

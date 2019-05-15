@@ -1,47 +1,3 @@
-
-package EvacSim.jme3tools.navmesh.util;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Vector;
-
-
-public abstract class Heap<T> extends Vector<T> {
-    
-    
-
-    private Comparator<T> comp = null;
-    
-    
-    
-    
-    protected boolean isHeap = true;
-
-    
-    public Heap() {
-        super();
-    }
-
-    
-    public Heap(Comparator<T> c) {
-        super();
-        comp = c;
-    }
-
-    
-    public Heap(int capacity) {
-        super(capacity);
-    }
-
-    
-    public Heap(Collection<T> c) {
-        super();
-        addAll(c);
-    }
-
-    
-    @Override
     public T remove(int index) {
         if (!isHeap) {
             rebuildHeap();
@@ -132,23 +88,6 @@ public abstract class Heap<T> extends Vector<T> {
         }
 
         elementData = a;
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-        
-        
-        
-        
         
         
         isHeap = false;
@@ -198,9 +137,3 @@ public abstract class Heap<T> extends Vector<T> {
     private void heapify(int node) {
         heapify(node, size());
     }
-
-    
-    public boolean isHeap() {
-        return isHeap;
-    }
-}

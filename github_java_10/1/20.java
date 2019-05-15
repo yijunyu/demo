@@ -1,9 +1,4 @@
-package sort;
-
-
-public class Sort_03_InsertionSort {
-
-    public static int[] insertionSort(int[] arr) {
+public static int[] insertionSort(int[] arr) {
         for (int i = 1; i < arr.length; i++) {
             for (int j = i; j != 0; j--) {
                 if (arr[j-1] > arr[j]) {
@@ -21,15 +16,3 @@ public class Sort_03_InsertionSort {
         arr[index1] = arr[index2];
         arr[index2] = temp;
     }
-
-    public static void printArray(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-    }
-
-    public static void main(String[] args) {
-        int[] arr = {1, 5, 4, 8, 2, 3, 0, 9, 7, 4, 5};
-        printArray(insertionSort(arr));
-    }
-}

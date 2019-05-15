@@ -51,11 +51,4 @@ public class Insertionsort {
 
         }
 
-
-
-    public static void main(String[] args) {
-        ListNode in = ListNode.CreateListNode(new int[]{1});
-        Insertionsort is= new Insertionsort();
-        ListNode.print(is.insertionSortList(in));
-    }
 }

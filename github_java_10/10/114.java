@@ -9,14 +9,6 @@ public class BucketSort {
     private int noOfBuckets = 5;
 
 
-    public static void main(String[] args) {
-        BucketSort bucketSort = new BucketSort();
-        int[] values = {1, 12, 113, 13, 1, 13, 1, 11, 1238, 131, 13, 1, 9, 100123, 123, 222};
-        for (int i = 0; i < values.length; i++) {
-            bucketSort.insert(values[i]);
-        }
-        bucketSort.sortAllBuckets();
-    }
     public BucketSort() {
         buckets = new HashMap<Integer, List<Integer>>();
         for (int i = 0; i < noOfBuckets; i++) {

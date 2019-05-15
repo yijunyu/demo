@@ -61,17 +61,5 @@ public class TopologicalSort {
         stringStack.add(name);
     }
 
-    public static void main(String[] args) {
-        TopologicalSort topologicalSort = new TopologicalSort();
-        topologicalSort.addPair("Naveen", "Satish");
-        topologicalSort.addPair("Satish", "Anushree");
-        topologicalSort.addPair("Satish", "Sandeep");
-        topologicalSort.addPair("Gurinder", "Naveen");
-        topologicalSort.addPair("Dheeraj","Gurinder");
-        topologicalSort.addPair("Dheeraj","Gurinder1");
-
-
-        topologicalSort.topologicalSort();
-    }
 
 }

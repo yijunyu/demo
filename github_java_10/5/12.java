@@ -1,9 +1,4 @@
-import java.util.Arrays;
-
-public class JavaBubbleSort{
-  public static int counter = 0;
-
-  public static int[] bubbleSort(int arr[]){
+public static int[] bubbleSort(int arr[]){
     int n = arr.length;
     boolean swapped = false;
     for(int i=0;i<n-1;i++){
@@ -21,17 +16,3 @@ public class JavaBubbleSort{
 
     return arr;
   }
-
-  public static  void main(String[] args){
-    JavaBubbleSort jbs = new JavaBubbleSort();
-    
-    int[] inputs = {2,3,4,5,6,7,8,9,10,11,12,13};
-    inputs = jbs.bubbleSort(inputs);
-    print(inputs);
-  }
-
-  public static void print(int arr[]){
-    System.out.println(Arrays.toString(arr));
-    System.out.println(counter);
-  }
-}

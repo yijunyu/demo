@@ -1,9 +1,4 @@
-import java.util.*;
-
-
-public class BucketSort {
-
-    public ArrayList<Integer> bucketSort(int[] array){
+public ArrayList<Integer> bucketSort(int[] array){
 
         ArrayList<Integer> result = new ArrayList<>();
         int min = array[0];
@@ -97,34 +92,4 @@ public class BucketSort {
         return array;
     }
 
-    public static void main(String[] args){
-        int[] arrayToSort = {9,61,7,8,61,3,5,99};
-
-        
-
-        BucketSort bucketSort = new BucketSort();
-        ArrayList<Integer> resultList = bucketSort.bucketSort(arrayToSort);
-
-
-        
-
-
-
-
-
-
-
-        System.out.println();
-
-
-
-        for (Integer element :
-                resultList) {
-            System.out.print(element+" ");
-        }
-
-        System.out.println();
-
-
-    }
-}
+    

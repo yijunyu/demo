@@ -1,9 +1,4 @@
-import java.util.*;
-
-
-public class MergeSort {
-    
-    
+  
     void merge(int A[], int l, int m, int r) {
         
         int nL = m - l + 1; 
@@ -60,19 +55,3 @@ public class MergeSort {
             merge(A, l, mid, r); 
         }
     }
-    
-    public static void main(String args[]) {
-        int Arr[] = {38, 27, 43, 3, 9, 82, 10};
-
-        System.out.println("Unsorted Array:");
-        
-        System.out.println(Arrays.toString(Arr));
-
-        
-        MergeSort ob = new MergeSort();
-        ob.merge_sort(Arr, 0, Arr.length - 1); 
-
-        System.out.println("\nSorted Array:");
-        System.out.println(Arrays.toString(Arr)); 
-    }
-}

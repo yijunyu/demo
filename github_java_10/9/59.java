@@ -1,23 +1,4 @@
-package pl.coderstrust.sort;
-
-import java.util.Arrays;
-
-
-public class SelectionSortSort {
-    public static void main(String[] args) {
-
-        int[] array = {5, 4, 1, 2, 9, 2, 7};
-
-        System.out.println(Arrays.toString(array));
-
-        SelectionSortSort myObject = new SelectionSortSort();
-        myObject.sort(array);
-
-        System.out.println(Arrays.toString(array));
-
-    }
-
-    public int[] sort(int[] array) {
+ public int[] sort(int[] array) {
         for (int j = 0; j < array.length; ++j) {
             int minimumNumberIndex = getMinimumNumberIndex(array, j);
             swap(array, j, minimumNumberIndex);
@@ -40,7 +21,3 @@ public class SelectionSortSort {
         array[j] = array[minimumNumberIndex];
         array[minimumNumberIndex] = temp;
     }
-
-
-}
-

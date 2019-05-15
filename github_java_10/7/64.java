@@ -1,12 +1,3 @@
-package com.github.algorithms.sorting;
-
-
-public class Shellsort {
-  private int array[];
-
-  public Shellsort(int array[]) {
-    this.array = array;
-  }
 
   public int[] sort() {
     double d;
@@ -31,4 +22,3 @@ public class Shellsort {
     }
     return array;
   }
-}

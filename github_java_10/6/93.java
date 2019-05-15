@@ -29,13 +29,5 @@ public class RadixSort_Java {
             h *= 10;
         }
     }
-    
-    public static void main(String[] args) {
-        
-        radixSort(2);
-        for (int i = 0; i < size; i++) {
-            System.out.print(a[i] + " ");
-        }
-    }
-    
+
 }

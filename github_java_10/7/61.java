@@ -1,13 +1,4 @@
-package stanford.algs4;
-
-import stanford.stdlib.StdIn;
-import stanford.stdlib.StdOut;
-
-
-
-public class Shell {
-
-    
+  
     public static void sort(Comparable[] a) {
         int N = a.length;
 
@@ -42,35 +33,3 @@ public class Shell {
         a[i] = a[j];
         a[j] = swap;
     }
-
-    
-    private static boolean isSorted(Comparable[] a) {
-        for (int i = 1; i < a.length; i++)
-            if (less(a[i], a[i - 1]))
-                return false;
-        return true;
-    }
-
-    
-    private static boolean isHsorted(Comparable[] a, int h) {
-        for (int i = h; i < a.length; i++)
-            if (less(a[i], a[i - h]))
-                return false;
-        return true;
-    }
-
-    
-    private static void show(Comparable[] a) {
-        for (int i = 0; i < a.length; i++) {
-            StdOut.println(a[i]);
-        }
-    }
-
-    
-    public static void main(String[] args) {
-        String[] a = StdIn.readStrings();
-        Shell.sort(a);
-        show(a);
-    }
-
-}

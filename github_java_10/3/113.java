@@ -1,30 +1,4 @@
-import java.util.*;
-class Main {
-  public static void main(String[] args) {
-    System.out.println("hello world");
-    
-   
-    
-    
 
-    
-
-	http:
-	from 3:00
-
-    Graph g = new Graph(6);
-    g.addEdge(1, 2);
-    g.addEdge(2, 3);
-    g.addEdge(1, 3);
-    g.addEdge(2, 4);
-    g.addEdge(3, 4);
-    g.addEdge(3, 5);
-    Deque<Integer> result = g.topologicalSort();
-    
-    while(!result.isEmpty())
-    	System.out.print(result.pop() + " ");
-  }
-}
 
 class Graph{
 	private int V;

@@ -1,21 +1,4 @@
-public class Selectionsort {
-
-  public static void main(String[]args) {
-
-    int[] numbers = { 10,9,8,7,6,5,4,3,2,1 };
-    int size = numbers.length;
-
-    int[] sorted = selectionSort(numbers,size);
-
-    for(int i=0; i < sorted.length; i++) {
-      System.out.print(sorted[i]);
-    }
-
-
-
-  }
-
-  public static int[] selectionSort(int[] unsorted, int n) {
+ public static int[] selectionSort(int[] unsorted, int n) {
 
     
     
@@ -43,5 +26,3 @@ public class Selectionsort {
     return list;
 
   }
-
-}

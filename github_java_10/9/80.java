@@ -1,9 +1,4 @@
-
-
-
-public class GeneralizedSortSelectionSort
-{
-    public static void sort(Comparable[] somearray, int numberused)
+ public static void sort(Comparable[] somearray, int numberused)
     {
         int index, indexOfNextSmallest;
         for(index = 0; index < numberused - 1; index++)
@@ -39,5 +34,3 @@ public class GeneralizedSortSelectionSort
         somearray[i] = somearray[j];
         somearray[j] = temp;
     }
-
-}

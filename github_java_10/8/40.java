@@ -1,26 +1,4 @@
-
-
-
-
-import java.io.*;
-import java.util.*;
-
-public class Solution {
-
-    public static void main(String[] args) {
-        
-        Scanner input = new Scanner(System.in);
-        int n = input.nextInt();
-        ArrayList<Integer> ar = new ArrayList<>();
-        for(int i=0; i<n; i++){
-            ar.add(input.nextInt());
-        }
-        quickSort(ar);
-        for(int i=0; i<n; i++){
-            System.out.print(ar.get(i)+" ");
-        }
-    }
-    
+ 
     public static void quickSort(ArrayList<Integer> ar){
         
         int n = ar.size();
@@ -66,4 +44,3 @@ public class Solution {
         }
         return;
     }
-}

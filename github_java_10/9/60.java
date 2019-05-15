@@ -1,41 +1,4 @@
-package Sorting;
-
-import java.util.Iterator;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-public class SelectionSort_JAVA {
-    public static void sorting (int[] list, int n) {
+  public static void sorting (int[] list, int n) {
         int i, j, least, temp;
         
         for (i = 0; i < n - 1; i++) {
@@ -57,14 +20,3 @@ public class SelectionSort_JAVA {
             }
         }
     }
-    
-    public static void main(String[] args) {
-        int test[]  = {10, 9, 2, 7, 80};
-        
-        sorting(test, test.length);
-        
-        for (int data : test) {
-            System.out.print(data + ", ");
-        }
-    }
-}

@@ -1,11 +1,4 @@
-package com.linbo.algs.sortings;
-
-
-public class Shell {
-
-  private Shell() { }
-
-  public static void sort(Comparable[] a) {
+ public static void sort(Comparable[] a) {
     int n = a.length;
 
     
@@ -32,15 +25,3 @@ public class Shell {
     a[i] = a[j];
     a[j] = swap;
   }
-
-  public static void main(String args[]) {
-    Integer[] a = {6,2,1,4,23,11,9,43,97,111,3,5,12,36};
-
-    Shell.sort(a);
-
-    for (int i: a) {
-      System.out.print(i + " ");
-    }
-  }
-
-}

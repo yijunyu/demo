@@ -72,25 +72,5 @@ public class AcyclicSP {
         }
     }
 
-    
-    public static void main(String[] args) {
-        In in = new In(args[0]);
-        int s = Integer.parseInt(args[1]);
-        EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
 
-        
-        AcyclicSP sp = new AcyclicSP(G, s);
-        for (int v = 0; v < G.V(); v++) {
-            if (sp.hasPathTo(v)) {
-                System.out.printf("%d to %d (%.2f)  ", s, v, sp.distTo(v));
-                for (DirectedEdge e : sp.pathTo(v)) {
-                    System.out.print(e + "  ");
-                }
-                System.out.println();
-            }
-            else {
-                System.out.printf("%d to %d   no path\n", s, v);
-            }
-        }
-    }
 }

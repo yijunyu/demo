@@ -1,21 +1,4 @@
-
-import java.util.Arrays;
-
-public class RadixSort {
-
-    private static int max(int[] nums) {
-
-        int mx = Integer.MIN_VALUE;
-
-        for (int n : nums) {
-            mx = Math.max(mx, n);
-        }
-
-        return mx;
-
-    }
-
-    private static void sortCount(int[] nums, int mask) {
+private static void sortCount(int[] nums, int mask) {
 
         int[] counts = new int[10];
         int[] out = new int[nums.length];
@@ -49,16 +32,4 @@ public class RadixSort {
 
     }
 
-    public static void main(String[] args) {
-
-        int[] nums = new int[]{1, 52, 2, 25, 6, 10, 25, 200, 15, 12, 8, 2};
-
-        System.out.println(Arrays.toString(nums));
-
-        radixSort(nums);
-
-        System.out.println(Arrays.toString(nums));
-
-    }
-
-}
+    

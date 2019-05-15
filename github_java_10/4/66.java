@@ -172,49 +172,5 @@ public class Heap {
         }
     }
 
-    public static void main(String args[]){
-
-        Heap maxHeap = new Heap(7);
-        maxHeap.insertMax(4);
-        maxHeap.insertMax(3);
-        maxHeap.insertMax(6);
-        maxHeap.insertMax(5);
-        maxHeap.insertMax(7);
-        maxHeap.insertMax(2);
-        maxHeap.insertMax(1);
-
-        Heap minHeap = new Heap(7);
-        minHeap.insertMin(4);
-        minHeap.insertMin(3);
-        minHeap.insertMin(6);
-        minHeap.insertMin(5);
-        minHeap.insertMin(7);
-        minHeap.insertMin(2);
-        minHeap.insertMin(1);
-
-        System.out.print("Max-Heap after Insertions: ");
-        System.out.println(Arrays.toString(maxHeap.heap));
-
-        System.out.print("Min-Heap after Insertions: ");
-        System.out.println(Arrays.toString(minHeap.heap));
-
-
-        
-        for(int i=0;i<7;i++){
-            maxHeap.extractMaxMin();
-            maxHeap.MaxHeapify(0);
-        }
-        System.out.print("\nHeap Sort on Max-Heap ");
-        System.out.println(Arrays.toString(maxHeap.heap));
-
-        
-        for(int i=0;i<7;i++){
-            minHeap.extractMaxMin();
-            minHeap.MinHeapify(0);
-        }
-        System.out.print("\nHeap Sort on Min-Heap ");
-        System.out.println(Arrays.toString(minHeap.heap));
-
-    }
 
 }

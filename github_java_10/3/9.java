@@ -64,20 +64,5 @@ public class Topological {
         return false;
     }
 
-    public static void main(String[] args) {
-        Graph graph = new Graph(true, 4);
-        graph.add(new Edge(0, 1));
-        graph.add(new Edge(0, 2));
-        graph.add(new Edge(1, 3));
-        graph.add(new Edge(2, 3));
 
-        Topological topological = new Topological(graph);
-        topological.sort();
-
-        Deque<Integer> s = topological.stack;
-
-        while (!s.isEmpty()) {
-            System.out.println(s.pop());
-        }
-    }
 }

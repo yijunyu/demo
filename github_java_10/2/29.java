@@ -1,22 +1,4 @@
-import java.util.Scanner; 
-
-public class mergesort {
-  public void solve() { 
-    
-    Scanner sc = new Scanner(System.in);
-    String[] input = sc.nextLine().split(" ");
-    int n = input.length; 
-    int[] arr = new int[n];
-    for (int j = 0; j < n; j++) 
-      arr[j] = Integer.parseInt(input[j]);
-    
-    arr = mergesort(arr);
-    
-    for (int i = 0; i < arr.length; i++) 
-      System.out.println(arr[i]);
-  }
-  
-  public int[] mergesort(int[] arr) {
+ public int[] mergesort(int[] arr) {
     int len = arr.length; 
     if (len <= 1)
       return arr; 
@@ -54,17 +36,3 @@ public class mergesort {
     }
     return arr; 
   }
-  
-  public void run() { 
-    int[] a = {1,4,5,6,7}; 
-    int[] b = {2, 3, 5, 7, 8};
-    int[] arr = merge(a, b);
-    
-    for (int i = 0; i < arr.length; i++) 
-      System.out.println(arr[i]); 
-  }
-  
-  public static void main(String args[]) { 
-    new mergesort().run(); 
-  }
-}

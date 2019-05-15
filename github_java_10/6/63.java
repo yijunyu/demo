@@ -7,13 +7,7 @@ class RadixSort {
 		return max;
 	}
 
-	public static void printArray(int[] nums) {
-		for (int num : nums) {
-			System.out.print(num + " ");
-		}
-		System.out.println();
-	}
-
+	
 	public static void countSort(int[] nums, int exponent) {
 		int n = nums.length;
 		int[] output = new int[n];
@@ -42,11 +36,5 @@ class RadixSort {
 		for (int exponent = 1; max / exponent > 0; exponent *= 10) {
 			countSort(nums, exponent);
 		}
-	}
-
-	public static void main(String args[]) {
-		int[] nums = {170, 45, 75, 90, 802, 24, 2, 66};
-		radixSort(nums);
-		printArray(nums);
 	}
 }

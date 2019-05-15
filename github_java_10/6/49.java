@@ -50,20 +50,4 @@ public class radixsort {
 			
     }
  
-	
-    static void print(String arr[], int n)
-    {
-		System.out.println("Lista ordinata: ");
-        for (int i=0; i<n; i++)
-            System.out.print(arr[i]+" ");
-		System.out.println();
-    }
- 
-    public static void main (String[] args)
-    {
-        String arr[] = {"all", "bad", "zoo", "one", "car", "bug", "dad", "two", "lan", "yes", "sin", "yet"};
-        int n = arr.length;
-        radixsort(arr, n);
-        print(arr, n);
-    }
 }

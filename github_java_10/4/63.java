@@ -70,11 +70,4 @@ public class SortAlgoHeapSort {
         return arr;
     }
 
-    public static void main(String[] args) {
-        int[] arr = new int[]{3,1,41,62,73,22};
-        int n = arr.length;
-        createHeap(arr, n);
-        heapSort(arr, n);
-        System.out.println(arr);
-    }
 }

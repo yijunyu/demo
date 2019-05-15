@@ -5,17 +5,7 @@ public class Principal {
 public static void main(String[] args){
 
 int[] vet = {5,10,2,6,3,2};
-int aux;
-int x;
-int y;
-int cont = 0;
-System.out.println("Numeros Desordenados");
 
-	for (x = 0; x < vet.length; x++) { 
-	
-		System.out.print (" "+vet[x]); 
-
-}  
  
 	for ( x = 0; x < vet.length; x++) { 
 
@@ -30,12 +20,5 @@ System.out.println("Numeros Desordenados");
 		}
 	
 	}
-	System.out.println(""); 
-	System.out.println("Vetor organizado:"); 
-		for(x = 0; x<vet.length; x++){
-			System.out.print(" "+vet[x]);
-		}
-	System.out.println(""); 
-	System.out.println("Numero de trocas: \n"+cont); 
-	}
+
 }

@@ -64,16 +64,5 @@ public class TopologicalSort {
 			}
 			stack.push(new Integer(vertex));
 		}
-		public static void main(String[] args) {
-			TopologicalSort obj=new TopologicalSort(6);
-			obj.addEdge(5, 2);
-			obj.addEdge(5, 0);
-			obj.addEdge(4, 0);
-			obj.addEdge(4, 1);
-			obj.addEdge(2, 3);
-			obj.addEdge(3, 1);
-	 
-	        System.out.println("Following is a Topological sort of the given graph");
-	        obj.topologicalSort();
-		}
+	
 }

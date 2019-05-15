@@ -1,6 +1,4 @@
-public class HeapSortJava {
-
-    public void heapify(int arr[], int n, int root) {
+ public void heapify(int arr[], int n, int root) {
         int largestNumber = root;
         int left = 2 * root + 1;
         int right = 2 * root + 2;
@@ -36,23 +34,3 @@ public class HeapSortJava {
             heapify(arr, i, 0);
         }
     }
-
-    static void printArray(int arr[]) {
-        int len = arr.length;
-        for (int i = 0; i < len; i++) {
-            System.out.println(arr[i] + " ");
-        }
-        System.out.println();
-    }
-
-    public static void main(String args[]) {
-        int arr[] = {34, 33, 75, 44, 89, 01};
-        int len = arr.length;
-
-        HeapSort heapSort = new HeapSort();
-        heapSort.sort(arr);
-
-        System.out.println("Sorted array is ");
-        printArray(arr);
-    }
-}

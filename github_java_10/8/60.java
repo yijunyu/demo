@@ -1,33 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-
-public class Quicksort {
-
-    private static int comparisonsCount = 0;
-
-    public static void main(String[] args) throws FileNotFoundException {
-        List<Integer> input = loadData("data.txt");
-
-        int number = quickSort(input, 0, input.size()-1);
-        System.out.println(number);
-    }
-
-    public static List<Integer> loadData(String fileName) throws FileNotFoundException {
-        List<Integer> result = new ArrayList<>();
-        Scanner scan = new Scanner(new File(fileName));
-        while(scan.hasNextLine()) {
-            int element = Integer.parseInt(scan.nextLine());
-            result.add(element);
-        }
-
-        return result;
-    }
-
-    public static int quickSort(List<Integer> array, int start, int end) {
+   public static int quickSort(List<Integer> array, int start, int end) {
         if (start >= end) {
             return 0;
         }
@@ -78,5 +49,3 @@ public class Quicksort {
 
         return mid;
     }
-}
-

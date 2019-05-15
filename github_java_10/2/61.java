@@ -1,18 +1,4 @@
 
-
-
-
-public class Solution {
-    
-    public void sortIntegers2(int [] A) {
-        int n = A.length;
-        if (n > 0) {
-            int [] temp = new int[n];
-            mergeSort(A, 0, n - 1, temp);
-        }
-    }
-    
-
     private void mergeSort(int [] A, int start, int end, int [] temp) {
         
         if (start < end) {
@@ -48,21 +34,3 @@ public class Solution {
             A[p] = temp[p];
         }
     }
-    
-    private void merge(int [] A, int start, int mid, int end, int [] temp) {
-        int i = start, j = mid + 1, k = start;
-        
-        while (i <= mid || j <= end) {
-            if (j > end || (i <= mid && A[i] <= A[j])) {
-                temp[k++] = A[i++];
-            }
-            else {
-                temp[k++] = A[j++];
-            }
-        }
-        
-        for (int p = start; p <= end; ++p) {
-            A[p] = temp[p];
-        }
-    }
-};

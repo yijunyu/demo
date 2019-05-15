@@ -1,5 +1,4 @@
-public class mergesort {	
-	public static void Sort(int[] array,int num) 
+public static void Sort(int[] array,int num) 
     { 
         int[] workArray = new int[array.length]; 
         Sort(array, workArray, 0, num); 
@@ -35,4 +34,3 @@ public class mergesort {
         for (i = leftStart; i < index; ++i) 
             array[i] = workArray[i]; 
     }
-}

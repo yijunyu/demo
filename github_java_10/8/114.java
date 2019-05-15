@@ -1,10 +1,4 @@
-package com.fengqiliu.test.algorithm;
-
-
-public class Quicksort {
-    int[] arr;
-
-    private void swap(int x, int y) {
+  private void swap(int x, int y) {
         int temp = arr[x];
         arr[x] = arr[y];
         arr[y] = temp;
@@ -34,17 +28,3 @@ public class Quicksort {
         arr = arrin;
         quick_sort_recursive(0, arr.length - 1);
     }
-
-    public static void main(String[] args) {
-        int[] data = new int[]{2,3,65,23,57,86,34535,86,868,575,46,345,65564,4322,566,567,78678,9989};
-        Quicksort quicksort = new Quicksort();
-        quicksort.sort(data);
-
-        int i = 0;
-        while (i< quicksort.arr.length){
-            System.out.printf(quicksort.arr[i] + ",");
-            i++;
-        }
-
-    }
-}

@@ -1,16 +1,6 @@
-import java.util.Arrays;
-
-public class Quicksort  {
-  private int[] numbers;
-  private int number;
-  public int cComparisons = 0;
-  public int cSwaps = 0;
-  public long executionTime = 0;
-private String order;
-
-  public void sort(int[] values, String order) {
-	  this.order = order;
-	final long startTime = System.nanoTime();
+ public void sort(int[] values, String order) {
+      this.order = order;
+    final long startTime = System.nanoTime();
     
     if (values == null || values.length == 0){
       return;
@@ -22,9 +12,9 @@ private String order;
   }
   
   public void print(){
-	  System.out.println("Quicksort " + this.order + ": aantal vergelijkingen (" + this.cComparisons + "), aantal swaps (" + this.cSwaps + "), uitvoertijd (" + this.executionTime  + "ms)");
-	  
-	  System.out.println();
+      System.out.println("Quicksort " + this.order + ": aantal vergelijkingen (" + this.cComparisons + "), aantal swaps (" + this.cSwaps + "), uitvoertijd (" + this.executionTime  + "ms)");
+      
+      System.out.println();
   }
 
   private void quicksort(int low, int high) {
@@ -72,4 +62,3 @@ private String order;
     numbers[j] = temp;
     this.cSwaps++;
   }
-} 

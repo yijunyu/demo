@@ -1,16 +1,4 @@
-package chapter2;
-
-import java.util.Arrays;
-
-
-public class MergeSort {
-    public static void main(String[] args) {
-        int[] arr = {4,1,8,6,3,9,7,5,2};
-        mergeSort(arr,0,arr.length-1);
-        System.out.println(Arrays.toString(arr));
-    }
-
-    
+  
     private static void merge(int[] arr, int p, int q, int r){
         int n1 = q - p + 1;
         int n2 = r - q;
@@ -43,4 +31,3 @@ public class MergeSort {
             merge(arr,p,q,r);
         }
     }
-}

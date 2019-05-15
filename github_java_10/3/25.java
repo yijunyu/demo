@@ -1,12 +1,4 @@
-package com.kmcho.com.geeks.graph.toposort;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Stack;
-
-
-public class GfG2 {
-    public static int[] topoSort(ArrayList<Integer> graph[], int N) {
+public static int[] topoSort(ArrayList<Integer> graph[], int N) {
         boolean[] visited = new boolean[N];
         Stack<Integer> stack = new Stack<>();
 

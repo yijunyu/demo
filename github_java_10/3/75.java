@@ -47,25 +47,5 @@ public class TopologicalSort
         }
         return topological_sort;
     }
-    public static void main(String args[])
-    {
-        Scanner d=new Scanner(System.in);
-        int number_of_nodes=d.nextInt();
-        int adjacency_matrix[][]=new int[number_of_nodes+1][number_of_nodes+1];
-        for(int i=1;i<=number_of_nodes;i++)
-        {
-            for(int j=1;j<=number_of_nodes;j++)
-                adjacency_matrix[i][j]=d.nextInt();
-        }
-        int source=d.nextInt();
-        TopologicalSort topsort=new TopologicalSort();
-        int topological_sort[]=topsort.Topological(adjacency_matrix,source);
-        System.out.println();
-        for(int i=topological_sort.length-1;i>=0;i--)
-        {
-            if(topological_sort[i]!=0)
-                System.out.print(topological_sort[i]+"\t");
-        }
-        d.close();
-    }
+ 
 }

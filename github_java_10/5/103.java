@@ -1,10 +1,4 @@
-package com.haowei.codinginterview;
-
-import java.util.Scanner;
-
-
-public class SortBubbleSort {
-    public static void main(String[] args){
+public static void main(String[] args){
         Scanner in = new Scanner(System.in);
         int N = in.nextInt();
         int numbers[] = new int[N];
@@ -22,7 +16,6 @@ public class SortBubbleSort {
             }
         }
 
-        bubbleSortPrinter(numbers, numberOfSwap);
 
     }
 
@@ -31,10 +24,3 @@ public class SortBubbleSort {
         array[pos1] = array[pos2];
         array[pos2] = temp;
     }
-
-    static void bubbleSortPrinter(int[] array, int numberOfSwap){
-        System.out.println("Array is sorted in " + numberOfSwap + " swaps.");
-        System.out.println("First Element: " + array[0]);
-        System.out.println("Last Element: " + array[array.length - 1]);
-    }
-}

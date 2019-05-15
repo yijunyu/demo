@@ -1,15 +1,3 @@
-package com.liyafeng.algorithm.basic.sort;
-
-
-
-public class N_Sort_SelectionSort {
-
-    
-    public static void main(String[] args) {
-        int[] array = {1, 124, 54, 34, 34, 6, 5};
-        sort(array);
-        Util.print(array);
-    }
 
     private static void sort(int[] array) {
         int length = array.length;
@@ -26,5 +14,3 @@ public class N_Sort_SelectionSort {
         }
     }
 
-
-}

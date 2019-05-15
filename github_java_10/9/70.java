@@ -1,6 +1,4 @@
-public class SortSelectionSort implements SorterInterface {
-    @Override
-    public int[] sorter(int[] array) {
+  public int[] sorter(int[] array) {
         int temp, index = 0;
 
         for (int i = 0; i < array.length; i++) {
@@ -18,4 +16,3 @@ public class SortSelectionSort implements SorterInterface {
 
         return array;
     }
-}

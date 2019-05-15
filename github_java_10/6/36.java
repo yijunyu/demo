@@ -1,12 +1,4 @@
-package com.jnu.sortDemo;
-
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class RadixSort {
-
-    public static void radixSort(int[] arr){
+public static void radixSort(int[] arr){
         int radix = getRadix(arr);
         sort(arr, radix);
     }
@@ -42,30 +34,4 @@ public class RadixSort {
     }
 
     
-    private static int getRadix(int[] arr) {
-        int max = getMax(arr);
-        int time = 0;
-        while ( max > 0){
-            max /= 10;
-            time ++;
-        }
-        return time;
-    }
-
-    private static int getMax(int[] arr){
-        int flag = 0;
-        for(int i = 0; i < arr.length; i ++){
-            flag = i;
-            for(int j = i + 1; j < arr.length; j ++){
-                if(arr[j] > arr[flag]){
-                    flag = j;
-                }
-            }
-            if(flag != i){
-                break;
-            }
-        }
-        return arr[flag];
-    }
-
-}
+    

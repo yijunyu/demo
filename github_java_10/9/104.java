@@ -1,11 +1,4 @@
-
-public class SelectionSort extends RandomArray {
-
-    public SelectionSort(int n) {
-        super(n);
-    }
-
-    public void sort() {
+ public void sort() {
         for (int i = 0; i < numbers.length; i++) {
             int minIndex = i;
 
@@ -20,12 +13,3 @@ public class SelectionSort extends RandomArray {
             numbers[minIndex] = temp;
         }
     }
-
-    public static void main(String [] args) {
-        SelectionSort selectionSort = new SelectionSort(10);
-
-        selectionSort.printNumbers();
-        selectionSort.sort();
-        selectionSort.printNumbers();
-    }
-}

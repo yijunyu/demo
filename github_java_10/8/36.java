@@ -1,17 +1,4 @@
-package array;
-
-
-public class Quicksort {
-
-    public static void main(String[] args) {
-        int arr[] = {5, 9, 4, 1, 3, 2, -1};
-        new Quicksort().quickSort(arr, 0, arr.length - 1);
-        for (int num : arr) {
-            System.out.println(num);
-        }
-    }
-
-    public void quickSort(final int[] arr,
+  public void quickSort(final int[] arr,
                           final int low,
                           final int high) {
         if (low >= high) {
@@ -43,5 +30,3 @@ public class Quicksort {
         quickSort(arr, low, mid);
         quickSort(arr, mid + 1, high);
     }
-
-}

@@ -1,10 +1,4 @@
-package com.mpakhomov.algorithms.sort;
-
-
-public class SelectionSort implements Sorting {
-
-    
-    public static void sort(int a[]) {
+ public static void sort(int a[]) {
         final int N = a.length;
         
         
@@ -27,9 +21,3 @@ public class SelectionSort implements Sorting {
         a[i] = a[j];
         a[j] = tmp;
     }
-
-    @Override
-    public void instanceSort(int[] a) {
-        sort(a);
-    }
-}

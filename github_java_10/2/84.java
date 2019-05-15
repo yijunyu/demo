@@ -1,6 +1,4 @@
-class MergeSort {
-
-  void mergeSort(int[] arr, int l, int r) {
+void mergeSort(int[] arr, int l, int r) {
     if (l < r) {
       int mid = (l + r) / 2;
       mergeSort(arr, l, mid);
@@ -48,44 +46,3 @@ class MergeSort {
       k++;
     }
   }
-
-  void printArray(int[] arr) {
-    for (int i = 0; i < arr.length; i++) {
-      System.out.print(arr[i] + " ");
-    }
-    System.out.println();
-  }
-
-  public static void main(String[] args) {
-    MergeSort sort = new MergeSort();
-    int[] arr = {37, 27, 43, 3, 9, 82 , 10};
-    sort.mergeSort(arr, 0, arr.length - 1);
-    sort.printArray(arr);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

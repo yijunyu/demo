@@ -1,10 +1,4 @@
-import java.util.Scanner;
-
-public class heapsort 
-{    
-    private static int N;
-    
-    public static void sort(int arr[])
+  public static void sort(int arr[])
     {       
         heapify(arr);        
         for (int i = N; i > 0; i--)
@@ -45,5 +39,3 @@ public class heapsort
         arr[i] = arr[j];
         arr[j] = tmp; 
     }    
-    
-}

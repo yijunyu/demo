@@ -1,9 +1,4 @@
-package io.loper.algorithm.sort;
-
-
-public class ShellSort {
-
-    public static void shellSort(int[] arr) {
+   public static void shellSort(int[] arr) {
         if (SortUtil.isEmpty(arr)) {
             return;
         }
@@ -19,18 +14,3 @@ public class ShellSort {
             interval /= 2;
         }
     }
-
-    private static void intervalSort(int[] arr, int begin, int end, int interval) {
-        for (int i = begin + interval; i <= end; i += interval) {
-            final int key = arr[i];
-            int position = i;
-
-            while (position >= interval && key < arr[position - interval]) {
-                arr[position] = arr[position - interval];
-                position -= interval;
-            }
-
-            arr[position] = key;
-        }
-    }
-}

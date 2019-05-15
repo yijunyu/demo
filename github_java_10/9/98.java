@@ -1,16 +1,4 @@
-package com.ks.sort.algorithm;
-
-import com.ks.sort.SortingAlgorithm;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class Selectionsort<E extends Comparable> implements SortingAlgorithm<E> {
-
-    List<E> workingList;
-
-    @Override
-    public List<E> sort(final List<E> listToSort) {
+   public List<E> sort(final List<E> listToSort) {
 
         if (listToSort.size() == 0 || listToSort.size() == 1) {
             return listToSort;
@@ -40,4 +28,3 @@ public class Selectionsort<E extends Comparable> implements SortingAlgorithm<E> 
 
         return minimumIndex;
     }
-}

@@ -1,18 +1,4 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-
-public class Sort_BucketSort {
-    
-    
-    
-    
-    
-    
-
-    public int[] bucketSort(int[] num, int bucketSize){
+public int[] bucketSort(int[] num, int bucketSize){
         if(num.length == 0 || num.length == 1) return num;
         
         int max = Integer.MIN_VALUE;
@@ -63,14 +49,4 @@ public class Sort_BucketSort {
     }
 
 
-    public static void main(String[] args){
-        int[] arr = new int[]{2,3,1,3,8,4,5,6,6,7};
-        Sort_BucketSort b = new Sort_BucketSort();
-        b.bucketSort(arr,3);
-    }
-
-
-
-
-
-}
+    

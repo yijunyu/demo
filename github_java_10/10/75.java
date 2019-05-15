@@ -1,18 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
 
-
-public class BucketSort {
-    private int bucketSize;
-    private ArrayList<Integer> arrayOfBuckets;
-    private int[] bucket;
-    private int min=0;
-    private int max=0;
-    private  ArrayList<Integer> inputArray = new ArrayList<Integer>();
-
-    
-
-    
     public void sort(int start){
         for (int j=0; j<= arrayOfBuckets.size(); j++){
             MinHeap heapBucket  = new MinHeap(bucket);
@@ -48,4 +34,3 @@ public class BucketSort {
 
 
     }
-}

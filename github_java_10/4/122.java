@@ -1,26 +1,3 @@
-package javaPractice.algo.sort;
-
-
-import java.util.Random;
-
-
-
-public class Heapsort
-
-{
-
-    private static int[] a;
-
-    private static int   n;
-
-    private static int   left;
-
-    private static int   right;
-
-    private static int   largest;
-
-
-
     public static void buildheap(int[] a)
 
     {
@@ -122,51 +99,5 @@ public class Heapsort
         }
 
     }
-
-
-
-    public static void main(String[] args)
-
-    {
-
-        int N = 20;
-
-        int[] sequence = new int[N];
-
-        Random random = new Random();
-
-
-
-        System.out.println("Heap Sort Test");
-
-
-
-        for (int i = 0; i < N; i++)
-
-            sequence[i] = Math.abs(random.nextInt(100));
-
-
-
-        System.out.println("The original sequence is: ");
-
-        for (int i = 0; i < sequence.length; i++)
-
-            System.out.print(sequence[i] + " ");
-
-
-
-        sort(sequence);
-
-
-
-        System.out.println("\nThe sorted sequence is: ");
-
-        for (int i = 0; i < sequence.length; i++)
-
-            System.out.print(sequence[i] + " ");
-
-    }
-
-}
 
 

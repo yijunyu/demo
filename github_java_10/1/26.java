@@ -1,38 +1,4 @@
-
-package org.burstsort4j;
-
-
-public class Insertionsort {
-
-    private Insertionsort() {
-    }
-
-    
-    public static <T extends Comparable<? super T>> void sort(T[] arr) {
-        if (arr != null) {
-            sort(arr, 0, arr.length - 1);
-        }
-    }
-
-    
-    public static <T extends Comparable<? super T>> void sort(T[] arr, int low, int high) {
-        if (arr == null || arr.length < 2 || low < 0 || high <= low) {
-            return;
-        }
-
-        for (int i = low + 1; i <= high; i++) {
-            T pivot = arr[i];
-            int j = i;
-            while (j > low && pivot.compareTo(arr[j - 1]) < 0) {
-                arr[j] = arr[j - 1];
-                j--;
-            }
-            arr[j] = pivot;
-        }
-    }
-
-    
-    public static void sort(CharSequence[] strings, int low, int high, int depth) {
+  public static void sort(CharSequence[] strings, int low, int high, int depth) {
         if (strings == null || low < 0 || high <= low || depth < 0) {
             return;
         }
@@ -55,4 +21,3 @@ public class Insertionsort {
             }
         }
     }
-}

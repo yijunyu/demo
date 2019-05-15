@@ -69,8 +69,5 @@ public class radixsort{
         }
         System.out.println();
     }
-    public static void main( String[] args ){
-        
-        return;
-    }
+
 }

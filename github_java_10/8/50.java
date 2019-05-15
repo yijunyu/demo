@@ -1,7 +1,4 @@
-package sort;
-
-public class JavaQuickSort {
-    public static void quickSort(int[] numbers) {
+public static void quickSort(int[] numbers) {
         quickSort(numbers, 0, numbers.length - 1);
     }
 
@@ -39,4 +36,3 @@ public class JavaQuickSort {
         a[i] = a[j];
         a[j] = temp;
     }
-}

@@ -31,20 +31,4 @@ public class RadixSort {
 		}
 
 	}
-
-	public static void main(String[] args) {
-
-		int len = (int) Math.floor(Math.random() * 15);
-		int[] a = new int[len];
-		for (int i = 0; i < a.length; i++) {
-			a[i] = (int) Math.floor(Math.random() * 21);
-			System.out.print(a[i] + ",");
-		}
-		System.out.println("排序");
-		sort(a);
-		for (int i = 0; i < a.length; i++) {
-			System.out.print(a[i] + ",");
-		}
-		return;
-	}
 }

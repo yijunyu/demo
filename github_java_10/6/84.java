@@ -61,24 +61,5 @@ class Radix {
          countSort(arr, n, exp);
  }
 
- 
- static void print(int arr[], int n)
- {
-     for (int i=0; i<n; i++)
-         System.out.print(arr[i]+" ");
- }
 
-
- 
- public static void main (String[] args)
- {
-     int arr[] = {170, 45, 75, 90, 802, 24, 2, 66};
-     for(int i:arr)
-    	 System.out.print(i + " ");
-     
-     System.out.println();
-     int n = arr.length;
-     radixsort(arr, n);
-     print(arr, n);
- }
 }

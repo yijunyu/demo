@@ -1,22 +1,3 @@
-package com.gerrard.sort.compare.comb;
-
-import com.gerrard.sort.Sort;
-import com.gerrard.util.ArrayHelper;
-
-
-public class CombSort implements Sort {
-
-    private double shrink = 1.3;
-
-    public double getShrink() {
-        return shrink;
-    }
-
-    public void setShrink(double shrink) {
-        this.shrink = shrink;
-    }
-
-    @Override
     public void sort(int[] array) {
         int gap = array.length;
         boolean sorted = false;
@@ -38,4 +19,3 @@ public class CombSort implements Sort {
             }
         }
     }
-}

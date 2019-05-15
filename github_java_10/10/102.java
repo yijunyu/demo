@@ -1,8 +1,4 @@
-package com.algorithmhelper.generalalgorithms.sorting;
-
-public class BucketSort {
-
-    
+   
     public static void sort(int[] arr) {
         if (arr == null)
             throw new IllegalArgumentException("sort with null array");
@@ -35,4 +31,3 @@ public class BucketSort {
         }
         return max;
     }
-}

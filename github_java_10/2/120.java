@@ -1,17 +1,4 @@
-public class Mergesort {
-    private int[] numbers;
-    private int[] helper;
-
-    private int number;
-
-    public void sort(int[] values) {
-        this.numbers = values;
-        number = values.length;
-        this.helper = new int[number];
-        mergesort(0, number - 1);
-    }
-
-    private void mergesort(int low, int high) {
+private void mergesort(int low, int high) {
         
         if (low < high) {
             
@@ -55,4 +42,3 @@ public class Mergesort {
         }
 
     }
-}

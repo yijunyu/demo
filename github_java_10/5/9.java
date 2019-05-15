@@ -1,9 +1,4 @@
-import java.io.*;
-import java.util.*;
-
-public class Solution {
-
-    public static void bubbleSort(int arr[]) {
+   public static void bubbleSort(int arr[]) {
         int swaps = 0;
         int temp = 0;
         int lastSorted = arr.length - 1;
@@ -20,19 +15,4 @@ public class Solution {
             lastSorted--;
         }
 
-        System.out.println("Array is sorted in " + swaps + " swaps.");
-        System.out.println("First Element: " + arr[0]);
-        System.out.println("Last Element: " + arr[arr.length - 1]);
     }
-
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        int arr[] = new int[n];
-
-        in.nextLine();
-        for(int i = 0; i < n; i++) arr[i] = in.nextInt();
-
-        bubbleSort(arr);
-    }
-}

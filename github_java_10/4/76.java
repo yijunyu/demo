@@ -54,41 +54,7 @@ public class Heap {
 		}
 	}  
     
-    public static void main(String[] args)throws IOException {
-        try{
-            int size,c;
-            int array[];
-            
-            File input = new File("input.txt");         
-            File output = new File("output.txt");       
-            
-            Scanner sc = new Scanner(input);                
-            PrintWriter pw = new PrintWriter(output);
-            
-            size = sc.nextInt();
-            c=0;
-            array = new int [size];
-            
-            while(sc.hasNext()){
-            array[c++] = sc.nextInt();
-            }
-            
-            sort(array);                    
-           
-             for(c = 0;c<array.length;c++){
-                 System.out.print(array[c]+" ");
-            }
-            System.out.println("");
-            
-            for(c = 0;c<array.length;c++){
-                pw.print(array[c]+" ");
-            }
-            pw.close();
-        }
-        catch(FileNotFoundException e){
-            System.out.print(e);
-        }
-    }
+    
     
     public static void buildMaxHeap(int [] array){
     

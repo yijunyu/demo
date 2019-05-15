@@ -1,6 +1,4 @@
-public class SortMergeSort implements SorterInterface {
-    @Override
-    public int[] sorter(int[] array) {
+  public int[] sorter(int[] array) {
         if (array.length <= 1) {
             return array;
         }
@@ -36,4 +34,3 @@ public class SortMergeSort implements SorterInterface {
         System.arraycopy(left, firstIndex, array, union, left.length - firstIndex);
         System.arraycopy(right, secondIndex, array, union, right.length - secondIndex);
     }
-}

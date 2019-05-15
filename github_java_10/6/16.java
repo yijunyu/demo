@@ -1,7 +1,3 @@
-package radix;
-
-import java.util.Scanner;
-
 
 public class radixsort {
     private static int getMax(int a[]) {
@@ -36,20 +32,5 @@ public class radixsort {
         int max = getMax(a);
         for (exp = 1; max / exp > 0; exp *= 10)
             countsort(a, exp);
-    }
-
-    public static void main(String args[]) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("请输入一串整数并在输入时用英文逗号隔开：");
-        String inputString = sc.nextLine();
-        String stringArray[] = inputString.split(",");
-        int num[] = new int[stringArray.length];
-        for (int i = 0; i < stringArray.length; i++) {
-            num[i] = Integer.parseInt(stringArray[i]);
-        }
-        radixsort(num);
-        for (int i = 0; i < num.length; i++) {
-            System.out.print(num[i]+" ");
-        }
     }
 }

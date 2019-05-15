@@ -1,13 +1,4 @@
 
-
-public class Solution {
-    
-    public void sortIntegers2(int[] A) {
-        
-        int[] temp = new int[A.length];
-        mergeSort(A, 0, A.length - 1, temp);
-    }
-
     private void mergeSort(int[] A, int start, int end, int[] temp) {
         if (start >= end) {
             return;
@@ -46,4 +37,3 @@ public class Solution {
             A[index] = temp[index];
         }
     }
-}

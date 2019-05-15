@@ -1,5 +1,4 @@
-class MSorting{
-    static int[] mergeSort(int[] a){
+ static int[] mergeSort(int[] a){
         int n = a.length;
         int[] left;
         int[] right;
@@ -52,11 +51,3 @@ class MSorting{
         
         return result;
     }
-
-    public static void main(String[]args){
-        int[] numbers = {1,6,8,5,3,2.9};
-
-        mergeSort(numbers);
-
-    }
-}

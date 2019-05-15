@@ -1,7 +1,4 @@
 
-
-public class SortUtils {
-
   public static void quickSort(int[] array) {
     quickSort(array, 0, array.length - 1);
   }
@@ -34,24 +31,3 @@ public class SortUtils {
     array[left] = array[right];
     array[right] = temp;
   }
-
-  public static void main(String[] args) {
-    int[] array1 = new int[] {2, 1, 3, 4, -1};
-    int[] array2 = new int[] {2};
-    int[] array3 = new int[] {8, 8, 8};
-    quickSort(array1);
-    quickSort(array2);
-    quickSort(array3);
-    for (int item : array1) {
-      System.out.print(item + " ");
-    }
-    System.out.println();
-    for (int item : array2) {
-      System.out.print(item + " ");
-    }
-    System.out.println();
-    for (int item : array3) {
-      System.out.print(item + " ");
-    }
-  }
-}

@@ -1,10 +1,4 @@
-
-
-import java.util.Comparator;
-
-public class Shell
-{   
-    public static void sort(Comparable[] a)
+ public static void sort(Comparable[] a)
     {
         int N = a.length;
         
@@ -45,27 +39,3 @@ public class Shell
         a[i] = a[j];
         a[j] = swap;
     }
-    
-    public static void print(Comparable[] a)
-    {
-        StringBuilder temp = new StringBuilder();
-        temp.append("");
-        
-        for (int i = 0; i < a.length; i++)
-        {
-            temp.append(a[i]);
-            temp.append(" ");
-        }
-        String strI = temp.toString();
-        System.out.println(strI);
-    }
-    
-    public static void main(String[] args) 
-    { 
-        Integer[] intArray = {53,26,94,25,99,14,54,75,17,20};
- 
-        print(intArray);
-        
-        sort(intArray);
-    }
-}

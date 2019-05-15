@@ -1,10 +1,4 @@
-package org.olmec.sorting;
-
-
-public class ShellSort {
-
-  
-  public <T extends Comparable<T>> void sort(T[] array) {
+public <T extends Comparable<T>> void sort(T[] array) {
     int n = array.length;
 
     
@@ -36,4 +30,3 @@ public class ShellSort {
   private <T extends Comparable<T>> boolean less(T i, T j) {
     return i.compareTo(j) < 0;
   }
-}

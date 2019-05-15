@@ -58,11 +58,4 @@ public class HeapSort
     	}
     }
     
-    public static void main(String[] args) {
-		int []a1={3,5,1,2,4};
-    	sort(a1);
-    	for(int i=0;i<a1.length;i++){
-    		System.out.print(a1[i] + " ");
-    	}
-	}
 } 

@@ -1,13 +1,4 @@
-package sorting.noncomparison;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-public class BucketSort {
-
-    public void sort(Double[] A) {
+  public void sort(Double[] A) {
 
         int n = A.length;
         List[] B = new ArrayList[n];
@@ -27,16 +18,3 @@ public class BucketSort {
                 A[i++] = (Double) d;
 
     }
-
-    public static void main(String... args) {
-
-        Double[] numbers = {0.15, 0.84, 0.36, 0.99, 0.13, 0.34, 0.91, 0.51};
-        BucketSort bucketSort = new BucketSort();
-        bucketSort.sort(numbers);
-
-        Arrays.asList(numbers).stream().forEach(System.out::println);
-
-    }
-
-
-}

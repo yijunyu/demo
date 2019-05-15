@@ -1,12 +1,4 @@
-package nl.hva.dmci.ict.se.datastructures.sortstudents.util;
-
-import java.util.List;
-
-
-public class Bubblesort {
-
-    
-    public static <T extends Comparable<T>> void sort(List<T> lijst) {
+ public static <T extends Comparable<T>> void sort(List<T> lijst) {
         
         
         int n = lijst.size(); 
@@ -28,5 +20,3 @@ public class Bubblesort {
             }
         }
     }
-
-}

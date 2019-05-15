@@ -1,11 +1,3 @@
-
-
-package de.lmichaelis.sorting.algorithm;
-
-import de.lmichaelis.sorting.common.Comparator;
-import de.lmichaelis.sorting.common.Converter;
-
-
 public class BubbleSort extends Algorithm {
     
     static <T> boolean loopReverse ( T[] array,
@@ -42,8 +34,6 @@ public class BubbleSort extends Algorithm {
         
         while ( swapped ) {
 
-            
-            
             
             swapped = loop( array, comparator, this, 0, wall--, 1, 1 );
         }

@@ -1,10 +1,4 @@
-
-package sorting;
-
-
-public class Mergesort {
-
-    void mergesort(int[] arr) {
+void mergesort(int[] arr) {
         int size = arr.length;
         if (size < 2) {
             return;
@@ -48,19 +42,3 @@ public class Mergesort {
         }
 
     }
-
-    void printArray(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-        System.out.println(" ");
-    }
-
-    public static void main(String[] args) {
-        Mergesort ob = new Mergesort();
-        int[] arr = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        ob.printArray(arr);
-        ob.mergesort(arr);
-        ob.printArray(arr);
-    }
-}

@@ -1,26 +1,4 @@
-
-package me.qcarver.filesorts;
-
-import java.util.Date;
-
-
-public class MergeSort implements Sorter {
-    private A A = null;
-    private long sortingTime = 0;
-    
-    @Override
-    public void sort(int[] A){
-        Date date = new Date();
-        long timeStart = date.getTime();
-        this.A = new A(A);
-        mergeSort(0, A.length-1);  
-        date = new Date();
-        long timeEnd = date.getTime();
-        sortingTime = timeEnd - timeStart;
-    }
-    
-    
-    private void mergeSort(int start, int end){
+  private void mergeSort(int start, int end){
         if (start<end){
             int middle=(start+end)/2;
                 mergeSort(start,middle);
@@ -54,14 +32,3 @@ public class MergeSort implements Sorter {
             }
         }
     }
-
-    public int[] getA(){
-        return A.get();
-    }
-    
-    @Override
-    public Stats getStats(){
-        return new Stats(SortMode.MERGE_SORT, A.length(),
-                sortingTime, A.getNumReads(), A.getNumWrites());
-    }
-}

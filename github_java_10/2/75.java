@@ -1,10 +1,4 @@
-package ctcilib;
-
-import java.util.Arrays;
-
-public class Mergesort {
-
-    public static void sort(int[] arr) {
+  public static void sort(int[] arr) {
         sort(arr, 0, arr.length-1);
     }
     
@@ -36,10 +30,3 @@ public class Mergesort {
             arr[i+l] = tmp[i];
         }
     }
-
-    public static void main(String[] args) {
-        int[] arr1 = {1,5,2,5,7,3,4};
-        sort(arr1);
-        System.out.println(Arrays.toString(arr1));
-    }
-}

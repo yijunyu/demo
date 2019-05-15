@@ -1,13 +1,4 @@
-package com.github.glomadrian.algorithms.sort;
-
-public class Shellsort extends Sort {
-
-    public Shellsort(Comparable[] collection) {
-        super(collection);
-    }
-
-    @Override
-    public Comparable[] sort() {
+ public Comparable[] sort() {
         int lenght = collection.length;
         int increment = 1;
 
@@ -29,4 +20,3 @@ public class Shellsort extends Sort {
         }
         return collection;
     }
-}

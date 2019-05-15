@@ -110,26 +110,5 @@ class Vertex {
 	      matrix[row][col] = matrix[row][col + 1];
 	  }
 
-	  public static void main(String[] args) {
-		  topologicalsort g = new topologicalsort();
-	    g.addVertex('1'); 
-	    g.addVertex('2'); 
-	    g.addVertex('3'); 
-	    g.addVertex('4'); 
-	    g.addVertex('5'); 
-	    g.addVertex('6'); 
-	    g.addVertex('7'); 
-	    g.addVertex('8'); 
-
-	    g.addEdge(0, 3); 
-	    g.addEdge(0, 1); 
-	    g.addEdge(3, 1); 
-	    g.addEdge(3, 2); 
-	    g.addEdge(2, 1); 
-	    g.addEdge(4, 1); 
-	    g.addEdge(2, 4); 
-	    g.addEdge(7, 1); 
-	    g.addEdge(7, 5); 
-	    g.topo(); 
-	  }
+	 
 	}

@@ -3,48 +3,7 @@ import java.io.*;
 
 public class heapsort
 {
-	public static void insert(int a[],int data,int m,int n)
-	{
-		int last,j=0,t;
-		if(a[0]==0)
-		{
-		 a[0]=a[0]+1;       
-		 a[m]=data;         
-	    }
-	    else
-	    {
-          last=a[0];
-          if(last>=n)
-          {
-          	System.out.println("Heap is Full");
-          }
-          else
-          {
-          a[0]++;
-          a[m]=data;
-          j=m;
 
-          
-          while(true)
-          {
-          	j=j/2;   
-          	if(j>=1)
-          	{
-          		if(a[j]<a[m])
-          		{
-                  t=a[j];
-                  a[j]=a[m];
-                  a[m]=t;
-          		}
-          		m=j;    
-          	}
-          	else
-          		break;
-          }
-	    }
-	    return;
-	}
-	}   
 
 
 	
@@ -102,25 +61,5 @@ public class heapsort
     }
   }
   
-  public static void main(String args[])
-  {
-    int data;
-    int m=1;
-    Scanner in=new Scanner(System.in);
-    System.out.print("Enter the no. of Elements : ");
-    int n=in.nextInt();
-    int a[]=new int[n+1];   
-    a[0]=0;
-    System.out.println("Enter the Elements : ");
-    for(;m<=n;m++)
-    {
-    	data=in.nextInt();
-    	insert(a,data,m,n);
-    } 
-    System.out.println("\n");
-    displayHeap(a);              
-
-    System.out.println("The Sorted Array in descending order using Heap Sort is : ");
-    heapSort(a);	               
-   }
+  
   }

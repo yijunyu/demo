@@ -1,11 +1,4 @@
-package SortMethods;
 
-public class Mergesort
-{
-  private static double[] temp;
-
-  
-  
   public static void sort(double[] a)
   {
     int n = a.length;
@@ -76,4 +69,3 @@ public class Mergesort
     for (k = from; k <= to; k++)
       a[k] = temp[k];
   }
-}

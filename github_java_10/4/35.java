@@ -1,18 +1,4 @@
-
-
-import sort_tools.SortIO;
-
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
-
-
-public class Heap {
-
-    
-    private Heap() { }
-
-    
-    public static void sort(Comparable[] pq) {
+ public static void sort(Comparable[] pq) {
         int N = pq.length;
         for (int k = N/2; k >= 1; k--)
             sink(pq, k, N);
@@ -65,31 +51,3 @@ public class Heap {
             StdOut.println(a[i]);
         }
     }
-
-    
-    public static void main(String[] args) {
-
-
-
-      Integer[] nums;
-      ThreadMXBean thMxB = ManagementFactory.getThreadMXBean();
-      if (args.length != 2) {
-        System.out.print("Usage: heapsort <input file> <output file>");
-        System.exit(1);
-      }
-      try {
-        String input = args[0];
-        String output = args[1];
-        SortIO tools = new SortIO();
-        nums = tools.getData(input);
-        long start = thMxB.getCurrentThreadCpuTime();
-        Heap.sort(nums);
-        long stop = thMxB.getCurrentThreadCpuTime();
-        
-        tools.writeMeas(start, stop, output);
-
-      } catch (Exception ex) {
-        System.out.print(ex.toString());
-      }
-    }
-}

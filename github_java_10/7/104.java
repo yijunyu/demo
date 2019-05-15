@@ -1,17 +1,4 @@
-package chap7;
-
-public class ShellSort {
-    private int[] theArray;
-    private int size;
-    private int index;
-
-    public ShellSort(int _size) {
-        size = _size;
-        theArray = new int[size];
-        index = 0;
-    }
-    
-    public void insert(int number){
+   public void insert(int number){
         theArray[index++] = number;
     }
     
@@ -40,29 +27,3 @@ public class ShellSort {
         }
     }
     
-    public void display(){
-        for (int i : theArray) {
-            System.out.print(i + " ");
-        }
-    }
-    
-    public static void main(String[] args) {
-        ShellSort shellSort = new ShellSort(9);
-        shellSort.insert(45);
-        
-        shellSort.insert(9);
-        shellSort.insert(5);
-        shellSort.insert(4);
-        shellSort.insert(8);
-        shellSort.insert(7);
-
-        
-        shellSort.insert(3);
-        shellSort.insert(2);
-        shellSort.insert(10);
-        
-        shellSort.shellSort();
-        
-        shellSort.display();
-    }
-}

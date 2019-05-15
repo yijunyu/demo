@@ -55,9 +55,4 @@ public class Sort_06_HeapSort {
             System.out.print(arr[i] + " ");
         }
     }
-
-    public static void main(String[] args) {
-        int[] arr = {21, 5, 4, 8, 2, 3, 0, 9, 7, 4, 5, 10};
-        printArray(heapSort(arr));
-    }
 }

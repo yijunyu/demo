@@ -1,8 +1,4 @@
-package life.util;
-
-public class JavaQuickSort {
-
-    public static void quickSort(SaveCarrier[] array) {
+  public static void quickSort(SaveCarrier[] array) {
         int startIndex = 0;
         int endIndex = array.length - 1;
         doSort(array, startIndex, endIndex);
@@ -33,4 +29,3 @@ public class JavaQuickSort {
         doSort(array, start, cur);
         doSort(array, cur + 1, end);
     }
-}

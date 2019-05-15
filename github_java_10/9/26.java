@@ -1,9 +1,4 @@
-package sort;
-
-
-public class Sort_02_SelectionSort {
-
-    public static int[] selectionSort(int[] arr) {
+ public static int[] selectionSort(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             int index = i;
             int min = arr[i];
@@ -23,15 +18,3 @@ public class Sort_02_SelectionSort {
         arr[index1] = arr[index2];
         arr[index2] = temp;
     }
-
-    public static void printArray(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-    }
-
-    public static void main(String[] args) {
-        int[] arr = {1, 5, 4, 8, 2, 3, 0, 9, 7, 4, 5};
-        printArray(selectionSort(arr));
-    }
-}

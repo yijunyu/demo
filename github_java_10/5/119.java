@@ -1,15 +1,4 @@
-import java.util.Arrays;
-
-public class Example {
-
-   public static void main(String[] args) {
-      int[] arr = {9,7,5,3,1,0,2,4,6,8};
-      System.out.println("Unsorted: " + Arrays.toString(arr));
-      bubbleSort(arr);
-      System.out.println("Sorted  : " + Arrays.toString(arr));
-   }
-
-   public static void bubbleSort(int arr[]) {
+ public static void bubbleSort(int arr[]) {
       int len = arr.length;
       for (int i = len; i >= 0; i--) {
          for (int j = 0; j < len - 1; j++) {
@@ -27,6 +16,3 @@ public class Example {
       arr[i] = arr[j];
       arr[j] = temp;
    }
-}
-
-

@@ -62,30 +62,3 @@ public void	AddEdge(int a,int b,int weight)
 	}
 	
 }
-class Main
-{
-    public static void main(String args[])
-    {
-        Scanner scan = new Scanner(System.in);
-        
-        
-        
-        int n= scan.nextInt();
-        Graph graph=new Graph(n);
-
-        int e=scan.nextInt();
-         
-          for(int i=0;i<e;i++)
-          {
-             graph.AddEdge(scan.nextInt(),scan.nextInt(),scan.nextInt());
-              
-          }
-          Stack stack=graph.TopologicalSort();
-          
-          while (stack.empty()==false)
-            System.out.print(stack.pop() + " ");
-   }
-        
-    }
-    
-    

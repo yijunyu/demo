@@ -3,10 +3,7 @@ import java.util.Arrays;
 public class Heapsort {
 	static int[] a = {2, 8, 6,1,10,15,3,12,11};
 	
-	public static void main(String[] args) {
-		heapsort(a);
-		System.out.println("오름차순 출력:"+Arrays.toString(a));
-	}
+	
 	public static void heapsort(int[] data){
 		System.out.println("배열->힙");
 		

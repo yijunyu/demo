@@ -1,13 +1,4 @@
-package Sort;
-
-import java.util.ArrayList;
-
-import static Sort.SelectSort.selectSort;
-
-
-public class BucketSort {
-
-    public static int[] bucketSort(int [] tab){
+  public static int[] bucketSort(int [] tab){
         double bucketSize;
         ArrayList<ArrayList<Integer>> buckets = new ArrayList<>();
         if(tab.length<=1000){
@@ -52,40 +43,3 @@ public class BucketSort {
         return tabs;
 
     }
-
-
-    static class threads implements Runnable{
-        private Thread t;
-        private ArrayList<Integer> list;
-
-        threads(ArrayList<Integer> list){
-            this.list = list;
-        }
-
-        public void run(){
-            selectSort(list);
-        }
-
-        public void start(){
-            if(t == null){
-                t = new Thread(this);
-                t.run();
-            }
-        }
-
-
-    }
-
-
-
-
-
-    public static boolean check(int [] tab){
-        for(int i = tab.length-1; i>1; --i){
-            if(tab[i]<tab[i-1]){
-                return false;
-            }
-        }
-        return true;
-    }
-}

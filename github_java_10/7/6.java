@@ -1,12 +1,4 @@
-package mainpackage.algorithms;
-
-public class Shellsort {
-    
-    public static int[] sort(int[] arr) {
-        return sort(arr, arr.length);
-    }
-    
-    private static int[] sort(int[] arr, int n) {
+   private static int[] sort(int[] arr, int n) {
         int i, j, h, x;
         
         for(h = 1; h < n; h = 3 * h + 1);
@@ -29,4 +21,3 @@ public class Shellsort {
         }
         return arr;
     }
-}

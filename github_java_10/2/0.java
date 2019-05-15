@@ -1,28 +1,3 @@
-package com.jbwang.recursive;
-
-
-public class MergeSort {
-
-    public long [] theArray;
-    public int nElems;
-
-    public MergeSort(int maxSize) {
-        theArray = new long[maxSize];
-        nElems = 0;
-    }
-
-    public void insert(long value) {
-        theArray[nElems++] = value;
-    }
-
-    public void display() {
-
-        for (int i = 0; i < nElems; i++) {
-            System.out.print(theArray[i] + " ");
-        }
-        System.out.println();
-
-    }
 
     public void mergeSort() {
         long [] workArray = new long[nElems];
@@ -65,23 +40,3 @@ public class MergeSort {
         }
 
     }
-
-    public static void main(String [] args) {
-        MergeSort mergeSort = new MergeSort(100);
-
-        mergeSort.insert(27);
-        mergeSort.insert(76);
-        mergeSort.insert(45);
-        mergeSort.insert(86);
-        mergeSort.insert(34);
-        mergeSort.insert(17);
-        mergeSort.insert(87);
-        mergeSort.insert(65);
-        mergeSort.insert(59);
-        mergeSort.insert(97);
-
-        mergeSort.mergeSort();
-        mergeSort.display();
-
-    }
-}

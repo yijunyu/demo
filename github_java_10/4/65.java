@@ -133,23 +133,5 @@ public class HeapSort {
 		}
 	}
 	
-	public static void show(Comparable[] a) {
-		for(int i = 0; i < a.length; i++) {
-			StdOut.print(a[i]);
-		}
-		StdOut.println("");
-	}
-	
-	public static void main(String[] args) {
 
-		String[] a = {"bed", "bug", "dad", "yes", "zoo",
-					  "now", "for", "tip", "ilk", "dim", 
-                      "tag", "jot", "sob", "nob", "sky",
-                      "hut", "men", "egg", "few", "jay",
-                      "owl", "joy", "rap", "gig", "wee",
-                      "was", "wad", "fee", "tap", "tar",
-                      "dug", "jam", "all", "bad", "yet"};
-		sort(a);
-		show(a);
-	}
 }

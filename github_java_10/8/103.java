@@ -1,19 +1,4 @@
-package com.wiceflow.Sort.quicksort;
-
-
-public class quicksort {
-
-    public int[] getB() {
-        return b;
-    }
-
-    private int[] b = new int[101];
-
-    public quicksort(int[] nums) {
-        this.b = nums;
-    }
-    
-    
+   
     public void quicksort(int left, int right) {
         int l1 = left, r1 = right;
 
@@ -48,6 +33,3 @@ public class quicksort {
         
         quicksort(l1+1, right);
     }
-
-
-}

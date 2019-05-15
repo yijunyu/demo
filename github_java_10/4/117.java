@@ -1,7 +1,4 @@
-
-public class HeapSort
-{
-    public void sort(int arr[])
+ public void sort(int arr[])
     {
         int n = arr.length;
  
@@ -50,36 +47,3 @@ public class HeapSort
         }
     }
  
-    
-    static void printArray(int arr[])
-    {
-        int n = arr.length;
-        for (int i=0; i<n; ++i)
-            System.out.print(arr[i]+" ");
-        System.out.println();
-    }
- 
-    
-    public static void main(String args[])
-    {
-        for(int i= 0;  i<5; i++){
-            int arr[4];
-            Scanner i  = new Scanner(System.in);
-            System.out.println("insert element of array :");
-            i.nextInt;
-            
-            int n = arr.length;
- 
-            HeapSort ob = new HeapSort();
-            ob.sort(arr);
- 
-            System.out.println("Sorted array is");
-            printArray(arr);
-        }
-    }
-}
-
-
-
-
-

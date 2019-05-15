@@ -1,23 +1,4 @@
-package sort;
-
-import static v.ArrayUtils.*;
-
-import java.security.SecureRandom;
-
-import edu.princeton.cs.algs4.StdIn;
-
-
-
-
-@SuppressWarnings("unused")
-public class Heap {
-  public static double compares = 0;
-
-    
-    private Heap(){}
-
-    
-    public static <T extends Comparable<? super T>> double sort(T[] pq) {
+public static <T extends Comparable<? super T>> double sort(T[] pq) {
         compares = 0;
         int n = pq.length;
         for (int k = n/2; k >= 1; k--)
@@ -72,23 +53,3 @@ public class Heap {
         for (int i = 0; i < a.length; i++) System.out.print(a[i]+" ");
         System.out.println();
     }
-
-    
-    public static void main(String[] args) {
-      
-      SecureRandom sr = new SecureRandom();
-      Double[] a = {0.,12.,3.,1.,5.,4.,6.,2.,7.,11.,10.,9.};
-      a = rangeDouble(1.,21.);
-      shuffle(a,sr);
-      
-      par(a);
-      sort(a);
-      par(a);
-      
-
-
-
-
-
-    }
-}

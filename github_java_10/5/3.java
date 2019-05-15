@@ -1,19 +1,4 @@
-package chapter07;
-
-
-
-import java.util.Arrays;
-
-public class BubbleSort {
-    public static void main(String[] args) {
-        double[] numbers = {4, 7, 10, 56, 2, 1, 6, 120, 30, 45, 80};
-        System.out.println(isSorted(numbers));
-        sort(numbers);
-        System.out.println(isSorted(numbers));
-        System.out.println(Arrays.toString(numbers));
-    }
-
-    public static void sort(double... array) {
+  public static void sort(double... array) {
         boolean wasChanged = false;
         do {
             wasChanged = false;
@@ -31,13 +16,3 @@ public class BubbleSort {
         array[i] = array[j];
         array[j] = temp;
     }
-
-    public static boolean isSorted(double... array) {
-        for (int i = 0; i < array.length - 1; i++) {
-            if (array[i] > array[i + 1])
-                return false;
-        }
-
-        return true;
-    }
-}

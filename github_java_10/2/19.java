@@ -1,16 +1,4 @@
-package me.lirui.algo.sort;
-
-import java.util.Arrays;
-
-
-public class MergeSort extends SortStub {
-  @Override
-  public int[] onPrepareInputData() {
-    return new int[] {4, 3, 2, 1};
-  }
-
-  @Override
-  public void onDoSort(int[] inputData) {
+public void onDoSort(int[] inputData) {
     super.onDoSort(inputData);
     _mergeSort(inputData);
     System.out.println("");
@@ -61,4 +49,3 @@ public class MergeSort extends SortStub {
       array[k++] = rightArray[j++];
     }
   }
-}

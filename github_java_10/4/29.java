@@ -1,9 +1,4 @@
-package algs4;
-
-
-public class Heap {
-
-    public static void sort(Comparable[] pq) {
+public static void sort(Comparable[] pq) {
         int N = pq.length;
         for (int k = N/2; k >= 1; k--)
             sink(pq, k, N);
@@ -56,11 +51,3 @@ public class Heap {
             StdOut.println(a[i]);
         }
     }
-
-    
-    public static void main(String[] args) {
-        String[] a = StdIn.readStrings();
-        Heap.sort(a);
-        show(a);
-    }
-}

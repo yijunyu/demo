@@ -3,33 +3,7 @@ import java.util.*;
 
 class TopologicalSort
 {
-	public static void main(String args[])
-	{
-		Scanner sc = new Scanner(System.in);
-		int t,v,e,i,x,y;
-		t = sc.nextInt();
-		while(t-- > 0)
-		{
-			v = sc.nextInt();
-			e = sc.nextInt();
-			ArrayList<PriorityQueue<Integer>> adjl = new ArrayList<PriorityQueue<Integer>>();
-			for(i=0;i<=v;i++)
-				adjl.add(new PriorityQueue<Integer>());
-			for(i=0;i<e;i++)
-			{
-				x = sc.nextInt();
-				y = sc.nextInt();
-				adjl.get(x).add(y);
-			}	
-			Stack<Integer> topo = topoSort(adjl);
-			while(!topo.isEmpty())
-			{
-				System.out.print(topo.pop()+" ");
-			}
-			pr("");
-		}
-	}
-	
+
 	static Stack<Integer> topoSort(ArrayList<PriorityQueue<Integer>> adjl)
 	{
 		int i, v = adjl.size(),x,y,visitedCount = 0,time = 0;

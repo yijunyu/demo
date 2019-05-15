@@ -43,29 +43,3 @@ class HSort
 
 }
 
-
-class heap
-{
-	public static void main(String[] args) 
-	{
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter the no of elements for heap sort");
-		int n=sc.nextInt();
-
-		HSort h = new HSort();
-		System.out.println();
-
-		int a[]=new int[n];
-
-		System.out.println("Enter elements for sorting:");
-		for(int i=0;i<n;i++)
-			a[i]=sc.nextInt();
-
-		System.out.println("Heap Sort");
-		h.heapSort(a);
-
-		
-
-
-	}
-}

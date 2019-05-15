@@ -1,51 +1,4 @@
-
-
-import java.util.*;
-import java.nio.file.*;
-import java.io.*;
-
-public class Heap{
-
-    
-    
-    public static int heapSize = 0;
-    
-    public static void main(String[] args) throws IOException{
-        
-        Scanner in = new Scanner(Paths.get("../input/input_strings.txt"), "UTF-8");
-        PrintWriter outTime = new PrintWriter("../output/heap_sort/time.txt", "UTF-8");
-        String[] origin=new String[1<<17];
-        for(int i = 0; i < 1<<17; i++){
-            origin[i] = in.nextLine();
-        }
-
-        int[] exp={2, 5, 8, 11, 14, 17};
-        
-        
-        for(int index : exp){
-            String[] partArray = Arrays.copyOf(origin, 1<<index);
-            
-            long enduration = sort(partArray)/1000;
-            
-            
-            outTime.println("index: " + index + "\ntime: " + enduration + "\tmicroseconds.");
-            outTime.flush();
-
-            
-            System.out.println("index: " + index + "\ntime: " + enduration + "\tmicroseconds.");
-            PrintWriter outSort = new PrintWriter("../output/heap_sort/result_"+index+".txt", "UTF-8");
-            for(int j = 0; j < 1<<index; j++){
-                outSort.println(partArray[j]);
-                outSort.flush();
-            }
-
-        }
-        
-    }
-    
-    
-    
-    public static int compare(String a, String b){
+ public static int compare(String a, String b){
         if(a.length() < b.length())
             return -1;
         else if(a.length() > b.length())
@@ -54,18 +7,6 @@ public class Heap{
             return a.compareTo(b);
     }
 
-    
-    public static long sort(String[] A){
-        
-        long startTime = System.nanoTime();
-        
-        
-        heap_sort(A);
-
-        
-        long endTime = System.nanoTime();
-        return endTime - startTime;
-    }
 
     public static int left(int i){
         return 2 * i + 1;
@@ -117,5 +58,3 @@ public class Heap{
             max_heapify(A, 0);
         }
     }
-}
-

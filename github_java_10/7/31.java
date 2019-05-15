@@ -4,12 +4,7 @@ package sort;
 public class Shellsort {
 
     public static void main(String[] args) {
-        int[] a={49,38,65,97,76,13,27,49,78,34,12,64,1};
-        System.out.println("排序之前：");
-        for (int anA1 : a) {
-            System.out.print(anA1 + " ");
-        }
-        
+     
         int d = a.length;
         while(true){
             d = d / 2;
@@ -27,11 +22,7 @@ public class Shellsort {
                 break;
             }
         }
-        System.out.println();
-        System.out.println("排序之后：");
-        for (int anA : a) {
-            System.out.print(anA + " ");
-        }
+    
     }
 
 }

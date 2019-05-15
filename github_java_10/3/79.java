@@ -27,29 +27,5 @@ class TopologicalSort{
   }
   stack.push(i);
  }
- public static void main(String[] args){
-  System.out.println("Enter number of vertices");
-  Scanner sc = new Scanner(System.in);
-  int nov = sc.nextInt();
-  TopologicalSort ts = new TopologicalSort(nov);
-  System.out.println("Enter number of edges");
-  int noe = sc.nextInt();
-  System.out.println("Enter source and destination of edge");
-  for(int i=0;i<noe;i++){
-  int src=sc.nextInt();
-  int dest = sc.nextInt();
-  ts.addEdge(src, dest);
-  }
-  Iterator<Integer> ite;
- for(int i=0;i<nov;i++){
-  ite = arr[i].listIterator();
-  if(!visited[i]){
-    ts.sort(i);
-   }
-  }
- System.out.println("Sorted vertices");
- while(!stack.isEmpty()){
-    System.out.println(stack.pop());
-  }
- }
+
 }
