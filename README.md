@@ -1,8 +1,13 @@
 # Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server
 
-Table of Contents
-=================
+This repository provides a demonstration of the deep learning package for classifying the code parsed by the [fast
+utility](https://cloud.docker.com/u/yijun/repository/docker/yijun/fast). See also the [Visual Studio Code Extension](https://github.com/yijunyu/vscode-fast).
 
+You can run fast in your own machine as the docker container of course, but here you don't even need that: all the binary and python dependencies have been provided, including also the trained models and the pre-trained embeddings.
+
+To reproduce the results, all you need is to [enable the GitPod app to access your GitHub account](https://gitpod.io/#https://github.com/yijunyu/demo-vscode-fast) so that the commands can run on a remote server belonging to yourself.
+
+<!--ts-->
    * [Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server](#use-of-flattened-abstract-syntax-trees-in-deep-learning-on-your-own-gitpod-server)
       * [Usage](#usage)
       * [Usage of the fAST utility](#usage-of-the-fast-utility)
@@ -14,12 +19,9 @@ Table of Contents
             * [Diffing](#diffing)
             * [Bug Localisation](#bug-localisation)
 
-This repository provides a demonstration of the deep learning package for classifying the code parsed by the [fast
-utility](https://cloud.docker.com/u/yijun/repository/docker/yijun/fast). See also the [Visual Studio Code Extension](https://github.com/yijunyu/vscode-fast).
+<!-- Added by: yy66, at: Fri May 17 08:53:59 BST 2019 -->
 
-You can run fast in your own machine as the docker container of course, but here you don't even need that: all the binary and python dependencies have been provided, including also the trained models and the pre-trained embeddings.
-
-To reproduce the results, all you need is to [enable the GitPod app to access your GitHub account](https://gitpod.io/#https://github.com/yijunyu/demo-vscode-fast) so that the commands can run on a remote server belonging to yourself.
+<!--te-->
 
 ## Usage
 Examples of algorithms in Java and C++ are provided to test the algorithm classification deep learning tool. Once your
@@ -105,20 +107,3 @@ Yijun Yu, Thein Thun Tun, and Bashar Nuseibeh, "[Specifying and detecting meanin
 
 #### Bug Localisation
 Tezcan Dilshener, Michel Wermelinger, Yijun Yu: “[Locating bugs without looking back](http://oro.open.ac.uk/51576)”. Automated Software Engineering 25(3): 383-434 (2018) [ConCodeSe](http://concodese.com)
-
-Table of Contents
-=================
-
-   * [Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server](#use-of-flattened-abstract-syntax-trees-in-deep-learning-on-your-own-gitpod-server)
-      * [Usage](#usage)
-      * [Usage of the fAST utility](#usage-of-the-fast-utility)
-         * [You can call fAST anywhere when you have docker installed:](#you-can-call-fast-anywhere-when-you-have-docker-installed)
-      * [Reference and Applications](#reference-and-applications)
-            * [Deep Learning](#deep-learning)
-            * [Parsing](#parsing)
-            * [Slicing](#slicing)
-            * [Diffing](#diffing)
-            * [Bug Localisation](#bug-localisation)
-   * [Table of Contents](#table-of-contents)
-
-Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
