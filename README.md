@@ -7,16 +7,12 @@ You can run fast in your own machine as the docker container of course, but here
 
 To reproduce the results, all you need is to [enable the GitPod app to access your GitHub account](https://gitpod.io/#https://github.com/yijunyu/demo-vscode-fast) so that the commands can run on a remote server belonging to yourself.
 
-## usage
-Two examples of insertion sort algorithms in Java are provided to
-test the algorithm classification deep learning tool. Once the
+## Usage
+Examples of algorithms in Java and C++ are provided to test the algorithm classification deep learning tool. Once your
 gitpod machine is running, it will launch the following command:
 ```bash
-. .bashrc
 run.sh github_java_10/1/1.java
 ```
-In this convention, the folder number indicate the correct class label
-that we already know, and the test will return the algorithm of the code.
 
 Click the file "github_java_10/1/1.png" in the EXPLORER, you will see the predicted
 probabilistic distribution of the class labels. The correctly classified label
@@ -27,13 +23,36 @@ Preview button on the up-right corner of the tab to see visualization results
 in a split pane.  The colours on the tokens indicate which parts of the code
 that have got the most attention by the classification algorithm.
 
-
-To run the other example, type:
+To run another example, with differently trained models, type:
 ```bash
 live_test \
 --model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 \
 --pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz \
 github_java_10/1/103.java
+```
+In this convention, the folder number indicate the correct class label
+that we already know, and the test will return the algorithm of the code.
+
+## fAST usage
+
+```bash
+# print the command line options and arguments
+fast
+# convert a C++ code into protobuffer representation
+fast foo.cc foo.pb
+# convert a Java code into flatbuffers representation
+fast bar.java bar.fbs
+# convert a flatbuffers representation back to C#
+fast moo.fbs moo.cs
+# slice a program
+fast -S -G foo.java foo.fbs
+# diff two programs
+fast -D v1.java v2.java
+```
+
+### you can call fast anywhere if you have docker installed:
+```bash
+alias fast=”docker run -v $PWD:/e yijun/fast”
 ```
 
 ## Datasets
