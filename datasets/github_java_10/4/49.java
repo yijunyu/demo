@@ -1,19 +1,13 @@
-
-    public int[] heapSort(int[] num){
-        Comparator<Integer> comparator = new IntegerDescendingComparator();
-
-        if(num.length == 0 || num.length == 1) return num;
-        int[] res = new int[num.length];
-        PriorityQueue pq = new PriorityQueue(comparator);
-        for(int i = 0; i < num.length; i++){
-            pq.add(num[i]);
+    public static void sort(int[] arr) {
+        for(int i=1;i<arr.length;i++) {
+            for(int j=i;j>0;j--) {
+                if(arr[j]<arr[j-1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j-1];
+                    arr[j-1] = temp;
+                }else {
+                    break;
+                }
+            }
         }
-        for(int i = 0; i < num.length;i++){
-            int tmp = (Integer)pq.remove();
-            res[i] = tmp;
-            System.out.print(res[i]+ ",");
-        }
-
-        return res;
-
     }

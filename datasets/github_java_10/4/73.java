@@ -1,58 +1,28 @@
-package sort;
-
-
-public class Sort_06_HeapSort {
-
-    public static int[] heapSort(int[] arr) {
-        
-        arr = buildMaxHap(arr);
-        
-        for (int i = arr.length - 1; i > 0; i--) {
-            
-            swap(arr, 0, i);
-            heapAdjust(arr, 0, i);
+private int[] ascend_insert(int x, int[] L)
+    {
+        if (L.length == 0)
+        {
+            return new int[]{x};
         }
-        return arr;
-    }
-
-    private static int[] buildMaxHap(int[] arr) {
-        for (int i = arr.length / 2; i >= 0; i--) {
-            heapAdjust(arr, i, arr.length);
-        }
-        return arr;
-    }
-
-    
-    public static void heapAdjust(int[] arr, int parent, int length) {
-        int temp = arr[parent]; 
-        int child = 2 * parent + 1; 
-        while (child < length) {
-            
-            if (child + 1 < length && arr[child] < arr[child + 1]) {
-                child++;
+        else if (x <= L[0])
+        {
+            int[] result = new int[L.length+1];
+            result[0] = x;
+            for (int i=0; i<L.length; i++)
+            {
+                result[i+1] = L[i];
             }
-            
-            if (temp >= arr[child]) {
-                break;
+            return result;
+        }
+        else
+        {
+            int[] combine = ascend_insert(x, rest(L));
+            int[] result = new int[L.length+1];
+            result[0] = L[0];
+            for (int i=0; i<combine.length; i++)
+            {
+                result[i+1] = combine[i]; 
             }
-            
-            arr[parent] = arr[child];
-            
-            parent = child;
-            child = 2 * child + 1;
-        }
-        arr[parent] = temp;
-    }
-
-    public static void swap(int[] arr, int index1, int index2) {
-        int temp = arr[index1];
-        arr[index1] = arr[index2];
-        arr[index2] = temp;
-    }
-
-    public static void printArray(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
+            return result;
         }
     }
-}

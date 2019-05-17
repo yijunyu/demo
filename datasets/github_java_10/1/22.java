@@ -1,41 +1,33 @@
-package September;
-
-public class InsertionSortList {
-	
-    public ListNode insertionSortList(ListNode head) {
-        ListNode cur = head.next;
-        ListNode p = cur;
-        ListNode q = head;
-        while( p != null){
-        	ListNode t = head;
-        	if(t.val > p.val){
-        		q.next = p.next;
-        		p.next = t;
-        		head = p;
-            	ListNode tmp = p;
-            	p = q;
-            	q = tmp;
-        	}
-        	else{
-        		while(t.next.val < p.val)
-        			t = t.next;
-        		if(t.next != p){
-	        		q.next = p.next;
-	        		p.next = t.next;
-	        		t.next = p;
-	            	ListNode tmp = p;
-	            	p = q;
-	            	q = tmp;
-        		}
-        	}
-
-        	p = p.next;
-        	q = q.next;
+     int n = arr.length;
+        
+        
+        
+        
+        for (int i = (n - 1 - 1) / 2; i >= 0; i--) {
+            
+            shiftDown(arr, n, i);
         }
         
-        
-        return head;
+        for (int j = n - 1; j > 0; j--) {
+            SortTestHelper.swap(arr, 0, j);
+            shiftDown(arr, j, 0);
+        }
     }
-	
-	
-}
+
+    
+    private static void shiftDown(Comparable[] arr, int n, int i) {
+        
+        while (i * 2 + 1 < n) {
+            
+            int j = i * 2 + 1;
+            
+            if (j + 1 < n && arr[j + 1].compareTo(arr[j]) > 0) {
+                j += 1;
+            }
+            
+            if (arr[i].compareTo(arr[j]) >= 0) {
+                break;
+            }
+            SortTestHelper.swap(arr, i, j);
+            i = j;
+        }

@@ -1,19 +1,32 @@
-public static void sort(Comparable[] data) {
-        long start = System.nanoTime();
-        int len = data.length;
-        for (int i = 1; i < len; i++) {
-            Comparable c = data[i];
-            int position = 0;
-            for (position = i; position > 0; position--) {
-                if (c.compareTo(data[position - 1]) < 0) {
-                    data[position] = data[position - 1];
-                } else {
-                    break;
-                }
-            }
-            data[position] = c;
+ public static void sort(Comparable[] pq) {
+        int n = pq.length;
+        for (int k = n/2; k >= 1; k--)
+            sink(pq, k, n);
+        while (n > 1) {
+            exch(pq, 1, n--);
+            sink(pq, 1, n);
         }
-        long end = System.nanoTime();
-        System.out.println("\nInsertionSort Execute time:" + (end - start));
     }
-}
+
+    
+
+    private static void sink(Comparable[] pq, int k, int n) {
+        while (2*k <= n) {
+            int j = 2*k;
+            if (j < n && less(pq, j, j+1)) j++;
+            if (!less(pq, k, j)) break;
+            exch(pq, k, j);
+            k = j;
+        }
+    }
+
+    
+    private static boolean less(Comparable[] pq, int i, int j) {
+        return pq[i-1].compareTo(pq[j-1]) < 0;
+    }
+
+    private static void exch(Object[] pq, int i, int j) {
+        Object swap = pq[i-1];
+        pq[i-1] = pq[j-1];
+        pq[j-1] = swap;
+    }

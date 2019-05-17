@@ -1,38 +1,18 @@
-private boolean less(Comparable a[], int i, int j){
-        return a[i].compareTo(a[j]) < 0;
+public static int[] insertionSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = i; j != 0; j--) {
+                if (arr[j-1] > arr[j]) {
+                    swap(arr, j-1, j);
+                } else {
+                    break;
+                }
+            }
+        }
+        return arr;
     }
 
-    private void exch(Comparable a[], int i, int j){
-        Comparable t = a[i];
-        a[i] = a[j];
-        a[j] = t;
-    }
-
-    
-    private void sink(Comparable a[], int k, int N){
-        while(2*k <= N){
-            int j = 2*k;
-            if(j < N && less(a, j,j+1))
-                j++;
-            if(!less(a, k,j))
-                break;
-            exch(a, k,j );
-            k=j;
-        }
-    }
-
-
-    
-    public void sort(Comparable a[]){
-        int N = a.length;
-        for(int k=N/2; k>=1; k--)  
-        {
-            sink(a, k, N);
-        }
-
-        while(N>1){
-            exch(a, 1, N--);  
-            sink(a, 1, N);  
-        }
-
+    public static void swap(int[] arr, int index1, int index2) {
+        int temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
     }

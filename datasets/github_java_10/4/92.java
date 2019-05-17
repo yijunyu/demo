@@ -1,59 +1,40 @@
-package com.learn.algorithms.sort;
+public ListNode insertionSortList(ListNode head) {      
+    
+        if (head == null)
+            return null;
+        if (head.next == null) {
+            return head;
+        }
+        ListNode first = head;
+        ListNode testNode = head;
 
-import java.util.Arrays;
+        while (testNode.next != null) {
+            ListNode insertNode = testNode.next;
+            
+            if (testNode.val <= insertNode.val) {
+                testNode = testNode.next;
+                continue;
+            }
+            
+            if (insertNode.val <= first.val) {
+                testNode.next = insertNode.next;
+                insertNode.next = first;
+                first = insertNode;
+                continue;
+            }
 
-public class HeapSortMaxHeap {
-	
+            for (ListNode pointer = first; pointer != testNode; pointer = pointer.next) {
+                if (pointer.val <= insertNode.val
+                        && insertNode.val <= pointer.next.val) {
+                    testNode.next = insertNode.next;
+                    insertNode.next = pointer.next;
+                    pointer.next = insertNode;
+                    break;
+                }
+            }
+        }
+
+        return first;
+    }
 
     
-    
-	
-	private static void swap(Comparable[] input,int IndexOne,int IndexTwo){
-		Comparable tmp = input[IndexOne];
-		input[IndexOne] = input[IndexTwo];
-		input[IndexTwo] = tmp;
-	}
-	
-	private static void heapsort(Comparable[] input){
-		int size=input.length;
-		
-		for(int i=size/2-1;i>=0;i--)
-		    heapify(input,i,size);
-		
-		System.out.println("After heapifying\n");
-		System.out.println(Arrays.toString(input));
-		
-	   
-	   
-	   
-	   for(int i = size-1;i>=0;i--){
-		   Comparable tmp = input[0];
-		   input[0]=input[i];
-		   input[i]=tmp;
-		   
-		   heapify(input,0,i);
-	   }
-				
-	}
-	
-	
-	
-	private static void heapify(Comparable[]input,int index,int size){
-	   int largestIndex = index;
-	   
-	   if(hasLeft(index,size) && input[largestIndex].compareTo(input[getLeftChildIndex(index)])<0)
-		   largestIndex = getLeftChildIndex(index);
-	   
-	   if(hasRight(index,size) && input[largestIndex].compareTo(input[getRightChildIndex(index)]) < 0)
-		   largestIndex = getRightChildIndex(index);
-		   
-	   if(largestIndex != index) 
-	   {
-		   swap(input,index,largestIndex);
-		   heapify(input, largestIndex,size);
-	   }
-		    
-	}
-	
-
-}

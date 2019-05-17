@@ -1,18 +1,40 @@
-
-    public static void insertionSort() {
-        int ii = 0, jj = 0;
-        for (ii = 1; ii < InsertionSort.ITEMS.length; ii++) {
-            jj = ii;
-            while ((jj > 0)
-                    && (InsertionSort.ITEMS[jj] < InsertionSort.ITEMS[jj - 1])) {
-                swap(jj, jj - 1);
-                jj -= 1;
-            }
+private static void heapSort(int[] a) {
+        
+        
+        for (int i = a.length / 2 - 1; i >= 0; i--) {
+            heapify(a, a.length-1, i);
         }
+        
+        for(int i=0;i<a.length-1;i++)
+        {
+            heapify(a, a.length-1, i);
+        }
+        
+        
+
     }
 
-    public static void swap(final int ii, final int jj) {
-        final int temp = InsertionSort.ITEMS[ii];
-        InsertionSort.ITEMS[ii] = InsertionSort.ITEMS[jj];
-        InsertionSort.ITEMS[jj] = temp;
+    private static void heapify(int[] a,int n, int i) {
+        
+
+        int l = 2 * i+1;
+        int r = 2 * i + 2;
+
+        int min = i;
+
+        if (l <= n && a[i] > a[l]) {
+            min = l;
+        }
+
+        if (r <= n && a[r] < a[min]) {
+            min = r;
+        }
+
+        if (min != i) {
+            int temp = a[i];
+            a[i] = a[min];
+            a[min] = temp;
+            heapify(a, n ,min);
+        }
+
     }

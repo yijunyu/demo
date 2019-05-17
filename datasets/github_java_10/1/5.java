@@ -1,44 +1,53 @@
-package com.hari.all.pracitce;
+    public static void sort(Comparable[] pq) {
+        int N = pq.length;
+        for (int k = N/2; k >= 1; k--)
+            sink(pq, k, N);
+        while (N > 1) {
+            exch(pq, 1, N--);
+            sink(pq, 1, N);
+        }
+    }
 
-import java.util.Scanner;
+   
 
-public class Insertionsort {
+    private static void sink(Comparable[] pq, int k, int N) {
+        while (2*k <= N) {
+            int j = 2*k;
+            if (j < N && less(pq, j, j+1)) j++;
+            if (!less(pq, k, j)) break;
+            exch(pq, k, j);
+            k = j;
+        }
+    }
 
-	public static void main(String[] args) {
-		 int size, i, j, temp;
-	       int arr[] = new int[100];
-	       Scanner scan = new Scanner(System.in);
-		   
-	       System.out.print("Enter Array Size : ");
-	       size = scan.nextInt();
-		   
-	       System.out.print("Enter Array Elements : ");
-	       for(i=0; i<size; i++)
-	       {
-	           arr[i] = scan.nextInt();
-	       }
-		   
-	       System.out.print("Sorting Array using Insertion Sort Technique..\n");
-	       for(i=1; i<size; i++)
-	       {
-	           temp = arr[i];
-	           j = i - 1;
-	           while((temp < arr[j]) && (j > -1))
-	           {
-	               arr[j+1] = arr[j];
-	               j=j-1;
-	           }
-	           arr[j+1] = temp;
-	       }
-		   
-	       System.out.print("Array after Sorting is : \n");
-	       for(i=0; i<size; i++)
-	       {
-	           System.out.print(arr[i] + "  ");
-	       }
-	   }
-		
+   
+    private static boolean less(Comparable[] pq, int i, int j) {
+        return pq[i-1].compareTo(pq[j-1]) < 0;
+    }
 
-	
+    private static void exch(Object[] pq, int i, int j) {
+        Object swap = pq[i-1];
+        pq[i-1] = pq[j-1];
+        pq[j-1] = swap;
+    }
 
-}
+    
+    private static boolean less(Comparable v, Comparable w) {
+        return (v.compareTo(w) < 0);
+    }
+        
+
+   
+    private static boolean isSorted(Comparable[] a) {
+        for (int i = 1; i < a.length; i++)
+            if (less(a[i], a[i-1])) return false;
+        return true;
+    }
+
+
+    
+    private static void show(Comparable[] a) {
+        for (int i = 0; i < a.length; i++) {
+            StdOut.println(a[i]);
+        }
+    }

@@ -1,54 +1,22 @@
-
-    public static int []  heapsort(int [] A){
-        int [] tab = new int[A.length];
-        System.arraycopy(A, 0, tab, 0, A.length);
+public ListNode insertionSortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
         
-        for(int c=A.length-1;c>=1;c--){ 
+        ListNode newHead = new ListNode(0); 
+        ListNode p = head;
         
-        int largest ;
-        int pomoc ;
-        int dlugosc = (c-1)/2;
-    
-        for(int j = dlugosc; j>=0; j--){
-            for(int i=dlugosc;i>=0;i--){
-                int left = (2*i)+1;
-                int right = (2*i)+2;
-                if((left <=c) && (right<=c)){
-            
-            if(tab[right] >= tab[left]){
-                largest=right;
+        while(p != null) {
+            ListNode t = newHead;
+            while(t.next != null && t.next.val <= p.val) {
+                t = t.next;
             }
-            else
-            {
-                largest=left;
-            }
-        }
-        else{
-            if(right>c){
-                largest=left;
-            }
-            else{
-                largest=right;
-            }
+            ListNode temp = p;
+            p = p.next;
+            temp.next = t.next;
+            t.next = temp;
         }
         
-        if(tab[largest] > tab[i])
-        {
-            pomoc = tab[largest];
-            tab[largest]= tab[i];
-            tab[i]= pomoc;
-            
-        }
-        }
-        }
-        
-        pomoc = tab[0];
-        tab[0]= tab[c];
-        tab[c]= pomoc;
-    
-        
-        
-    
+        return newHead.next;
     }
-        return tab;
-    }
+}

@@ -1,23 +1,42 @@
-  public static void sort(CharSequence[] strings, int low, int high, int depth) {
-        if (strings == null || low < 0 || high <= low || depth < 0) {
-            return;
+public static void buildheap(int []a){
+        n=a.length-1;
+        for(int i=n/2;i>=0;i--){
+            maxheap(a,i);
         }
-        for (int i = low + 1; i < high; i++) {
-            for (int j = i; j > low; j--) {
-                int idx = depth;
-                char s = idx < strings[j - 1].length() ? strings[j - 1].charAt(idx) : 0;
-                char t = idx < strings[j].length() ? strings[j].charAt(idx) : 0;
-                while (s == t && idx < strings[j - 1].length()) {
-                    idx++;
-                    s = idx < strings[j - 1].length() ? strings[j - 1].charAt(idx) : 0;
-                    t = idx < strings[j].length() ? strings[j].charAt(idx) : 0;
-                }
-                if (s <= t) {
-                    break;
-                }
-                CharSequence tmp = strings[j];
-                strings[j] = strings[j - 1];
-                strings[j - 1] = tmp;
-            }
+    }
+
+    public static void maxheap(int[] a, int i){ 
+        left=2*i;
+        right=2*i+1;
+        if(left <= n && a[left] > a[i]){
+            largest=left;
+        }
+        else{
+            largest=i;
+        }
+
+        if(right <= n && a[right] > a[largest]){
+            largest=right;
+        }
+        if(largest!=i){
+            exchange(i,largest);
+            maxheap(a, largest);
+        }
+    }
+
+    public static void exchange(int i, int j){
+        int t=a[i];
+        a[i]=a[j];
+        a[j]=t; 
+    }
+
+    public static void sort(int []a0){
+        a=a0;
+        buildheap(a);
+
+        for(int i=n;i>0;i--){
+            exchange(0, i);
+            n=n-1;
+            maxheap(a, 0);
         }
     }

@@ -1,58 +1,69 @@
-package stanford.algs4;
+package chapter2.insertion_sort;
 
-import stanford.stdlib.StdIn;
-import stanford.stdlib.StdOut;
+import java.util.StringJoiner;
 
+public class InsertionSort {
+    private Integer[] array;
 
+    public InsertionSort(Integer[] arrayToSort) {
+        this.array = arrayToSort;
+    }
 
-public class Heap {
+    public void setArray(Integer[] array) {
+        this.array = array;
+    }
 
-    public static void sort(Comparable[] pq) {
-        int N = pq.length;
-        for (int k = N / 2; k >= 1; k--)
-            sink(pq, k, N);
-        while (N > 1) {
-            exch(pq, 1, N--);
-            sink(pq, 1, N);
+    public void sortByNonDecreasing() {
+        for (int i = 1; i < array.length; i++) {
+            Integer key = array[i];
+            int j = i - 1;
+
+            while (j >= 0 && array[j] > key) {
+                array[j+1] = array[j];
+                j--;
+            }
+
+            array[j+1] = key;
         }
     }
 
-    
+    public void sortByNonIncreasing() {
+        for (int i = 1; i < array.length; i++) {
+            Integer key = array[i];
+            int j = i - 1;
 
-    private static void sink(Comparable[] pq, int k, int N) {
-        while (2 * k <= N) {
-            int j = 2 * k;
-            if (j < N && less(pq, j, j + 1))
-                j++;
-            if (!less(pq, k, j))
-                break;
-            exch(pq, k, j);
-            k = j;
+            while (j >= 0 && array[j] < key) {
+                array[j+1] = array[j];
+                j--;
+            }
+
+            array[j+1] = key;
         }
     }
 
-    
-    private static boolean less(Comparable[] pq, int i, int j) {
-        return pq[i - 1].compareTo(pq[j - 1]) < 0;
+    @Override
+    public String toString() {
+        StringJoiner stringJoiner = new StringJoiner(",");
+
+        for (Integer key : array) {
+            stringJoiner.add(key.toString());
+        }
+
+        return stringJoiner.toString();
     }
 
-    private static void exch(Object[] pq, int i, int j) {
-        Object swap = pq[i - 1];
-        pq[i - 1] = pq[j - 1];
-        pq[j - 1] = swap;
-    }
+    public static void main(String[] args) {
+        Integer[] array = new Integer[] {0, 4, 5, 9, 2, 7, 1, 5, 3, 9, 9, 8, 0, 6};
 
-    
-    private static boolean less(Comparable v, Comparable w) {
-        return (v.compareTo(w) < 0);
-    }
+        InsertionSort insertionSort = new InsertionSort(array);
 
-    
-    private static boolean isSorted(Comparable[] a) {
-        for (int i = 1; i < a.length; i++)
-            if (less(a[i], a[i - 1]))
-                return false;
-        return true;
-    }
+        System.out.println(insertionSort);
+        insertionSort.sortByNonDecreasing();
+        System.out.println(insertionSort);
 
+        insertionSort.setArray(array);
+        System.out.println(insertionSort);
+        insertionSort.sortByNonIncreasing();
+        System.out.println(insertionSort);
+    }
 }

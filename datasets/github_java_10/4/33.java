@@ -1,36 +1,15 @@
- public void heapify(int arr[], int n, int root) {
-        int largestNumber = root;
-        int left = 2 * root + 1;
-        int right = 2 * root + 2;
-
-        if (left < n && arr[left] > arr[largestNumber]) {
-            largestNumber = left;
+    
+    private static int[] insertSort(int[] seq, boolean isASC) {
+        int[] tmp_seq = new int[seq.length];
+        System.arraycopy(seq, 0, tmp_seq, 0, seq.length);
+        for (int i = 1; i < tmp_seq.length; i++) {
+            int tmp = tmp_seq[i];
+            int j = i - 1;
+            while (j >= 0 && (isASC? (tmp_seq[j] > tmp) : (tmp_seq[j] < tmp))) {
+                tmp_seq[j + 1] = tmp_seq[j];
+                j--;
+            }
+            tmp_seq[j + 1] = tmp;
         }
-
-        if (right < n && arr[right] > arr[largestNumber]) {
-            largestNumber = right;
-        }
-
-        if (largestNumber != root) {
-            int swap = arr[root];
-            arr[root] = arr[largestNumber];
-            arr[largestNumber] = swap;
-            heapify(arr, n,largestNumber);
-        }
-    }
-
-    public void sort(int arr[]) {
-        int len = arr.length;
-
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(arr, n, i);
-        }
-
-        for (int i = n - 1; i >= 0; i--) {
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
-
-            heapify(arr, i, 0);
-        }
+        return tmp_seq;
     }

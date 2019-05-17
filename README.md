@@ -27,7 +27,7 @@ To reproduce the results, all you need is to [enable the GitPod app to access yo
 Examples of algorithms in Java and C++ are provided to test the algorithm classification deep learning tool. Once your
 gitpod machine is running, it will launch the following command:
 ```bash
-run.sh datasets/github_java_10/1/1.java
+run.sh datasets/github_java_10/4/1.java
 ```
 
 Click the file "datasets/github_java_10/1/1.png" in the EXPLORER, you will see the predicted
@@ -44,7 +44,7 @@ To run another example with differently trained models, type:
 live_test \
 --model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 \
 --pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz \
-datasets/github_java_10/1/103.java
+datasets/github_java_10/4/103.java
 ```
 In this convention, the folder number indicate the correct class label
 that we already know, and the test will return the algorithm of the code.

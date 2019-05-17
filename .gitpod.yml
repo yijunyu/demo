@@ -1,4 +1,4 @@
 tasks:
    - before: pip3 install -r requirements.txt
      init: . .bashrc
-     command: . .bashrc && ./run.sh datasets/github_java_10/1/1.java
+     command: . .bashrc && ./run.sh datasets/github_java_10/4/1.java
