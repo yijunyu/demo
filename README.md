@@ -1,4 +1,9 @@
 # Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server
+
+Table of Contents
+=================
+
+   * [Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server](#use-of-flattened-abstract-syntax-trees-in-deep-learning-on-your-own-gitpod-server)
       * [Usage](#usage)
       * [Usage of the fAST utility](#usage-of-the-fast-utility)
          * [You can call fAST anywhere when you have docker installed:](#you-can-call-fast-anywhere-when-you-have-docker-installed)
