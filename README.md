@@ -55,14 +55,15 @@ fast -D v1.java v2.java
 alias fast=”docker run -v $PWD:/e yijun/fast”
 ```
 
-## Datasets
+## Datasets in this repository
 
 * [pku_cpp_104/](https://sites.google.com/site/treebasedcnn/)
 
-## References
+## Reference and Applications
 
 Yijun Yu. "[fAST: Flattening Abstract Syntax Trees for Efficiency](http://oro.open.ac.uk/59268/)". In: 41st ACM/IEEE International Conference on Software Engineering, 25-31 May 2019, Montreal, Canada, ACM and IEEE.
 
+#### Deep Learning
 Nghi D. Q. Bui, Yijun Yu, Lingxiao Jiang. "[Bilateral Dependency Neural Networks for Cross-Language Algorithm Classification](https://bdqnghi.github.io/files/SANER_2019_bilateral_dependency.pdf)", In the 26th edition of the IEEE International Conference on Software Analysis, Evolution and Reengineering, Research Track, Hangzhou, China, February 24-27, 2019.
 
 Nghi D. Q. Bui, Lingxiao Jiang, and Yijun Yu. "[Cross-Language Learning for Program Classification Using Bilateral Tree-Based Convolutional Neural Networks](https://bdqnghi.github.io/files/AAAI_18_cross_language_learning.pdf)", In the proceedings of the 32nd AAAI Conference on Artificial Intelligence (AAAI) Workshop on NLP for Software Engineering, New Orleans, Louisiana, USA, 2018.
@@ -72,3 +73,20 @@ Miltiadis Allamanis, Marc Brockschmidt, Mahmoud Khademi. "[Learning to Represent
 Y. Li, D. Tarlow, M. Brockschmidt, R. Zemel. "[Gated graph sequence neural networks](https://arxiv.org/abs/1511.05493)", In: 4th International Conference on Language Representations (ICLR), 2016.
 
 Lili Mou, Ge Li, Lu Zhang, Tao Wang, Zhi Jin: "[Convolutional Neural Networks over Tree Structures for Programming Language Processing](https://arxiv.org/abs/1409.5718)". In: AAAI 2016: 1287-1293
+
+#### Parsing
+
+M. L. Collard and J. I. Maletic, "[srcML 1.0: Explore, Analyze, and Manipulate Source Code](https://ieeexplore.ieee.org/document/7816536)," 2016 IEEE International Conference on Software Maintenance and Evolution (ICSME), Raleigh, NC, 2016, pp. 649-649.
+
+Parr, T. J. and Quong, R. W. 1995. "[ANTLR: a predicated-LL(k) parser generator](http://dx.doi.org/10.1002/spe.4380250705)". Softw. Pract. Exper. 25, 7 (Jul. 1995), 789-810.
+
+#### Slicing
+Hakam W. Alomari, Michael L. Collard, Jonathan I. Maletic,  Nouh Alhindawi and  Omar Meqdadi. “[srcSlice: very efficient and scalable forward static slicing](https://doi.org/10.1002/smr.1651)”. Software: Evolution and Process, 26(11):931-961, November 2014.
+
+#### Diffing
+Jean-Rémy Falleri, Floréal Morandat, Xavier Blanc, Matias Martinez, and Martin Monperrus. 2014. "[Fine-grained and accurate source code differencing](http://doi.acm.org/10.1145/2642937.2642982)". In Proceedings of the 29th ACM/IEEE international conference on Automated software engineering (ASE '14). ACM, New York, NY, USA, 313-324.
+
+Yijun Yu, Thein Thun Tun, and Bashar Nuseibeh, "[Specifying and detecting meaningful changes in programs](http://oro.open.ac.uk/29450/)," In: Proc. of the 26th IEEE/ACM Conference on Automated Software Engineering, pp. 273-282, 2011.
+
+#### Bug Localisation
+Tezcan Dilshener, Michel Wermelinger, Yijun Yu: “[Locating bugs without looking back](http://oro.open.ac.uk/51576)”. Automated Software Engineering 25(3): 383-434 (2018)
