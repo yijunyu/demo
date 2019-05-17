@@ -169,5 +169,5 @@ eval "$(pyenv virtualenv-init -)"
 export PATH="$PATH:$HOME/.rvm/bin"
 export PATH=$PATH:/workspace/demo-fast/usr/bin:/workspace/demo-fast/usr/local/bin:.:/workspace/.pip-modules/bin
 export LD_LIBRARY_PATH=/workspace/demo-fast/usr/lib:/workspace/demo-fast/usr/local/lib:/workspace/demo-fast/usr/lib/x86_64-linux-gnu:/usr/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu
-f=$(python3 -c "import powerline, os, sys; print(os.path.dirname(powerline.__file__))")
-source $f/bindings/bash/powerline.sh
+#f=$(python3 -c "import powerline, os, sys; print(os.path.dirname(powerline.__file__))")
+#source $f/bindings/bash/powerline.sh
