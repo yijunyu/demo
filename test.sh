@@ -1,5 +1,5 @@
 #!/bin/bash
-for f in github_java_10/*/*.java; do
+for f in datasets/github_java_10/*/*.java; do
 	if [ ! -f ${f/.java/.html} ]; then
 		run.sh $f
 	fi
