@@ -9,9 +9,9 @@ To reproduce the results, all you need is to [enable the GitPod app to access yo
 
 <!--ts-->
    * [Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server](#use-of-flattened-abstract-syntax-trees-in-deep-learning-on-your-own-gitpod-server)
-      * [Usage of fast utility in Deep Learning for Algorithm Classification](#usage-of-fast-utility-in-deep-learning-for-algorithm-classification)
+      * [Usage of fAST in Deep Learning for Algorithm Classification](#usage-of-fast-in-deep-learning-for-algorithm-classification)
       * [Usage of the fAST utility](#usage-of-the-fast-utility)
-      * [Usage of the fAST utility in Bug Localisation](#usage-of-the-fast-utility-in-bug-localisation)
+      * [Usage of fAST in Bug Localisation](#usage-of-fast-in-bug-localisation)
          * [You can call fAST anywhere when you have docker installed:](#you-can-call-fast-anywhere-when-you-have-docker-installed)
       * [Reference and Applications](#reference-and-applications)
             * [Deep Learning](#deep-learning)
@@ -20,11 +20,11 @@ To reproduce the results, all you need is to [enable the GitPod app to access yo
             * [Diffing](#diffing)
             * [Bug Localisation](#bug-localisation)
 
-<!-- Added by: yy66, at: Sun May 19 20:25:23 BST 2019 -->
+<!-- Added by: yy66, at: Sun May 19 20:26:33 BST 2019 -->
 
 <!--te-->
 
-## Usage of fast utility in Deep Learning for Algorithm Classification
+## Usage of fAST in Deep Learning for Algorithm Classification
 Examples of algorithms in Java and C++ are provided to test the algorithm classification deep learning tool. Once your
 gitpod machine is running, it will launch the following command:
 ```bash
@@ -63,7 +63,7 @@ fast -S -G RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java RxJava-1.2.9/sr
 fast -D github_java_10/4/1.java github_java_10/4/3.java
 ```
 
-## Usage of the fAST utility in Bug Localisation
+## Usage of fAST in Bug Localisation
 
 ```bash
 cd usr/bin
