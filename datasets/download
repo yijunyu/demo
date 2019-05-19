@@ -1,18 +1,20 @@
 #!/bin/bash
 function download() {
     F=$(basename $P)-$V
-    if [ ! -f v$V.tar.gz -a ! -f $V.tar.gz ]; then
-        wget https://github.com/$P/archive/v$V.tar.gz
-        if [ ! -f v$V.tar.gz ]; then
-            wget https://github.com/$P/archive/$V.tar.gz
-        fi
-    fi
     if [ ! -d $F-$V ]; then
+        if [ ! -f v$V.tar.gz -a ! -f $V.tar.gz ]; then
+            wget https://github.com/$P/archive/v$V.tar.gz
+            if [ ! -f v$V.tar.gz ]; then
+                wget https://github.com/$P/archive/$V.tar.gz
+            fi
+        fi
         if [ -f v$V.tar.gz ]; then
             tar xvfz v$V.tar.gz
+            rm -f v$V.tar.gz
         fi
         if [ -f $V.tar.gz ]; then
             tar xvfz $V.tar.gz
+            rm -f $V.tar.gz
         fi
     fi
 }
@@ -22,4 +24,3 @@ V=3.1.0 P=AFNetworking/AFNetworking download
 V=1.2.9 P=ReactiveX/RxJava download
 V=1.0.1 P=tensorflow/tensorflow download
 V=4.11-rc3 P=torvalds/linux download
-V=1.0.gf P=openssl/openssl download
