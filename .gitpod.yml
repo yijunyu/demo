@@ -6,4 +6,4 @@ tasks:
      command: . .bashrc && echo fAST for Deep Learning ... && cd /workspace/demo-fast && ./run.sh datasets/github_java_10/4/1.java
    - command: . .bashrc && echo fAST for Parsing, Slicing, Diffing ... && cd /workspace/demo-fast/datasets && ./download
    - command: . .bashrc && echo fAST for Bug Localisation ... && cd /workspace/demo-fast/usr/bin && java -cp /workspace/demo-fast/usr/config:/workspace/demo-fast/usr/config/lic:/workspace/demo-fast/usr/lib/ConCodeSe-1.0.0.jar com.concodese.ConCodeSeJettyServerStarter SERVER_PORT=8081
-   - command: . .bashrc && /bin/sleep 30 && gp preview $(gp url 8081)ConCodeSe
+   - command: . .bashrc && /bin/sleep 120 && gp preview $(gp url 8081)ConCodeSe
