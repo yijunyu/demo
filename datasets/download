@@ -49,10 +49,12 @@ V=1.2.9 P=ReactiveX/RxJava parse_slice "*.java"
 V=1.0.1 P=tensorflow/tensorflow parse_slice "*.cc"
 V=4.11-rc3 P=torvalds/linux parse_slice "*.c"
 
-V=1.0.4 P=dotnet/corefx diff "*.cs"
-V=3.1.0 P=AFNetworking/AFNetworking diff "*.[cm]"
-V=1.2.9 P=ReactiveX/RxJava diff "*.java"
-V=1.0.1 P=tensorflow/tensorflow diff "*.cc"
-V=4.11-rc3 P=torvalds/linux diff "*.c"
+#V=1.0.4 P=dotnet/corefx diff "*.cs"
+#V=3.1.0 P=AFNetworking/AFNetworking diff "*.[cm]"
+#V=1.2.9 P=ReactiveX/RxJava diff "*.java"
+#V=1.0.1 P=tensorflow/tensorflow diff "*.cc"
+#V=4.11-rc3 P=torvalds/linux diff "*.c"
 
+echo diffing ...
+echo fast -D github_java_10/4/1.java github_java_10/4/3.java
 fast -D github_java_10/4/1.java github_java_10/4/3.java
