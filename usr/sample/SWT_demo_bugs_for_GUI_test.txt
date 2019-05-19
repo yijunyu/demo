@@ -1,0 +1,32 @@
+Note: 
+1. Obtain the sources for SWT project from the dataset link provided at http://www.concodese.com/?cat=9
+2. Create the repository by running the steps described in ConCodeSe_readme.pdf available at http://www.concodese.com/?cat=7  
+3. Use the below sample bug descriptions to try out the ConCodeSe GUI. 
+
+
+Bud_id = 104545
+Summary = Make default size of empty composites smaller 
+Description = Could the following two constants in Widget.java be changed to something smaller? 
+/* Default widths for widgets */ static final int DEFAULT_WIDTH = 64; static final int DEFAULT_HEIGHT = 64; 
+Anything less than or equal to 16 would work for us, 0 would be OK too. 
+I have run our tests (JFace, UI, RCP) and they run fine when the constants are 0. 
+Background: When you write an RCP app and enable the cool bar, the cool bar will initially be empty, 
+but 64x64 pixels in size. 
+On Windows, you cannot see the border of the empty coolbar so the user gets a big empty space at the top of their window 
+and might be confused. 
+Changed classes = CoolBar.java
+
+
+Bud_id = 95410
+Summary = GDI+ drawString is not consistent with GDI
+Description = If you have a structure which is rendered to a GC, you need to be able to predict things like how large a String is going to be painted. 
+But, if a previous visitor has triggered GDI+, drawString's behavior is altered. 
+The chars get expanded and compressed in funny ways, and generally look bad. 
+";"Defect";"
+Changed classes = GC.java, TextLayout.java, Gdip.java, OS.java
+
+
+Bud_id = 92341
+Summary = DCR - Add SWT.VIRTUAL style to Tree widget 
+Description = Please add a possibility to lazy-load the first tree level (like SWT.VIRTUAL for the table widget). 
+Changed classes = Tree.java, TreeColumn.java, TreeItem.java"
