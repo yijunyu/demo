@@ -9,8 +9,9 @@ To reproduce the results, all you need is to [enable the GitPod app to access yo
 
 <!--ts-->
    * [Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server](#use-of-flattened-abstract-syntax-trees-in-deep-learning-on-your-own-gitpod-server)
-      * [Usage](#usage)
+      * [Usage of fast utility in Deep Learning for Algorithm Classification](#usage-of-fast-utility-in-deep-learning-for-algorithm-classification)
       * [Usage of the fAST utility](#usage-of-the-fast-utility)
+      * [Usage of the fAST utility in Bug Localisation](#usage-of-the-fast-utility-in-bug-localisation)
          * [You can call fAST anywhere when you have docker installed:](#you-can-call-fast-anywhere-when-you-have-docker-installed)
       * [Reference and Applications](#reference-and-applications)
             * [Deep Learning](#deep-learning)
@@ -19,7 +20,7 @@ To reproduce the results, all you need is to [enable the GitPod app to access yo
             * [Diffing](#diffing)
             * [Bug Localisation](#bug-localisation)
 
-<!-- Added by: yy66, at: Fri May 17 08:53:59 BST 2019 -->
+<!-- Added by: yy66, at: Sun May 19 20:25:23 BST 2019 -->
 
 <!--te-->
 
