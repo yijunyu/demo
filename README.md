@@ -46,6 +46,8 @@ run.sh datasets/github_java_10/4/3.java
 ## Usage of the fAST utility
 
 ```bash
+cd datasets
+
 # print the command line options and arguments
 fast
 # convert a C++ code into protobuffer representation
@@ -58,6 +60,14 @@ fast corefx-1.0.4/src/System.IO.IsolatedStorage/ref/System.IO.IsolatedStorage.cs
 fast -S -G RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests-ggnn.fbs
 # diff two programs
 fast -D github_java_10/4/1.java github_java_10/4/3.java
+```
+
+## Usage of the fAST utility in Bug Localisation
+
+```bash
+cd usr/bin
+
+java -cp /workspace/demo-fast/usr/config:/workspace/demo-fast/usr/config/lic:/workspace/demo-fast/usr/lib/ConCodeSe-1.0.0.jar com.concodese.ConCodeSeJettyServerStarter SERVER_PORT=8081
 ```
 
 ### You can call fAST anywhere when you have docker installed:
