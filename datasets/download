@@ -19,19 +19,40 @@ function download() {
     fi
 }
 export -f download
+function parse_slice() {
+    F=$(basename $P)-$V
+    find $F -name "$@" | head -1 | while read f; do
+    echo $f
+    echo parsing ...
+    fast $f $f.pb
+    fast $f $f.fbs
+    echo slicing ...
+    fast -S -G $f.pb $f-ggnn.fbs
+    done
+}
+export -f parse_slice
+function diff() {
+    F=$(basename $P)-$V
+    echo fast -D $(find $F -name "$@" | head -2)
+}
+export -f parse_slice
+
 V=1.0.4 P=dotnet/corefx download
 V=3.1.0 P=AFNetworking/AFNetworking download
 V=1.2.9 P=ReactiveX/RxJava download
 V=1.0.1 P=tensorflow/tensorflow download
 V=4.11-rc3 P=torvalds/linux download
 
-find corefx-1.0.4 -name "*.cs" | head -10 | while read f; do
-   echo $f
-   echo parsing ...
-   fast $f $f.pb
-   fast $f $f.fbs
-   echo slicing ...
-   fast -S -G $f.pb $f-ggnn.fbs
-done
-echo diffing ...
-fast -D github_java_10/1/1.java github_java_10/1/2.java 
+V=1.0.4 P=dotnet/corefx parse_slice "*.cs"
+V=3.1.0 P=AFNetworking/AFNetworking parse_slice "*.[cm]"
+V=1.2.9 P=ReactiveX/RxJava parse_slice "*.java"
+V=1.0.1 P=tensorflow/tensorflow parse_slice "*.cc"
+V=4.11-rc3 P=torvalds/linux parse_slice "*.c"
+
+V=1.0.4 P=dotnet/corefx diff "*.cs"
+V=3.1.0 P=AFNetworking/AFNetworking diff "*.[cm]"
+V=1.2.9 P=ReactiveX/RxJava diff "*.java"
+V=1.0.1 P=tensorflow/tensorflow diff "*.cc"
+V=4.11-rc3 P=torvalds/linux diff "*.c"
+
+fast -D github_java_10/1/1.java github_java_10/1/2.java
