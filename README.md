@@ -33,8 +33,8 @@ run.sh datasets/github_java_10/4/1.java
 You will see the predicted probabilistic distribution of the class labels: the correctly classified label
 will be shown in blue, and the misclassified label will be shown in red.
 
-To understand why, click at the HTML file "datasets/github_java_10/1/1.html" and use the
-Preview button on the up-right corner of the tab to see visualization results
+To understand why, click at the HTML file "datasets/github_java_10/4/1.html" and use the
+Preview button on the up-right corner of the tab to see visualisation results
 in a split pane.  The colours on the tokens indicate which parts of the code
 that have got the most attention by the classification algorithm.
 
