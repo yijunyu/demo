@@ -1,7 +1,7 @@
 #!/bin/bash
 function download() {
     F=$(basename $P)-$V
-    if [ ! -d $F-$V ]; then
+    if [ ! -d $F ]; then
         if [ ! -f v$V.tar.gz -a ! -f $V.tar.gz ]; then
             wget https://github.com/$P/archive/v$V.tar.gz
             if [ ! -f v$V.tar.gz ]; then
