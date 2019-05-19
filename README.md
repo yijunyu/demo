@@ -23,7 +23,7 @@ To reproduce the results, all you need is to [enable the GitPod app to access yo
 
 <!--te-->
 
-## Usage
+## Usage of fast utility in Deep Learning for Algorithm Classification
 Examples of algorithms in Java and C++ are provided to test the algorithm classification deep learning tool. Once your
 gitpod machine is running, it will launch the following command:
 ```bash
