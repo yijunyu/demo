@@ -30,9 +30,8 @@ gitpod machine is running, it will launch the following command:
 run.sh datasets/github_java_10/4/1.java
 ```
 
-Click the file "datasets/github_java_10/1/1.png" in the EXPLORER, you will see the predicted
-probabilistic distribution of the class labels. The correctly classified label
-will be shown in blue, and the wrongly classified label will be shown in red.
+You will see the predicted probabilistic distribution of the class labels: the correctly classified label
+will be shown in blue, and the misclassified label will be shown in red.
 
 To understand why, click at the HTML file "datasets/github_java_10/1/1.html" and use the
 Preview button on the up-right corner of the tab to see visualization results
