@@ -24,3 +24,14 @@ V=3.1.0 P=AFNetworking/AFNetworking download
 V=1.2.9 P=ReactiveX/RxJava download
 V=1.0.1 P=tensorflow/tensorflow download
 V=4.11-rc3 P=torvalds/linux download
+
+find corefx-1.0.4 -name "*.cs" | head -10 | while read f; do
+   echo $f
+   echo parsing ...
+   fast $f $f.pb
+   fast $f $f.fbs
+   echo slicing ...
+   fast -S -G $f.pb $f-ggnn.fbs
+done
+echo diffing ...
+fast -D github_java_10/1/1.java github_java_10/1/2.java 
