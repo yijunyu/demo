@@ -49,11 +49,11 @@ run.sh datasets/github_java_10/4/3.java
 # print the command line options and arguments
 fast
 # convert a C++ code into protobuffer representation
-fast tensorflow-1.0.1/tensorflow/cc/saved_model/loader_test.cc tensorflow-1.0.1/tensorflow/cc/saved_model/loader_test.pb
+fast tensorflow-1.0.1/tensorflow/cc/saved_model/loader_test.cc tensorflow-1.0.1/tensorflow/cc/saved_model/loader_test.cc.pb
 # convert a Java code into flatbuffers representation
 fast RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java.java RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java.fbs
 # convert a flatbuffers representation back to C#
-fast corefx-1.0.4/src/System.IO.IsolatedStorage/ref/System.IO.IsolatedStorage.fbs corefx-1.0.4/src/System.IO.IsolatedStorage/ref/System.IO.IsolatedStorage.cs
+fast corefx-1.0.4/src/System.IO.IsolatedStorage/ref/System.IO.IsolatedStorage.cs.fbs corefx-1.0.4/src/System.IO.IsolatedStorage/ref/System.IO.IsolatedStorage.cs
 # slice a program
 fast -S -G RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests-ggnn.fbs
 # diff two programs
