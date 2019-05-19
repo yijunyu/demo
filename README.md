@@ -38,15 +38,10 @@ Preview button on the up-right corner of the tab to see visualization results
 in a split pane.  The colours on the tokens indicate which parts of the code
 that have got the most attention by the classification algorithm.
 
-To run another example with differently trained models, type:
+To run another example, type:
 ```bash
-live_test \
---model_path model/github_java_10.ggnn.aggregation=1.distributed_function=0.hidden_layer_size=200.num_hidden_layer=2.node_dim=100 \
---pretrained_embeddings_url=embedding/fast_pretrained_vectors.pkl.gz \
-datasets/github_java_10/4/103.java
+run.sh datasets/github_java_10/4/3.java
 ```
-In this convention, the folder number indicate the correct class label
-that we already know, and the test will return the algorithm of the code.
 
 ## Usage of the fAST utility
 
@@ -54,15 +49,15 @@ that we already know, and the test will return the algorithm of the code.
 # print the command line options and arguments
 fast
 # convert a C++ code into protobuffer representation
-fast foo.cc foo.pb
+fast tensorflow-1.0.1/tensorflow/cc/saved_model/loader_test.cc tensorflow-1.0.1/tensorflow/cc/saved_model/loader_test.pb
 # convert a Java code into flatbuffers representation
-fast bar.java bar.fbs
+fast RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java.java RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java.fbs
 # convert a flatbuffers representation back to C#
-fast moo.fbs moo.cs
+fast corefx-1.0.4/src/System.IO.IsolatedStorage/ref/System.IO.IsolatedStorage.fbs corefx-1.0.4/src/System.IO.IsolatedStorage/ref/System.IO.IsolatedStorage.cs
 # slice a program
-fast -S -G foo.java foo.fbs
+fast -S -G RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests.java RxJava-1.2.9/src/test/java/rx/ErrorHandlingTests-ggnn.fbs
 # diff two programs
-fast -D v1.java v2.java
+fast -D github_java_10/4/1.java github_java_10/4/3.java
 ```
 
 ### You can call fAST anywhere when you have docker installed:
