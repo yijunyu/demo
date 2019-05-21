@@ -42,7 +42,14 @@ that have got the most attention by the classification algorithm.
 To run another example, type:
 ```bash
 run.sh datasets/github_java_10/4/3.java
+run.sh datasets/github_cs_10/4/1.cs
+run.sh datasets/github_cpp_10/4/1.cpp
 ```
+
+In these examples, it shows that even though the model was trained using Java
+programs, when applying it to other programming languages such as C# or C++, it
+normally works well too. We call this feature "Cross-Language Algorithm
+Classification" [Bui et al SANER'19].
 
 ## Usage of the fAST utility
 
