@@ -89,6 +89,10 @@ Yijun Yu. "[fAST: Flattening Abstract Syntax Trees for Efficiency](http://oro.op
 [demo](https://gitpod.io/#https://github.com/yijunyu/demo), [paper](http://oro.open.ac.uk/59268), [poster](doc/fast-poster-A0.pdf)
 
 #### Deep Learning
+Nghi D. Q. Bui, Yijun Yu, Lingxiao Jiang. "[Learning Cross-Language API Mappings with Little Knowledge]()", In
+[the 27th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE)](https://esec-fse19.ut.ee/),
+Tallinn, Estonia, 26-30 August 2019.
+
 Nghi D. Q. Bui, Yijun Yu, Lingxiao Jiang. "[Bilateral Dependency Neural Networks for Cross-Language Algorithm Classification](https://bdqnghi.github.io/files/SANER_2019_bilateral_dependency.pdf)", In the 26th edition of the IEEE International Conference on Software Analysis, Evolution and Reengineering, Research Track, Hangzhou, China, February 24-27, 2019.
 [GGNN](https://github.com/bdqnghi/ggnn.tensorflow), [DTBCNN](https://github.com/bdqnghi/tbcnn-attention)
 
