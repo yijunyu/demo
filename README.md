@@ -5,7 +5,7 @@ utility](https://cloud.docker.com/u/yijun/repository/docker/yijun/fast). See als
 
 You can run fast in your own machine as the docker container of course, but here you don't even need that: all the binary and python dependencies have been provided, including also the trained models and the pre-trained embeddings.
 
-To reproduce the results, all you need is to [enable the GitPod app to access your GitHub account](https://gitpod.io/#https://github.com/yijunyu/demo-vscode-fast) so that the commands can run on a remote server belonging to yourself.
+To reproduce the results, all you need is to [enable the GitPod app to access your GitHub account](https://gitpod.io/#https://github.com/yijunyu/demo) so that the commands can run on a remote server belonging to yourself.
 
 <!--ts-->
    * [Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server](#use-of-flattened-abstract-syntax-trees-in-deep-learning-on-your-own-gitpod-server)
@@ -75,7 +75,7 @@ fast -D github_java_10/4/1.java github_java_10/4/3.java
 ```bash
 cd usr/bin
 
-java -cp /workspace/demo-fast/usr/config:/workspace/demo-fast/usr/config/lic:/workspace/demo-fast/usr/lib/ConCodeSe-1.0.0.jar com.concodese.ConCodeSeJettyServerStarter SERVER_PORT=8081
+java -cp /workspace/demo/usr/config:/workspace/demo/usr/config/lic:/workspace/demo/usr/lib/ConCodeSe-1.0.0.jar com.concodese.ConCodeSeJettyServerStarter SERVER_PORT=8081
 ```
 
 ### You can call fAST anywhere when you have docker installed:
@@ -86,7 +86,7 @@ alias fast=”docker run -v $PWD:/e yijun/fast”
 ## Reference and Applications
 
 Yijun Yu. "[fAST: Flattening Abstract Syntax Trees for Efficiency](http://oro.open.ac.uk/59268/)". In: 41st ACM/IEEE International Conference on Software Engineering, 25-31 May 2019, Montreal, Canada, ACM and IEEE.
-[demo](https://gitpod.io/#https://github.com/yijunyu/demo-fast), [paper](http://oro.open.ac.uk/59268), [poster](doc/fast-poster-A0.pdf)
+[demo](https://gitpod.io/#https://github.com/yijunyu/demo), [paper](http://oro.open.ac.uk/59268), [poster](doc/fast-poster-A0.pdf)
 
 #### Deep Learning
 Nghi D. Q. Bui, Yijun Yu, Lingxiao Jiang. "[Bilateral Dependency Neural Networks for Cross-Language Algorithm Classification](https://bdqnghi.github.io/files/SANER_2019_bilateral_dependency.pdf)", In the 26th edition of the IEEE International Conference on Software Analysis, Evolution and Reengineering, Research Track, Hangzhou, China, February 24-27, 2019.
