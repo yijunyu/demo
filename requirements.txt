@@ -7,7 +7,7 @@ certifi==2019.3.9
 chardet==3.0.4
 cycler==0.10.0
 docutils==0.14
-flatast==0.0.9
+flatast==0.0.14.post3
 flatbuffers==1.10
 gast==0.2.2
 ggnn==0.0.7.post44
