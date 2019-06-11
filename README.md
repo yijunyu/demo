@@ -1,4 +1,4 @@
-# Use of flattened Abstract Syntax Trees in Deep Learning on your own GitPod server
+# Flattened Abstract Syntax Trees
 
 This repository provides a demonstration of the deep learning package for classifying the code parsed by the [fast
 utility](https://cloud.docker.com/u/yijun/repository/docker/yijun/fast). See also the [Visual Studio Code Extension](https://github.com/yijunyu/vscode-fast).
