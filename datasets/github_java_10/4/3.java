@@ -1,34 +1,27 @@
-class InsertionSort
-{
-  void sort(int arr[])
-  {
-    int n=arr.length;
-    for(int i=1;i<n;++i)
+public static void insertionSort()
+    
     {
-      int key=arr[i];
-      int j=i-1;
-      while(j>=0&& arr[j]>key)
-      {
-        arr[j+1]=arr[j];
-        j=j-1;
-      }
-      arr[j+1]=key;
+    int i = 1;
+
+    while 
+        
+        (i < arr.length)
+    {
+        int j = i;
+        while
+        
+        (j > 0)
+        {
+        if (arr[j].key < arr[j-1].key)
+        {
+            InsertionSortNode tmp = arr[j];
+            arr[j] = arr[j-1];
+            arr[j-1] = tmp;
+        }
+        j = j - 1;
+        }
+        i = i + 1;
     }
-  }
+    }
 
-  static void printArray(int arr[])
-  {
-    int n=arr.length;
-    for(int i=0;i<n;++i)
-      System.out.print(arr[i]+" ");
-    System.out.println();
-  }
-
-  public static void main(String args[])
-  {
-    int arr[]={12,11,14,5,6};
-    InsertionSort insertSort=new InsertionSort();
-    insertSort.sort(arr);
-    printArray(arr);
-  }
-}
+    
