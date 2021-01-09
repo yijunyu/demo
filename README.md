@@ -30,6 +30,7 @@ gitpod machine is running, it will launch the following command:
 ```bash
 run.sh datasets/github_java_10/4/1.java
 ```
+Looks like Tensorflow 1.15 is no longer supported by default. You need to set up an older python environment that is compatible with this older version.
 
 You will see the predicted probabilistic distribution of the class labels: the correctly classified label
 will be shown in blue, and the misclassified label will be shown in red.
